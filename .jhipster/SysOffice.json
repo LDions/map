@@ -1,0 +1,166 @@
+{
+    "name": "SysOffice",
+    "fields": [
+        {
+            "fieldName": "officeCode",
+            "javadoc": "机构编码",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "parentCode",
+            "javadoc": "父级编号",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "parentCodes",
+            "javadoc": "所有父级编号",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 1000
+        },
+        {
+            "fieldName": "treeSort",
+            "javadoc": "本级排序号（升序）",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "treeSorts",
+            "javadoc": "所有级别排序号",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "treeLeaf",
+            "javadoc": "是否最末级",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "treeLevel",
+            "javadoc": "层次级别",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "treeNames",
+            "javadoc": "全节点名",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 1000
+        },
+        {
+            "fieldName": "viewCode",
+            "javadoc": "机构代码",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "officeName",
+            "javadoc": "机构名称",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 200
+        },
+        {
+            "fieldName": "fullName",
+            "javadoc": "机构全称",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 200
+        },
+        {
+            "fieldName": "officeType",
+            "javadoc": "机构类型",
+            "fieldType": "OfficeType",
+            "fieldValues": "NATIONAL,PROVINCIAL,CITY"
+        },
+        {
+            "fieldName": "leader",
+            "javadoc": "负责人",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "phone",
+            "javadoc": "办公电话",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "address",
+            "javadoc": "联系地址",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 255
+        },
+        {
+            "fieldName": "zipCode",
+            "javadoc": "邮政编码",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "email",
+            "javadoc": "电子邮箱",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 300
+        },
+        {
+            "fieldName": "remarks",
+            "javadoc": "备注信息",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        },
+        {
+            "fieldName": "status",
+            "javadoc": "状态",
+            "fieldType": "OfficeStatusType",
+            "fieldValues": "NORMAL,DELETE,DISABLE"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085035",
+    "javadoc": "组织机构表\n@author JeeSite",
+    "entityTableName": "sys_office",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -1,0 +1,27 @@
+{
+    "name": "SysUserRole",
+    "fields": [
+        {
+            "fieldName": "sysUserId",
+            "javadoc": "用户外键",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "sysRoleId",
+            "javadoc": "角色外键",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085032",
+    "javadoc": "用户与角色关联表\n@author JeeSite",
+    "entityTableName": "sys_user_role",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

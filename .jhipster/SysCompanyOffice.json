@@ -1,0 +1,35 @@
+{
+    "name": "SysCompanyOffice",
+    "fields": [
+        {
+            "fieldName": "sysCompanyId",
+            "javadoc": "公司ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "sysOfficeId",
+            "javadoc": "机构ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085038",
+    "javadoc": "公司部门关联表\n@author JeeSite",
+    "entityTableName": "sys_company_office",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

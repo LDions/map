@@ -1,0 +1,44 @@
+{
+    "name": "SysEmployeeOffice",
+    "fields": [
+        {
+            "fieldName": "sysEmployeeId",
+            "javadoc": "员工ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "sysOfficeId",
+            "javadoc": "机构ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "sysPostId",
+            "javadoc": "岗位ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085037",
+    "javadoc": "员工附属机构关系表\n@author JeeSite",
+    "entityTableName": "sys_employee_office",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

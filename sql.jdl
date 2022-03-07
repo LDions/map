@@ -1,0 +1,435 @@
+
+
+paginate all with pagination
+skipClient all
+/**
+ * 1、使用id作为表的主键，id的生成策略需要修改，目前用UUID，确保全局唯一，建议搞一个脚本处理；
+ * 2、如果有表需要审计功能，需要创建人、创建时间、修改人、修改时间等字段，那么在设计表结构的时候可以暂时不用考虑这四个自动，而是基于spring的AUDIT框架实现；
+ */
+
+/**
+ * 用户表
+ * @author JeeSite
+ */
+entity SysUser {
+    userCode                String maxlength(100)           /** 用户编码 ，该字段不作为表的关联外键，仅供展示*/
+    loginCode	            String maxlength(100)           /** 登录账号 */
+    userName	            String maxlength(100)	        /** 用户昵称 */
+    password	            String maxlength(100)	        /** 登录密码 */
+    email                   String maxlength(300)	        /** 电子邮箱 */
+    mobile                  String maxlength(100)	        /** 手机号码 */
+    phone                   String maxlength(100)	        /** 办公电话 */
+    sex                     GenderType                      /** 用户性别 */
+    avatar                  String maxlength(1000)          /** 头像相对路径 */
+    sign                    String maxlength(200)           /** 个性签名 */
+    wxOpenid                String maxlength(1000)	        /** 绑定的微信号 */
+    mobileImei              String maxlength(100)           /** 绑定的手机MID */
+    userType                UserType                        /** 用户类型 */
+    refCode                 String maxlength(100)           /** 用户类型引用编号（雇员表或会员表的ID） */
+    refName                 String maxlength(100)           /** 用户类型引用姓名 */
+    lastLoginIp             String maxlength(100)           /** 最后登录IP */
+    lastLoginDate           Instant                         /** 最后登录时间 */
+    freezeDate              Instant                         /** 冻结时间 */
+    freezeCause             String maxlength(200)           /** 冻结原因 */
+    userSort                Integer                         /** 用户权重，用于排序（降序） */
+    status                  UserStatusType                  /** 用户状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 用户性别
+ * 男|女
+ * @author JeeSite
+ */
+enum GenderType {
+    MALE,
+    FEMALE
+}
+
+/**
+ * 用户类型
+ * 雇员|会员
+ * @author JeeSite
+ */
+enum UserType {
+    EMPLOYEE,
+    MEMBER
+}
+
+/**
+ * 管理员类型
+ * 非管理员|系统管理员|二级管理员
+ * @author JeeSite
+ */
+enum AdminType {
+    NONE,
+    SYS_ADMIN,
+    SUB_ADMIN
+}
+
+/**
+ * 密码安全级别类型
+ * 初始|很弱|弱|安全|很安全
+ * @author JeeSite
+ */
+enum PwdSecurityLevelType {
+    INITIAL,
+    VERY_WEAK,
+    WEAK,
+    STRONG,
+    VERY_STRONG
+}
+
+/**
+ * 用户状态类型
+ * 正常|删除|停用|冻结
+ * @author JeeSite
+ */
+enum UserStatusType {
+    NORMAL,
+    DELETE,
+    DISABLE,
+    FREEZE
+}
+
+/**
+ * 角色表
+ * @author JeeSite
+ */
+entity SysRole {
+    roleCode                String maxlength(100)            /** 角色编码 ，该字段不作为表的关联外键，仅供展示*/
+    roleName	            String maxlength(100)           /** 角色名称 */
+    roleType	            RoleType	                    /** 角色类型 */
+    roleSort	            Integer	                        /** 角色排序（升序） */
+    isSys                   Boolean	                        /** 是否系统内置 */
+    dataScope               DataScopeType                   /** 数据范围设置 */
+    bizScope                String maxlength(255)           /** 适应业务范围 */
+    status                  RoleStatusType	                /** 状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 角色类型
+ * 组织角色|用户角色
+ * @author JeeSite
+ */
+enum RoleType {
+    ORGANIZARION,
+    USER
+}
+
+/**
+ * 数据范围类型
+ * 未设置|全部|自定义
+ * @author JeeSite
+ */
+enum DataScopeType {
+    NONE,
+    ALL,
+    CUSTOM
+}
+
+/**
+ * 角色状态类型
+ * 正常|删除|停用
+ * @author JeeSite
+ */
+enum RoleStatusType {
+    NORMAl,
+    DELETE,
+    DISABLE
+}
+
+/**
+ * 菜单表
+ * @author JeeSite
+ */
+entity SysMenu {
+    menuCode                String maxlength(100)           /** 菜单编码 */
+    parentId 	            Long                            /** 父级编号 */
+    parentIds	            String maxlength(1000) 	        /** 所有父级编号 */
+    treeSort	            Integer	                        /** 本级排序号（升序） */
+    treeSorts               Integer	                        /** 所有级别排序号 */
+    treeLeaf                Boolean                         /** 是否最末级 */
+    treeLevel               Integer                         /** 层次级别 */
+    treeNames               String maxlength(1000)          /** 全节点名 */
+    menuName                String maxlength(100)           /** 菜单名称 */
+    menuType                MenuType                        /** 菜单类型 */
+    menuHref                String maxlength(1000)          /** 链接 */
+    menuIcon                String maxlength(100)           /** 图标 */
+    menuTitle               String maxlength(100)           /** 菜单标题 */
+    permission              String maxlength(1000)          /** 权限标识 */
+    menuSort	            Integer	                        /** 菜单排序（升序） */
+    isShow                  Boolean                         /** 是否显示 */
+    sysCode                 SysType                         /** 归属系统（default:主导航菜单、mobileApp:APP菜单） */
+    status                  MenuStatusType	                /** 状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 菜单类型
+ * 菜单|权限|开发
+ * @author JeeSite
+ */
+enum MenuType {
+    MENU,
+    PERMISSION,
+    DEV
+}
+
+/**
+ * 归属系统类型
+ * 主导航|APP菜单
+ * @author JeeSite
+ */
+enum SysType {
+    WEB,
+    MOBILE
+}
+
+/**
+ * 菜单状态类型
+ * 正常|删除|停用
+ * @author JeeSite
+ */
+enum MenuStatusType {
+    NORMAL,
+    DELETE,
+    DISABLE
+}
+
+/**
+ * 用户与角色关联表
+ * @author JeeSite
+ */
+entity SysUserRole {
+    sysUserId               Long             /** 用户外键 */
+    sysRoleId  	            Long             /** 角色外键 */
+}
+
+/**
+ * 角色与菜单关联表
+ * @author JeeSite
+ */
+entity SysRoleMenu {
+    sysRoleId  	            Long             /** 角色外键 */
+    sysMenuId               Long             /** 菜单外键 */
+}
+
+/**
+ * 公司表
+ * @author JeeSite
+ */
+entity SysCompany {
+    companyCode             String maxlength(100)           /** 公司编码 */
+    parentCode 	            String maxlength(100)           /** 父级编号 */
+    parentCodes	            String maxlength(1000) 	        /** 所有父级编号 */
+    treeSort	            Integer	                        /** 本级排序号（升序） */
+    treeSorts               Integer	                        /** 所有级别排序号 */
+    treeLeaf                Boolean                         /** 是否最末级 */
+    treeLevel               Integer                         /** 层次级别 */
+    treeNames               String maxlength(1000)          /** 全节点名 */
+    viewCode                String maxlength(100)           /** 公司代码 */
+    companyName             String maxlength(200)           /** 公司名称 */
+    fullName                String maxlength(200)           /** 公司全称 */
+    areaCode                String maxlength(100)           /** 区域编码 */
+    status                  CompanyStatusType	            /** 状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 公司状态类型
+ * 正常|删除|停用
+ * @author JeeSite
+ */
+enum CompanyStatusType {
+    NORMAL,
+    DELETE,
+    DISABLE
+}
+
+/**
+ * 组织机构表
+ * @author JeeSite
+ */
+entity SysOffice {
+    officeCode             String maxlength(100)           /** 机构编码 */
+    parentCode 	            String maxlength(100)           /** 父级编号 */
+    parentCodes	            String maxlength(1000) 	        /** 所有父级编号 */
+    treeSort	            Integer	                        /** 本级排序号（升序） */
+    treeSorts               Integer	                        /** 所有级别排序号 */
+    treeLeaf                Boolean                         /** 是否最末级 */
+    treeLevel               Integer                         /** 层次级别 */
+    treeNames               String maxlength(1000)          /** 全节点名 */
+    viewCode                String maxlength(100)           /** 机构代码 */
+    officeName              String maxlength(200)           /** 机构名称 */
+    fullName                String maxlength(200)           /** 机构全称 */
+    officeType              OfficeType                      /** 机构类型 */
+    leader                  String maxlength(100)           /** 负责人 */
+    phone                   String maxlength(100)           /** 办公电话 */
+    address                 String maxlength(255)           /** 联系地址 */
+    zipCode                 String maxlength(100)           /** 邮政编码 */
+    email                   String maxlength(300)           /** 电子邮箱 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+    status                  OfficeStatusType	            /** 状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 机构类型
+ * @author JeeSite
+ */
+enum OfficeType {
+    NATIONAL,
+    PROVINCIAL,
+    CITY
+}
+
+/**
+ * 机构状态类型
+ * 正常|删除|停用
+ * @author JeeSite
+ */
+enum OfficeStatusType {
+    NORMAL,
+    DELETE,
+    DISABLE
+}
+
+/**
+ * 员工表
+ * @author JeeSite
+ */
+entity SysEmployee {
+    empCode                 String maxlength(100)           /** 员工编码 */
+    empName	                String maxlength(100)           /** 员工姓名 */
+    empNameEn	            String maxlength(1000) 	        /** 英文名 */
+    sysOfficeId             Long                            /** 机构ID */
+    officeName              String maxlength(100)           /** 机构名称 */
+    sysCompanyId            Long                            /** 公司ID */
+    companyName             String maxlength(100)           /** 公司名称 */
+    status                  EmployeeStatusType	            /** 状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 员工状态类型
+ * 在职|删除|离职
+ * @author JeeSite
+ */
+enum EmployeeStatusType {
+    NORMAL,
+    DELETE,
+    DEPARTUTE
+}
+
+/**
+ * 员工附属机构关系表
+ * @author JeeSite
+ */
+entity SysEmployeeOffice {
+    sysEmployeeId  	        String maxlength(100)            /** 员工ID */
+    sysOfficeId             String maxlength(100)            /** 机构ID */
+    sysPostId               String maxlength(100)            /** 岗位ID */
+}
+
+/**
+ * 公司部门关联表
+ * @author JeeSite
+ */
+entity SysCompanyOffice {
+    sysCompanyId  	        String maxlength(100)            /** 公司ID */
+    sysOfficeId             String maxlength(100)            /** 机构ID */
+}
+
+/**
+ * 员工岗位
+ * @author JeeSite
+ */
+entity SysPost {
+    postCode                String maxlength(100)           /** 岗位编码 */
+    postName	            String maxlength(100)           /** 岗位名称 */
+    postType	            PostType 	                    /** 岗位分类（高管、中层、基层） */
+    status                  PostStatusType	                /** 状态 */
+    remarks                 String maxlength(500)           /** 备注信息 */
+}
+
+/**
+ * 岗位分类
+ * 高管|中层|基层
+ * @author JeeSite
+ */
+enum PostType {
+    SENIOR,
+    MIDDLE,
+    BASIC
+}
+
+/**
+ * 机构状态类型
+ * 正常|删除|停用
+ * @author JeeSite
+ */
+enum PostStatusType {
+    NORMAL,
+    DELETE,
+    DISABLE
+}
+
+/**
+ * 员工与岗位关联表
+ * @author JeeSite
+ */
+entity SysEmployeePost {
+    sysEmployeeId  	        String maxlength(100)            /** 员工ID */
+    sysPostId               String maxlength(100)            /** 岗位ID */
+}
+
+/**
+ * 角色数据权限表
+ * @author JeeSite
+ */
+entity SysRoleDataScope {
+    sysRoleId  	            Long                            /** 控制角色ID */
+    ctrlType                ControlType                     /** 控制类型 */
+    ctrlData                String maxlength(64)            /** 控制数据，如控制类型为公司，那么这里就是公司编号 */
+    ctrlPermi               String maxlength(64)            /** 控制权限 ??????????????????? */
+}
+
+/**
+ * 控制类型
+ * 公司级|机构级
+ * @author JeeSite
+ */
+enum ControlType {
+    COMPANY,
+    OFFICE
+}
+
+/**
+ * 用户数据权限表
+ * @author JeeSite
+ */
+entity SysUserDataScope {
+    sysUserId  	            String maxlength(100)           /** 控制用户ID */
+    ctrlType                ControlType                     /** 控制类型 */
+    ctrlData                String maxlength(64)            /** 控制数据，如控制类型为公司，那么这里就是公司编号 */
+    ctrlPermi               String maxlength(64)            /** 控制权限 ???????????????????*/
+}
+
+/**
+ * 接口表
+ */
+ entity SysApi {
+    name            String           /** 接口名称 */
+    requestMethod   String           /** 请求方法 */
+    url             String           /** 路径 */
+ }
+
+ /**
+  * 角色接口关联表
+  */
+  entity SysRoleApi {
+     sysRoleId       Long           /** 角色外键 */
+     sysApiId        Long           /** 接口外键 */
+  }

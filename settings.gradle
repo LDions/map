@@ -1,0 +1,3 @@
+rootProject.name = "ruowei-app"
+startParameter.excludedTaskNames.add('compileQuerydslJava')
+startParameter.excludedTaskNames.add('compileTestJava')

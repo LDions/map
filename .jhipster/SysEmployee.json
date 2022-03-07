@@ -1,0 +1,87 @@
+{
+    "name": "SysEmployee",
+    "fields": [
+        {
+            "fieldName": "empCode",
+            "javadoc": "员工编码",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "empName",
+            "javadoc": "员工姓名",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "empNameEn",
+            "javadoc": "英文名",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 1000
+        },
+        {
+            "fieldName": "sysOfficeId",
+            "javadoc": "机构ID",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "officeName",
+            "javadoc": "机构名称",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "sysCompanyId",
+            "javadoc": "公司ID",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "companyName",
+            "javadoc": "公司名称",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "status",
+            "javadoc": "状态",
+            "fieldType": "EmployeeStatusType",
+            "fieldValues": "NORMAL,DELETE,DEPARTUTE"
+        },
+        {
+            "fieldName": "remarks",
+            "javadoc": "备注信息",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085036",
+    "javadoc": "员工表\n@author JeeSite",
+    "entityTableName": "sys_employee",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

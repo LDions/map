@@ -1,0 +1,27 @@
+{
+    "name": "SysRoleApi",
+    "fields": [
+        {
+            "fieldName": "sysRoleId",
+            "javadoc": "角色外键",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "sysApiId",
+            "javadoc": "接口外键",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20191116085051",
+    "javadoc": "角色接口关联表",
+    "entityTableName": "sys_role_api",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

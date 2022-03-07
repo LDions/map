@@ -1,0 +1,81 @@
+{
+    "name": "SysRole",
+    "fields": [
+        {
+            "fieldName": "roleCode",
+            "javadoc": "角色编码 ，该字段不作为表的关联外键，仅供展示",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "roleName",
+            "javadoc": "角色名称",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "roleType",
+            "javadoc": "角色类型",
+            "fieldType": "RoleType",
+            "fieldValues": "ORGANIZARION,USER"
+        },
+        {
+            "fieldName": "roleSort",
+            "javadoc": "角色排序（升序）",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "isSys",
+            "javadoc": "是否系统内置",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dataScope",
+            "javadoc": "数据范围设置",
+            "fieldType": "DataScopeType",
+            "fieldValues": "NONE,ALL,CUSTOM"
+        },
+        {
+            "fieldName": "bizScope",
+            "javadoc": "适应业务范围",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 255
+        },
+        {
+            "fieldName": "status",
+            "javadoc": "状态",
+            "fieldType": "RoleStatusType",
+            "fieldValues": "NORMAl,DELETE,DISABLE"
+        },
+        {
+            "fieldName": "remarks",
+            "javadoc": "备注信息",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085030",
+    "javadoc": "角色表\n@author JeeSite",
+    "entityTableName": "sys_role",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

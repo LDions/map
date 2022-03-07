@@ -1,0 +1,35 @@
+{
+    "name": "SysEmployeePost",
+    "fields": [
+        {
+            "fieldName": "sysEmployeeId",
+            "javadoc": "员工ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldName": "sysPostId",
+            "javadoc": "岗位ID",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 100
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20190831085040",
+    "javadoc": "员工与岗位关联表\n@author JeeSite",
+    "entityTableName": "sys_employee_post",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
