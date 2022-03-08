@@ -128,6 +128,9 @@ public class SewEmiDetailDTO {
     @ApiModelProperty(value = "污泥处置情况")
     private List<SewEmiAccountVM.SewSluVM> sewSlus;
 
+    @ApiModelProperty(value = "其他指标")
+    private List<SewEmiAccountVM.OtherIndexVM> otherIndexs;
+
     @ApiModelProperty(value = "碳排放因子版本号")
     private String factorVersionNum;
 

@@ -52,11 +52,12 @@ public class SewEmiService {
     private final EmiDataRepository emiDataRepository;
     private final SewProcessRepository sewProcessRepository;
     private final SewSluRepository sewSluRepository;
+    private final OtherIndexRepository otherIndexRepository;
     private final SewPotRepository sewPotRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private QSewEmi qSewEmi = QSewEmi.sewEmi;
 
-    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, SewEmiRepository sewEmiRepository, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory) {
+    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, SewEmiRepository sewEmiRepository, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory) {
         this.emiFactorRepository = emiFactorRepository;
         this.objectMapper = objectMapper;
         this.applicationProperties = applicationProperties;
@@ -64,6 +65,7 @@ public class SewEmiService {
         this.emiDataRepository = emiDataRepository;
         this.sewProcessRepository = sewProcessRepository;
         this.sewSluRepository = sewSluRepository;
+        this.otherIndexRepository = otherIndexRepository;
         this.sewPotRepository = sewPotRepository;
         this.jpaQueryFactory = jpaQueryFactory;
     }
@@ -240,6 +242,48 @@ public class SewEmiService {
                         break;
                     default:
                         throw new BadRequestProblem("核算失败", "不存在该污泥方法");
+                }
+            }
+            enterDTO.setOdeg1(new BigDecimal(0));
+            enterDTO.setOdeg2(new BigDecimal(0));
+            enterDTO.setOdeg3(new BigDecimal(0));
+            enterDTO.setOdeg4(new BigDecimal(0));
+            enterDTO.setOdeg5(new BigDecimal(0));
+            enterDTO.setOdeg6(new BigDecimal(0));
+            enterDTO.setOdeg7(new BigDecimal(0));
+            enterDTO.setOdeg8(new BigDecimal(0));
+            enterDTO.setOdeg9(new BigDecimal(0));
+            for (SewEmiAccountVM.OtherIndexVM otherIndexVM : vm.getOtherIndexs()) {
+                switch (otherIndexVM.getMethodCode()) {
+                    case INRETURNFLOW:
+                        enterDTO.setOdeg1(otherIndexVM.getIndexCapacity());
+                        break;
+                    case OUTRETURNFLOW:
+                        enterDTO.setOdeg2(otherIndexVM.getIndexCapacity());
+                        break;
+                    case FIRSTMUD:
+                        enterDTO.setOdeg3(otherIndexVM.getIndexCapacity());
+                        break;
+                    case SECONDMUD:
+                        enterDTO.setOdeg4(otherIndexVM.getIndexCapacity());
+                        break;
+                    case REFLUX:
+                        enterDTO.setOdeg5(otherIndexVM.getIndexCapacity());
+                        break;
+                    case CARADD:
+                        enterDTO.setOdeg6(otherIndexVM.getIndexCapacity());
+                        break;
+                    case INRETURNPUMP:
+                        enterDTO.setOdeg7(otherIndexVM.getIndexCapacity());
+                        break;
+                    case OUTRETURNPUMP:
+                        enterDTO.setOdeg8(otherIndexVM.getIndexCapacity());
+                        break;
+                    case FANSTATE:
+                        enterDTO.setOdeg9(otherIndexVM.getIndexCapacity());
+                        break;
+                    default:
+                        throw new BadRequestProblem("核算失败", "不存在该指标");
                 }
             }
             // 污泥处置是否为本厂管理
@@ -552,11 +596,21 @@ public class SewEmiService {
                  .sluMoisture(sluVm.getSluMoisture());
              sewSluList.add(sewSlu);
         }
+        List<OtherIndex> otherIndexList = new ArrayList<>();
+        for (SewEmiAccountVM.OtherIndexVM otherIndexVM : vm.getOtherIndexs()) {
+            OtherIndex otherIndex = new OtherIndex()
+                .documentCode(documentCode)
+                .methodCode(otherIndexVM.getMethodCode())
+                .methodName(otherIndexVM.getMethodName())
+                .indexCapacity(otherIndexVM.getIndexCapacity());
+            otherIndexList.add(otherIndex);
+        }
         emiDataRepository.save(emiData);
         sewEmiRepository.save(sewEmi);
         sewProcessRepository.saveAll(sewProcessList);
         sewPotRepository.saveAll(sewPotList);
         sewSluRepository.saveAll(sewSluList);
+        otherIndexRepository.saveAll(otherIndexList);
     }
 
     /**
@@ -617,6 +671,15 @@ public class SewEmiService {
             sewSluVms.add(vm);
         }
         sewEmiDetailDTO.setSewSlus(sewSluVms);
+
+        List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
+        List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
+        for (OtherIndex otherIndex : otherIndexList) {
+            SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
+            BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
+            otherIndexVMS.add(vm);
+        }
+        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);
         return sewEmiDetailDTO;
     }
 
@@ -653,6 +716,14 @@ public class SewEmiService {
             sewSluVms.add(vm);
         }
         sewEmiDTO.setSewSlus(sewSluVms);
+        List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
+        List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
+        for (OtherIndex otherIndex : otherIndexList) {
+            SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
+            BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
+            otherIndexVMS.add(vm);
+        }
+        sewEmiDTO.setOtherIndexs(otherIndexVMS);
         return sewEmiDTO;
     }
 

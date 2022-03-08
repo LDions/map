@@ -68,6 +68,52 @@ public class WaterCarbonEmissionEnterDTO {
     private BigDecimal wc3;
 
     /**
+     * OOTher1其他指标量（kg/mth）
+     */
+    private BigDecimal odeg1;
+
+    /**
+     * OOTher2其他指标量（kg/mth）
+     */
+    private BigDecimal odeg2;
+
+    /**
+     * OOTher3其他指标量（kg/mth）
+     */
+    private BigDecimal odeg3;
+
+    /**
+     * OOTher4其他指标量（kg/mth）
+     */
+    private BigDecimal odeg4;
+
+    /**
+     * OOTher5其他指标量（kg/mth）
+     */
+    private BigDecimal odeg5;
+
+    /**
+     * OOTher6其他指标量（kg/mth）
+     */
+    private BigDecimal odeg6;
+
+    /**
+     * OOTher7其他指标量（kg/mth）
+     */
+    private BigDecimal odeg7;
+
+    /**
+     * OOTher8其他指标量（kg/mth）
+     */
+    private BigDecimal odeg8;
+
+    /**
+     * OOTher9其他指标量（kg/mth）
+     */
+    private BigDecimal odeg9;
+
+
+    /**
      * 污泥处置是否为本厂管理
      */
     private Boolean managedBySelf;

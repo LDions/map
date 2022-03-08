@@ -304,6 +304,16 @@ entity SewPot(sew_pot) {
 	dayAerobicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
 	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 }
+
+/** 其他指标 */
+entity OtherIndex(sew_index) {
+    documentCode String required /** 单据号 */
+    methodCode String required /** 其他指标编码 */
+    methodName String required /** 其他指标名称 */
+    indexCapacity BigDecimal /** 指标量（kg/m）*/
+
+}
+
 /** 核算数据草稿 */
 entity Draft(app_draft) {
 	userId Long required /** 用户ID */

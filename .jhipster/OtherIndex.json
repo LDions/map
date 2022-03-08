@@ -1,0 +1,40 @@
+{
+  "name": "OtherIndex",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "methodCode",
+      "fieldType": "String",
+      "javadoc": "其他指标编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "methodName",
+      "fieldType": "String",
+      "javadoc": "其他指标名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "indexCapacity",
+      "fieldType": "BigDecimal",
+      "javadoc": "指标量（kg/m）"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "其他指标数据",
+  "entityTableName": "other_index",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023702"
+}

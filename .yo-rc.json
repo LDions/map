@@ -58,7 +58,8 @@
       "District",
       "Enterprise",
       "Menu",
-      "RoleMenu"
+      "RoleMenu",
+      "OtherIndex"
     ],
     "lastLiquibaseTimestamp": 1631693326000
   }

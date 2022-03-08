@@ -21,6 +21,16 @@ public final class Constants {
     public static final String BIOGAS = "BIOGAS";
     public static final String LANDFILL = "LANDFILL";
 
+    public static final String INRETURNFLOW = "INRETURNFLOW";
+    public static final String OUTRETURNFLOW = "OUTRETURNFLOW";
+    public static final String FIRSTMUD = "FIRSTMUD";
+    public static final String SECONDMUD = "SECONDMUD";
+    public static final String REFLUX = "REFLUX";
+    public static final String CARADD = "CARADD";
+    public static final String INRETURNPUMP = "INRETURNPUMP";
+    public static final String OUTRETURNPUMP = "OUTRETURNPUMP";
+    public static final String FANSTATE = "FANSTATE";
+
     public static final String SEWAGE = "SEWAGE";
 
     public static final String SEW_TREAT = "SEW_TREAT";

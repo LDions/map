@@ -129,6 +129,10 @@ public class SewEmiAccountVM {
     @ApiModelProperty(value = "污泥处置情况")
     private List<SewSluVM> sewSlus;
 
+    @ApiModelProperty(value = "污泥处置情况")
+    private List<OtherIndexVM> otherIndexs;
+
+
     @Data
     public static class SewPotVM {
 
@@ -174,6 +178,19 @@ public class SewEmiAccountVM {
 
         @ApiModelProperty(value = "污泥处置前含水率（%）")
         private BigDecimal sluMoisture;
+    }
+
+    @Data
+    public static class OtherIndexVM {
+
+        @ApiModelProperty(value = "污泥处置方法编码")
+        private String methodCode;
+
+        @ApiModelProperty(value = "污泥处置方法名称")
+        private String methodName;
+
+        @ApiModelProperty(value = "污泥处置量（kg/m）")
+        private BigDecimal indexCapacity;
     }
 
     @Data

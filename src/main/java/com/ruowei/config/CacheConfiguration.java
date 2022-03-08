@@ -58,6 +58,7 @@ public class CacheConfiguration {
             createCache(cm, com.ruowei.domain.Enterprise.class.getName());
             createCache(cm, com.ruowei.domain.Menu.class.getName());
             createCache(cm, com.ruowei.domain.RoleMenu.class.getName());
+            createCache(cm, com.ruowei.domain.OtherIndex.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

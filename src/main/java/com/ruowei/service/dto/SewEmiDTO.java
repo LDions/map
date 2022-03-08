@@ -200,6 +200,11 @@ public class SewEmiDTO {
     private List<SewEmiAccountVM.SewSluVM> sewSlus;
 
     /**
+     * 其他指标
+     */
+    private List<SewEmiAccountVM.OtherIndexVM> otherIndexs;
+
+    /**
      * 碳排放因子版本号
      */
     private String factorVersionNum;
@@ -412,6 +417,7 @@ public class SewEmiDTO {
         this.managedBySelf = vm.getManagedBySelf();
         this.sluMoistureAfterTreat = vm.getSluMoistureAfterTreat();
         this.sewSlus = vm.getSewSlus();
+        this.otherIndexs = vm.getOtherIndexs();
         this.factorVersionNum = factorVersionNum;
         this.level1PotEmi = outputDTO.getC11();
         this.level2PotEmi = outputDTO.getC12();
