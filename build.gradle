@@ -76,7 +76,7 @@ eclipse {
 defaultTasks "bootRun"
 
 springBoot {
-    mainClassName = "com.ruowei.CnspJavaApp"
+    mainClassName = "com.ruowei.ZhjcxtJavaApp"
 }
 
 if (!project.hasProperty("runList")) {
@@ -89,22 +89,22 @@ liquibase {
     activities {
         main {
             driver "com.mysql.cj.jdbc.Driver"
-            url "jdbc:mysql://localhost:3306/cnspJava"
+            url "jdbc:mysql://localhost:3306/db"
             username "root"
             password ""
             changeLogFile "src/main/resources/config/liquibase/master.xml"
-            defaultSchemaName "cnspJava"
+            defaultSchemaName "zhjcxtJava"
             logLevel "debug"
             classpath "src/main/resources/"
         }
         diffLog {
             driver "com.mysql.cj.jdbc.Driver"
-            url "jdbc:mysql://localhost:3306/cnspJava"
+            url "jdbc:mysql://localhost:3306/db"
             username "root"
             password ""
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:com.ruowei.domain?dialect=org.hibernate.dialect.MySQL8Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
-            defaultSchemaName "cnspJava"
+            defaultSchemaName "zhjcxtJava"
             logLevel "debug"
             classpath "$buildDir/classes/java/main"
         }
