@@ -195,9 +195,9 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "工艺类型名称", required = true)
         private String processTypeName;
 
-        @NotNull(message = "请输入进水总氮")
-        @ApiModelProperty(value = "进水总氮（mg/L）", required = true)
-        private BigDecimal inNitrogen;
+        @NotNull(message = "请输入进水流量")
+        @ApiModelProperty(value = "进水流量（mg/L）", required = true)
+        private BigDecimal inFlow;
 
         @NotNull(message = "请输入进水氨氮")
         @ApiModelProperty(value = "进水氨氮（mg/L）", required = true)
@@ -207,16 +207,22 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "进水COD（mg/L）", required = true)
         private BigDecimal inCod;
 
-        @NotNull(message = "请输入进水总磷")
-        @ApiModelProperty(value = "进水总磷（mg/L）", required = true)
-        private BigDecimal inPhosphorus;
+        @NotNull(message = "请输入进水TP")
+        @ApiModelProperty(value = "进水TP（mg/L）", required = true)
+        private BigDecimal inTp;
 
-        @ApiModelProperty(value = "进水BOD（mg/L）")
-        private BigDecimal inBod;
+        @ApiModelProperty(value = "进水TN（mg/L）")
+        private BigDecimal inTn;
 
-        @NotNull(message = "请输入出水总氮")
-        @ApiModelProperty(value = "出水总氮（mg/L）", required = true)
-        private BigDecimal outNitrogen;
+        @ApiModelProperty(value = "进水PH（mg/L）")
+        private BigDecimal inPh;
+
+        @ApiModelProperty(value = "进水SS（mg/L）")
+        private BigDecimal inSs;
+
+        @NotNull(message = "请输入出水流量")
+        @ApiModelProperty(value = "出水流量（mg/L）", required = true)
+        private BigDecimal outFlow;
 
         @NotNull(message = "请输入出水氨氮")
         @ApiModelProperty(value = "出水氨氮（mg/L）", required = true)
@@ -226,12 +232,18 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "出水COD（mg/L）", required = true)
         private BigDecimal outCod;
 
-        @NotNull(message = "请输入出水总磷")
-        @ApiModelProperty(value = "出水总磷（mg/L）", required = true)
-        private BigDecimal outPhosphorus;
+        @NotNull(message = "请输入出水TP")
+        @ApiModelProperty(value = "出水TP（mg/L）", required = true)
+        private BigDecimal outTp;
 
-        @ApiModelProperty(value = "出水BOD（mg/L）")
-        private BigDecimal outBod;
+        @ApiModelProperty(value = "出水TN（mg/L）")
+        private BigDecimal outTn;
+
+        @ApiModelProperty(value = "出水PH（mg/L）")
+        private BigDecimal outPh;
+
+        @ApiModelProperty(value = "出水SS（mg/L）")
+        private BigDecimal outSs;
     }
 
 }

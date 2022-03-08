@@ -11,7 +11,6 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import com.ruowei.web.rest.vm.SewEmiAccountVM;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -235,16 +234,16 @@ public class CarbonAccountingExcel2 {
                 createExcelCell(row7, 0, styleContent2, sewProcessVM.getProcessTypeName());
                 createExcelCell(row7, 1, styleContent2, String.valueOf(sewProcessVM.getDailyScale()));
                 createExcelCell(row7, 2, styleContent2, String.valueOf(sewProcessVM.getOperatingDays()));
-                createExcelCell(row7, 3, styleContent2, String.valueOf(sewProcessVM.getInNitrogen()));
+                createExcelCell(row7, 3, styleContent2, String.valueOf(sewProcessVM.getInFlow()));
                 createExcelCell(row7, 4, styleContent2, String.valueOf(sewProcessVM.getInCod()));
                 createExcelCell(row7, 5, styleContent2, String.valueOf(sewProcessVM.getInAmmonia()));
-                createExcelCell(row7, 6, styleContent2, String.valueOf(sewProcessVM.getInPhosphorus()));
-                createExcelCell(row7, 7, styleContent2, getValue(sewProcessVM.getInBod()));
-                createExcelCell(row7, 8, styleContent2, String.valueOf(sewProcessVM.getOutNitrogen()));
+                createExcelCell(row7, 6, styleContent2, String.valueOf(sewProcessVM.getInTp()));
+                createExcelCell(row7, 7, styleContent2, getValue(sewProcessVM.getInTn()));
+                createExcelCell(row7, 8, styleContent2, String.valueOf(sewProcessVM.getOutFlow()));
                 createExcelCell(row7, 9, styleContent2, String.valueOf(sewProcessVM.getOutCod()));
                 createExcelCell(row7, 10, styleContent2, String.valueOf(sewProcessVM.getOutAmmonia()));
-                createExcelCell(row7, 11, styleContent2, String.valueOf(sewProcessVM.getOutPhosphorus()));
-                createExcelCell(row7, 12, styleContent2, getValue(sewProcessVM.getOutBod()));
+                createExcelCell(row7, 11, styleContent2, String.valueOf(sewProcessVM.getOutTp()));
+                createExcelCell(row7, 12, styleContent2, getValue(sewProcessVM.getOutTn()));
                 a++;
             }
 

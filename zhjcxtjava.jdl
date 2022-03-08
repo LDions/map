@@ -150,7 +150,7 @@ entity SewEmi(sew_emi) {
     reporterId Long required /** 录入员ID */
     reporterName String required /** 录入员姓名 */
     reportTime Instant required /** 填报时间 */
-	// 输入项目-基本信息
+	// 输入项目-进水指标
     provinceCode String required /** 省份编码 */
     provinceName String required /** 省份名称 */
     accYear String required /** 核算年份 */
@@ -219,7 +219,7 @@ entity SewEmi(sew_emi) {
     carbonIndirEmi BigDecimal required /** 污水厂本月间接碳排放（kg/m） */
     carbonEmi BigDecimal required /** 污水厂本月碳排放（kg/m） */
 }
-/** 污水处理工艺数据 */
+/** 仪表数据 */
 entity SewProcess(sew_process) {
     documentCode String required /** 单据号 */
     processTypeCode String required /** 工艺类型编码 */
@@ -227,36 +227,82 @@ entity SewProcess(sew_process) {
     dailyScale BigDecimal required /** 日均规模（m3/d） */
     operatingDays Integer required /** 本月运行天数 */
     // 输入项目-水质信息
-    inNitrogen BigDecimal required /** 进水总氮（mg/L） */
+    inFlow BigDecimal required /** 进水流量（mg/L） */
     inAmmonia BigDecimal required /** 进水氨氮（mg/L） */
     inCod BigDecimal required /** 进水COD（mg/L） */
-    inPhosphorus BigDecimal required /** 进水总磷（mg/L） */
-    inBod BigDecimal /** 进水BOD（mg/L） */
-    outNitrogen BigDecimal required /** 出水总氮（mg/L） */
+    inTn BigDecimal required /** 进水TN（mg/L） */
+    inTp BigDecimal /** 进水TP（mg/L） */
+    inPh BigDecimal /** 进水PH（mg/L） */
+    inSs BigDecimal /** 进水SS（mg/L） */
+    outFlow BigDecimal required /** 出水流量（mg/L） */
     outAmmonia BigDecimal required /** 出水氨氮（mg/L） */
     outCod BigDecimal required /** 出水COD（mg/L） */
-    outPhosphorus BigDecimal required /** 出水总磷（mg/L） */
-    outBod BigDecimal /** 出水BOD（mg/L） */
+    outTn BigDecimal required /** 出水TN（mg/L） */
+    outTp BigDecimal /** 出水TP（mg/L） */
+    outPh BigDecimal /** 出水PH（mg/L） */
+    outSs BigDecimal /** 出水SS（mg/L） */
+    //输入项目-厌氧池
+    anaerobicPoolDo BigDecimal /** 厌氧池DO（mg/L） */
+    //输入项目-缺氧池
+    anoxicPoolDo BigDecimal /** 缺氧池DO（mg/L） */
+    //输入项目-好氧池
+    aerobicPoolDo BigDecimal /** 好氧池DO（mg/L） */
+    anoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
+    aerobicPoolNit BigDecimal /** 亚硝酸盐（mg/L） */
 }
-/** 污泥处置方法数据 */
+/** 化验数据 */
 entity SewSlu(sew_slu) {
     documentCode String required /** 单据号 */
     methodCode String required /** 污泥处置方法编码 */
     methodName String required /** 污泥处置方法名称 */
-    sluCapacity BigDecimal /** 污泥处置量（kg/m）*/
-    sluMoisture BigDecimal /** 污泥处置前含水率（%） */
+
+    assInFlow BigDecimal required /** 进水流量（mg/L） */
+    assInAmmonia BigDecimal required /** 进水氨氮（mg/L） */
+    assInCod BigDecimal required /** 进水COD（mg/L） */
+    assInTn BigDecimal required /** 进水TN（mg/L） */
+    assInTp BigDecimal /** 进水TP（mg/L） */
+    assAnoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
+    assAerobicPoolDoOutNit BigDecimal /** 好氧池出口硝酸盐（mg/L） */
+    assOutFlow BigDecimal required /** 出水流量（mg/L） */
+    assOutAmmonia BigDecimal required /** 出水氨氮（mg/L） */
+    assOutCod BigDecimal required /** 出水COD（mg/L） */
+    assOutTn BigDecimal required /** 出水TN（mg/L） */
+    assOutTp BigDecimal /** 出水TP（mg/L） */
 }
-/** 污水处理药剂月投加量数据 */
+/** 日报表数据 */
 entity SewPot(sew_pot) {
     documentCode String required /** 单据号 */
-	potionCode String required /** 药剂编码 */
-	potionName String required /** 药剂名称 */
-    totalPot BigDecimal required /** 药剂月投加量（单位kWh/m） */
-    level1Pot BigDecimal /** 一级投加量（单位kWh/m） */
-    level2Pot BigDecimal /** 二级投加量（单位kWh/m） */
-    level3Pot BigDecimal /** 三级投加量（单位kWh/m） */
-    sluTreatPot BigDecimal /** 污泥处理投加量（单位kWh/m） */
-    sluHandlePot BigDecimal /** 污泥处置投加量（单位kWh/m） */
+	dayInPh BigDecimal /** 进水PH（mg/L） */
+    dayOutPh BigDecimal /** 出水PH（mg/L） */
+	dayFirstMud BigDecimal /** 初沉池排泥量（mg/L） */
+	daySecondMud BigDecimal /** 二沉池排泥量（mg/L） */
+	dayReflux BigDecimal /** 回流比（mg/L） */
+	dayCarAdd BigDecimal /** 碳源投加量（mg/L） */
+
+	//生化池-厌氧池
+	dayAnaerobicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
+	dayAnaerobicPoolOrp Bigdecimal /** 生化池-厌氧池ORP （）*/
+	dayAnaerobicPoolDo Bigdecimal /** 生化池-厌氧池DO （）*/
+	dayAnaerobicPoolSour Bigdecimal /** 生化池-厌氧池SOUR （）*/
+	dayAnaerobicPoolSv Bigdecimal /** 生化池-厌氧池SV （）*/
+	dayAnaerobicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
+	dayAnaerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
+	//生化池-缺氧池
+	dayAnoxicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
+	dayAnoxicPoolOrp Bigdecimal /** 生化池-厌氧池ORP （）*/
+	dayAnoxicPoolDo Bigdecimal /** 生化池-厌氧池DO （）*/
+	dayAnoxicPoolSour Bigdecimal /** 生化池-厌氧池SOUR （）*/
+	dayAnoxicPoolSv Bigdecimal /** 生化池-厌氧池SV （）*/
+	dayAnoxicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
+	dayAnoxicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
+	//生化池-好氧池
+	dayAerobicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
+	dayAerobicPoolOrp Bigdecimal /** 生化池-厌氧池ORP （）*/
+	dayAerobicPoolDo Bigdecimal /** 生化池-厌氧池DO （）*/
+	dayAerobicPoolSour Bigdecimal /** 生化池-厌氧池SOUR （）*/
+	dayAerobicPoolSv Bigdecimal /** 生化池-厌氧池SV （）*/
+	dayAerobicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
+	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 }
 /** 核算数据草稿 */
 entity Draft(app_draft) {

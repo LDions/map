@@ -32,9 +32,9 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "inNitrogen",
+      "fieldName": "inFlow",
       "fieldType": "BigDecimal",
-      "javadoc": "进水总氮（mg/L）",
+      "javadoc": "进水流量（mg/L）",
       "fieldValidateRules": ["required"]
     },
     {
@@ -50,20 +50,20 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "inPhosphorus",
+      "fieldName": "inTn",
       "fieldType": "BigDecimal",
       "javadoc": "进水总磷（mg/L）",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "inBod",
+      "fieldName": "inTp",
       "fieldType": "BigDecimal",
-      "javadoc": "进水BOD（mg/L）"
+      "javadoc": "进水Tp（mg/L）"
     },
     {
-      "fieldName": "outNitrogen",
+      "fieldName": "outFlow",
       "fieldType": "BigDecimal",
-      "javadoc": "出水总氮（mg/L）",
+      "javadoc": "出水流量（mg/L）",
       "fieldValidateRules": ["required"]
     },
     {
@@ -79,15 +79,15 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "outPhosphorus",
+      "fieldName": "outTn",
       "fieldType": "BigDecimal",
       "javadoc": "出水总磷（mg/L）",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "outBod",
+      "fieldName": "outTp",
       "fieldType": "BigDecimal",
-      "javadoc": "出水BOD（mg/L）"
+      "javadoc": "出水Tp（mg/L）"
     }
   ],
   "relationships": [],

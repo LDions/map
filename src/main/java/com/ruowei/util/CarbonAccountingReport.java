@@ -142,16 +142,16 @@ public class CarbonAccountingReport {
             table.addCell(createCell(sewProcessVM.getProcessTypeName(), 6, bfchinese, 1, null, borderColor));
             table.addCell(createCell(String.valueOf(sewProcessVM.getDailyScale()), 6, bfchinese, 1, null, borderColor));
             table.addCell(createCell(String.valueOf(sewProcessVM.getOperatingDays()), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(String.valueOf(sewProcessVM.getInNitrogen()), 6, bfchinese, 1, null, borderColor));
+            table.addCell(createCell(String.valueOf(sewProcessVM.getInFlow()), 6, bfchinese, 1, null, borderColor));
             table.addCell(createCell(String.valueOf(sewProcessVM.getInCod()), 6, bfchinese, 1, null, borderColor));
             table.addCell(createCell(String.valueOf(sewProcessVM.getInAmmonia()), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(String.valueOf(sewProcessVM.getInPhosphorus()), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewProcessVM.getInBod()), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(String.valueOf(sewProcessVM.getOutNitrogen()), 6, bfchinese, 1, null, borderColor));
+            table.addCell(createCell(String.valueOf(sewProcessVM.getInTp()), 6, bfchinese, 1, null, borderColor));
+            table.addCell(createCell(getValue(sewProcessVM.getInTn()), 6, bfchinese, 1, null, borderColor));
+            table.addCell(createCell(String.valueOf(sewProcessVM.getOutFlow()), 6, bfchinese, 1, null, borderColor));
             table.addCell(createCell(String.valueOf(sewProcessVM.getOutCod()), 6, bfchinese, 1, null, borderColor));
             table.addCell(createCell(String.valueOf(sewProcessVM.getOutAmmonia()), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(String.valueOf(sewProcessVM.getOutPhosphorus()), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewProcessVM.getOutBod()), 6, bfchinese, 1, null, borderColor));
+            table.addCell(createCell(String.valueOf(sewProcessVM.getOutTp()), 6, bfchinese, 1, null, borderColor));
+            table.addCell(createCell(getValue(sewProcessVM.getOutTn()), 6, bfchinese, 1, null, borderColor));
             table.addCell(cell);
             doc.add(table);
         }

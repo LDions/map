@@ -151,16 +151,16 @@ public class SewEmiService {
                     sewProcessVm.getDailyScale(),
                     new BigDecimal(sewProcessVm.getOperatingDays()),
                     sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getProcessTypeCode()).getValue(),
-                    sewProcessVm.getInNitrogen(),
+                    sewProcessVm.getInFlow(),
                     sewProcessVm.getInCod(),
                     sewProcessVm.getInAmmonia(),
-                    sewProcessVm.getInPhosphorus(),
-                    sewProcessVm.getInBod() != null ? sewProcessVm.getInBod() : new BigDecimal(0),
-                    sewProcessVm.getOutNitrogen(),
+                    sewProcessVm.getInTp(),
+                    sewProcessVm.getInTn() != null ? sewProcessVm.getInTn() : new BigDecimal(0),
+                    sewProcessVm.getOutFlow(),
                     sewProcessVm.getOutCod(),
                     sewProcessVm.getOutAmmonia(),
-                    sewProcessVm.getOutPhosphorus(),
-                    sewProcessVm.getOutBod() != null ? sewProcessVm.getOutBod() : new BigDecimal(0)
+                    sewProcessVm.getOutTp(),
+                    sewProcessVm.getOutTn() != null ? sewProcessVm.getOutTn() : new BigDecimal(0)
                 );
                 waterQualityDTOList.add(waterQualityDTO);
             }
@@ -512,16 +512,20 @@ public class SewEmiService {
                 .processTypeName(processVm.getProcessTypeName())
                 .dailyScale(processVm.getDailyScale())
                 .operatingDays(processVm.getOperatingDays())
-                .inNitrogen(processVm.getInNitrogen())
+                .inFlow(processVm.getInFlow())
                 .inAmmonia(processVm.getInAmmonia())
                 .inCod(processVm.getInCod())
-                .inPhosphorus(processVm.getInPhosphorus())
-                .inBod(processVm.getInBod())
-                .outNitrogen(processVm.getOutNitrogen())
+                .inTn(processVm.getInTp())
+                .inTp(processVm.getInTn())
+                .inPh(processVm.getInPh())
+                .inSs(processVm.getInSs())
+                .outFlow(processVm.getOutFlow())
                 .outAmmonia(processVm.getOutAmmonia())
                 .outCod(processVm.getOutCod())
-                .outPhosphorus(processVm.getOutPhosphorus())
-                .outBod(processVm.getOutBod());
+                .outTn(processVm.getOutTp())
+                .outTp(processVm.getOutTn())
+                .outPh(processVm.getOutPh())
+                .outSs(processVm.getOutSs());
             sewProcessList.add(sewProcess);
         }
         List<SewPot> sewPotList = new ArrayList<>();

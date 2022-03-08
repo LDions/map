@@ -68,9 +68,9 @@ public class SewProcess implements Serializable {
      * 进水总氮（mg/L）
      */
     @NotNull
-    @ApiModelProperty(value = "进水总氮（mg/L）", required = true)
-    @Column(name = "in_nitrogen", precision = 21, scale = 2, nullable = false)
-    private BigDecimal inNitrogen;
+    @ApiModelProperty(value = "进水流量（mg/L）", required = true)
+    @Column(name = "in_flpw", precision = 21, scale = 2, nullable = false)
+    private BigDecimal inFlow;
 
     /**
      * 进水氨氮（mg/L）
@@ -89,27 +89,43 @@ public class SewProcess implements Serializable {
     private BigDecimal inCod;
 
     /**
-     * 进水总磷（mg/L）
+     * 进水TN（mg/L）
      */
     @NotNull
-    @ApiModelProperty(value = "进水总磷（mg/L）", required = true)
-    @Column(name = "in_phosphorus", precision = 21, scale = 2, nullable = false)
-    private BigDecimal inPhosphorus;
+    @ApiModelProperty(value = "进水TN（mg/L）", required = true)
+    @Column(name = "in_tn", precision = 21, scale = 2, nullable = false)
+    private BigDecimal inTn;
 
     /**
-     * 进水BOD（mg/L）
+     * 进水Tp（mg/L）
      */
-    @ApiModelProperty(value = "进水BOD（mg/L）")
-    @Column(name = "in_bod", precision = 21, scale = 2)
-    private BigDecimal inBod;
+    @ApiModelProperty(value = "进水Tp（mg/L）")
+    @Column(name = "in_tp", precision = 21, scale = 2)
+    private BigDecimal inTp;
+
+    /**
+     * 进水PH（mg/L）
+     */
+    @ApiModelProperty(value = "进水Ph（mg/L）")
+    @Column(name = "in_ph", precision = 21, scale = 2)
+    private BigDecimal inPh;
+
+
+
+    /**
+     * 进水SS（mg/L）
+     */
+    @ApiModelProperty(value = "进水Ss（mg/L）")
+    @Column(name = "in_ss", precision = 21, scale = 2)
+    private BigDecimal inSs;
 
     /**
      * 出水总氮（mg/L）
      */
     @NotNull
-    @ApiModelProperty(value = "出水总氮（mg/L）", required = true)
-    @Column(name = "out_nitrogen", precision = 21, scale = 2, nullable = false)
-    private BigDecimal outNitrogen;
+    @ApiModelProperty(value = "出水流量（mg/L）", required = true)
+    @Column(name = "out_flow", precision = 21, scale = 2, nullable = false)
+    private BigDecimal outFlow;
 
     /**
      * 出水氨氮（mg/L）
@@ -128,19 +144,33 @@ public class SewProcess implements Serializable {
     private BigDecimal outCod;
 
     /**
-     * 出水总磷（mg/L）
+     * 出水TN（mg/L）
      */
     @NotNull
-    @ApiModelProperty(value = "出水总磷（mg/L）", required = true)
-    @Column(name = "out_phosphorus", precision = 21, scale = 2, nullable = false)
-    private BigDecimal outPhosphorus;
+    @ApiModelProperty(value = "出水TN（mg/L）", required = true)
+    @Column(name = "out_tn", precision = 21, scale = 2, nullable = false)
+    private BigDecimal outTn;
 
     /**
-     * 出水BOD（mg/L）
+     * 出水Tp（mg/L）
      */
-    @ApiModelProperty(value = "出水BOD（mg/L）")
-    @Column(name = "out_bod", precision = 21, scale = 2)
-    private BigDecimal outBod;
+    @ApiModelProperty(value = "出水Tp（mg/L）")
+    @Column(name = "out_tp", precision = 21, scale = 2)
+    private BigDecimal outTp;
+
+    /**
+     * 出水Ph（mg/L）
+     */
+    @ApiModelProperty(value = "出水Ph（mg/L）")
+    @Column(name = "out_ph", precision = 21, scale = 2)
+    private BigDecimal outPh;
+
+    /**
+     * 出水Ss（mg/L）
+     */
+    @ApiModelProperty(value = "出水Ss（mg/L）")
+    @Column(name = "out_ss", precision = 21, scale = 2)
+    private BigDecimal outSs;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -221,17 +251,17 @@ public class SewProcess implements Serializable {
         this.operatingDays = operatingDays;
     }
 
-    public BigDecimal getInNitrogen() {
-        return this.inNitrogen;
+    public BigDecimal getInFlow() {
+        return this.inFlow;
     }
 
-    public SewProcess inNitrogen(BigDecimal inNitrogen) {
-        this.inNitrogen = inNitrogen;
+    public SewProcess inFlow(BigDecimal inFlow) {
+        this.inFlow = inFlow;
         return this;
     }
 
-    public void setInNitrogen(BigDecimal inNitrogen) {
-        this.inNitrogen = inNitrogen;
+    public void setInFlow(BigDecimal inFlow) {
+        this.inFlow = inFlow;
     }
 
     public BigDecimal getInAmmonia() {
@@ -260,43 +290,43 @@ public class SewProcess implements Serializable {
         this.inCod = inCod;
     }
 
-    public BigDecimal getInPhosphorus() {
-        return this.inPhosphorus;
+    public BigDecimal getInTn() {
+        return this.inTn;
     }
 
-    public SewProcess inPhosphorus(BigDecimal inPhosphorus) {
-        this.inPhosphorus = inPhosphorus;
+    public SewProcess inTn(BigDecimal inTn) {
+        this.inTn = inTn;
         return this;
     }
 
-    public void setInPhosphorus(BigDecimal inPhosphorus) {
-        this.inPhosphorus = inPhosphorus;
+    public void setInTn(BigDecimal inTn) {
+        this.inTn = inTn;
     }
 
-    public BigDecimal getInBod() {
-        return this.inBod;
+    public BigDecimal getInTp() {
+        return this.inTp;
     }
 
-    public SewProcess inBod(BigDecimal inBod) {
-        this.inBod = inBod;
+    public SewProcess inTp(BigDecimal inTp) {
+        this.inTp = inTp;
         return this;
     }
 
-    public void setInBod(BigDecimal inBod) {
-        this.inBod = inBod;
+    public void setInTp(BigDecimal inTp) {
+        this.inTp = inTp;
     }
 
-    public BigDecimal getOutNitrogen() {
-        return this.outNitrogen;
+    public BigDecimal getOutFlow() {
+        return this.outFlow;
     }
 
-    public SewProcess outNitrogen(BigDecimal outNitrogen) {
-        this.outNitrogen = outNitrogen;
+    public SewProcess outFlow(BigDecimal outFlow) {
+        this.outFlow = outFlow;
         return this;
     }
 
-    public void setOutNitrogen(BigDecimal outNitrogen) {
-        this.outNitrogen = outNitrogen;
+    public void setOutFlow(BigDecimal outFlow) {
+        this.outFlow = outFlow;
     }
 
     public BigDecimal getOutAmmonia() {
@@ -325,30 +355,75 @@ public class SewProcess implements Serializable {
         this.outCod = outCod;
     }
 
-    public BigDecimal getOutPhosphorus() {
-        return this.outPhosphorus;
+    public BigDecimal getOutTn() {
+        return this.outTn;
     }
 
-    public SewProcess outPhosphorus(BigDecimal outPhosphorus) {
-        this.outPhosphorus = outPhosphorus;
+    public SewProcess outTn(BigDecimal outTn) {
+        this.outTn = outTn;
         return this;
     }
 
-    public void setOutPhosphorus(BigDecimal outPhosphorus) {
-        this.outPhosphorus = outPhosphorus;
+    public void setOutTn(BigDecimal outTn) {
+        this.outTn = outTn;
     }
 
-    public BigDecimal getOutBod() {
-        return this.outBod;
+    public BigDecimal getOutTp() {
+        return this.outTp;
     }
 
-    public SewProcess outBod(BigDecimal outBod) {
-        this.outBod = outBod;
+    public SewProcess outTp(BigDecimal outTp) {
+        this.outTp = outTp;
         return this;
     }
 
-    public void setOutBod(BigDecimal outBod) {
-        this.outBod = outBod;
+    public void setOutTp(BigDecimal outTp) {
+        this.outTp = outTp;
+    }
+
+    public BigDecimal getInSs() {
+        return inSs;
+    }
+    public SewProcess inSs(BigDecimal inSs) {
+        this.inSs = inSs;
+        return this;
+    }
+    public void setInSs(BigDecimal inSs) {
+        this.inSs = inSs;
+    }
+
+
+    public BigDecimal getInPh() {
+        return inPh;
+    }
+    public SewProcess inPh(BigDecimal inPh) {
+        this.inPh = inPh;
+        return this;
+    }
+    public void setInPh(BigDecimal inPh) {
+        this.inPh = inPh;
+    }
+
+    public BigDecimal getOutSs() {
+        return outSs;
+    }
+    public SewProcess outSs(BigDecimal outSs) {
+        this.outSs = outSs;
+        return this;
+    }
+    public void setOutSs(BigDecimal outSs) {
+        this.outSs = outSs;
+    }
+
+    public BigDecimal getOutPh() {
+        return outPh;
+    }
+    public SewProcess outPh(BigDecimal outPh) {
+        this.outPh = outPh;
+        return this;
+    }
+    public void setOutPh(BigDecimal outPh) {
+        this.outPh = outPh;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -380,16 +455,20 @@ public class SewProcess implements Serializable {
             ", processTypeName='" + getProcessTypeName() + "'" +
             ", dailyScale=" + getDailyScale() +
             ", operatingDays=" + getOperatingDays() +
-            ", inNitrogen=" + getInNitrogen() +
+            ", inFlow=" + getInFlow() +
             ", inAmmonia=" + getInAmmonia() +
             ", inCod=" + getInCod() +
-            ", inPhosphorus=" + getInPhosphorus() +
-            ", inBod=" + getInBod() +
-            ", outNitrogen=" + getOutNitrogen() +
+            ", inTn=" + getInTn() +
+            ", inTp=" + getInTp() +
+            ", inPh=" + getInPh() +
+            ", inSs=" + getInSs() +
+            ", outFlow=" + getOutFlow() +
             ", outAmmonia=" + getOutAmmonia() +
             ", outCod=" + getOutCod() +
-            ", outPhosphorus=" + getOutPhosphorus() +
-            ", outBod=" + getOutBod() +
+            ", outTn=" + getOutTn() +
+            ", outTp=" + getOutTp() +
+            ", outPh=" + getOutPh() +
+            ", outSs=" + getOutSs() +
             "}";
     }
 }
