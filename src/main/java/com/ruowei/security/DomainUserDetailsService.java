@@ -1,15 +1,21 @@
 package com.ruowei.security;
 
-import com.ruowei.modules.sys.domain.table.SysUserTable;
-import com.ruowei.modules.sys.repository.SysUserRoleRepository;
-import com.ruowei.modules.sys.repository.table.SysUserTableRepository;
+import com.ruowei.domain.Enterprise;
+import com.ruowei.domain.User;
+import com.ruowei.domain.enumeration.EnterpriseStatusType;
+import com.ruowei.domain.enumeration.UserStatusType;
+import com.ruowei.repository.EnterpriseRepository;
+import com.ruowei.repository.UserRepository;
+import com.ruowei.repository.UserRoleRepository;
+import com.ruowei.web.rest.errors.BadRequestProblem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,30 +29,41 @@ import java.util.stream.Collectors;
 public class DomainUserDetailsService implements UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
-    private final SysUserTableRepository sysUserTableRepository;
-    private final SysUserRoleRepository sysUserRoleRepository;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final EnterpriseRepository enterpriseRepository;
 
-    public DomainUserDetailsService(SysUserTableRepository sysUserTableRepository, SysUserRoleRepository sysUserRoleRepository) {
-        this.sysUserTableRepository = sysUserTableRepository;
-        this.sysUserRoleRepository = sysUserRoleRepository;
+    public DomainUserDetailsService(UserRepository userRepository, UserRoleRepository userRoleRepository, EnterpriseRepository enterpriseRepository) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.enterpriseRepository = enterpriseRepository;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
-
-        return sysUserTableRepository.findOneByLoginCode(login)
+        return userRepository
+            .findOneByLogin(login)
             .map(this::createSpringSecurityUser)
-            .orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
+            .orElseThrow(() -> new InternalAuthenticationServiceException("用户名或密码错误！"));
     }
 
-    private UserModel createSpringSecurityUser(SysUserTable sysUser) {
-        List<GrantedAuthority> grantedAuthorities =
-            sysUserRoleRepository.getAllRoleCodeByUserId(sysUser.getId())
-                .stream().map(SimpleGrantedAuthority::new)
-                .distinct().collect(Collectors.toList());
-        return new UserModel(sysUser.getLoginCode(), sysUser.getPassword(),
-            grantedAuthorities, sysUser.getId(), sysUser.getRefCode());
+    private UserModel createSpringSecurityUser(User user) {
+        List<GrantedAuthority> authorities =
+            userRoleRepository.getAllRoleCodeByUserId(user.getId())
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .distinct()
+                .collect(Collectors.toList());
+        if (user.getStatus() != UserStatusType.NORMAL) {
+            throw new LockedException("该用户已停用，请联系系统管理员");
+        }
+        if (user.getEnterpriseId() != null) {
+            Enterprise enterprise = enterpriseRepository.findByIdAndStatus(user.getEnterpriseId(), EnterpriseStatusType.NORMAL)
+                .orElseThrow(() -> new LockedException("未找到水务企业信息"));
+            return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), enterprise.getId(), enterprise.getName());
+        }
+        return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), null, null);
     }
 }

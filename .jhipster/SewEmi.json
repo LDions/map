@@ -1,0 +1,381 @@
+{
+  "name": "SewEmi",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "enterpriseId",
+      "fieldType": "Long",
+      "javadoc": "企业ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "enterpriseName",
+      "fieldType": "String",
+      "javadoc": "企业名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reporterId",
+      "fieldType": "Long",
+      "javadoc": "录入员ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reporterName",
+      "fieldType": "String",
+      "javadoc": "录入员姓名",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reportTime",
+      "fieldType": "Instant",
+      "javadoc": "填报时间",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "provinceCode",
+      "fieldType": "String",
+      "javadoc": "省份编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "provinceName",
+      "fieldType": "String",
+      "javadoc": "省份名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accYear",
+      "fieldType": "String",
+      "javadoc": "核算年份",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accMonth",
+      "fieldType": "String",
+      "javadoc": "核算月份",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accTime",
+      "fieldType": "String",
+      "javadoc": "核算时间",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "月度总电量消耗（kWh/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inPumpPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水总泵站耗电（kWh/m）"
+    },
+    {
+      "fieldName": "blowerPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "鼓风机房耗电（kWh/m）"
+    },
+    {
+      "fieldName": "retSluPumpPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "回流污泥泵房耗电（kWh）"
+    },
+    {
+      "fieldName": "sluTreatPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处理耗电（kWh/m）"
+    },
+    {
+      "fieldName": "disinfectPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "紫外+氯消毒耗电（kWh/m）"
+    },
+    {
+      "fieldName": "facilityPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "附属设施耗电（kWh/m）"
+    },
+    {
+      "fieldName": "otherPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "其他耗电（kWh/m）"
+    },
+    {
+      "fieldName": "sluHandlePow",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置用电（kWh/m）"
+    },
+    {
+      "fieldName": "solarPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "太阳能月发电量（kWh/m）"
+    },
+    {
+      "fieldName": "heatPumpHeat",
+      "fieldType": "BigDecimal",
+      "javadoc": "热泵月供热量（GJ/m）"
+    },
+    {
+      "fieldName": "heatPumpRefr",
+      "fieldType": "BigDecimal",
+      "javadoc": "热泵月制冷量（GJ/m）"
+    },
+    {
+      "fieldName": "heatPumpHotHours",
+      "fieldType": "BigDecimal",
+      "javadoc": "热泵供热运行时间（h）"
+    },
+    {
+      "fieldName": "heatPumpColdHours",
+      "fieldType": "BigDecimal",
+      "javadoc": "热泵制冷运行时间（h）"
+    },
+    {
+      "fieldName": "thermoElec",
+      "fieldType": "BigDecimal",
+      "javadoc": "热电联产月产电量（kWh/m）"
+    },
+    {
+      "fieldName": "thermoEner",
+      "fieldType": "BigDecimal",
+      "javadoc": "热电联产月产热量（GJ/m）"
+    },
+    {
+      "fieldName": "toGirdPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "负碳发电输送到电网的电量"
+    },
+    {
+      "fieldName": "otherText",
+      "fieldType": "String",
+      "javadoc": "其他负碳项目文字说明"
+    },
+    {
+      "fieldName": "otherEmiReduction",
+      "fieldType": "BigDecimal",
+      "javadoc": "其他负碳项目减排量"
+    },
+    {
+      "fieldName": "windPow",
+      "fieldType": "BigDecimal",
+      "javadoc": "风能月发电量"
+    },
+    {
+      "fieldName": "ecoComplexReduction",
+      "fieldType": "BigDecimal",
+      "javadoc": "生态综合体碳减排量"
+    },
+    {
+      "fieldName": "managedBySelf",
+      "fieldType": "Boolean",
+      "javadoc": "污泥处置是否为本厂管理"
+    },
+    {
+      "fieldName": "sluMoistureAfterTreat",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处理后含水率"
+    },
+    {
+      "fieldName": "factorVersionNum",
+      "fieldType": "String",
+      "javadoc": "碳排放因子版本号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "level1PotEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "一级处理药剂投加产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "level2PotEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "二级处理药剂投加产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "level3PotEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "三级处理药剂投加产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "sluTreatPotEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处理药剂投加产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "totalPotEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "药剂投加产生的间接碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inletPumpPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水总泵站耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "blowerPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "鼓风机房耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "retSluPumpPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "回流污泥泵房耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "sluTreatPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处理用电耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "facilityPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "紫外+氯消毒耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "disinfectPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "附属设施用电耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "otherPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "其他耗电产生的间接碳排放（kg/m）"
+    },
+    {
+      "fieldName": "totalPowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "耗电产生的间接碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sewTreatCh4Emi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水处理CH4的CO2当量（kg/m）"
+    },
+    {
+      "fieldName": "sewTreatN2oEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水处理N2O的CO2当量（kg/m）"
+    },
+    {
+      "fieldName": "totalSewTreatEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水处理的直接碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sluHandleCh4Emi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置CH4的CO2当量（kg/m）"
+    },
+    {
+      "fieldName": "sluHandleN2oEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置N2O的CO2当量（kg/m）"
+    },
+    {
+      "fieldName": "totalSluHandleDirEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置的直接碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sluHandlePotEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置药剂投加产生的间接碳排放",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sluHandlePowEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置用电产生的间接碳排放",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalSluHandleIndirEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置间接碳排放",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "solarPowRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "太阳能间接减少的碳排放（kg/m）"
+    },
+    {
+      "fieldName": "heatPumpRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "热泵间接减少的碳排放（kg/m）"
+    },
+    {
+      "fieldName": "thermoElecRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "热电联产发电间接减少的碳排放（kg/m）"
+    },
+    {
+      "fieldName": "thermoEnerRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "热电联产产热间接减少的碳排放（kg/m）"
+    },
+    {
+      "fieldName": "otherEmiRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "其他负碳项目减少的碳排放"
+    },
+    {
+      "fieldName": "windPowRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "风电间接减少的碳排放"
+    },
+    {
+      "fieldName": "ecoComplexRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "生态综合体减少的碳排放"
+    },
+    {
+      "fieldName": "carbonRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水厂本月负碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonDirEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水厂本月直接碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonIndirEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水厂本月间接碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "污水厂本月碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "污水处理碳排放数据",
+  "entityTableName": "sew_emi",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023658"
+}

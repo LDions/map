@@ -52,14 +52,6 @@ public class User implements Serializable {
     @Column(name = "enterprise_id")
     private Long enterpriseId;
 
-    @ApiModelProperty(value = "业主ID")
-    @Column(name = "company_id")
-    private Long companyId;
-
-    @ApiModelProperty(value = "第三方机构ID")
-    @Column(name = "third_party_id")
-    private Long thirdPartyId;
-
     @NotNull
     @ApiModelProperty(value = "用户状态", required = true)
     @Enumerated(EnumType.STRING)
@@ -140,32 +132,6 @@ public class User implements Serializable {
         this.enterpriseId = enterpriseId;
     }
 
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public User companyId(Long companyId) {
-        this.companyId = companyId;
-        return this;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public Long getThirdPartyId() {
-        return thirdPartyId;
-    }
-
-    public User thirdPartyId(Long thirdPartyId) {
-        this.thirdPartyId = thirdPartyId;
-        return this;
-    }
-
-    public void setThirdPartyId(Long thirdPartyId) {
-        this.thirdPartyId = thirdPartyId;
-    }
-
     public UserStatusType getStatus() {
         return status;
     }
@@ -206,8 +172,6 @@ public class User implements Serializable {
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
             ", enterpriseId=" + enterpriseId +
-            ", companyId=" + companyId +
-            ", thirdPartyId=" + thirdPartyId +
             ", status=" + status +
             '}';
     }

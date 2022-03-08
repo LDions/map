@@ -1,0 +1,66 @@
+{
+  "name": "SewPot",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "potionCode",
+      "fieldType": "String",
+      "javadoc": "药剂编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "potionName",
+      "fieldType": "String",
+      "javadoc": "药剂名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalPot",
+      "fieldType": "BigDecimal",
+      "javadoc": "药剂月投加量（单位kWh/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "level1Pot",
+      "fieldType": "BigDecimal",
+      "javadoc": "一级投加量（单位kWh/m）"
+    },
+    {
+      "fieldName": "level2Pot",
+      "fieldType": "BigDecimal",
+      "javadoc": "二级投加量（单位kWh/m）"
+    },
+    {
+      "fieldName": "level3Pot",
+      "fieldType": "BigDecimal",
+      "javadoc": "三级投加量（单位kWh/m）"
+    },
+    {
+      "fieldName": "sluTreatPot",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处理投加量（单位kWh/m）"
+    },
+    {
+      "fieldName": "sluHandlePot",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置投加量（单位kWh/m）"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "污水处理药剂月投加量数据",
+  "entityTableName": "sew_pot",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023700"
+}

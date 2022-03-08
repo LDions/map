@@ -3,9 +3,7 @@ package com.ruowei.web.rest.vm;
 import com.ruowei.domain.enumeration.UserStatusType;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,13 +91,11 @@ public class UserVM {
         }
         return id != null && id.equals(((UserVM) o).id);
     }
-
     @Override
     public int hashCode() {
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
-
     // prettier-ignore
     @Override
     public String toString() {
@@ -112,4 +108,3 @@ public class UserVM {
             '}';
     }
 }
-

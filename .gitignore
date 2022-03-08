@@ -1,6 +1,7 @@
 ######################
 # Project Specific
 ######################
+/src/main/webapp/content/css/main.css
 /build/resources/main/static/**
 /src/test/javascript/coverage/
 
@@ -52,8 +53,9 @@ local.properties
 
 # STS-specific
 /.sts4-cache/*
+
 ######################
-# Intellij
+# IntelliJ
 ######################
 .idea/
 *.iml
@@ -67,7 +69,12 @@ out/
 ######################
 # Visual Studio Code
 ######################
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
 
 ######################
 # Maven
@@ -144,6 +151,9 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
-/src/main/resources/config/liquibase/**
-/.gradletasknamecache
-/www/
+
+######################
+# Code coverage
+######################
+/coverage/
+/.nyc_output/

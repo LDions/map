@@ -1,0 +1,105 @@
+{
+  "name": "SewProcess",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "processTypeCode",
+      "fieldType": "String",
+      "javadoc": "工艺类型编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "processTypeName",
+      "fieldType": "String",
+      "javadoc": "工艺类型名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dailyScale",
+      "fieldType": "BigDecimal",
+      "javadoc": "日均规模（m3/d）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "operatingDays",
+      "fieldType": "Integer",
+      "javadoc": "本月运行天数",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inNitrogen",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水总氮（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inAmmonia",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水氨氮（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水COD（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inPhosphorus",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水总磷（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "inBod",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水BOD（mg/L）"
+    },
+    {
+      "fieldName": "outNitrogen",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水总氮（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "outAmmonia",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水氨氮（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "outCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水COD（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "outPhosphorus",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水总磷（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "outBod",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水BOD（mg/L）"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "污水处理工艺数据",
+  "entityTableName": "sew_process",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023701"
+}

@@ -7,28 +7,53 @@ import java.util.Collection;
 
 public class UserModel extends User {
 
-    private Long id;
-    private Long employeeId;
+    // 用户ID
+    private Long userId;
+    // 用户姓名
+    private String nickName;
+    // 企业ID
+    private Long enterpriseId;
+    // 企业名称
+    private String enterpriseName;
 
-    public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities, Long id, Long employeeId) {
+    public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, String nickName, Long enterpriseId, String enterpriseName) {
         super(username, password, authorities);
-        this.id = id;
-        this.employeeId = employeeId;
+        this.userId = userId;
+        this.nickName = nickName;
+        this.enterpriseId = enterpriseId;
+        this.enterpriseName = enterpriseName;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setEmployeeId(Long employeeId) {
-        this.employeeId = employeeId;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public Long getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(Long enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
 }
+

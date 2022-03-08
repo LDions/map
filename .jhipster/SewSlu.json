@@ -1,0 +1,45 @@
+{
+  "name": "SewSlu",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "methodCode",
+      "fieldType": "String",
+      "javadoc": "污泥处置方法编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "methodName",
+      "fieldType": "String",
+      "javadoc": "污泥处置方法名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sluCapacity",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置量（kg/m）"
+    },
+    {
+      "fieldName": "sluMoisture",
+      "fieldType": "BigDecimal",
+      "javadoc": "污泥处置前含水率（%）"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "污泥处置方法数据",
+  "entityTableName": "sew_slu",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023702"
+}

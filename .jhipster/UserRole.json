@@ -1,0 +1,29 @@
+{
+  "name": "UserRole",
+  "fields": [
+    {
+      "fieldName": "userId",
+      "fieldType": "Long",
+      "javadoc": "用户ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "roleId",
+      "fieldType": "Long",
+      "javadoc": "角色ID",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "用户角色",
+  "entityTableName": "sys_user_role",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210730055830"
+}

@@ -1,0 +1,53 @@
+{
+  "name": "Dict",
+  "fields": [
+    {
+      "fieldName": "catagoryCode",
+      "fieldType": "String",
+      "javadoc": "分类编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "catagoryName",
+      "fieldType": "String",
+      "javadoc": "分类名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dictCode",
+      "fieldType": "String",
+      "javadoc": "字典编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dictName",
+      "fieldType": "String",
+      "javadoc": "字典名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "disabled",
+      "fieldType": "Boolean",
+      "javadoc": "禁用状态",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sortNo",
+      "fieldType": "Integer",
+      "javadoc": "排序号",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "数据字典",
+  "entityTableName": "sys_dict",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210802063252"
+}

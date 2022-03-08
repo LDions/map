@@ -1,0 +1,107 @@
+{
+  "name": "EmiData",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "enterpriseId",
+      "fieldType": "Long",
+      "javadoc": "企业ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "enterpriseName",
+      "fieldType": "String",
+      "javadoc": "企业名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reporterId",
+      "fieldType": "Long",
+      "javadoc": "录入员ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reporterName",
+      "fieldType": "String",
+      "javadoc": "录入员姓名",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reportTime",
+      "fieldType": "Instant",
+      "javadoc": "填报时间",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accYear",
+      "fieldType": "String",
+      "javadoc": "核算年份",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accMonth",
+      "fieldType": "String",
+      "javadoc": "核算月份",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accTime",
+      "fieldType": "String",
+      "javadoc": "核算时间",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "industryCode",
+      "fieldType": "String",
+      "javadoc": "行业类型编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "industryName",
+      "fieldType": "String",
+      "javadoc": "行业类型名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "本月碳排放（kg/m）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonDirEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "本月直接碳排放（kg）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonIndirEmi",
+      "fieldType": "BigDecimal",
+      "javadoc": "本月间接碳排放（kg）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "carbonRed",
+      "fieldType": "BigDecimal",
+      "javadoc": "本月负碳排放（kg）",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "碳排放数据",
+  "entityTableName": "emi_data",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023657"
+}
