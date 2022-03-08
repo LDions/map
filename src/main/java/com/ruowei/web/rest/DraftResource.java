@@ -41,7 +41,7 @@ public class DraftResource {
     }
 
     @PostMapping("/drafts")
-    @ApiOperation(value = "添加草稿", notes = "作者:郑昊天")
+    @ApiOperation(value = "添加草稿", notes = "作者:张锴")
     public ResponseEntity<Void> createDraft(@Valid @RequestBody DraftVM vm,
                                             @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         Long draftNum = draftRepository.countAllByUserIdAndType(userModel.getUserId(), vm.getType());
@@ -60,7 +60,7 @@ public class DraftResource {
     }
 
     @PutMapping("/drafts/{id}")
-    @ApiOperation(value = "更新草稿", notes = "作者:郑昊天")
+    @ApiOperation(value = "更新草稿", notes = "作者:张锴")
     public ResponseEntity<Void> updateDraft(@PathVariable(value = "id", required = false) final Long id,
                                             @Valid @RequestBody DraftContentVM vm) {
         draftRepository.findById(id)
@@ -69,28 +69,28 @@ public class DraftResource {
     }
 
     @GetMapping("/drafts")
-    @ApiOperation(value = "获取草稿列表", notes = "作者:郑昊天")
+    @ApiOperation(value = "获取草稿列表", notes = "作者:张锴")
     public List<DraftListDTO> getAllDrafts(@ApiParam(value = "草稿类型", required = true) @RequestParam DraftType draftType,
                                            @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         return draftRepository.findAllByUserIdAndTypeOrderByModifyTimeDesc(userModel.getUserId(), draftType);
     }
 
     @GetMapping("/drafts/{id}")
-    @ApiOperation(value = "获取草稿详情", notes = "作者:郑昊天")
+    @ApiOperation(value = "获取草稿详情", notes = "作者:张锴")
     public ResponseEntity<Draft> getDraft(@PathVariable Long id) {
         Optional<Draft> draft = draftRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(draft);
     }
 
     @DeleteMapping("/drafts/{id}")
-    @ApiOperation(value = "删除草稿", notes = "作者:郑昊天")
+    @ApiOperation(value = "删除草稿", notes = "作者:张锴")
     public ResponseEntity<Void> deleteDraft(@PathVariable Long id) {
         draftRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/drafts/draftNumber")
-    @ApiOperation(value = "获取草稿数量", notes = "作者:郑昊天")
+    @ApiOperation(value = "获取草稿数量", notes = "作者:张锴")
     public ResponseEntity<DraftNumberDTO> getDraftNumber(@ApiParam(value = "草稿类型", required = true) @RequestParam DraftType draftType,
                                                          @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         DraftNumberDTO draftNumberDTO = new DraftNumberDTO(draftRepository.countAllByUserIdAndType(userModel.getUserId(), draftType));
@@ -98,7 +98,7 @@ public class DraftResource {
     }
 
     @PostMapping("/drafts/saveOldDraft")
-    @ApiOperation(value = "保存旧数据草稿", notes = "作者:郑昊天")
+    @ApiOperation(value = "保存旧数据草稿", notes = "作者:张锴")
     public ResponseEntity<Void> createOldDataDraft(@Valid @RequestBody OldDataDraftVM vm,
                                             @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         Long draftNum = draftRepository.countAllByUserIdAndTypeAndIndustryCode(userModel.getUserId(),DraftType.OLD,vm.getIndustryCode());
@@ -124,7 +124,7 @@ public class DraftResource {
     }
 
     @GetMapping("/drafts/getOldDraft")
-    @ApiOperation(value = "获取旧数据草稿", notes = "作者:郑昊天")
+    @ApiOperation(value = "获取旧数据草稿", notes = "作者:张锴")
     public ResponseEntity<Draft> getOldDataDraft(@ApiIgnore @AuthenticationPrincipal UserModel userModel,
                                                  @ApiParam(value = "行业类型编码", required = true) @RequestParam String industryCode) {
         Optional<Draft> draftOpt = draftRepository.findByUserIdAndTypeAndIndustryCode(userModel.getUserId(),DraftType.OLD,industryCode);
