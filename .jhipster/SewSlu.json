@@ -20,14 +20,55 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "sluCapacity",
+      "fieldName": "assInFlow",
       "fieldType": "BigDecimal",
-      "javadoc": "污泥处置量（kg/m）"
+      "javadoc": "assInFlow（mg/L）"
     },
     {
-      "fieldName": "sluMoisture",
+      "fieldName": "assInAmmonia",
       "fieldType": "BigDecimal",
-      "javadoc": "污泥处置前含水率（%）"
+      "javadoc": "进水氨氮（mg/L）"
+    },
+    {
+      "fieldName": "assInCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水COD（mg/L）"
+    },{
+      "fieldName": "assInTn",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水TN（mg/L）"
+    },{
+      "fieldName": "assInTp",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水TP（mg/L）"
+    },{
+      "fieldName": "assAnoxicPoolDoOutNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池出口硝酸盐（mg/L）"
+    },{
+      "fieldName": "assAerobicPoolDoOutNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "好氧池出口硝酸盐（mg/L）"
+    },{
+      "fieldName": "assOutFlow",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水流量（mg/L）"
+    },{
+      "fieldName": "assOutAmmonia",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水氨氮（mg/L）"
+    },{
+      "fieldName": "assOutCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水COD（mg/L）"
+    },{
+      "fieldName": "assOutTn",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水TN（mg/L）"
+    },{
+      "fieldName": "assOutTp",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水TP（mg/L）"
     }
   ],
   "relationships": [],

@@ -10,9 +10,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * 污水处理药剂月投加量数据
+ * 日报表数据
  */
-@ApiModel(description = "污水处理药剂月投加量数据")
+@ApiModel(description = "日报表数据")
 @Entity
 @Table(name = "sew_pot")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -33,65 +33,224 @@ public class SewPot implements Serializable {
     private String documentCode;
 
     /**
-     * 药剂编码
+     * 进水PH
      */
     @NotNull
-    @ApiModelProperty(value = "药剂编码", required = true)
-    @Column(name = "potion_code", nullable = false)
-    private String potionCode;
+    @ApiModelProperty(value = "进水PH", required = true)
+    @Column(name = "day_in_ph", nullable = false)
+    private BigDecimal dayInPh;
 
     /**
-     * 药剂名称
+     * 出水PH
      */
     @NotNull
-    @ApiModelProperty(value = "药剂名称", required = true)
-    @Column(name = "potion_name", nullable = false)
-    private String potionName;
+    @ApiModelProperty(value = "出水PH", required = true)
+    @Column(name = "day_out_ph", nullable = false)
+    private BigDecimal dayOutPh;
 
     /**
-     * 药剂月投加量（单位kWh/m）
+     * 初沉池排泥量
      */
     @NotNull
-    @ApiModelProperty(value = "药剂月投加量（单位kWh/m）", required = true)
-    @Column(name = "total_pot", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalPot;
+    @ApiModelProperty(value = "初沉池排泥量", required = true)
+    @Column(name = "day_first_mud", nullable = false)
+    private BigDecimal dayFirstMud;
 
     /**
-     * 一级投加量（单位kWh/m）
+     * 二沉池排泥量
      */
-    @ApiModelProperty(value = "一级投加量（单位kWh/m）")
-    @Column(name = "level_1_pot", precision = 21, scale = 2)
-    private BigDecimal level1Pot;
+    @NotNull
+    @ApiModelProperty(value = "二沉池排泥量", required = true)
+    @Column(name = "day_second_mud", nullable = false)
+    private BigDecimal daySecondMud;
 
     /**
-     * 二级投加量（单位kWh/m）
+     * 回流比
      */
-    @ApiModelProperty(value = "二级投加量（单位kWh/m）")
-    @Column(name = "level_2_pot", precision = 21, scale = 2)
-    private BigDecimal level2Pot;
+    @NotNull
+    @ApiModelProperty(value = "回流比", required = true)
+    @Column(name = "day_reflux", nullable = false)
+    private BigDecimal dayReflux;
 
     /**
-     * 三级投加量（单位kWh/m）
+     * 碳源投加量
      */
-    @ApiModelProperty(value = "三级投加量（单位kWh/m）")
-    @Column(name = "level_3_pot", precision = 21, scale = 2)
-    private BigDecimal level3Pot;
+    @NotNull
+    @ApiModelProperty(value = "碳源投加量", required = true)
+    @Column(name = "day_car_add", nullable = false)
+    private BigDecimal dayCarAdd;
 
     /**
-     * 污泥处理投加量（单位kWh/m）
+     * 生化池-厌氧池PH
      */
-    @ApiModelProperty(value = "污泥处理投加量（单位kWh/m）")
-    @Column(name = "slu_treat_pot", precision = 21, scale = 2)
-    private BigDecimal sluTreatPot;
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池PH", required = true)
+    @Column(name = "day_anaerobic_pool_ph", nullable = false)
+    private BigDecimal dayAnaerobicPoolPh;
 
     /**
-     * 污泥处置投加量（单位kWh/m）
+     * 生化池-厌氧池ORP
      */
-    @ApiModelProperty(value = "污泥处置投加量（单位kWh/m）")
-    @Column(name = "slu_handle_pot", precision = 21, scale = 2)
-    private BigDecimal sluHandlePot;
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池ORP", required = true)
+    @Column(name = "day_anaerobic_pool_orp", nullable = false)
+    private BigDecimal dayAnaerobicPoolOrp;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    /**
+     * 生化池-厌氧池DO
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池DO", required = true)
+    @Column(name = "day_anaerobic_pool_do", nullable = false)
+    private BigDecimal dayAnaerobicPoolDo;
+
+    /**
+     * 生化池-厌氧池SOUR
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池SOUR", required = true)
+    @Column(name = "day_anaerobic_pool_sour", nullable = false)
+    private BigDecimal dayAnaerobicPoolSour;
+
+    /**
+     * 生化池-厌氧池SV
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池SV", required = true)
+    @Column(name = "day_anaerobic_pool_sv", nullable = false)
+    private BigDecimal dayAnaerobicPoolSv;
+
+    /**
+     * 生化池-厌氧池MLSS
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池MLSS", required = true)
+    @Column(name = "day_anaerobic_pool_mlss", nullable = false)
+    private BigDecimal dayAnaerobicPoolMlss;
+
+    /**
+     * 生化池-厌氧池温度
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池温度", required = true)
+    @Column(name = "day_anaerobic_pool_temper", nullable = false)
+    private BigDecimal dayAnaerobicPoolTemper;
+
+    /**
+     * 生化池-厌氧池PH
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池PH", required = true)
+    @Column(name = "day_anoxic_pool_ph", nullable = false)
+    private BigDecimal dayAnoxicPoolPh;
+
+    /**
+     * 生化池-厌氧池ORP
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池ORP", required = true)
+    @Column(name = "day_anoxic_pool_orp", nullable = false)
+    private BigDecimal dayAnoxicPoolOrp;
+
+    /**
+     * 生化池-厌氧池DO
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池DO", required = true)
+    @Column(name = "day_anoxic_pool_do", nullable = false)
+    private BigDecimal dayAnoxicPoolDo;
+
+    /**
+     * 生化池-厌氧池SOUR
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池SOUR", required = true)
+    @Column(name = "day_anoxic_pool_sour", nullable = false)
+    private BigDecimal dayAnoxicPoolSour;
+
+    /**
+     * 生化池-厌氧池SV
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池SV", required = true)
+    @Column(name = "day_anoxic_pool_sv", nullable = false)
+    private BigDecimal dayAnoxicPoolSv;
+
+    /**
+     * 生化池-厌氧池MLSS
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池MLSS", required = true)
+    @Column(name = "day_anoxic_pool_mlss", nullable = false)
+    private BigDecimal dayAnoxicPoolMlss;
+
+    /**
+     * 生化池-厌氧池温度
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池温度", required = true)
+    @Column(name = "day_anoxic_pool_temper", nullable = false)
+    private BigDecimal dayAnoxicPoolTemper;
+
+    /**
+     * 生化池-厌氧池PH
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池PH", required = true)
+    @Column(name = "day_aerobic_pool_ph", nullable = false)
+    private BigDecimal dayAerobicPoolPh;
+
+    /**
+     * 生化池-厌氧池ORP
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池ORP", required = true)
+    @Column(name = "day_aerobic_pool_orp", nullable = false)
+    private BigDecimal dayAerobicPoolOrp;
+
+    /**
+     * 生化池-厌氧池DO
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池DO", required = true)
+    @Column(name = "day_aerobic_pool_do", nullable = false)
+    private BigDecimal dayAerobicPoolDo;
+
+    /**
+     * 生化池-厌氧池SOUR
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池SOUR", required = true)
+    @Column(name = "day_aerobic_pool_sour", nullable = false)
+    private BigDecimal dayAerobicPoolSour;
+
+    /**
+     * 生化池-厌氧池SV
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池SV", required = true)
+    @Column(name = "day_aerobic_pool_sv", nullable = false)
+    private BigDecimal dayAerobicPoolSv;
+
+    /**
+     * 生化池-厌氧池MLSS
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池MLSS", required = true)
+    @Column(name = "day_aerobic_pool_mlss", nullable = false)
+    private BigDecimal dayAerobicPoolMlss;
+
+    /**
+     * 生化池-厌氧池温度
+     */
+    @NotNull
+    @ApiModelProperty(value = "生化池-厌氧池温度", required = true)
+    @Column(name = "day_aerobic_pool_temper", nullable = false)
+    private BigDecimal dayAerobicPoolTemper;
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+
     public Long getId() {
         return id;
     }
@@ -99,131 +258,320 @@ public class SewPot implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
     public SewPot id(Long id) {
         this.id = id;
         return this;
     }
 
     public String getDocumentCode() {
-        return this.documentCode;
-    }
-
-    public SewPot documentCode(String documentCode) {
-        this.documentCode = documentCode;
-        return this;
+        return documentCode;
     }
 
     public void setDocumentCode(String documentCode) {
         this.documentCode = documentCode;
     }
-
-    public String getPotionCode() {
-        return this.potionCode;
+    public SewPot documentCode(String documentCode) {
+        this.documentCode = documentCode;
+        return this;
+    }
+    public BigDecimal getDayInPh() {
+        return dayInPh;
     }
 
-    public SewPot potionCode(String potionCode) {
-        this.potionCode = potionCode;
+    public void setDayInPh(BigDecimal dayInPh) {
+        this.dayInPh = dayInPh;
+    }
+    public SewPot dayInPh(BigDecimal dayInPh) {
+        this.dayInPh = dayInPh;
         return this;
     }
 
-    public void setPotionCode(String potionCode) {
-        this.potionCode = potionCode;
+    public BigDecimal getDayOutPh() {
+        return dayOutPh;
     }
 
-    public String getPotionName() {
-        return this.potionName;
+    public void setDayOutPh(BigDecimal dayOutPh) {
+        this.dayOutPh = dayOutPh;
     }
-
-    public SewPot potionName(String potionName) {
-        this.potionName = potionName;
+    public SewPot dayOutPh(BigDecimal dayOutPh) {
+        this.dayOutPh = dayOutPh;
         return this;
     }
-
-    public void setPotionName(String potionName) {
-        this.potionName = potionName;
+    public BigDecimal getDayFirstMud() {
+        return dayFirstMud;
     }
 
-    public BigDecimal getTotalPot() {
-        return this.totalPot;
+    public void setDayFirstMud(BigDecimal dayFirstMud) {
+        this.dayFirstMud = dayFirstMud;
     }
-
-    public SewPot totalPot(BigDecimal totalPot) {
-        this.totalPot = totalPot;
+    public SewPot dayFirstMud(BigDecimal dayFirstMud) {
+        this.dayFirstMud = dayFirstMud;
         return this;
     }
-
-    public void setTotalPot(BigDecimal totalPot) {
-        this.totalPot = totalPot;
+    public BigDecimal getDaySecondMud() {
+        return daySecondMud;
     }
 
-    public BigDecimal getLevel1Pot() {
-        return this.level1Pot;
+    public void setDaySecondMud(BigDecimal daySecondMud) {
+        this.daySecondMud = daySecondMud;
     }
-
-    public SewPot level1Pot(BigDecimal level1Pot) {
-        this.level1Pot = level1Pot;
+    public SewPot daySecondMud(BigDecimal daySecondMud) {
+        this.daySecondMud = daySecondMud;
         return this;
     }
-
-    public void setLevel1Pot(BigDecimal level1Pot) {
-        this.level1Pot = level1Pot;
+    public BigDecimal getDayReflux() {
+        return dayReflux;
     }
 
-    public BigDecimal getLevel2Pot() {
-        return this.level2Pot;
+    public void setDayReflux(BigDecimal dayReflux) {
+        this.dayReflux = dayReflux;
     }
-
-    public SewPot level2Pot(BigDecimal level2Pot) {
-        this.level2Pot = level2Pot;
+    public SewPot dayReflux(BigDecimal dayReflux) {
+        this.dayReflux = dayReflux;
         return this;
     }
-
-    public void setLevel2Pot(BigDecimal level2Pot) {
-        this.level2Pot = level2Pot;
+    public BigDecimal getDayCarAdd() {
+        return dayCarAdd;
     }
 
-    public BigDecimal getLevel3Pot() {
-        return this.level3Pot;
+    public void setDayCarAdd(BigDecimal dayCarAdd) {
+        this.dayCarAdd = dayCarAdd;
     }
-
-    public SewPot level3Pot(BigDecimal level3Pot) {
-        this.level3Pot = level3Pot;
+    public SewPot dayCarAdd(BigDecimal dayCarAdd) {
+        this.dayCarAdd = dayCarAdd;
         return this;
     }
-
-    public void setLevel3Pot(BigDecimal level3Pot) {
-        this.level3Pot = level3Pot;
+    public BigDecimal getDayAnaerobicPoolPh() {
+        return dayAnaerobicPoolPh;
     }
 
-    public BigDecimal getSluTreatPot() {
-        return this.sluTreatPot;
+    public void setDay_anaerobicPoolPh(BigDecimal dayAnaerobicPoolPh) {
+        this.dayAnaerobicPoolPh = dayAnaerobicPoolPh;
     }
-
-    public SewPot sluTreatPot(BigDecimal sluTreatPot) {
-        this.sluTreatPot = sluTreatPot;
+    public SewPot dayAnaerobicPoolPh(BigDecimal dayAnaerobicPoolPh) {
+        this.dayAnaerobicPoolPh = dayAnaerobicPoolPh;
         return this;
     }
-
-    public void setSluTreatPot(BigDecimal sluTreatPot) {
-        this.sluTreatPot = sluTreatPot;
+    public BigDecimal getDayAnaerobicPoolOrp() {
+        return dayAnaerobicPoolOrp;
     }
 
-    public BigDecimal getSluHandlePot() {
-        return this.sluHandlePot;
+    public void setDayAnaerobicPoolOrp(BigDecimal dayAnaerobicPoolOrp) {
+        this.dayAnaerobicPoolOrp = dayAnaerobicPoolOrp;
     }
-
-    public SewPot sluHandlePot(BigDecimal sluHandlePot) {
-        this.sluHandlePot = sluHandlePot;
+    public SewPot dayAnaerobicPoolOrp(BigDecimal dayAnaerobicPoolOrp) {
+        this.dayAnaerobicPoolOrp = dayAnaerobicPoolOrp;
         return this;
     }
-
-    public void setSluHandlePot(BigDecimal sluHandlePot) {
-        this.sluHandlePot = sluHandlePot;
+    public BigDecimal getDayAnaerobicPoolDo() {
+        return dayAnaerobicPoolDo;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public void setDayAnaerobicPoolDo(BigDecimal dayAnaerobicPoolDo) {
+        this.dayAnaerobicPoolDo = dayAnaerobicPoolDo;
+    }
+    public SewPot dayAnaerobicPoolDo(BigDecimal dayAnaerobicPoolDo) {
+        this.dayAnaerobicPoolDo = dayAnaerobicPoolDo;
+        return this;
+    }
+    public BigDecimal getDayAnaerobicPoolSour() {
+        return dayAnaerobicPoolSour;
+    }
 
+    public void setDayAnaerobicPoolSour(BigDecimal dayAnaerobicPoolSour) {
+        this.dayAnaerobicPoolSour = dayAnaerobicPoolSour;
+    }
+    public SewPot dayAnaerobicPoolSour(BigDecimal dayAnaerobicPoolSour) {
+        this.dayAnaerobicPoolSour = dayAnaerobicPoolSour;
+        return this;
+    }
+    public BigDecimal getDayAnaerobicPoolSv() {
+        return dayAnaerobicPoolSv;
+    }
+
+    public void setDayAnaerobicPoolSv(BigDecimal dayAnaerobicPoolSv) {
+        this.dayAnaerobicPoolSv = dayAnaerobicPoolSv;
+    }
+    public SewPot dayAnaerobicPoolSv(BigDecimal dayAnaerobicPoolSv) {
+        this.dayAnaerobicPoolSv = dayAnaerobicPoolSv;
+        return this;
+    }
+    public BigDecimal getDayAnaerobicPoolMlss() {
+        return dayAnaerobicPoolMlss;
+    }
+
+    public void setDayAnaerobicPoolMlss(BigDecimal dayAnaerobicPoolMlss) {
+        this.dayAnaerobicPoolMlss = dayAnaerobicPoolMlss;
+    }
+    public SewPot dayAnaerobicPoolMlss(BigDecimal dayAnaerobicPoolMlss) {
+        this.dayAnaerobicPoolMlss = dayAnaerobicPoolMlss;
+        return this;
+    }
+    public BigDecimal getDayAnaerobicPoolTemper() {
+        return dayAnaerobicPoolTemper;
+    }
+
+    public void setDayAnaerobicPoolTemper(BigDecimal dayAnaerobicPoolTemper) {
+        this.dayAnaerobicPoolTemper = dayAnaerobicPoolTemper;
+    }
+    public SewPot dayAnaerobicPoolTemper(BigDecimal dayAnaerobicPoolTemper) {
+        this.dayAnaerobicPoolTemper = dayAnaerobicPoolTemper;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolPh() {
+        return dayAnoxicPoolPh;
+    }
+
+    public void setDayAnoxicPoolPh(BigDecimal dayAnoxicPoolPh) {
+        this.dayAnoxicPoolPh = dayAnoxicPoolPh;
+    }
+    public SewPot dayAnoxicPoolPh(BigDecimal dayAnoxicPoolPh) {
+        this.dayAnoxicPoolPh = dayAnoxicPoolPh;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolOrp() {
+        return dayAnoxicPoolOrp;
+    }
+
+    public void setDayAnoxicPoolOrp(BigDecimal dayAnoxicPoolOrp) {
+        this.dayAnoxicPoolOrp = dayAnoxicPoolOrp;
+    }
+    public SewPot dayAnoxicPoolOrp(BigDecimal dayAnoxicPoolOrp) {
+        this.dayAnoxicPoolOrp = dayAnoxicPoolOrp;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolDo() {
+        return dayAnoxicPoolDo;
+    }
+
+    public void setDayAnoxicPoolDo(BigDecimal dayAnoxicPoolDo) {
+        this.dayAnoxicPoolDo = dayAnoxicPoolDo;
+    }
+    public SewPot dayAnoxicPoolDo(BigDecimal dayAnoxicPoolDo) {
+        this.dayAnoxicPoolDo = dayAnoxicPoolDo;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolSour() {
+        return dayAnoxicPoolSour;
+    }
+
+    public void setDayAnoxicPoolSour(BigDecimal dayAnoxicPoolSour) {
+        this.dayAnoxicPoolSour = dayAnoxicPoolSour;
+    }
+    public SewPot dayAnoxicPoolSour(BigDecimal dayAnoxicPoolSour) {
+        this.dayAnoxicPoolSour = dayAnoxicPoolSour;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolSv() {
+        return dayAnoxicPoolSv;
+    }
+
+    public void setDayAnoxicPoolSv(BigDecimal dayAnoxicPoolSv) {
+        this.dayAnoxicPoolSv = dayAnoxicPoolSv;
+    }
+    public SewPot dayAnoxicPoolSv(BigDecimal dayAnoxicPoolSv) {
+        this.dayAnoxicPoolSv = dayAnoxicPoolSv;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolMlss() {
+        return dayAnoxicPoolMlss;
+    }
+
+    public void setDayAnoxicPoolMlss(BigDecimal dayAnoxicPoolMlss) {
+        this.dayAnoxicPoolMlss = dayAnoxicPoolMlss;
+    }
+    public SewPot dayAnoxicPoolMlss(BigDecimal dayAnoxicPoolMlss) {
+        this.dayAnoxicPoolMlss = dayAnoxicPoolMlss;
+        return this;
+    }
+    public BigDecimal getDayAnoxicPoolTemper() {
+        return dayAnoxicPoolTemper;
+    }
+
+    public void setDayAnoxicPoolTemper(BigDecimal dayAnoxicPoolTemper) {
+        this.dayAnoxicPoolTemper = dayAnoxicPoolTemper;
+    }
+    public SewPot dayAnoxicPoolTemper(BigDecimal dayAnoxicPoolTemper) {
+        this.dayAnoxicPoolTemper = dayAnoxicPoolTemper;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolPh() {
+        return dayAerobicPoolPh;
+    }
+
+    public void setDayAerobicPoolPh(BigDecimal dayAerobicPoolPh) {
+        this.dayAerobicPoolPh = dayAerobicPoolPh;
+    }
+    public SewPot dayAerobicPoolPh(BigDecimal dayAerobicPoolPh) {
+        this.dayAerobicPoolPh = dayAerobicPoolPh;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolOrp() {
+        return dayAerobicPoolOrp;
+    }
+
+    public void setDayAerobicPoolOrp(BigDecimal dayAerobicPoolOrp) {
+        this.dayAerobicPoolOrp = dayAerobicPoolOrp;
+    }
+    public SewPot dayAerobicPoolOrp(BigDecimal dayAerobicPoolOrp) {
+        this.dayAerobicPoolOrp = dayAerobicPoolOrp;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolDo() {
+        return dayAerobicPoolDo;
+    }
+
+    public void setDayAerobicPoolDo(BigDecimal dayAerobicPoolDo) {
+        this.dayAerobicPoolDo = dayAerobicPoolDo;
+    }
+    public SewPot dayAerobicPoolDo(BigDecimal dayAerobicPoolDo) {
+        this.dayAerobicPoolDo = dayAerobicPoolDo;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolSour() {
+        return dayAerobicPoolSour;
+    }
+
+    public void setDayAerobicPoolSour(BigDecimal dayAerobicPoolSour) {
+        this.dayAerobicPoolSour = dayAerobicPoolSour;
+    }
+    public SewPot dayAerobicPoolSour(BigDecimal dayAerobicPoolSour) {
+        this.dayAerobicPoolSour = dayAerobicPoolSour;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolSv() {
+        return dayAerobicPoolSv;
+    }
+
+    public void setDayAerobicPoolSv(BigDecimal dayAerobicPoolSv) {
+        this.dayAerobicPoolSv = dayAerobicPoolSv;
+    }
+    public SewPot dayAerobicPoolSv(BigDecimal dayAerobicPoolSv) {
+        this.dayAerobicPoolSv = dayAerobicPoolSv;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolMlss() {
+        return dayAerobicPoolMlss;
+    }
+
+    public void setDayAerobicPoolMlss(BigDecimal dayAerobicPoolMlss) {
+        this.dayAerobicPoolMlss = dayAerobicPoolMlss;
+    }
+    public SewPot dayAerobicPoolMlss(BigDecimal dayAerobicPoolMlss) {
+        this.dayAerobicPoolMlss = dayAerobicPoolMlss;
+        return this;
+    }
+    public BigDecimal getDayAerobicPoolTemper() {
+        return dayAerobicPoolTemper;
+    }
+
+    public void setDayAerobicPoolTemper(BigDecimal dayAerobicPoolTemper) {
+        this.dayAerobicPoolTemper = dayAerobicPoolTemper;
+    }
+    public SewPot dayAerobicPoolTemper(BigDecimal dayAerobicPoolTemper) {
+        this.dayAerobicPoolTemper = dayAerobicPoolTemper;
+        return this;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -247,14 +595,33 @@ public class SewPot implements Serializable {
         return "SewPot{" +
             "id=" + getId() +
             ", documentCode='" + getDocumentCode() + "'" +
-            ", potionCode='" + getPotionCode() + "'" +
-            ", potionName='" + getPotionName() + "'" +
-            ", totalPot=" + getTotalPot() +
-            ", level1Pot=" + getLevel1Pot() +
-            ", level2Pot=" + getLevel2Pot() +
-            ", level3Pot=" + getLevel3Pot() +
-            ", sluTreatPot=" + getSluTreatPot() +
-            ", sluHandlePot=" + getSluHandlePot() +
+            ", dayInPh='" + getDayInPh() + "'" +
+            ", dayOutPh='" + getDayOutPh() + "'" +
+            ", dayFirstMud='" + getDayFirstMud() + "'" +
+            ", daySecondMud='" + getDaySecondMud() + "'" +
+            ", dayReflux='" + getDayReflux() + "'" +
+            ", dayCarAdd='" + getDayCarAdd() + "'" +
+            ", dayAnaerobicPoolPh='" + getDayAnaerobicPoolPh() + "'" +
+            ", dayAnaerobicPoolOrp='" + getDayAnaerobicPoolOrp() + "'" +
+            ", dayAnaerobicPoolDo='" + getDayAnaerobicPoolDo() + "'" +
+            ", dayAnaerobicPoolSour='" + getDayAnaerobicPoolSour() + "'" +
+            ", dayAnaerobicPoolSv='" + getDayAnaerobicPoolSv() + "'" +
+            ", dayAnaerobicPoolMlss='" + getDayAnaerobicPoolMlss() + "'" +
+            ", dayAnaerobicPoolTemper='" + getDayAnaerobicPoolTemper() + "'" +
+            ", dayAnoxicPoolPh='" + getDayAnoxicPoolPh() + "'" +
+            ", dayAnoxicPoolOrp='" + getDayAnoxicPoolOrp() + "'" +
+            ", dayAnoxicPoolDo='" + getDayAnoxicPoolDo() + "'" +
+            ", dayAnoxicPoolSour='" + getDayAnoxicPoolSour() + "'" +
+            ", dayAnoxicPoolSv='" + getDayAnoxicPoolSv() + "'" +
+            ", dayAnoxicPoolMlss='" + getDayAnoxicPoolMlss() + "'" +
+            ", dayAnoxicPoolTemper='" + getDayAnoxicPoolTemper() + "'" +
+            ", dayAerobicPoolPh='" + getDayAerobicPoolPh() + "'" +
+            ", dayAerobicPoolOrp='" + getDayAerobicPoolOrp() + "'" +
+            ", dayAerobicPoolDo='" + getDayAerobicPoolDo() + "'" +
+            ", dayAerobicPoolSour='" + getDayAerobicPoolSour() + "'" +
+            ", dayAerobicPoolSv='" + getDayAerobicPoolSv() + "'" +
+            ", dayAerobicPoolMlss='" + getDayAerobicPoolMlss() + "'" +
+            ", dayAerobicPoolTemper='" + getDayAerobicPoolTemper() + "'" +
             "}";
     }
 }

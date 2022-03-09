@@ -10,9 +10,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * 污泥处置方法数据
+ * 化验数据
  */
-@ApiModel(description = "污泥处置方法数据")
+@ApiModel(description = "化验数据")
 @Entity
 @Table(name = "sew_slu")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -49,18 +49,89 @@ public class SewSlu implements Serializable {
     private String methodName;
 
     /**
-     * 污泥处置量（kg/m）
+     * 进水流量（mg/L）
      */
-    @ApiModelProperty(value = "污泥处置量（kg/m）")
-    @Column(name = "slu_capacity", precision = 21, scale = 2)
-    private BigDecimal sluCapacity;
+    @ApiModelProperty(value = "进水流量（mg/L）")
+    @Column(name = "ass_in_flow", precision = 21, scale = 2)
+    private BigDecimal assInFlow;
 
     /**
-     * 污泥处置前含水率（%）
+     * 进水氨氮（mg/L）
      */
-    @ApiModelProperty(value = "污泥处置前含水率（%）")
-    @Column(name = "slu_moisture", precision = 21, scale = 2)
-    private BigDecimal sluMoisture;
+    @ApiModelProperty(value = "进水氨氮（mg/L）")
+    @Column(name = "ass_in_ammonia", precision = 21, scale = 2)
+    private BigDecimal assInAmmonia;
+
+    /**
+     * 进水COD（mg/L）
+     */
+    @ApiModelProperty(value = "进水COD（mg/L）")
+    @Column(name = "ass_in_cod", precision = 21, scale = 2)
+    private BigDecimal assInCod;
+
+    /**
+     * 进水TN（mg/L）
+     */
+    @ApiModelProperty(value = "进水TN（mg/L）")
+    @Column(name = "ass_in_tn", precision = 21, scale = 2)
+    private BigDecimal assInTn;
+
+    /**
+     * 进水TP（mg/L）
+     */
+    @ApiModelProperty(value = "进水TP（mg/L）")
+    @Column(name = "ass_in_tp", precision = 21, scale = 2)
+    private BigDecimal assInTp;
+
+    /**
+     * 缺氧池出口硝酸盐（mg/L）
+     */
+    @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
+    @Column(name = "ass_anoxic_pool_do_out_nit", precision = 21, scale = 2)
+    private BigDecimal assAnoxicPoolDoOutNit;
+
+    /**
+     * 好氧池出口硝酸盐（mg/L）
+     */
+    @ApiModelProperty(value = "好氧池出口硝酸盐（mg/L）")
+    @Column(name = "ass_aerobic_pool_do_out_nit", precision = 21, scale = 2)
+    private BigDecimal assAerobicPoolDoOutNit;
+
+    /**
+     * 出水流量（mg/L）
+     */
+    @ApiModelProperty(value = "出水流量（mg/L）")
+    @Column(name = "ass_out_flow", precision = 21, scale = 2)
+    private BigDecimal assOutFlow;
+
+    /**
+     * 出水氨氮（mg/L）
+     */
+    @ApiModelProperty(value = "出水氨氮（mg/L）")
+    @Column(name = "ass_out_ammonia", precision = 21, scale = 2)
+    private BigDecimal assOutAmmonia;
+
+    /**
+     * 出水COD（mg/L）
+     */
+    @ApiModelProperty(value = "出水COD（mg/L）")
+    @Column(name = "ass_out_cod", precision = 21, scale = 2)
+    private BigDecimal assOutCod;
+
+    /**
+     * 出水TN（mg/L）
+     */
+    @ApiModelProperty(value = "出水TN（mg/L）")
+    @Column(name = "ass_out_tn", precision = 21, scale = 2)
+    private BigDecimal assOutTn;
+
+    /**
+     * 出水TP（mg/L）
+     */
+    @ApiModelProperty(value = "出水TP（mg/L）")
+    @Column(name = "ass_out_tp", precision = 21, scale = 2)
+    private BigDecimal assOutTp;
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -115,30 +186,136 @@ public class SewSlu implements Serializable {
         this.methodName = methodName;
     }
 
-    public BigDecimal getSluCapacity() {
-        return this.sluCapacity;
+    public BigDecimal getAssInFlow() {
+        return assInFlow;
     }
-
-    public SewSlu sluCapacity(BigDecimal sluCapacity) {
-        this.sluCapacity = sluCapacity;
+    public SewSlu assInFlow(BigDecimal assInFlow) {
+        this.assInFlow = assInFlow;
         return this;
     }
-
-    public void setSluCapacity(BigDecimal sluCapacity) {
-        this.sluCapacity = sluCapacity;
+    public void setAssInFlow(BigDecimal assInFlow) {
+        this.assInFlow = assInFlow;
     }
 
-    public BigDecimal getSluMoisture() {
-        return this.sluMoisture;
+    public BigDecimal getAssInAmmonia() {
+        return assInAmmonia;
     }
-
-    public SewSlu sluMoisture(BigDecimal sluMoisture) {
-        this.sluMoisture = sluMoisture;
+    public SewSlu assInAmmonia(BigDecimal assInAmmonia) {
+        this.assInAmmonia = assInAmmonia;
         return this;
     }
+    public void setAssInAmmonia(BigDecimal assInAmmonia) {
+        this.assInAmmonia = assInAmmonia;
+    }
 
-    public void setSluMoisture(BigDecimal sluMoisture) {
-        this.sluMoisture = sluMoisture;
+    public BigDecimal getAssInCod() {
+        return assInCod;
+    }
+    public SewSlu assInCod(BigDecimal assInCod) {
+        this.assInCod = assInCod;
+        return this;
+    }
+    public void setAssInCod(BigDecimal assInCod) {
+        this.assInCod = assInCod;
+    }
+
+    public BigDecimal getAssInTn() {
+        return assInTn;
+    }
+    public SewSlu assInTn(BigDecimal assInTn) {
+        this.assInTn = assInTn;
+        return this;
+    }
+    public void setAssInTn(BigDecimal assInTn) {
+        this.assInTn = assInTn;
+    }
+
+    public BigDecimal getAssInTp() {
+        return assInTp;
+    }
+    public SewSlu assInTp(BigDecimal assInTp) {
+        this.assInTp = assInTp;
+        return this;
+    }
+    public void setAssInTp(BigDecimal assInTp) {
+        this.assInTp = assInTp;
+    }
+
+    public BigDecimal getAssAnoxicPoolDoOutNit() {
+        return assAnoxicPoolDoOutNit;
+    }
+    public SewSlu assAnoxicPoolDoOutNit(BigDecimal assAnoxicPoolDoOutNit) {
+        this.assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit;
+        return this;
+    }
+    public void setAssAnoxicPoolDoOutNit(BigDecimal assAnoxicPoolDoOutNit) {
+        this.assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit;
+    }
+
+    public BigDecimal getAssAerobicPoolDoOutNit() {
+        return assAerobicPoolDoOutNit;
+    }
+    public SewSlu assAerobicPoolDoOutNit(BigDecimal assAerobicPoolDoOutNit) {
+        this.assAerobicPoolDoOutNit = assAerobicPoolDoOutNit;
+        return this;
+    }
+    public void setAssAerobicPoolDoOutNit(BigDecimal assAerobicPoolDoOutNit) {
+        this.assAerobicPoolDoOutNit = assAerobicPoolDoOutNit;
+    }
+
+    public BigDecimal getAssOutFlow() {
+        return assOutFlow;
+    }
+    public SewSlu assOutFlow(BigDecimal assOutFlow) {
+        this.assOutFlow = assOutFlow;
+        return this;
+    }
+    public void setAssOutFlow(BigDecimal assOutFlow) {
+        this.assOutFlow = assOutFlow;
+    }
+
+    public BigDecimal getAssOutAmmonia() {
+        return assOutAmmonia;
+    }
+    public SewSlu assOutAmmonia(BigDecimal assOutAmmonia) {
+        this.assOutAmmonia = assOutAmmonia;
+        return this;
+    }
+    public void setAssOutAmmonia(BigDecimal assOutAmmonia) {
+        this.assOutAmmonia = assOutAmmonia;
+    }
+
+    public BigDecimal getAssOutCod() {
+        return assOutCod;
+    }
+    public SewSlu assOutCod(BigDecimal assOutCod) {
+        this.assOutCod = assOutCod;
+        return this;
+    }
+    public void setAssOutCod(BigDecimal assOutCod) {
+        this.assOutCod = assOutCod;
+    }
+
+    public BigDecimal getAssOutTn() {
+        return assOutTn;
+    }
+    public SewSlu assOutTn(BigDecimal assOutTn) {
+        this.assOutTn = assOutTn;
+        return this;
+    }
+    public void setAssOutTn(BigDecimal assOutTn) {
+        this.assOutTn = assOutTn;
+    }
+
+    public BigDecimal getAssOutTp() {
+        return assOutTp;
+    }
+    public SewSlu assOutTp(BigDecimal assOutTp) {
+        this.assOutTp = assOutTp;
+        return this;
+    }
+    public void setAssOutTp(BigDecimal assOutTp) {
+        this.assOutTp = assOutTp;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -168,8 +345,18 @@ public class SewSlu implements Serializable {
             ", documentCode='" + getDocumentCode() + "'" +
             ", methodCode='" + getMethodCode() + "'" +
             ", methodName='" + getMethodName() + "'" +
-            ", sluCapacity=" + getSluCapacity() +
-            ", sluMoisture=" + getSluMoisture() +
+            ", assInFlow='" + getAssInFlow() + "'" +
+            ", assInAmmonia='" + getAssInAmmonia() + "'" +
+            ", assInCod='" + getAssInCod() + "'" +
+            ", assInTn='" + getAssInTn() + "'" +
+            ", assInTp='" + getAssInTp() + "'" +
+            ", assAnoxicPoolDoOutNit='" + getAssAnoxicPoolDoOutNit() + "'" +
+            ", assAerobicPoolDoOutNit='" + getAssAerobicPoolDoOutNit() + "'" +
+            ", assOutFlow='" + getAssOutFlow() + "'" +
+            ", assOutAmmonia='" + getAssOutAmmonia() + "'" +
+            ", assOutCod='" + getAssOutCod() + "'" +
+            ", assOutTn='" + getAssOutTn() + "'" +
+            ", assOutTp='" + getAssOutTp() + "'" +
             "}";
     }
 }

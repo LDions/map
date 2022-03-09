@@ -10,9 +10,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * 污水处理工艺数据
+ * 仪表数据
  */
-@ApiModel(description = "污水处理工艺数据")
+@ApiModel(description = "仪表数据")
 @Entity
 @Table(name = "sew_process")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -171,6 +171,42 @@ public class SewProcess implements Serializable {
     @ApiModelProperty(value = "出水Ss（mg/L）")
     @Column(name = "out_ss", precision = 21, scale = 2)
     private BigDecimal outSs;
+
+    /**
+     * 厌氧池DO（mg/L）
+     */
+    @ApiModelProperty(value = "厌氧池（mg/L）")
+    @Column(name = "anaerobic_pool_do", precision = 21, scale = 2)
+    private BigDecimal anaerobicPoolDo;
+
+    /**
+     * 缺氧池（mg/L）
+     */
+    @ApiModelProperty(value = "缺氧池（mg/L）")
+    @Column(name = "anoxic_pool_do", precision = 21, scale = 2)
+    private BigDecimal anoxicPoolDo;
+
+    /**
+     * 好氧池（mg/L）
+     */
+    @ApiModelProperty(value = "好氧池（mg/L）")
+    @Column(name = "aerobic_pool_do", precision = 21, scale = 2)
+    private BigDecimal aerobicPoolDo;
+
+    /**
+     * 缺氧池出口硝酸盐（mg/L）
+     */
+    @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
+    @Column(name = "anoxic_pool_do_out_nit", precision = 21, scale = 2)
+    private BigDecimal anoxicPoolDoOutNit;
+
+    /**
+     * 亚硝酸盐（mg/L）
+     */
+    @ApiModelProperty(value = "亚硝酸盐（mg/L）")
+    @Column(name = "aerobic_pool_nit", precision = 21, scale = 2)
+    private BigDecimal aerobicPoolNit;
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -426,6 +462,63 @@ public class SewProcess implements Serializable {
         this.outPh = outPh;
     }
 
+    public BigDecimal getAnaerobicPoolDo() {
+        return anaerobicPoolDo;
+    }
+    public SewProcess anaerobicPoolDo(BigDecimal anaerobicPoolDo) {
+        this.anaerobicPoolDo = anaerobicPoolDo;
+        return this;
+    }
+
+    public void setAnaerobicPoolDo(BigDecimal anaerobicPoolDo) {
+        this.anaerobicPoolDo = anaerobicPoolDo;
+    }
+
+    public BigDecimal getAnoxicPoolDo() {
+        return anoxicPoolDo;
+    }
+    public SewProcess anoxicPoolDo(BigDecimal anoxicPoolDo) {
+        this.anoxicPoolDo = anoxicPoolDo;
+        return this;
+    }
+
+    public void setAnoxicPoolDo(BigDecimal anoxicPoolDo) {
+        this.anoxicPoolDo = anoxicPoolDo;
+    }
+
+    public BigDecimal getAerobicPoolDo() {
+        return aerobicPoolDo;
+    }
+    public SewProcess aerobicPoolDo(BigDecimal aerobicPoolDo) {
+        this.aerobicPoolDo = aerobicPoolDo;
+        return this;
+    }
+    public void setAerobicPoolDo(BigDecimal aerobicPoolDo) {
+        this.aerobicPoolDo = aerobicPoolDo;
+    }
+
+    public BigDecimal getAnoxicPoolDoOutNit() {
+        return anoxicPoolDoOutNit;
+    }
+    public SewProcess anoxicPoolDoOutNit(BigDecimal anoxicPoolDoOutNit) {
+        this.anoxicPoolDoOutNit = anoxicPoolDoOutNit;
+        return this;
+    }
+    public void setAnoxicPoolDoOutNit(BigDecimal anoxicPoolDoOutNit) {
+        this.anoxicPoolDoOutNit = anoxicPoolDoOutNit;
+    }
+
+    public BigDecimal getAerobicPoolNit() {
+        return aerobicPoolNit;
+    }
+    public SewProcess aerobicPoolNit(BigDecimal aerobicPoolNit) {
+        this.aerobicPoolNit = aerobicPoolNit;
+        return this;
+    }
+    public void setAerobicPoolNit(BigDecimal aerobicPoolNit) {
+        this.aerobicPoolNit = aerobicPoolNit;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -469,6 +562,11 @@ public class SewProcess implements Serializable {
             ", outTp=" + getOutTp() +
             ", outPh=" + getOutPh() +
             ", outSs=" + getOutSs() +
+            ", anaerobicPoolDo=" + getAnaerobicPoolDo() +
+            ", anoxicPoolDo=" + getAnoxicPoolDo() +
+            ", aerobicPoolDo=" + getAnaerobicPoolDo() +
+            ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
+            ", aerobicPoolNit=" + getAerobicPoolNit() +
             "}";
     }
 }

@@ -187,13 +187,7 @@ public class CarbonAccountingReport {
             // table.setWidthPercentage(100); // 设置table宽度为100%
             // table.setHorizontalAlignment(PdfPTable.ALIGN_CENTER); // 设置table居中显示
 //                  for (int i = 0; i < sewPotDetailDTO.getParams2().size(); i++) {
-            table.addCell(createCell(sewSluDetailDTO.getPotionName(), 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewSluDetailDTO.getTotalPot()) + " kg/mth", 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewSluDetailDTO.getLevel1Pot()) + " kg/mth", 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewSluDetailDTO.getLevel2Pot()) + " kg/mth", 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewSluDetailDTO.getLevel3Pot()) + " kg/mth", 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewSluDetailDTO.getSluTreatPot()) + " kg/mth", 6, bfchinese, 1, null, borderColor));
-            table.addCell(createCell(getValue(sewSluDetailDTO.getSluHandlePot()) + " kg/mth", 6, bfchinese, 1, null, borderColor));
+
             doc.add(table);
         }
         if (sewEmiDTO.getSolarPow() != null || sewEmiDTO.getHeatPumpHeat() != null || sewEmiDTO.getThermoElec() != null
@@ -285,8 +279,7 @@ public class CarbonAccountingReport {
                 table15.addCell(createCell1("", 8, bfchinese, 1, null, borderColor));
             }
             table15.addCell(createCell(sewSluDetailDTO.getMethodName(), 8, bfchinese, 1, null, borderColor));
-            table15.addCell(createCell("*污泥处置量:" + getValue(sewSluDetailDTO.getSluCapacity()) + " kg/mth", 8, bfchinese, 1, null, borderColor));
-            table15.addCell(createCell("*污泥处理前含水率(%):" + getValue(sewSluDetailDTO.getSluMoisture()), 8, bfchinese, 1, null, borderColor));
+
             n++;
         }
         table15.addCell(cell);

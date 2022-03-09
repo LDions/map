@@ -296,13 +296,7 @@ public class CarbonAccountingExcel2 {
                 sheet.addMergedRegion(new CellRangeAddress(a, (short) a, 7, (short) 8));
                 sheet.addMergedRegion(new CellRangeAddress(a, (short) a, 9, (short) 10));
                 sheet.addMergedRegion(new CellRangeAddress(a, (short) a, 11, (short) 12));
-                createExcelCell(row11, 0, styleContent2, sewSluDetailDTO.getPotionName());
-                createExcelCell(row11, 1, styleContent2, sewSluDetailDTO.getTotalPot() + "kg/mth");
-                createExcelCell(row11, 3, styleContent2, sewSluDetailDTO.getLevel1Pot() + "kg/mth");
-                createExcelCell(row11, 5, styleContent2, sewSluDetailDTO.getLevel2Pot() + "kg/mth");
-                createExcelCell(row11, 7, styleContent2, sewSluDetailDTO.getLevel3Pot() + "kg/mth");
-                createExcelCell(row11, 9, styleContent2, sewSluDetailDTO.getSluTreatPot() + "kg/mth");
-                createExcelCell(row11, 11, styleContent2, sewSluDetailDTO.getSluHandlePot() + "kg/mth");
+
                 a++;
             }
 
@@ -453,8 +447,7 @@ public class CarbonAccountingExcel2 {
                     createExcelCell(rowWuni4, 0, styleContent2, "");
                 }
                 createExcelCell(rowWuni4, 1, styleContent5, sewSluDetailDTO.getMethodName());
-                createExcelCell(rowWuni4, 3, styleContent2, "*污泥处置量:" + getValue(sewSluDetailDTO.getSluCapacity()) + " kg/mth");
-                createExcelCell(rowWuni4, 5, styleContent2, "*污泥处理前含水率(%):" + getValue(sewSluDetailDTO.getSluMoisture()));
+               
                 IntStream.range(7, 13).forEach(value -> createExcelCell(rowWuni4, value, styleContent2, ""));              //填充空白列
                 a++;
                 i++;

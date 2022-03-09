@@ -88,6 +88,43 @@
       "fieldName": "outTp",
       "fieldType": "BigDecimal",
       "javadoc": "出水Tp（mg/L）"
+    },
+    {
+      "fieldName": "outPh",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水PH（mg/L）"
+    },
+    {
+      "fieldName": "outSs",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水SS（mg/L）"
+    },
+    {
+      "fieldName": "anaerobicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "厌氧池DO（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "anoxicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池DO（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "aerobicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "好氧池DO（mg/L）",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "anoxicPoolDoOutNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池出口硝酸盐（mg/L）"
+    },{
+      "fieldName": "aerobicPoolNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "亚硝酸盐（mg/L）"
     }
   ],
   "relationships": [],

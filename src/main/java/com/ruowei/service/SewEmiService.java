@@ -72,6 +72,7 @@ public class SewEmiService {
 
     /**
      * 计算各设施耗电量之和
+     *
      * @param vm
      * @return
      */
@@ -103,28 +104,19 @@ public class SewEmiService {
 
     /**
      * 计算某种药剂各投加量之和
+     *
      * @param vm
      * @return
      */
     public BigDecimal calculateSumOfEachDosage(SewEmiAccountVM.SewPotVM vm) {
         BigDecimal sum = new BigDecimal(0);
-        if (vm.getLevel1Pot() != null) {
-            sum = sum.add(vm.getLevel1Pot());
-        }
-        if (vm.getLevel2Pot() != null) {
-            sum = sum.add(vm.getLevel2Pot());
-        }
-        if (vm.getLevel3Pot() != null) {
-            sum = sum.add(vm.getLevel3Pot());
-        }
-        if (vm.getSluTreatPot() != null) {
-            sum = sum.add(vm.getSluTreatPot());
-        }
+
         return sum;
     }
 
     /**
      * 污水碳排放输入数据和排放因子参数封装
+     *
      * @param vm
      * @return
      */
@@ -180,25 +172,10 @@ public class SewEmiService {
                 vm.getSluHandlePow() != null ? vm.getSluHandlePow() : new BigDecimal(0)
             );
             enterDTO.setElectricityDTO(electricityDTO);
-            // 封装药剂月投加量信息
+            // TODO 日报表数据核算
             List<WaterCarbonEmissionEnterDTO.PharmacyDTO> pharmacyDTOList = new ArrayList<>();
             for (SewEmiAccountVM.SewPotVM sewPotVm : vm.getSewPots()) {
-                if (StringUtils.isBlank(sewPotVm.getPotionCode())) {
-                    throw new BadRequestProblem("核算失败", "药剂编码不能为空");
-                }
-                if (sewEmiFactorDTO.getChemicalsEmiFactor().get(sewPotVm.getPotionCode()) == null) {
-                    throw new BadRequestProblem("核算失败", "不存在" + sewPotVm.getPotionName() + "药剂");
-                }
-                WaterCarbonEmissionEnterDTO.PharmacyDTO pharmacyDTO = new WaterCarbonEmissionEnterDTO.PharmacyDTO(
-                    sewPotVm.getTotalPot(),
-                    sewPotVm.getLevel1Pot() != null ? sewPotVm.getLevel1Pot() : new BigDecimal(0),
-                    sewPotVm.getLevel2Pot() != null ? sewPotVm.getLevel2Pot() : new BigDecimal(0),
-                    sewPotVm.getLevel3Pot() != null ? sewPotVm.getLevel3Pot() : new BigDecimal(0),
-                    sewPotVm.getSluTreatPot() != null ? sewPotVm.getSluTreatPot() : new BigDecimal(0),
-                    sewPotVm.getSluHandlePot() != null ? sewPotVm.getSluHandlePot() : new BigDecimal(0),
-                    sewEmiFactorDTO.getChemicalsEmiFactor().get(sewPotVm.getPotionCode()).getValue()
-                );
-                pharmacyDTOList.add(pharmacyDTO);
+
             }
             enterDTO.setPharmacyDTOList(pharmacyDTOList);
             // 封装碳减排信息
@@ -224,25 +201,7 @@ public class SewEmiService {
             enterDTO.setMSludge3(new BigDecimal(0));
             enterDTO.setWc3(new BigDecimal(60));
             for (SewEmiAccountVM.SewSluVM sewSluVm : vm.getSewSlus()) {
-                if (sewSluVm.getSluMoisture().compareTo(new BigDecimal(0)) == 0) {
-                    throw new BadRequestProblem("核算失败", "污泥处理后含水率不能为0");
-                }
-                switch (sewSluVm.getMethodCode()) {
-                    case COMPOST:
-                        enterDTO.setMSludge1(sewSluVm.getSluCapacity());
-                        enterDTO.setWc1(sewSluVm.getSluMoisture());
-                        break;
-                    case BIOGAS:
-                        enterDTO.setMSludge2(sewSluVm.getSluCapacity());
-                        enterDTO.setWc2(sewSluVm.getSluMoisture());
-                        break;
-                    case LANDFILL:
-                        enterDTO.setMSludge3(sewSluVm.getSluCapacity());
-                        enterDTO.setWc3(sewSluVm.getSluMoisture());
-                        break;
-                    default:
-                        throw new BadRequestProblem("核算失败", "不存在该污泥方法");
-                }
+
             }
             enterDTO.setOdeg1(new BigDecimal(0));
             enterDTO.setOdeg2(new BigDecimal(0));
@@ -316,10 +275,11 @@ public class SewEmiService {
 
     /**
      * 调用智能合约接口（现将数据保存在MySQL数据库中，此方法暂未用到）
+     *
      * @param request
      * @param operationTypeEnum 操作类型
-     * @param functionEnum 方法
-     * @param requestArgs 请求体（json格式）
+     * @param functionEnum      方法
+     * @param requestArgs       请求体（json格式）
      * @return
      */
     public ChainCodeResponseDTO callTheSmartContractInterface(HttpServletRequest request,
@@ -352,6 +312,7 @@ public class SewEmiService {
 
     /**
      * 封装碳排放数据
+     *
      * @param documentCode
      * @param userModel
      * @param vm
@@ -378,6 +339,7 @@ public class SewEmiService {
 
     /**
      * 封装污水碳排放核算数据
+     *
      * @param documentCode
      * @param userModel
      * @param vm
@@ -409,6 +371,7 @@ public class SewEmiService {
 
     /**
      * 调用智能合约接口保存污水厂碳排放核算数据（现将数据保存在MySQL数据库中，此方法暂未用到）
+     *
      * @param request
      * @param documentCode
      * @param userModel
@@ -455,6 +418,7 @@ public class SewEmiService {
 
     /**
      * 保存碳排放核算信息
+     *
      * @param documentCode
      * @param userModel
      * @param vm
@@ -569,32 +533,65 @@ public class SewEmiService {
                 .outTn(processVm.getOutTp())
                 .outTp(processVm.getOutTn())
                 .outPh(processVm.getOutPh())
-                .outSs(processVm.getOutSs());
+                .outSs(processVm.getOutSs())
+                .anaerobicPoolDo(processVm.getAnaerobicPoolDo())
+                .anoxicPoolDo(processVm.getAnoxicPoolDo())
+                .aerobicPoolDo(processVm.getAerobicPoolDo())
+                .anoxicPoolDoOutNit(processVm.getAnoxicPoolDoOutNit())
+                .aerobicPoolNit(processVm.getAerobicPoolNit());
             sewProcessList.add(sewProcess);
         }
         List<SewPot> sewPotList = new ArrayList<>();
         for (SewEmiAccountVM.SewPotVM potVm : vm.getSewPots()) {
             SewPot sewPot = new SewPot()
                 .documentCode(documentCode)
-                .potionCode(potVm.getPotionCode())
-                .potionName(potVm.getPotionName())
-                .totalPot(potVm.getTotalPot())
-                .level1Pot(potVm.getLevel1Pot())
-                .level2Pot(potVm.getLevel2Pot())
-                .level3Pot(potVm.getLevel3Pot())
-                .sluTreatPot(potVm.getSluTreatPot())
-                .sluHandlePot(potVm.getSluHandlePot());
+                .dayInPh(potVm.getDayInPh())
+                .dayOutPh(potVm.getDayOutPh())
+                .dayFirstMud(potVm.getDayFirstMud())
+                .daySecondMud(potVm.getDaySecondMud())
+                .dayReflux(potVm.getDayReflux())
+                .dayCarAdd(potVm.getDayCarAdd())
+                .dayAnaerobicPoolPh(potVm.getDayAnaerobicPoolPh())
+                .dayAnaerobicPoolOrp(potVm.getDayAnaerobicPoolOrp())
+                .dayAnaerobicPoolDo(potVm.getDayAnaerobicPoolDo())
+                .dayAnaerobicPoolSour(potVm.getDayAnaerobicPoolSour())
+                .dayAnaerobicPoolSv(potVm.getDayAnaerobicPoolSv())
+                .dayAnaerobicPoolMlss(potVm.getDayAnaerobicPoolMlss())
+                .dayAnaerobicPoolTemper(potVm.getDayAnaerobicPoolTemper())
+                .dayAnoxicPoolPh(potVm.getDayAnoxicPoolPh())
+                .dayAnoxicPoolOrp(potVm.getDayAnoxicPoolOrp())
+                .dayAnoxicPoolDo(potVm.getDayAnoxicPoolDo())
+                .dayAnoxicPoolSour(potVm.getDayAnoxicPoolSour())
+                .dayAnoxicPoolSv(potVm.getDayAnoxicPoolSv())
+                .dayAnoxicPoolMlss(potVm.getDayAnoxicPoolMlss())
+                .dayAnoxicPoolTemper(potVm.getDayAnoxicPoolTemper())
+                .dayAerobicPoolPh(potVm.getDayAerobicPoolPh())
+                .dayAerobicPoolOrp(potVm.getDayAerobicPoolOrp())
+                .dayAerobicPoolDo(potVm.getDayAerobicPoolDo())
+                .dayAerobicPoolSour(potVm.getDayAerobicPoolSour())
+                .dayAerobicPoolSv(potVm.getDayAerobicPoolSv())
+                .dayAerobicPoolMlss(potVm.getDayAerobicPoolMlss())
+                .dayAerobicPoolTemper(potVm.getDayAerobicPoolTemper());
             sewPotList.add(sewPot);
         }
         List<SewSlu> sewSluList = new ArrayList<>();
         for (SewEmiAccountVM.SewSluVM sluVm : vm.getSewSlus()) {
-             SewSlu sewSlu = new SewSlu()
-                 .documentCode(documentCode)
-                 .methodCode(sluVm.getMethodCode())
-                 .methodName(sluVm.getMethodName())
-                 .sluCapacity(sluVm.getSluCapacity())
-                 .sluMoisture(sluVm.getSluMoisture());
-             sewSluList.add(sewSlu);
+            SewSlu sewSlu = new SewSlu()
+                .documentCode(documentCode)
+                .methodCode(sluVm.getMethodCode())
+                .methodName(sluVm.getMethodName())
+                .assInFlow(sluVm.getInFlow())
+                .assInAmmonia(sluVm.getAssInAmmonia())
+                .assInCod(sluVm.getAssInCod())
+                .assInTp(sluVm.getAssInTp())
+                .assAnoxicPoolDoOutNit(sluVm.getAssAnoxicPoolDoOutNit())
+                .assAerobicPoolDoOutNit(sluVm.getAssAerobicPoolDoOutNit())
+                .assOutFlow(sluVm.getAssOutFlow())
+                .assOutAmmonia(sluVm.getAssOutAmmonia())
+                .assOutCod(sluVm.getAssOutCod())
+                .assOutTn(sluVm.getAssOutTn())
+                .assOutTp(sluVm.getAssOutTp());
+            sewSluList.add(sewSlu);
         }
         List<OtherIndex> otherIndexList = new ArrayList<>();
         for (SewEmiAccountVM.OtherIndexVM otherIndexVM : vm.getOtherIndexs()) {
@@ -615,6 +612,7 @@ public class SewEmiService {
 
     /**
      * 生成/重新生成 碳排放核算报告（异步）
+     *
      * @param sewEmiDTO
      */
     @Async("taskExecutor")
@@ -628,6 +626,7 @@ public class SewEmiService {
 
     /**
      * 生成/重新生成 碳排放核算报告（同步）
+     *
      * @param sewEmiDTO
      */
     public void syncGenerateReport(SewEmiDTO sewEmiDTO) {
@@ -640,6 +639,7 @@ public class SewEmiService {
 
     /**
      * 根据单据号获取污水厂碳排放数据，并封装为SewEmiDetailDTO
+     *
      * @param documentCode 单据号
      * @return
      */
@@ -685,6 +685,7 @@ public class SewEmiService {
 
     /**
      * 根据单据号获取污水厂碳排放数据，并封装为SewEmiDTO
+     *
      * @param documentCode 单据号
      * @return
      */
@@ -729,6 +730,7 @@ public class SewEmiService {
 
     /**
      * 封装碳排放核算列表数据查询条件
+     *
      * @param qm
      * @param qEmiData
      * @param userModel
@@ -768,6 +770,7 @@ public class SewEmiService {
 
     /**
      * 获取上一个月（下一个月）污水厂碳排放详情接口
+     *
      * @param vm
      * @return
      */
@@ -788,8 +791,8 @@ public class SewEmiService {
             if (index + 1 == list.size()) {
                 throw new BadRequestProblem("暂无下一个月数据");
             }
-            return convertToSewEmiDetailDtoByDocumentCode(list.get(index+1).getDocumentCode());
-        }else {
+            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
+        } else {
             List<SewEmiMonthDTO> list = jpaQueryFactory
                 .select(Projections.bean(SewEmiMonthDTO.class, qSewEmi.id, qSewEmi.documentCode, qSewEmi.accYear, qSewEmi.accMonth))
                 .from(qSewEmi)
@@ -805,12 +808,13 @@ public class SewEmiService {
             if (index + 1 == list.size()) {
                 throw new BadRequestProblem("暂无上一个月数据");
             }
-            return convertToSewEmiDetailDtoByDocumentCode(list.get(index+1).getDocumentCode());
+            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
         }
     }
 
     /**
      * 初始化碳排放因子
+     *
      * @return
      */
     public EmiFactor create() {

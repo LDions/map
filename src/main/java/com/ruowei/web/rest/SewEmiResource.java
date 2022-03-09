@@ -84,8 +84,8 @@ public class SewEmiResource {
         // 各级药剂投加量之和不超出“药剂月投加量”
         for (SewEmiAccountVM.SewPotVM sewPotVm : vm.getSewPots()) {
             BigDecimal sumDosageOfEach = sewEmiService.calculateSumOfEachDosage(sewPotVm);
-            if (sumDosageOfEach.compareTo(sewPotVm.getTotalPot()) > 0) {
-                throw new BadRequestProblem("核算失败", "药剂".concat(sewPotVm.getPotionName()).concat("各级投加量之和不能超出药剂月投加量"));
+            if (sumDosageOfEach.compareTo(sewPotVm.getDayAerobicPoolPh()) > 0) {
+                throw new BadRequestProblem("核算失败", "药剂".concat(sewPotVm.getDayAnaerobicPoolOrp().toEngineeringString()).concat("各级投加量之和不能超出药剂月投加量"));
             }
         }
         // 输入数据和排放因子参数封装
