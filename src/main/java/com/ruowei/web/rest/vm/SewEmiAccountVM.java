@@ -310,13 +310,13 @@ public class SewEmiAccountVM {
     @Data
     public static class OtherIndexVM {
 
-        @ApiModelProperty(value = "污泥处置方法编码")
+        @ApiModelProperty(value = "其他指标编码")
         private String methodCode;
 
-        @ApiModelProperty(value = "污泥处置方法名称")
+        @ApiModelProperty(value = "其他指标名称")
         private String methodName;
 
-        @ApiModelProperty(value = "污泥处置量（kg/m）")
+        @ApiModelProperty(value = "指标量（kg/m）")
         private BigDecimal indexCapacity;
     }
 

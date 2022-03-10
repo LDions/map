@@ -91,18 +91,13 @@ entity RoleMenu(sys_role_menu) {
 }
 /** 企业信息 */
 entity Enterprise(sys_enterprise) {
-    name String required /** 单位名称 */
-    nature String /** 企业性质 */
-    uniCreditCode String required /** 统一信用代码 */
-    legalRepresentative String /** 法定代表人 */
-    businessProvince String required /** 经营地址所在省 */
-    businessCity String required /** 经营地址所在市 */
-    businessArea String required /** 经营地址所在区 */
-    businessAddress String required /** 经营详细地址 */
-    contactName String /** 联系人姓名 */
-    contactPhone String /** 联系人手机 */
+    name String required /** 水厂名称 */
+    equipmentName String /** 设备名称 */
+    dataType String  /** 数据类型 */
     remark String /** 备注 */
-    status EnterpriseStatusType required /** 状态 */
+    poinDataName String  /** 点数据名称  */
+    groupCode String /** 水厂所属集团编码 */
+    groupName String /** 水厂所属集团名称 */
 }
 /**
  * 公司状态类型
@@ -253,8 +248,6 @@ entity SewProcess(sew_process) {
 /** 化验数据 */
 entity SewSlu(sew_slu) {
     documentCode String required /** 单据号 */
-    methodCode String required /** 污泥处置方法编码 */
-    methodName String required /** 污泥处置方法名称 */
 
     assInFlow BigDecimal required /** 进水流量（mg/L） */
     assInAmmonia BigDecimal required /** 进水氨氮（mg/L） */
