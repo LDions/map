@@ -69,7 +69,7 @@ public class SewProcess implements Serializable {
      */
     @NotNull
     @ApiModelProperty(value = "进水流量（mg/L）", required = true)
-    @Column(name = "in_flpw", precision = 21, scale = 2, nullable = false)
+    @Column(name = "in_flow", precision = 21, scale = 2, nullable = false)
     private BigDecimal inFlow;
 
     /**
