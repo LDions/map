@@ -525,20 +525,18 @@ public class SewEmiService {
                 .inCod(processVm.getInCod())
                 .inTn(processVm.getInTp())
                 .inTp(processVm.getInTn())
-                .inPh(processVm.getInPh())
                 .inSs(processVm.getInSs())
                 .outFlow(processVm.getOutFlow())
                 .outAmmonia(processVm.getOutAmmonia())
                 .outCod(processVm.getOutCod())
                 .outTn(processVm.getOutTp())
                 .outTp(processVm.getOutTn())
-                .outPh(processVm.getOutPh())
                 .outSs(processVm.getOutSs())
-                .anaerobicPoolDo(processVm.getAnaerobicPoolDo())
                 .anoxicPoolDo(processVm.getAnoxicPoolDo())
                 .aerobicPoolDo(processVm.getAerobicPoolDo())
                 .anoxicPoolDoOutNit(processVm.getAnoxicPoolDoOutNit())
-                .aerobicPoolNit(processVm.getAerobicPoolNit());
+                .aerobicPoolNit(processVm.getAerobicPoolNit())
+                .dayTime(processVm.getDayTime());
             sewProcessList.add(sewProcess);
         }
         List<SewPot> sewPotList = new ArrayList<>();
@@ -571,7 +569,10 @@ public class SewEmiService {
                 .dayAerobicPoolSour(potVm.getDayAerobicPoolSour())
                 .dayAerobicPoolSv(potVm.getDayAerobicPoolSv())
                 .dayAerobicPoolMlss(potVm.getDayAerobicPoolMlss())
-                .dayAerobicPoolTemper(potVm.getDayAerobicPoolTemper());
+                .dayAerobicPoolMlvss(potVm.getDayAerobicPoolMlvss())
+                .dayAerobicPoolSvi(potVm.getDayAerobicPoolSvi())
+                .dayAerobicPoolTemper(potVm.getDayAerobicPoolTemper())
+                .dayTime(potVm.getDayTime());
             sewPotList.add(sewPot);
         }
         List<SewSlu> sewSluList = new ArrayList<>();
@@ -590,7 +591,8 @@ public class SewEmiService {
                 .assOutAmmonia(sluVm.getAssOutAmmonia())
                 .assOutCod(sluVm.getAssOutCod())
                 .assOutTn(sluVm.getAssOutTn())
-                .assOutTp(sluVm.getAssOutTp());
+                .assOutTp(sluVm.getAssOutTp())
+                .dayTime(sluVm.getDayTime());
             sewSluList.add(sewSlu);
         }
         List<OtherIndex> otherIndexList = new ArrayList<>();

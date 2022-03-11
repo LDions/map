@@ -124,7 +124,11 @@
     },{
       "fieldName": "aerobicPoolNit",
       "fieldType": "BigDecimal",
-      "javadoc": "亚硝酸盐（mg/L）"
+      "javadoc": "好氧池出口亚硝酸盐（mg/L）"
+    },{
+      "fieldName": "dayTime",
+      "fieldType": "Instant",
+      "javadoc": "采集时间"
     }
   ],
   "relationships": [],

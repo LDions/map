@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -240,9 +241,21 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "生化池-好氧池MLSS（mg/L）")
         private BigDecimal dayAerobicPoolMlss;
 
+        @NotNull(message = "请输入生化池-好氧池MLVSS")
+        @ApiModelProperty(value = "生化池-好氧池MLVSS（mg/L）")
+        private BigDecimal dayAerobicPoolMlvss;
+
+        @NotNull(message = "请输入生化池-好氧池SVI")
+        @ApiModelProperty(value = "生化池-好氧池SVI（mg/L）")
+        private BigDecimal dayAerobicPoolSvi;
+
         @NotNull(message = "请输入生化池-好氧池温度")
         @ApiModelProperty(value = "生化池-好氧池温度（mg/L）")
         private BigDecimal dayAerobicPoolTemper;
+
+        @NotNull(message = "采集时间")
+        @ApiModelProperty(value = "采集时间")
+        private Instant dayTime;
     }
 
     @Data
@@ -304,7 +317,9 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "出水TP（mg/L）")
         private BigDecimal assOutTp;
 
-
+        @NotNull(message = "采集时间")
+        @ApiModelProperty(value = "采集时间")
+        private Instant dayTime;
     }
 
     @Data
@@ -323,61 +338,46 @@ public class SewEmiAccountVM {
     @Data
     public static class SewProcessVM {
 
-        @NotNull(message = "请输入日均运行规模")
-        @ApiModelProperty(value = "日均规模（m3/d）", required = true)
+        @ApiModelProperty(value = "日均规模（m3/d）")
         private BigDecimal dailyScale;
 
-        @NotNull(message = "请输入本月运行天数")
-        @ApiModelProperty(value = "本月运行天数", required = true)
+        @ApiModelProperty(value = "本月运行天数")
         private Integer operatingDays;
 
-        @NotEmpty(message = "请选择工艺类型")
-        @ApiModelProperty(value = "工艺类型编码", required = true)
+        @ApiModelProperty(value = "工艺类型编码")
         private String processTypeCode;
 
-        @NotEmpty(message = "请选择工艺类型")
-        @ApiModelProperty(value = "工艺类型名称", required = true)
+        @ApiModelProperty(value = "工艺类型名称")
         private String processTypeName;
 
-        @NotNull(message = "请输入进水流量")
-        @ApiModelProperty(value = "进水流量（mg/L）", required = true)
+        @ApiModelProperty(value = "进水流量（mg/L）")
         private BigDecimal inFlow;
 
-        @NotNull(message = "请输入进水氨氮")
-        @ApiModelProperty(value = "进水氨氮（mg/L）", required = true)
+        @ApiModelProperty(value = "进水氨氮（mg/L）")
         private BigDecimal inAmmonia;
 
-        @NotNull(message = "请输入进水COD")
-        @ApiModelProperty(value = "进水COD（mg/L）", required = true)
+        @ApiModelProperty(value = "进水COD（mg/L）")
         private BigDecimal inCod;
 
-        @NotNull(message = "请输入进水TP")
-        @ApiModelProperty(value = "进水TP（mg/L）", required = true)
+        @ApiModelProperty(value = "进水TP（mg/L）")
         private BigDecimal inTp;
 
         @ApiModelProperty(value = "进水TN（mg/L）")
         private BigDecimal inTn;
 
-        @ApiModelProperty(value = "进水PH（mg/L）")
-        private BigDecimal inPh;
-
         @ApiModelProperty(value = "进水SS（mg/L）")
         private BigDecimal inSs;
 
-        @NotNull(message = "请输入出水流量")
-        @ApiModelProperty(value = "出水流量（mg/L）", required = true)
+        @ApiModelProperty(value = "出水流量（mg/L）")
         private BigDecimal outFlow;
 
-        @NotNull(message = "请输入出水氨氮")
-        @ApiModelProperty(value = "出水氨氮（mg/L）", required = true)
+        @ApiModelProperty(value = "出水氨氮（mg/L）")
         private BigDecimal outAmmonia;
 
-        @NotNull(message = "请输入出水COD")
-        @ApiModelProperty(value = "出水COD（mg/L）", required = true)
+        @ApiModelProperty(value = "出水COD（mg/L）")
         private BigDecimal outCod;
 
-        @NotNull(message = "请输入出水TP")
-        @ApiModelProperty(value = "出水TP（mg/L）", required = true)
+        @ApiModelProperty(value = "出水TP（mg/L）")
         private BigDecimal outTp;
 
         @ApiModelProperty(value = "出水TN（mg/L）")
@@ -389,20 +389,20 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "出水SS（mg/L）")
         private BigDecimal outSs;
 
-        @ApiModelProperty(value = "请输入厌氧池DO（mg/L）", required = true)
-        private BigDecimal anaerobicPoolDo;
-
-        @ApiModelProperty(value = "请输入缺氧池DO（mg/L）", required = true)
+        @ApiModelProperty(value = "请输入缺氧池DO（mg/L）")
         private BigDecimal anoxicPoolDo;
 
-        @ApiModelProperty(value = "请输入好氧池DO（mg/L）", required = true)
+        @ApiModelProperty(value = "请输入好氧池DO（mg/L）")
         private BigDecimal aerobicPoolDo;
 
         @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
         private BigDecimal anoxicPoolDoOutNit;
 
-        @ApiModelProperty(value = "亚硝酸盐（mg/L）")
+        @ApiModelProperty(value = "好氧池出口亚硝酸盐（mg/L）")
         private BigDecimal aerobicPoolNit;
+
+        @ApiModelProperty(value = "采集时间")
+        private Instant dayTime;
 
     }
 

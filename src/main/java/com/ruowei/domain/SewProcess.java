@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -27,7 +28,6 @@ public class SewProcess implements Serializable {
     /**
      * 单据号
      */
-    @NotNull
     @ApiModelProperty(value = "单据号", required = true)
     @Column(name = "document_code", nullable = false)
     private String documentCode;
@@ -35,7 +35,6 @@ public class SewProcess implements Serializable {
     /**
      * 工艺类型编码
      */
-    @NotNull
     @ApiModelProperty(value = "工艺类型编码", required = true)
     @Column(name = "process_type_code", nullable = false)
     private String processTypeCode;
@@ -43,7 +42,6 @@ public class SewProcess implements Serializable {
     /**
      * 工艺类型名称
      */
-    @NotNull
     @ApiModelProperty(value = "工艺类型名称", required = true)
     @Column(name = "process_type_name", nullable = false)
     private String processTypeName;
@@ -51,7 +49,6 @@ public class SewProcess implements Serializable {
     /**
      * 日均规模（m3/d）
      */
-    @NotNull
     @ApiModelProperty(value = "日均规模（m3/d）", required = true)
     @Column(name = "daily_scale", precision = 21, scale = 2, nullable = false)
     private BigDecimal dailyScale;
@@ -59,7 +56,6 @@ public class SewProcess implements Serializable {
     /**
      * 本月运行天数
      */
-    @NotNull
     @ApiModelProperty(value = "本月运行天数", required = true)
     @Column(name = "operating_days", nullable = false)
     private Integer operatingDays;
@@ -67,7 +63,6 @@ public class SewProcess implements Serializable {
     /**
      * 进水总氮（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "进水流量（mg/L）", required = true)
     @Column(name = "in_flow", precision = 21, scale = 2, nullable = false)
     private BigDecimal inFlow;
@@ -75,7 +70,6 @@ public class SewProcess implements Serializable {
     /**
      * 进水氨氮（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "进水氨氮（mg/L）", required = true)
     @Column(name = "in_ammonia", precision = 21, scale = 2, nullable = false)
     private BigDecimal inAmmonia;
@@ -83,7 +77,6 @@ public class SewProcess implements Serializable {
     /**
      * 进水COD（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "进水COD（mg/L）", required = true)
     @Column(name = "in_cod", precision = 21, scale = 2, nullable = false)
     private BigDecimal inCod;
@@ -91,7 +84,6 @@ public class SewProcess implements Serializable {
     /**
      * 进水TN（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "进水TN（mg/L）", required = true)
     @Column(name = "in_tn", precision = 21, scale = 2, nullable = false)
     private BigDecimal inTn;
@@ -104,15 +96,6 @@ public class SewProcess implements Serializable {
     private BigDecimal inTp;
 
     /**
-     * 进水PH（mg/L）
-     */
-    @ApiModelProperty(value = "进水Ph（mg/L）")
-    @Column(name = "in_ph", precision = 21, scale = 2)
-    private BigDecimal inPh;
-
-
-
-    /**
      * 进水SS（mg/L）
      */
     @ApiModelProperty(value = "进水Ss（mg/L）")
@@ -122,7 +105,6 @@ public class SewProcess implements Serializable {
     /**
      * 出水总氮（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "出水流量（mg/L）", required = true)
     @Column(name = "out_flow", precision = 21, scale = 2, nullable = false)
     private BigDecimal outFlow;
@@ -130,7 +112,6 @@ public class SewProcess implements Serializable {
     /**
      * 出水氨氮（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "出水氨氮（mg/L）", required = true)
     @Column(name = "out_ammonia", precision = 21, scale = 2, nullable = false)
     private BigDecimal outAmmonia;
@@ -138,7 +119,6 @@ public class SewProcess implements Serializable {
     /**
      * 出水COD（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "出水COD（mg/L）", required = true)
     @Column(name = "out_cod", precision = 21, scale = 2, nullable = false)
     private BigDecimal outCod;
@@ -146,7 +126,6 @@ public class SewProcess implements Serializable {
     /**
      * 出水TN（mg/L）
      */
-    @NotNull
     @ApiModelProperty(value = "出水TN（mg/L）", required = true)
     @Column(name = "out_tn", precision = 21, scale = 2, nullable = false)
     private BigDecimal outTn;
@@ -159,25 +138,11 @@ public class SewProcess implements Serializable {
     private BigDecimal outTp;
 
     /**
-     * 出水Ph（mg/L）
-     */
-    @ApiModelProperty(value = "出水Ph（mg/L）")
-    @Column(name = "out_ph", precision = 21, scale = 2)
-    private BigDecimal outPh;
-
-    /**
      * 出水Ss（mg/L）
      */
     @ApiModelProperty(value = "出水Ss（mg/L）")
     @Column(name = "out_ss", precision = 21, scale = 2)
     private BigDecimal outSs;
-
-    /**
-     * 厌氧池DO（mg/L）
-     */
-    @ApiModelProperty(value = "厌氧池（mg/L）")
-    @Column(name = "anaerobic_pool_do", precision = 21, scale = 2)
-    private BigDecimal anaerobicPoolDo;
 
     /**
      * 缺氧池（mg/L）
@@ -203,10 +168,16 @@ public class SewProcess implements Serializable {
     /**
      * 亚硝酸盐（mg/L）
      */
-    @ApiModelProperty(value = "亚硝酸盐（mg/L）")
+    @ApiModelProperty(value = "好氧池出口亚硝酸盐（mg/L）")
     @Column(name = "aerobic_pool_nit", precision = 21, scale = 2)
     private BigDecimal aerobicPoolNit;
 
+    /**
+     * 日报表时间 yyyy/MM/dd HH:mm:ss
+     */
+    @ApiModelProperty(value = "日报表时间", required = true)
+    @Column(name = "day_time", nullable = false)
+    private Instant dayTime;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -428,18 +399,6 @@ public class SewProcess implements Serializable {
         this.inSs = inSs;
     }
 
-
-    public BigDecimal getInPh() {
-        return inPh;
-    }
-    public SewProcess inPh(BigDecimal inPh) {
-        this.inPh = inPh;
-        return this;
-    }
-    public void setInPh(BigDecimal inPh) {
-        this.inPh = inPh;
-    }
-
     public BigDecimal getOutSs() {
         return outSs;
     }
@@ -449,29 +408,6 @@ public class SewProcess implements Serializable {
     }
     public void setOutSs(BigDecimal outSs) {
         this.outSs = outSs;
-    }
-
-    public BigDecimal getOutPh() {
-        return outPh;
-    }
-    public SewProcess outPh(BigDecimal outPh) {
-        this.outPh = outPh;
-        return this;
-    }
-    public void setOutPh(BigDecimal outPh) {
-        this.outPh = outPh;
-    }
-
-    public BigDecimal getAnaerobicPoolDo() {
-        return anaerobicPoolDo;
-    }
-    public SewProcess anaerobicPoolDo(BigDecimal anaerobicPoolDo) {
-        this.anaerobicPoolDo = anaerobicPoolDo;
-        return this;
-    }
-
-    public void setAnaerobicPoolDo(BigDecimal anaerobicPoolDo) {
-        this.anaerobicPoolDo = anaerobicPoolDo;
     }
 
     public BigDecimal getAnoxicPoolDo() {
@@ -519,6 +455,17 @@ public class SewProcess implements Serializable {
         this.aerobicPoolNit = aerobicPoolNit;
     }
 
+    public Instant getDayTime() {
+        return dayTime;
+    }
+    public void setDayTime(Instant dayTime) {
+        this.dayTime = dayTime;
+    }
+    public SewProcess dayTime(Instant dayTime) {
+        this.dayTime = dayTime;
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -553,20 +500,18 @@ public class SewProcess implements Serializable {
             ", inCod=" + getInCod() +
             ", inTn=" + getInTn() +
             ", inTp=" + getInTp() +
-            ", inPh=" + getInPh() +
             ", inSs=" + getInSs() +
             ", outFlow=" + getOutFlow() +
             ", outAmmonia=" + getOutAmmonia() +
             ", outCod=" + getOutCod() +
             ", outTn=" + getOutTn() +
             ", outTp=" + getOutTp() +
-            ", outPh=" + getOutPh() +
             ", outSs=" + getOutSs() +
-            ", anaerobicPoolDo=" + getAnaerobicPoolDo() +
             ", anoxicPoolDo=" + getAnoxicPoolDo() +
-            ", aerobicPoolDo=" + getAnaerobicPoolDo() +
+            ", aerobicPoolDo=" + getAerobicPoolDo() +
             ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
             ", aerobicPoolNit=" + getAerobicPoolNit() +
+            ", dayTime=" + getDayTime() +
             "}";
     }
 }

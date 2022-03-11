@@ -227,40 +227,35 @@ entity SewProcess(sew_process) {
     inCod BigDecimal required /** 进水COD（mg/L） */
     inTn BigDecimal required /** 进水TN（mg/L） */
     inTp BigDecimal /** 进水TP（mg/L） */
-    inPh BigDecimal /** 进水PH（mg/L） */
     inSs BigDecimal /** 进水SS（mg/L） */
     outFlow BigDecimal required /** 出水流量（mg/L） */
     outAmmonia BigDecimal required /** 出水氨氮（mg/L） */
     outCod BigDecimal required /** 出水COD（mg/L） */
     outTn BigDecimal required /** 出水TN（mg/L） */
     outTp BigDecimal /** 出水TP（mg/L） */
-    outPh BigDecimal /** 出水PH（mg/L） */
     outSs BigDecimal /** 出水SS（mg/L） */
-    //输入项目-厌氧池
-    anaerobicPoolDo BigDecimal /** 厌氧池DO（mg/L） */
     //输入项目-缺氧池
     anoxicPoolDo BigDecimal /** 缺氧池DO（mg/L） */
     //输入项目-好氧池
     aerobicPoolDo BigDecimal /** 好氧池DO（mg/L） */
     anoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
-    aerobicPoolNit BigDecimal /** 亚硝酸盐（mg/L） */
+    aerobicPoolNit BigDecimal /** 好氧池出口亚硝酸盐（mg/L） */
+    dayTime Instant /** 采集时间 */
 }
 /** 化验数据 */
 entity SewSlu(sew_slu) {
     documentCode String required /** 单据号 */
-
-    assInFlow BigDecimal required /** 进水流量（mg/L） */
     assInAmmonia BigDecimal required /** 进水氨氮（mg/L） */
     assInCod BigDecimal required /** 进水COD（mg/L） */
     assInTn BigDecimal required /** 进水TN（mg/L） */
     assInTp BigDecimal /** 进水TP（mg/L） */
     assAnoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
     assAerobicPoolDoOutNit BigDecimal /** 好氧池出口硝酸盐（mg/L） */
-    assOutFlow BigDecimal required /** 出水流量（mg/L） */
     assOutAmmonia BigDecimal required /** 出水氨氮（mg/L） */
     assOutCod BigDecimal required /** 出水COD（mg/L） */
     assOutTn BigDecimal required /** 出水TN（mg/L） */
     assOutTp BigDecimal /** 出水TP（mg/L） */
+    dayTime Instant /** 采集时间 */
 }
 /** 日报表数据 */
 entity SewPot(sew_pot) {
@@ -281,21 +276,24 @@ entity SewPot(sew_pot) {
 	dayAnaerobicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
 	dayAnaerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 	//生化池-缺氧池
-	dayAnoxicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
-	dayAnoxicPoolOrp Bigdecimal /** 生化池-厌氧池ORP （）*/
-	dayAnoxicPoolDo Bigdecimal /** 生化池-厌氧池DO （）*/
-	dayAnoxicPoolSour Bigdecimal /** 生化池-厌氧池SOUR （）*/
-	dayAnoxicPoolSv Bigdecimal /** 生化池-厌氧池SV （）*/
-	dayAnoxicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
-	dayAnoxicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
+	dayAnoxicPoolPh Bigdecimal /** 生化池-缺氧池PH （）*/
+	dayAnoxicPoolOrp Bigdecimal /** 生化池-缺氧池ORP （）*/
+	dayAnoxicPoolDo Bigdecimal /** 生化池-缺氧池DO （）*/
+	dayAnoxicPoolSour Bigdecimal /** 生化池-缺氧池SOUR （）*/
+	dayAnoxicPoolSv Bigdecimal /** 生化池-缺氧池SV （）*/
+	dayAnoxicPoolMlss Bigdecimal /** 生化池-缺氧池MLSS （）*/
+	dayAnoxicPoolTemper Bigdecimal /** 生化池-缺氧池温度 （）*/
 	//生化池-好氧池
-	dayAerobicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
-	dayAerobicPoolOrp Bigdecimal /** 生化池-厌氧池ORP （）*/
-	dayAerobicPoolDo Bigdecimal /** 生化池-厌氧池DO （）*/
-	dayAerobicPoolSour Bigdecimal /** 生化池-厌氧池SOUR （）*/
-	dayAerobicPoolSv Bigdecimal /** 生化池-厌氧池SV （）*/
-	dayAerobicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
+	dayAerobicPoolPh Bigdecimal /** 生化池-好氧池PH （）*/
+	dayAerobicPoolOrp Bigdecimal /** 生化池-好氧池ORP （）*/
+	dayAerobicPoolDo Bigdecimal /** 生化池-好氧池DO （）*/
+	dayAerobicPoolSour Bigdecimal /** 生化池-好氧池SOUR （）*/
+	dayAerobicPoolSv Bigdecimal /** 生化池-好氧池SV （）*/
+	dayAerobicPoolMlss Bigdecimal /** 生化池-好氧池MLSS （）*/
+	dayAerobicPoolMlvss Bigdecimal /** 生化池-好氧池MLVSS （）*/
+    dayAerobicPoolSvi Bigdecimal /** 生化池-好氧池SVI（）*/
 	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
+	dayTime Instant /** 采集时间 */
 }
 
 /** 其他指标 */

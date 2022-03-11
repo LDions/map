@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -27,7 +28,6 @@ public class SewPot implements Serializable {
     /**
      * 单据号
      */
-    @NotNull
     @ApiModelProperty(value = "单据号", required = true)
     @Column(name = "document_code", nullable = false)
     private String documentCode;
@@ -35,7 +35,6 @@ public class SewPot implements Serializable {
     /**
      * 进水PH
      */
-    @NotNull
     @ApiModelProperty(value = "进水PH", required = true)
     @Column(name = "day_in_ph", nullable = false)
     private BigDecimal dayInPh;
@@ -43,7 +42,6 @@ public class SewPot implements Serializable {
     /**
      * 出水PH
      */
-    @NotNull
     @ApiModelProperty(value = "出水PH", required = true)
     @Column(name = "day_out_ph", nullable = false)
     private BigDecimal dayOutPh;
@@ -51,7 +49,6 @@ public class SewPot implements Serializable {
     /**
      * 初沉池排泥量
      */
-    @NotNull
     @ApiModelProperty(value = "初沉池排泥量", required = true)
     @Column(name = "day_first_mud", nullable = false)
     private BigDecimal dayFirstMud;
@@ -59,7 +56,6 @@ public class SewPot implements Serializable {
     /**
      * 二沉池排泥量
      */
-    @NotNull
     @ApiModelProperty(value = "二沉池排泥量", required = true)
     @Column(name = "day_second_mud", nullable = false)
     private BigDecimal daySecondMud;
@@ -67,7 +63,6 @@ public class SewPot implements Serializable {
     /**
      * 回流比
      */
-    @NotNull
     @ApiModelProperty(value = "回流比", required = true)
     @Column(name = "day_reflux", nullable = false)
     private BigDecimal dayReflux;
@@ -75,7 +70,6 @@ public class SewPot implements Serializable {
     /**
      * 碳源投加量
      */
-    @NotNull
     @ApiModelProperty(value = "碳源投加量", required = true)
     @Column(name = "day_car_add", nullable = false)
     private BigDecimal dayCarAdd;
@@ -83,7 +77,6 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池PH
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池PH", required = true)
     @Column(name = "day_anaerobic_pool_ph", nullable = false)
     private BigDecimal dayAnaerobicPoolPh;
@@ -91,7 +84,6 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池ORP
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池ORP", required = true)
     @Column(name = "day_anaerobic_pool_orp", nullable = false)
     private BigDecimal dayAnaerobicPoolOrp;
@@ -99,7 +91,6 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池DO
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池DO", required = true)
     @Column(name = "day_anaerobic_pool_do", nullable = false)
     private BigDecimal dayAnaerobicPoolDo;
@@ -107,7 +98,6 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池SOUR
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池SOUR", required = true)
     @Column(name = "day_anaerobic_pool_sour", nullable = false)
     private BigDecimal dayAnaerobicPoolSour;
@@ -115,7 +105,6 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池SV
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池SV", required = true)
     @Column(name = "day_anaerobic_pool_sv", nullable = false)
     private BigDecimal dayAnaerobicPoolSv;
@@ -123,7 +112,6 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池MLSS
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池MLSS", required = true)
     @Column(name = "day_anaerobic_pool_mlss", nullable = false)
     private BigDecimal dayAnaerobicPoolMlss;
@@ -131,122 +119,128 @@ public class SewPot implements Serializable {
     /**
      * 生化池-厌氧池温度
      */
-    @NotNull
     @ApiModelProperty(value = "生化池-厌氧池温度", required = true)
     @Column(name = "day_anaerobic_pool_temper", nullable = false)
     private BigDecimal dayAnaerobicPoolTemper;
 
     /**
-     * 生化池-厌氧池PH
+     * 生化池-缺氧池PH
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池PH", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池PH", required = true)
     @Column(name = "day_anoxic_pool_ph", nullable = false)
     private BigDecimal dayAnoxicPoolPh;
 
     /**
-     * 生化池-厌氧池ORP
+     * 生化池-缺氧池ORP
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池ORP", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池ORP", required = true)
     @Column(name = "day_anoxic_pool_orp", nullable = false)
     private BigDecimal dayAnoxicPoolOrp;
 
     /**
-     * 生化池-厌氧池DO
+     * 生化池-缺氧池DO
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池DO", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池DO", required = true)
     @Column(name = "day_anoxic_pool_do", nullable = false)
     private BigDecimal dayAnoxicPoolDo;
 
     /**
-     * 生化池-厌氧池SOUR
+     * 生化池-缺氧池SOUR
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池SOUR", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池SOUR", required = true)
     @Column(name = "day_anoxic_pool_sour", nullable = false)
     private BigDecimal dayAnoxicPoolSour;
 
     /**
-     * 生化池-厌氧池SV
+     * 生化池-缺氧池SV
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池SV", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池SV", required = true)
     @Column(name = "day_anoxic_pool_sv", nullable = false)
     private BigDecimal dayAnoxicPoolSv;
 
     /**
-     * 生化池-厌氧池MLSS
+     * 生化池-缺氧池MLSS
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池MLSS", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池MLSS", required = true)
     @Column(name = "day_anoxic_pool_mlss", nullable = false)
     private BigDecimal dayAnoxicPoolMlss;
 
     /**
-     * 生化池-厌氧池温度
+     * 生化池-缺氧池温度
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池温度", required = true)
+    @ApiModelProperty(value = "生化池-缺氧池温度", required = true)
     @Column(name = "day_anoxic_pool_temper", nullable = false)
     private BigDecimal dayAnoxicPoolTemper;
 
     /**
-     * 生化池-厌氧池PH
+     * 生化池-好氧池PH
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池PH", required = true)
+    @ApiModelProperty(value = "生化池-好氧池PH", required = true)
     @Column(name = "day_aerobic_pool_ph", nullable = false)
     private BigDecimal dayAerobicPoolPh;
 
     /**
-     * 生化池-厌氧池ORP
+     * 生化池-好氧池ORP
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池ORP", required = true)
+    @ApiModelProperty(value = "生化池-好氧池ORP", required = true)
     @Column(name = "day_aerobic_pool_orp", nullable = false)
     private BigDecimal dayAerobicPoolOrp;
 
     /**
-     * 生化池-厌氧池DO
+     * 生化池-好氧池DO
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池DO", required = true)
+    @ApiModelProperty(value = "生化池-好氧池DO", required = true)
     @Column(name = "day_aerobic_pool_do", nullable = false)
     private BigDecimal dayAerobicPoolDo;
 
     /**
-     * 生化池-厌氧池SOUR
+     * 生化池-好氧池SOUR
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池SOUR", required = true)
+    @ApiModelProperty(value = "生化池-好氧池SOUR", required = true)
     @Column(name = "day_aerobic_pool_sour", nullable = false)
     private BigDecimal dayAerobicPoolSour;
 
     /**
-     * 生化池-厌氧池SV
+     * 生化池-好氧池SV
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池SV", required = true)
+    @ApiModelProperty(value = "生化池-好氧池SV", required = true)
     @Column(name = "day_aerobic_pool_sv", nullable = false)
     private BigDecimal dayAerobicPoolSv;
 
     /**
-     * 生化池-厌氧池MLSS
+     * 生化池-好氧池MLSS
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池MLSS", required = true)
+    @ApiModelProperty(value = "生化池-好氧池MLSS", required = true)
     @Column(name = "day_aerobic_pool_mlss", nullable = false)
     private BigDecimal dayAerobicPoolMlss;
 
     /**
-     * 生化池-厌氧池温度
+     * 生化池-好氧池MLVSS
      */
-    @NotNull
-    @ApiModelProperty(value = "生化池-厌氧池温度", required = true)
+    @ApiModelProperty(value = "生化池-好氧池MLVSS", required = true)
+    @Column(name = "day_aerobic_pool_mlvss", nullable = false)
+    private BigDecimal dayAerobicPoolMlvss;
+
+    /**
+     * 生化池-好氧池SVI
+     */
+    @ApiModelProperty(value = "生化池-好氧池SVI", required = true)
+    @Column(name = "day_aerobic_pool_svi", nullable = false)
+    private BigDecimal dayAerobicPoolSvi;
+
+    /**
+     * 生化池-好氧池温度
+     */
+    @ApiModelProperty(value = "生化池-好氧池温度", required = true)
     @Column(name = "day_aerobic_pool_temper", nullable = false)
     private BigDecimal dayAerobicPoolTemper;
+
+    /**
+     * 日报表时间 yyyy/MM/dd HH:mm:ss
+     */
+    @ApiModelProperty(value = "日报表时间", required = true)
+    @Column(name = "day_time", nullable = false)
+    private Instant dayTime;
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -345,7 +339,7 @@ public class SewPot implements Serializable {
         return dayAnaerobicPoolPh;
     }
 
-    public void setDay_anaerobicPoolPh(BigDecimal dayAnaerobicPoolPh) {
+    public void setDayAnaerobicPoolPh(BigDecimal dayAnaerobicPoolPh) {
         this.dayAnaerobicPoolPh = dayAnaerobicPoolPh;
     }
     public SewPot dayAnaerobicPoolPh(BigDecimal dayAnaerobicPoolPh) {
@@ -561,6 +555,31 @@ public class SewPot implements Serializable {
         this.dayAerobicPoolMlss = dayAerobicPoolMlss;
         return this;
     }
+
+    public BigDecimal getDayAerobicPoolMlvss() {
+        return dayAerobicPoolMlvss;
+    }
+
+    public void setDayAerobicPoolMlvss(BigDecimal dayAerobicPoolMlvss) {
+        this.dayAerobicPoolMlvss = dayAerobicPoolMlvss;
+    }
+    public SewPot dayAerobicPoolMlvss(BigDecimal dayAerobicPoolMlvss) {
+        this.dayAerobicPoolMlvss = dayAerobicPoolMlvss;
+        return this;
+    }
+
+    public BigDecimal getDayAerobicPoolSvi() {
+        return dayAerobicPoolSvi;
+    }
+
+    public void setDayAerobicPoolSvi(BigDecimal dayAerobicPoolSvi) {
+        this.dayAerobicPoolSvi = dayAerobicPoolSvi;
+    }
+    public SewPot dayAerobicPoolSvi(BigDecimal dayAerobicPoolSvi) {
+        this.dayAerobicPoolSvi = dayAerobicPoolSvi;
+        return this;
+    }
+
     public BigDecimal getDayAerobicPoolTemper() {
         return dayAerobicPoolTemper;
     }
@@ -570,6 +589,18 @@ public class SewPot implements Serializable {
     }
     public SewPot dayAerobicPoolTemper(BigDecimal dayAerobicPoolTemper) {
         this.dayAerobicPoolTemper = dayAerobicPoolTemper;
+        return this;
+    }
+
+    public Instant getDayTime() {
+        return dayTime;
+    }
+
+    public void setDayTime(Instant dayTime) {
+        this.dayTime = dayTime;
+    }
+    public SewPot dayTime(Instant dayTime) {
+        this.dayTime = dayTime;
         return this;
     }
     @Override
@@ -621,7 +652,10 @@ public class SewPot implements Serializable {
             ", dayAerobicPoolSour='" + getDayAerobicPoolSour() + "'" +
             ", dayAerobicPoolSv='" + getDayAerobicPoolSv() + "'" +
             ", dayAerobicPoolMlss='" + getDayAerobicPoolMlss() + "'" +
+            ", dayAerobicPoolMlvss='" + getDayAerobicPoolMlvss() + "'" +
+            ", dayAerobicPoolSvi='" + getDayAerobicPoolSvi() + "'" +
             ", dayAerobicPoolTemper='" + getDayAerobicPoolTemper() + "'" +
+            ", dayTime='" + getDayTime() + "'" +
             "}";
     }
 }

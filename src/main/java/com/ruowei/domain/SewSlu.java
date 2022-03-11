@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -132,6 +133,10 @@ public class SewSlu implements Serializable {
     @Column(name = "ass_out_tp", precision = 21, scale = 2)
     private BigDecimal assOutTp;
 
+    @NotNull
+    @ApiModelProperty(value = "日报表时间", required = true)
+    @Column(name = "day_time", nullable = false)
+    private Instant dayTime;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -318,6 +323,18 @@ public class SewSlu implements Serializable {
         this.assOutTp = assOutTp;
     }
 
+    public Instant getDayTime() {
+        return dayTime;
+    }
+
+    public void setDayTime(Instant dayTime) {
+        this.dayTime = dayTime;
+    }
+    public SewSlu dayTime(Instant dayTime) {
+        this.dayTime = dayTime;
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -357,6 +374,7 @@ public class SewSlu implements Serializable {
             ", assOutCod='" + getAssOutCod() + "'" +
             ", assOutTn='" + getAssOutTn() + "'" +
             ", assOutTp='" + getAssOutTp() + "'" +
+            ", dayTime='" + getDayTime() + "'" +
             "}";
     }
 }

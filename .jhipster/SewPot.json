@@ -5,7 +5,6 @@
       "fieldName": "documentCode",
       "fieldType": "String",
       "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "dayInPh",
@@ -117,9 +116,21 @@
       "fieldType": "BigDecimal",
       "javadoc": "生化池-好氧池MLSS（mg/L）"
     },{
+      "fieldName": "dayAerobicPoolMlvss",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池MLVSS（mg/L）"
+    },{
+      "fieldName": "dayAerobicPoolMlss",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SVI（mg/L）"
+    },{
       "fieldName": "dayAerobicPoolTemper",
       "fieldType": "BigDecimal",
       "javadoc": "生化池-好氧池温度（）"
+    },{
+      "fieldName": "dayTime",
+      "fieldType": "Instant",
+      "javadoc": "采集时间"
     }
   ],
   "relationships": [],

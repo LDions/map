@@ -69,6 +69,10 @@
       "fieldName": "assOutTp",
       "fieldType": "BigDecimal",
       "javadoc": "出水TP（mg/L）"
+    },{
+      "fieldName": "dayTime",
+      "fieldType": "Instant",
+      "javadoc": "采集时间"
     }
   ],
   "relationships": [],
