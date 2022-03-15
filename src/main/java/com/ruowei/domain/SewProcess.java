@@ -179,6 +179,7 @@ public class SewProcess implements Serializable {
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;

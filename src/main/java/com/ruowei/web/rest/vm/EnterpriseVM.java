@@ -8,51 +8,26 @@ import javax.validation.constraints.NotNull;
 
 public class EnterpriseVM {
 
-    @NotNull(message = "单位名称不能为空")
     @ApiModelProperty(value = "单位名称")
     private String name;
 
-    @ApiModelProperty(value = "企业性质")
-    private String nature;
+    @ApiModelProperty(value = "设备名称")
+    private String equipmentName;
 
-    @NotNull(message = "统一信用代码不能为空")
-    @ApiModelProperty(value = "统一信用代码")
-    private String uniCreditCode;
-
-    @ApiModelProperty(value = "法定代表人")
-    private String legalRepresentative;
-
-    @NotNull(message = "经营地址所在省不能为空")
-    @ApiModelProperty(value = "经营地址所在省")
-    private String businessProvince;
-
-    @NotNull(message = "经营地址所在市不能为空")
-    @ApiModelProperty(value = "经营地址所在市")
-    private String businessCity;
-
-    @NotNull(message = "经营地址所在区不能为空")
-    @ApiModelProperty(value = "经营地址所在区")
-    private String businessArea;
-
-    @NotNull(message = "经营详细地址不能为空")
-    @ApiModelProperty(value = "经营详细地址")
-    private String businessAddress;
-
-    @ApiModelProperty(value = "联系人姓名")
-    private String contactName;
-
-    @ApiModelProperty(value = "联系人手机")
-    private String contactPhone;
+    @ApiModelProperty(value = "数据类型")
+    private String dataType;
 
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    @NotNull(message = "状态不能为空")
-    @ApiModelProperty(value = "状态(NORMAL|DELETE)")
-    private EnterpriseStatusType status;
+    @ApiModelProperty(value = "点数据名称")
+    private String pointDataName;
 
-    @ApiModelProperty(value = "企业用户信息")
-    private UserVM userInfo;
+    @ApiModelProperty(value = "水厂所属集团编码")
+    private String groupCode;
+
+    @ApiModelProperty(value = "水厂所属集团名称")
+    private String groupName;
 
     public String getName() {
         return name;
@@ -62,76 +37,20 @@ public class EnterpriseVM {
         this.name = name;
     }
 
-    public String getNature() {
-        return nature;
+    public String getEquipmentName() {
+        return equipmentName;
     }
 
-    public void setNature(String nature) {
-        this.nature = nature;
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
     }
 
-    public String getUniCreditCode() {
-        return uniCreditCode;
+    public String getDataType() {
+        return dataType;
     }
 
-    public void setUniCreditCode(String uniCreditCode) {
-        this.uniCreditCode = uniCreditCode;
-    }
-
-    public String getLegalRepresentative() {
-        return legalRepresentative;
-    }
-
-    public void setLegalRepresentative(String legalRepresentative) {
-        this.legalRepresentative = legalRepresentative;
-    }
-
-    public String getBusinessProvince() {
-        return businessProvince;
-    }
-
-    public void setBusinessProvince(String businessProvince) {
-        this.businessProvince = businessProvince;
-    }
-
-    public String getBusinessCity() {
-        return businessCity;
-    }
-
-    public void setBusinessCity(String businessCity) {
-        this.businessCity = businessCity;
-    }
-
-    public String getBusinessArea() {
-        return businessArea;
-    }
-
-    public void setBusinessArea(String businessArea) {
-        this.businessArea = businessArea;
-    }
-
-    public String getBusinessAddress() {
-        return businessAddress;
-    }
-
-    public void setBusinessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-    }
-
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     public String getRemark() {
@@ -142,19 +61,27 @@ public class EnterpriseVM {
         this.remark = remark;
     }
 
-    public EnterpriseStatusType getStatus() {
-        return status;
+    public String getPointDataName() {
+        return pointDataName;
     }
 
-    public void setStatus(EnterpriseStatusType status) {
-        this.status = status;
+    public void setPointDataName(String pointDataName) {
+        this.pointDataName = pointDataName;
     }
 
-    public UserVM getUserInfo() {
-        return userInfo;
+    public String getGroupCode() {
+        return groupCode;
     }
 
-    public void setUserInfo(UserVM userInfo) {
-        this.userInfo = userInfo;
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

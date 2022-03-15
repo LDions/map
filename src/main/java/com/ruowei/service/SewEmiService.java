@@ -33,10 +33,10 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import static com.ruowei.config.Constants.*;
@@ -646,9 +646,9 @@ public class SewEmiService {
      * @return
      */
     public SewEmiDetailDTO convertToSewEmiDetailDtoByDocumentCode(String documentCode) {
-        SewEmi sewEmi = sewEmiRepository.findByDocumentCode(documentCode).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));
+        /*SewEmi sewEmi = sewEmiRepository.findByDocumentCode(documentCode).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));*/
         SewEmiDetailDTO sewEmiDetailDTO = new SewEmiDetailDTO();
-        BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));
+        /*BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));*/
         List<SewProcess> sewProcessList = sewProcessRepository.findByDocumentCode(documentCode);
         List<SewEmiAccountVM.SewProcessVM> sewProcessVms = new ArrayList<>();
         for (SewProcess sewProcess : sewProcessList) {
@@ -674,14 +674,14 @@ public class SewEmiService {
         }
         sewEmiDetailDTO.setSewSlus(sewSluVms);
 
-        List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
+        /*List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
         List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
         for (OtherIndex otherIndex : otherIndexList) {
             SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
             BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
             otherIndexVMS.add(vm);
         }
-        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);
+        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);*/
         return sewEmiDetailDTO;
     }
 
@@ -947,5 +947,17 @@ public class SewEmiService {
         }
 
         return emiFactorRepository.save(emiFactor);
+    }
+
+    public Instant getInstant(String string){
+        if (string == null) return null;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        //将 string 装换成带有 T 的国际时间，但是没有进行，时区的转换，即没有将时间转为国际时间，只是格式转为国际时间
+        LocalDateTime parse = LocalDateTime.parse(string, dateTimeFormatter);
+        //+8 小时，offset 可以理解为时间偏移量
+        ZoneOffset offset = OffsetDateTime.now().getOffset();
+        //转换为 通过时间偏移量将 string -8小时 变为 国际时间，因为亚洲上海是8时区
+        Instant instant = parse.toInstant(offset).plusMillis(TimeUnit.HOURS.toMillis(8));
+        return instant;
     }
 }

@@ -84,11 +84,7 @@ public class UserJWTController {
 
         JWTToken jwtToken = new JWTToken(jwt);
         jwtToken.setEnterpriseId(user.getEnterpriseId());
-        if (user.getEnterpriseId() != null) {
-            Enterprise enterprise = enterpriseRepository.findByIdAndStatus(user.getEnterpriseId(), EnterpriseStatusType.NORMAL)
-                .orElseThrow(() -> new BadRequestProblem("登录失败", "账号所属企业不存在，请重新输入"));
-            jwtToken.setEnterpriseName(enterprise.getName());
-        }
+
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
         List<String> roleCodes = roleRepository.findAllByIdInAndStatus(roleIds, RoleStatusType.NORMAL).stream().map(Role::getCode).collect(Collectors.toList());
         jwtToken.setRoleCodes(roleCodes);

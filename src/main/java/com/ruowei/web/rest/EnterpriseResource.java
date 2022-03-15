@@ -79,29 +79,8 @@ public class EnterpriseResource {
     @ApiOperation(value = "新增企业接口", notes = "作者：张锴")
     public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) throws URISyntaxException {
         log.debug("REST request to save Enterprise : {}", vm);
-        enterpriseRepository.getFirstByUniCreditCodeAndStatus(vm.getUniCreditCode(), EnterpriseStatusType.NORMAL)
-            .ifPresent(so -> {
-                throw new BadRequestProblem("新增失败", "统一信用代码已存在");
-            });
-        Enterprise enterprise = enterpriseRepository.save(enterpriseVMMapper.toEntity(vm));
-        if (vm.getUserInfo().getId() != null) {
-            throw new BadRequestProblem("新增失败", "新增时ID必须为空");
-        }
-        userRepository.findOneByLoginAndStatusNot(vm.getUserInfo().getLogin(), UserStatusType.DELETE)
-            .ifPresent(so -> {
-                throw new BadRequestProblem("新增失败", "用户名已存在");
-            });
-        User user = userVMMapper.toEntity(vm.getUserInfo());
-        user.setPassword(passwordEncoder.encode(Constants.DEFAULT_PASSWORD));
-        user.setEnterpriseId(enterprise.getId());
-        User saveUser = userRepository.save(user);
-        vm.getUserInfo().getRoleIds().forEach(roleId -> {
-            Role role = roleRepository.getByCodeAndStatus(roleId, RoleStatusType.NORMAL)
-                .orElseThrow(() -> new BadRequestProblem("新增失败", "未找到污水处理厂角色"));
-            userRoleRepository.save(new UserRole().userId(saveUser.getId()).roleId(role.getId()));
-        });
-        return ResponseEntity.created(new URI("/api/enterprise/" + enterprise.getId()))
-            .body(enterprise);
+
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/enterprise")
@@ -111,10 +90,7 @@ public class EnterpriseResource {
         if (enterprise.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        enterpriseRepository.getFirstByUniCreditCodeAndIdNotAndStatus(enterprise.getUniCreditCode(), enterprise.getId(), EnterpriseStatusType.NORMAL)
-            .ifPresent(so -> {
-                throw new BadRequestProblem("编辑失败", "统一社会信用代码已存在");
-            });
+
         Enterprise result = enterpriseRepository.save(enterprise);
         return ResponseEntity.ok().body(result);
     }
@@ -124,57 +100,15 @@ public class EnterpriseResource {
     @ApiOperation(value = "获取带分页的企业列表接口", notes = "作者：张锴")
     public ResponseEntity<List<EnterpriseDTO>> getAllEnterprises(EnterpriseQM qm, Pageable pageable) {
         log.debug("REST request to get a page of Enterprises : {}", qm);
-        OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
-            .notEmptyAnd(qEnterprise.name::contains, qm.getName())
-            .notEmptyAnd(qEnterprise.uniCreditCode::contains, qm.getUniCreditCode())
-            .notEmptyAnd(qEnterprise.nature::contains, qm.getNature())
-            .notEmptyAnd(qEnterprise.status::ne, EnterpriseStatusType.DELETE);
-        List<EnterpriseDTO> list = jpaQueryFactory
-            .select(Projections.bean(EnterpriseDTO.class, qEnterprise.id, qEnterprise.name, qEnterprise.nature,
-                qEnterprise.uniCreditCode, qEnterprise.legalRepresentative, qEnterprise.businessProvince,
-                qEnterprise.businessCity, qEnterprise.businessArea, qEnterprise.businessAddress,
-                qEnterprise.contactName, qEnterprise.contactPhone, qEnterprise.remark, qEnterprise.status))
-            .from(qEnterprise)
-            .where(predicate.build())
-            .orderBy(OrderByUtil.createOrderSpecifierBy(qEnterprise, pageable.getSort()))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
-        long count = jpaQueryFactory
-            .selectFrom(qEnterprise)
-            .where(predicate.build())
-            .stream().count();
-        Page<EnterpriseDTO> page = new PageImpl<>(list, pageable, count);
-        List<EnterpriseDTO> content = page.getContent();
-        for (EnterpriseDTO enterpriseDTO : content) {
-            if (StringUtils.isNotBlank(enterpriseDTO.getBusinessProvince())) {
-                districtRepository.findById(Long.valueOf(enterpriseDTO.getBusinessProvince()))
-                    .ifPresent(province -> {
-                        enterpriseDTO.setBusinessProvince(province.getName());
-                    });
-            }
-            if (StringUtils.isNotBlank(enterpriseDTO.getBusinessCity())) {
-                districtRepository.findById(Long.valueOf(enterpriseDTO.getBusinessCity()))
-                    .ifPresent(city -> {
-                        enterpriseDTO.setBusinessCity(city.getName());
-                    });
-            }
-            if (StringUtils.isNotBlank(enterpriseDTO.getBusinessArea())) {
-                districtRepository.findById(Long.valueOf(enterpriseDTO.getBusinessArea()))
-                    .ifPresent(area -> {
-                        enterpriseDTO.setBusinessArea(area.getName());
-                    });
-            }
-        }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(content);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/enterprise/{id}")
     @ApiOperation(value = "查询企业详情接口", notes = "作者:张锴")
     public ResponseEntity<Enterprise> getEnterprise(@PathVariable Long id) {
-        Optional<Enterprise> enterprise = enterpriseRepository.findByIdAndStatus(id, EnterpriseStatusType.NORMAL);
-        return ResponseUtil.wrapOrNotFound(enterprise);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/enterprise/{id}")
@@ -184,17 +118,7 @@ public class EnterpriseResource {
         log.debug("REST request to delete Enterprise : {}", id);
         User user = userRepository.findByEnterpriseId(id)
             .orElseThrow(() -> new BadRequestProblem("删除失败", "企业用户不存在"));
-        jpaQueryFactory
-            .update(qEnterprise)
-            .set(qEnterprise.status, EnterpriseStatusType.DELETE)
-            .where(qEnterprise.id.eq(id))
-            .execute();
-        userRoleRepository.deleteAllByUserId(user.getId());
-        jpaQueryFactory
-            .update(qUser)
-            .set(qUser.status, UserStatusType.DELETE)
-            .where(qUser.id.eq(user.getId()))
-            .execute();
+
         return ResponseEntity.noContent().build();
     }
 
@@ -208,27 +132,17 @@ public class EnterpriseResource {
             dto.setName(userModel.getEnterpriseName());
             result.add(dto);
         }else {
-            enterpriseRepository.findAllByStatus(EnterpriseStatusType.NORMAL).forEach(enterprise -> {
-                DropDownDTO dto = new DropDownDTO();
-                dto.setId(enterprise.getId());
-                dto.setName(enterprise.getName());
-                result.add(dto);
-            });
-        }
-        return ResponseEntity.ok().body(result);
+
+            }
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/enterprise/province/{id}")
     @ApiOperation(value = "获取企业所在省份接口", notes = "作者：林宏栋")
     public ResponseEntity<DropDownDTO> getProvinceNameOfEnterprise(@PathVariable Long id) {
-        Enterprise enterprise = enterpriseRepository.findByIdAndStatus(id, EnterpriseStatusType.NORMAL)
-            .orElseThrow(() -> new BadRequestProblem("查询失败", "企业不存在"));
+
         DropDownDTO result = new DropDownDTO();
-        result.setCode(enterprise.getBusinessProvince());
-        districtRepository.findById(Long.valueOf(enterprise.getBusinessProvince()))
-            .ifPresent(province -> {
-                result.setName(province.getName());
-            });
+
         return ResponseEntity.ok().body(result);
     }
 }

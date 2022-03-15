@@ -59,11 +59,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         if (user.getStatus() != UserStatusType.NORMAL) {
             throw new LockedException("该用户已停用，请联系系统管理员");
         }
-        if (user.getEnterpriseId() != null) {
-            Enterprise enterprise = enterpriseRepository.findByIdAndStatus(user.getEnterpriseId(), EnterpriseStatusType.NORMAL)
-                .orElseThrow(() -> new LockedException("未找到水务企业信息"));
-            return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), enterprise.getId(), enterprise.getName());
-        }
+
         return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), null, null);
     }
 }

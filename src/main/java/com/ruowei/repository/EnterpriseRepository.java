@@ -17,11 +17,8 @@ import java.util.Optional;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, QuerydslPredicateExecutor<Enterprise> {
 
-    Optional<Enterprise> getFirstByUniCreditCodeAndStatus(@NotNull String uniCreditCode, @NotNull EnterpriseStatusType status);
+    List<Enterprise> findByGroupCode(String code);
 
-    Optional<Enterprise> getFirstByUniCreditCodeAndIdNotAndStatus(@NotNull String uniCreditCode, Long id, @NotNull EnterpriseStatusType status);
+    Enterprise findByEntCode(String code);
 
-    Optional<Enterprise> findByIdAndStatus(@NotNull Long id, @NotNull EnterpriseStatusType statusType);
-
-    List<Enterprise> findAllByStatus(@NotNull EnterpriseStatusType status);
 }

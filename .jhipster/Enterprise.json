@@ -4,84 +4,31 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "javadoc": "单位名称",
-      "fieldValidateRules": [
-        "required"
-      ]
-    },
-    {
-      "fieldName": "nature",
+      "javadoc": "单位名称"
+    },{
+      "fieldName": "equipmentName",
       "fieldType": "String",
-      "javadoc": "企业性质"
-    },
-    {
-      "fieldName": "uniCreditCode",
+      "javadoc": "设备名称"
+    },{
+      "fieldName": "dataType",
       "fieldType": "String",
-      "javadoc": "统一信用代码",
-      "fieldValidateRules": [
-        "required"
-      ]
-    },
-    {
-      "fieldName": "legalRepresentative",
-      "fieldType": "String",
-      "javadoc": "法定代表人"
-    },
-    {
-      "fieldName": "businessProvince",
-      "fieldType": "String",
-      "javadoc": "经营地址所在省",
-      "fieldValidateRules": [
-        "required"
-      ]
-    },
-    {
-      "fieldName": "businessCity",
-      "fieldType": "String",
-      "javadoc": "经营地址所在市",
-      "fieldValidateRules": [
-        "required"
-      ]
-    },
-    {
-      "fieldName": "businessArea",
-      "fieldType": "String",
-      "javadoc": "经营地址所在区",
-      "fieldValidateRules": [
-        "required"
-      ]
-    },
-    {
-      "fieldName": "businessAddress",
-      "fieldType": "String",
-      "javadoc": "经营详细地址",
-      "fieldValidateRules": [
-        "required"
-      ]
-    },
-    {
-      "fieldName": "contactName",
-      "fieldType": "String",
-      "javadoc": "联系人姓名"
-    },
-    {
-      "fieldName": "contactPhone",
-      "fieldType": "String",
-      "javadoc": "联系人手机"
-    },
-    {
+      "javadoc": "数据类型"
+    },{
       "fieldName": "remark",
       "fieldType": "String",
       "javadoc": "备注"
-    },
-    {
-      "fieldName": "status",
-      "fieldType": "EnterpriseStatusType",
-      "javadoc": "状态",
-      "fieldValues": "NORMAL,DELETE",
-      "fieldValidateRules": [
-        "required"
-      ]
+    },{
+      "fieldName": "pointDataName",
+      "fieldType": "String",
+      "javadoc": "点数据名称"
+    },{
+      "fieldName": "groupCode",
+      "fieldType": "String",
+      "javadoc": "水厂所属集团编码"
+    },{
+      "fieldName": "groupName",
+      "fieldType": "String",
+      "javadoc": "水厂所属集团名称"
     }
   ],
   "relationships": [],

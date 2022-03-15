@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -20,4 +21,9 @@ public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
      * @return
      */
     List<SewProcess> findByDocumentCode(@NotNull String documentCode);
+
+    List<SewProcess> findByProcessTypeCodeOrDocumentCodeOrProcessTypeNameOrDayTime(String processTypeCode, String industryCode, String processTypeName, String dayTime);
+
+    List<SewProcess> findByProcessTypeCodeOrDayTime(String craftCode,String time);
+
 }
