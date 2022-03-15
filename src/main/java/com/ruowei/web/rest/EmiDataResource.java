@@ -26,7 +26,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,13 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 
 import javax.validation.Valid;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api")
@@ -96,35 +89,35 @@ public class EmiDataResource {
 
     @GetMapping("/entenrprise")
     @ApiOperation(value = "获取水厂", notes = "作者：董玉祥")
-    public ResponseEntity<List<TestDTO>> getEnt() {
+    public ResponseEntity<List<DataDTO>> getEnt() {
 
-        List<TestDTO> testDTOs = new ArrayList<>();
+        List<DataDTO> dataDTOS = new ArrayList<>();
         List<Group> Groups = groupRepository.findAll();
         for (Group group : Groups) {
-            TestDTO.GroupDTO dto = new TestDTO.GroupDTO();
+            DataDTO.GroupDTO dto = new DataDTO.GroupDTO();
             BeanUtils.copyProperties(group, dto, BeanUtil.getNullPropertyNames(group));
-            testDTOs.add(dto);
+            dataDTOS.add(dto);
         }
         for (Group g : Groups) {
             List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
             for (Enterprise enterprise : enterprises) {
-                TestDTO.EntDTO dto = new TestDTO.EntDTO();
+                DataDTO.EntDTO dto = new DataDTO.EntDTO();
                 BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
-                testDTOs.add(dto);
+                dataDTOS.add(dto);
             }
         }
 
-        return ResponseEntity.ok().body(testDTOs);
+        return ResponseEntity.ok().body(dataDTOS);
     }
 
     @GetMapping("/process_period")
     @ApiOperation(value = "获取工艺段", notes = "作者：董玉祥")
-    public ResponseEntity<List<TestDTO.CraftDTO>> getCraft(String industryCode) {
+    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(String industryCode) {
 
         List<Craft> crafts = craftRepository.findByEntCode(industryCode);
-        List<TestDTO.CraftDTO> craftDTOS = new ArrayList<>();
+        List<DataDTO.CraftDTO> craftDTOS = new ArrayList<>();
         for (Craft craft : crafts) {
-            TestDTO.CraftDTO dto = new TestDTO.CraftDTO();
+            DataDTO.CraftDTO dto = new DataDTO.CraftDTO();
             BeanUtils.copyProperties(craft, dto, BeanUtil.getNullPropertyNames(craft));
             craftDTOS.add(dto);
         }
