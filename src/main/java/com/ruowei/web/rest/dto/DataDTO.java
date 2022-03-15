@@ -1,11 +1,8 @@
 package com.ruowei.web.rest.dto;
 
-import com.ruowei.web.rest.vm.DataVM;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.List;
 
 public class DataDTO {
 
