@@ -69,12 +69,12 @@ public class EntCraftData {
 
 
     /**
-     * 仪表数据id
+     * 单据号
      */
 
-    @ApiModelProperty(value = "仪表数据id")
-    @Column(name = "process_id")
-    private String groupCode;
+    @ApiModelProperty(value = "单据号")
+    @Column(name = "document_code")
+    private String documentCode;
 
 
     /**

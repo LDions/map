@@ -133,7 +133,6 @@ public class SewEmiAccountVM {
     @ApiModelProperty(value = "污泥处置情况")
     private List<OtherIndexVM> otherIndexs;
 
-
     @Data
     public static class SewPotVM {
 
@@ -403,6 +402,9 @@ public class SewEmiAccountVM {
 
         @ApiModelProperty(value = "采集时间")
         private Instant dayTime;
+
+        @ApiModelProperty(value = "所属工艺段")
+        private String craftCode;
 
     }
 

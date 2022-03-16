@@ -16,11 +16,13 @@ import com.ruowei.service.enumeration.OperationTypeEnum;
 import com.ruowei.util.BeanUtil;
 import com.ruowei.util.CarbonAccountingReport;
 import com.ruowei.util.DateUtil;
+import com.ruowei.web.rest.dto.SewDetailsDTO;
 import com.ruowei.web.rest.dto.SewEmiDetailDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.CarbonEmiMonthVM;
 import com.ruowei.web.rest.vm.CarbonEmiQM;
 import com.ruowei.web.rest.vm.SewEmiAccountVM;
+import com.ruowei.web.rest.vm.SewEmiVM;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -536,7 +538,8 @@ public class SewEmiService {
                 .aerobicPoolDo(processVm.getAerobicPoolDo())
                 .anoxicPoolDoOutNit(processVm.getAnoxicPoolDoOutNit())
                 .aerobicPoolNit(processVm.getAerobicPoolNit())
-                .dayTime(processVm.getDayTime());
+                .dayTime(processVm.getDayTime())
+                .craftCode(processVm.getCraftCode());
             sewProcessList.add(sewProcess);
         }
         List<SewPot> sewPotList = new ArrayList<>();
@@ -648,6 +651,7 @@ public class SewEmiService {
     public SewEmiDetailDTO convertToSewEmiDetailDtoByDocumentCode(String documentCode) {
         /*SewEmi sewEmi = sewEmiRepository.findByDocumentCode(documentCode).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));*/
         SewEmiDetailDTO sewEmiDetailDTO = new SewEmiDetailDTO();
+
         /*BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));*/
         List<SewProcess> sewProcessList = sewProcessRepository.findByDocumentCode(documentCode);
         List<SewEmiAccountVM.SewProcessVM> sewProcessVms = new ArrayList<>();
@@ -683,6 +687,50 @@ public class SewEmiService {
         }
         sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);*/
         return sewEmiDetailDTO;
+    }
+
+    /**
+     * 根据单据号获取污水厂碳排放数据，并封装为SewDetailDTO
+     *
+     * @param documentCode 单据号
+     * @return
+     */
+    public List<SewEmiVM> convertToSewDetailDtoByDocumentCode(String documentCode) {
+        /*SewEmi sewEmi = sewEmiRepository.findByDocumentCode(documentCode).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));*/
+
+        List<SewEmiVM> emiVMS = new ArrayList<>();
+        /*BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));*/
+        List<SewProcess> sewProcessList = sewProcessRepository.findByDocumentCode(documentCode);
+        List<SewEmiVM.SewProcessVM> sewProcessVms = new ArrayList<>();
+        for (SewProcess sewProcess : sewProcessList) {
+            SewEmiVM.SewProcessVM vm = new SewEmiVM.SewProcessVM();
+            BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
+            emiVMS.add(vm);
+        }
+        List<SewPot> sewPotList = sewPotRepository.findByDocumentCode(documentCode);
+        List<SewEmiVM.SewPotVM> sewPotVms = new ArrayList<>();
+        for (SewPot sewPot : sewPotList) {
+            SewEmiVM.SewPotVM vm = new SewEmiVM.SewPotVM();
+            BeanUtils.copyProperties(sewPot, vm, BeanUtil.getNullPropertyNames(sewPot));
+            emiVMS.add(vm);
+        }
+        List<SewSlu> sewSluList = sewSluRepository.findByDocumentCode(documentCode);
+        List<SewEmiVM.SewSluVM> sewSluVms = new ArrayList<>();
+        for (SewSlu sewSlu : sewSluList) {
+            SewEmiVM.SewSluVM vm = new SewEmiVM.SewSluVM();
+            BeanUtils.copyProperties(sewSlu, vm, BeanUtil.getNullPropertyNames(sewSlu));
+            emiVMS.add(vm);
+        }
+
+        /*List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
+        List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
+        for (OtherIndex otherIndex : otherIndexList) {
+            SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
+            BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
+            otherIndexVMS.add(vm);
+        }
+        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);*/
+        return emiVMS;
     }
 
     /**

@@ -138,6 +138,13 @@ public class SewSlu implements Serializable {
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 
+    /**
+     * 所属工艺段
+     */
+    @ApiModelProperty(value = "所属工艺段", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -335,6 +342,18 @@ public class SewSlu implements Serializable {
         return this;
     }
 
+    public String getCraftCode() {
+        return craftCode;
+    }
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
+    }
+    public SewSlu craftCode(String craftCode) {
+        this.craftCode = craftCode;
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -375,6 +394,7 @@ public class SewSlu implements Serializable {
             ", assOutTn='" + getAssOutTn() + "'" +
             ", assOutTp='" + getAssOutTp() + "'" +
             ", dayTime='" + getDayTime() + "'" +
+            ", craftCode=" + getCraftCode() +
             "}";
     }
 }

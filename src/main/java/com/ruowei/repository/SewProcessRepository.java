@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the SewProcess entity.
@@ -22,8 +23,6 @@ public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
      */
     List<SewProcess> findByDocumentCode(@NotNull String documentCode);
 
-    List<SewProcess> findByProcessTypeCodeOrDocumentCodeOrProcessTypeNameOrDayTime(String processTypeCode, String industryCode, String processTypeName, String dayTime);
-
-    List<SewProcess> findByProcessTypeCodeOrDayTime(String craftCode,String time);
+    List<SewProcess> findByCraftCodeAndDayTime(String craftCode,Instant dayTime);
 
 }

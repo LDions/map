@@ -11,6 +11,9 @@ public class EntCraftDataDTO {
 
     private Long id;
 
+    @ApiModelProperty(value = "单据号")
+    private String documentCode;
+
     @ApiModelProperty(value = "集团名称")
     private String groupName;
 

@@ -15,6 +15,7 @@ import com.ruowei.util.excel.ExcelExport;
 import com.ruowei.web.rest.dto.*;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.CarbonEmiQM;
+import com.ruowei.web.rest.vm.SewEmiVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -37,6 +38,8 @@ import tech.jhipster.web.util.PaginationUtil;
 
 import javax.validation.Valid;
 import java.util.*;
+
+import static com.ruowei.config.Constants.SEWAGE;
 
 @RestController
 @RequestMapping("/api")
@@ -72,20 +75,6 @@ public class EmiDataResource {
         this.jpaQueryFactory = jpaQueryFactory;
         this.queryFactory = queryFactory;
     }
-
-    /*@GetMapping("/group")
-    @ApiOperation(value = "获取集团", notes = "作者：董玉祥")
-    public ResponseEntity<List<TestDTO.GroupDTO>> getGroup() {
-
-        List<Group> Groups =groupRepository.findAll();
-        List<TestDTO.GroupDTO> groupDTOS = new ArrayList<>();
-        for (Group group : Groups) {
-            TestDTO.GroupDTO dto = new TestDTO.GroupDTO();
-            BeanUtils.copyProperties(group, dto, BeanUtil.getNullPropertyNames(group));
-            groupDTOS.add(dto);
-        }
-        return ResponseEntity.ok().body(groupDTOS);
-    }*/
 
     @GetMapping("/entenrprise")
     @ApiOperation(value = "获取水厂", notes = "作者：董玉祥")
@@ -124,25 +113,11 @@ public class EmiDataResource {
         return ResponseEntity.ok().body(craftDTOS);
     }
 
-    /*@GetMapping("/meter_data")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiOperation(value = "仪表数据", notes = "作者：董玉祥")
-    public ResponseEntity<List<SewProcessDTO>> getCarbonEmiData() {
-        List<SewProcess> sewProcessList = sewProcessRepository.findByProcessTypeCodeOrDocumentCodeOrProcessTypeNameOrDayTime(processTypeCode, industryCode, processTypeName,dayTime);
-        List<SewProcessDTO> sewProcessDTOS = new ArrayList<>();
-        for (SewProcess sewProcess : sewProcessList) {
-            SewProcessDTO sewProcessDTO = new SewProcessDTO();
-            BeanUtils.copyProperties(sewProcess, sewProcessDTO, BeanUtil.getNullPropertyNames(sewProcess));
-            sewProcessDTOS.add(sewProcessDTO);
-        }
-        return ResponseEntity.ok().body(sewProcessDTOS);
-    }*/
-
     @GetMapping("/getList")
     @ApiOperation(value = "获取列表", notes = "作者：董玉祥")
     public ResponseEntity<List<EntCraftDataDTO>> getList(@ApiParam(value = "水厂编号") @RequestParam String entCode,
                                                          @ApiParam(value = "工艺段编号") @RequestParam(required = false) String craftCode,
-                                                         @ApiParam(value = "数据起始时间") @RequestParam(required = false) String time,
+                                                         @ApiParam(value = "数据时间") @RequestParam(required = false) String time,
                                                          @ApiParam(value = "数据来源") @RequestParam String source,
                                                          Pageable pageable) {
 
@@ -153,7 +128,7 @@ public class EmiDataResource {
             .notEmptyAnd(qEntCraftData.messageSource::eq, source);
 
         JPAQuery<EntCraftDataDTO> jpaQuery = jpaQueryFactory
-            .select(Projections.bean(EntCraftDataDTO.class,qEntCraftData.id,qEntCraftData.groupName,qEntCraftData.entName,qEntCraftData.craftName,qEntCraftData.dayTime))
+            .select(Projections.bean(EntCraftDataDTO.class,qEntCraftData.id,qEntCraftData.documentCode,qEntCraftData.groupName,qEntCraftData.entName,qEntCraftData.craftName,qEntCraftData.dayTime))
             .from(qEntCraftData)
             .where(predicate.build())
             .offset(pageable.getOffset())
@@ -165,8 +140,15 @@ public class EmiDataResource {
         List<EntCraftDataDTO> entCraftProcesses = jpaQuery.fetch();
         Page<EntCraftDataDTO> page = new PageImpl<>(jpaQuery.fetch(), pageable, total);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-
         return ResponseEntity.ok().headers(headers).body(entCraftProcesses);
+    }
+
+    @GetMapping("/detail")
+    @ApiOperation(value = "详情数据", notes = "作者：董玉祥")
+    public ResponseEntity<List<SewEmiVM>> get(@ApiParam(value = "单据号") @RequestParam(required = false) String documentCode) {
+
+        List<SewEmiVM> sewEmiVMS= sewEmiService.convertToSewDetailDtoByDocumentCode(documentCode);
+        return ResponseEntity.ok().body(sewEmiVMS);
     }
 
     @GetMapping("/carbon-emission-data/with-pagination")
@@ -213,12 +195,13 @@ public class EmiDataResource {
     @ApiOperation(value = "获取碳排放数据核算详情接口", notes = "作者：林宏栋")
     public ResponseEntity<SewEmiDetailDTO> getCarbonEmiData(@ApiParam(value = "水厂名称", required = true) @RequestParam String documentCode,
                                                             @ApiParam(value = "行业类型") @RequestParam String industryCode) {
-        if (1 == 1) {
+        /*if (1 == 1) {
             SewEmiDetailDTO sewEmiDetailDTO = sewEmiService.convertToSewEmiDetailDtoByDocumentCode(documentCode);
             return ResponseEntity.ok().body(sewEmiDetailDTO);
         } else {
             throw new BadRequestProblem("查询失败", "不存在该行业类型");
-        }
+        }*/
+        return null;
     }
 
     @PostMapping("/carbon-emission-data/exportAll")
