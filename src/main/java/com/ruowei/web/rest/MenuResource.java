@@ -52,7 +52,7 @@ public class MenuResource {
 
     @PostMapping("/menu")
     @Transactional
-    @ApiOperation(value = "添加菜单或权限（按钮）接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "添加菜单或权限（按钮）接口", notes = "作者：孙小楠")
     public ResponseEntity<Menu> addMenu(@RequestBody Menu menu) {
         log.debug("REST request to add SysMenu : {}", menu);
         if (menu == null) {
@@ -91,7 +91,7 @@ public class MenuResource {
     }
 
     @PutMapping("/menu")
-    @ApiOperation(value = "编辑菜单或权限（按钮）接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "编辑菜单或权限（按钮）接口", notes = "作者：孙小楠")
     public ResponseEntity<Menu> editMenu(@RequestBody Menu menu) {
         log.debug("REST request to edit SysMenu : {}", menu);
         if (menu == null || menu.getId() == null) {
@@ -240,14 +240,14 @@ public class MenuResource {
     }
 
     @GetMapping("/menus/all")
-    @ApiOperation(value = "查询所有菜单接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "查询所有菜单接口", notes = "作者：孙小楠")
     public ResponseEntity<List<MenuTreeDTO>> findAllMenusAsTree(@ApiParam(value = "归属系统WEB|MOBILE", required = true) @RequestParam SysType sysType) {
         List<MenuTreeDTO> result = menuService.findAllMenusAsTree(sysType);
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/menu/{id}")
-    @ApiOperation(value = "查询菜单详情接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "查询菜单详情接口", notes = "作者：孙小楠")
     public ResponseEntity<Menu> getMenu(@PathVariable Long id) {
         log.debug("REST request to get SysMenu : {}", id);
         // 查询所有菜单
@@ -256,7 +256,7 @@ public class MenuResource {
     }
 
     @GetMapping("/menu/current")
-    @ApiOperation(value = "获取当前登录用户的菜单接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "获取当前登录用户的菜单接口", notes = "作者：孙小楠")
     public ResponseEntity<List<MenuTreeDTO>> getCurrentUserMenus(@ApiParam(value = "归属系统WEB|MOBILE", required = true) @RequestParam SysType sysType,
                                                                  @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         List<MenuTreeDTO> result = menuService.getCurrentUserMenus(sysType, userModel.getUserId());
@@ -264,7 +264,7 @@ public class MenuResource {
     }
 
     @GetMapping("/permission/current")
-    @ApiOperation(value = "获取当前登录用户的权限接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "获取当前登录用户的权限接口", notes = "作者：孙小楠")
     public ResponseEntity<List<String>> getCurrentUserPermissions(@ApiParam(value = "归属系统WEB|MOBILE", required = true) @RequestParam SysType sysType,
                                                                 @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         List<String> result = menuService.getCurrentUserPermissions(sysType, userModel.getUserId())
@@ -273,7 +273,7 @@ public class MenuResource {
     }
 
     @PostMapping("/role-menu")
-    @ApiOperation(value = "更新角色菜单权限接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "更新角色菜单权限接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> updateRoleMenuRelationship(@RequestBody RoleMenuVM vm) {
         if (vm.getMenuIds() != null) {
             roleMenuRepository.deleteAllByRoleId(vm.getRoleId());

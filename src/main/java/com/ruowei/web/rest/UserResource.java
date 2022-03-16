@@ -60,7 +60,7 @@ public class UserResource {
 
     @PostMapping("/user")
     @Transactional
-    @ApiOperation(value = "新增用户接口", notes = "作者：张锴")
+    @ApiOperation(value = "新增用户接口", notes = "作者：孙小楠")
     public ResponseEntity<User> createUser(@Valid @RequestBody UserVM vm) throws URISyntaxException {
         log.debug("REST request to save SysUser : {}", vm);
         if (vm.getId() != null) {
@@ -82,7 +82,7 @@ public class UserResource {
 
     @PutMapping("/user")
     @Transactional
-    @ApiOperation(value = "编辑用户接口", notes = "作者：张锴")
+    @ApiOperation(value = "编辑用户接口", notes = "作者：孙小楠")
     public ResponseEntity<User> editUser(@Valid @RequestBody UserVM vm) {
         log.debug("REST request to update SysUser : {}", vm);
         if (vm.getId() == null) {
@@ -117,7 +117,7 @@ public class UserResource {
     }
 
     @GetMapping("/user")
-    @ApiOperation(value = "获取带分页的用户列表接口", notes = "作者：张锴")
+    @ApiOperation(value = "获取带分页的用户列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<User>> getAllUsers(UserQM qm, Pageable pageable) {
         log.debug("REST request to get a page of SysUsers : {}", qm);
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
@@ -131,7 +131,7 @@ public class UserResource {
     }
 
     @GetMapping("/user/{id}")
-    @ApiOperation(value = "查询用户详情接口", notes = "作者：张锴")
+    @ApiOperation(value = "查询用户详情接口", notes = "作者：孙小楠")
     public ResponseEntity<UserVM> getUser(@PathVariable Long id) {
         log.debug("REST request to get SysUser : {}", id);
         Optional<UserVM> optional = userRepository.findById(id)
@@ -148,7 +148,7 @@ public class UserResource {
 
     @DeleteMapping("/user/{id}")
     @Transactional
-    @ApiOperation(value = "删除用户接口", notes = "作者：张锴")
+    @ApiOperation(value = "删除用户接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.debug("REST request to delete SysUser : {}", id);
         //TODO 无法删除进行过水务碳排放核算的用户
@@ -167,7 +167,7 @@ public class UserResource {
 
     @PostMapping("/user/using/{id}")
     @Transactional
-    @ApiOperation(value = "停用/启用用户接口", notes = "作者：张锴")
+    @ApiOperation(value = "停用/启用用户接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> changeUsingOfUser(@PathVariable Long id,
                                                   @ApiParam(value = "TRUE为启用，FALSE为停用", required = true) @RequestParam Boolean using) {
         if (using) {

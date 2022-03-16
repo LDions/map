@@ -64,7 +64,7 @@ public class RoleResource {
 
     @PostMapping("/role")
     @Transactional
-    @ApiOperation(value = "新增角色接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "新增角色接口", notes = "作者：孙小楠")
     public ResponseEntity<Role> createRole(@Valid @RequestBody RoleVM vm) throws URISyntaxException {
         log.debug("REST request to save SysRole : {}", vm);
         if (vm.getId() != null) {
@@ -87,7 +87,7 @@ public class RoleResource {
     }
 
     @PutMapping("/role")
-    @ApiOperation(value = "编辑角色接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "编辑角色接口", notes = "作者：孙小楠")
     public ResponseEntity<Role> editRole(@Valid @RequestBody Role role) {
         log.debug("REST request to update SysRole : {}", role);
         if (role.getId() == null) {
@@ -106,7 +106,7 @@ public class RoleResource {
     }
 
     @GetMapping("/roles")
-    @ApiOperation(value = "获取带分页的角色列表接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "获取带分页的角色列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<Role>> getAllRoles(RoleQM qm, Pageable pageable) {
         log.debug("REST request to get a page of SysRoles : {}", qm);
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
@@ -122,7 +122,7 @@ public class RoleResource {
     }
 
     @GetMapping("/role/{id}")
-    @ApiOperation(value = "查询角色详情接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "查询角色详情接口", notes = "作者：孙小楠")
     public ResponseEntity<RoleVM> getRole(@PathVariable Long id) {
         log.debug("REST request to get SysRole : {}", id);
         Optional<RoleVM> optional = roleRepository.findById(id)
@@ -139,7 +139,7 @@ public class RoleResource {
 
     @DeleteMapping("/role/{id}")
     @Transactional
-    @ApiOperation(value = "删除角色接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "删除角色接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete SysRole : {}", id);
         List<Long> userIds = userRoleRepository.findAllByRoleId(id).stream().map(UserRole::getUserId).collect(Collectors.toList());
@@ -159,7 +159,7 @@ public class RoleResource {
 
     @PostMapping("/role/using/{id}")
     @Transactional
-    @ApiOperation(value = "停用/启用角色接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "停用/启用角色接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> changeUsingOfRole(@PathVariable Long id,
                                                   @ApiParam(value = "TRUE为启用，FALSE为停用", required = true) @RequestParam Boolean using) {
         List<Long> userIds = userRoleRepository.findAllByRoleId(id).stream().map(UserRole::getUserId).collect(Collectors.toList());
@@ -185,7 +185,7 @@ public class RoleResource {
 
     @GetMapping("/role/drop-down")
     @Transactional
-    @ApiOperation(value = "获取角色下拉列表接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "获取角色下拉列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<DropDownDTO>> getDropDownOfRole(@ApiParam(value = "TRUE为带有污水处理厂，FALSE为不带有污水处理厂", required = true) @RequestParam Boolean haveSewTreat) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qRole.status.eq(RoleStatusType.NORMAL));
