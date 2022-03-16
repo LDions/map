@@ -678,14 +678,14 @@ public class SewEmiService {
         }
         sewEmiDetailDTO.setSewSlus(sewSluVms);
 
-        /*List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
+        List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
         List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
         for (OtherIndex otherIndex : otherIndexList) {
             SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
             BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
             otherIndexVMS.add(vm);
         }
-        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);*/
+        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);
         return sewEmiDetailDTO;
     }
 
@@ -701,21 +701,18 @@ public class SewEmiService {
         List<SewEmiVM> emiVMS = new ArrayList<>();
         /*BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));*/
         List<SewProcess> sewProcessList = sewProcessRepository.findByDocumentCode(documentCode);
-        List<SewEmiVM.SewProcessVM> sewProcessVms = new ArrayList<>();
         for (SewProcess sewProcess : sewProcessList) {
             SewEmiVM.SewProcessVM vm = new SewEmiVM.SewProcessVM();
             BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
             emiVMS.add(vm);
         }
         List<SewPot> sewPotList = sewPotRepository.findByDocumentCode(documentCode);
-        List<SewEmiVM.SewPotVM> sewPotVms = new ArrayList<>();
         for (SewPot sewPot : sewPotList) {
             SewEmiVM.SewPotVM vm = new SewEmiVM.SewPotVM();
             BeanUtils.copyProperties(sewPot, vm, BeanUtil.getNullPropertyNames(sewPot));
             emiVMS.add(vm);
         }
         List<SewSlu> sewSluList = sewSluRepository.findByDocumentCode(documentCode);
-        List<SewEmiVM.SewSluVM> sewSluVms = new ArrayList<>();
         for (SewSlu sewSlu : sewSluList) {
             SewEmiVM.SewSluVM vm = new SewEmiVM.SewSluVM();
             BeanUtils.copyProperties(sewSlu, vm, BeanUtil.getNullPropertyNames(sewSlu));
@@ -731,6 +728,32 @@ public class SewEmiService {
         }
         sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);*/
         return emiVMS;
+    }
+
+    /**
+     * 根据单据号获取污水厂碳排放数据，并封装为SewDetailDTO
+     *
+     * @param documentCode 单据号
+     * @return
+     */
+    public void modificationByDocumentCode(String documentCode,SewDetailsDTO.SewProcessDTO sewProcessDTO) {
+
+        for (SewProcess sew:sewProcessRepository.findByDocumentCode(documentCode)) {
+            sew.setId(sewProcessDTO.getId());
+            sew.setInAmmonia(sewProcessDTO.getInAmmonia());
+            sew.setInCod(sewProcessDTO.getInCod());
+            sew.setInFlow(sewProcessDTO.getInFlow());
+            sew.setInSs(sewProcessDTO.getInSs());
+            sew.setInTn(sewProcessDTO.getInTn());
+            sew.setInTp(sewProcessDTO.getInTp());
+            sew.setOutAmmonia(sewProcessDTO.getOutAmmonia());
+            sew.setOutCod(sewProcessDTO.getOutCod());
+            sew.setOutFlow(sewProcessDTO.getOutFlow());
+            sew.setOutSs(sewProcessDTO.getOutSs());
+            sew.setOutTn(sewProcessDTO.getOutTn());
+            sew.setOutTp(sewProcessDTO.getOutTp());
+            sewProcessRepository.save(sew);
+        }
     }
 
     /**

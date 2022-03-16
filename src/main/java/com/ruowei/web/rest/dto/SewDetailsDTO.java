@@ -12,17 +12,9 @@ import java.util.List;
 @Data
 public class SewDetailsDTO {
 
-    @ApiModelProperty(value = "仪表")
-    private List<SewEmiVM.SewProcessVM> sewProcesss;
+    @Data
+    public static class SewProcessDTO {
 
-    @ApiModelProperty(value = "化验")
-    private List<SewEmiVM.SewSluVM> sewSlus;
-
-    @ApiModelProperty(value = "日报")
-    private List<SewEmiVM.SewPotVM> sewPots;
-
-
-    /*public static class SewProcessDTO {
         private Long id;
 
         @ApiModelProperty(value = "进水流量（mg/L）")
@@ -117,6 +109,5 @@ public class SewDetailsDTO {
         @ApiModelProperty(value = "好氧池出口亚硝酸盐（mg/L）")
         private BigDecimal aerobicPoolNit;
     }
-*/
 
 }

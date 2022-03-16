@@ -37,6 +37,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.*;
 
 import static com.ruowei.config.Constants.SEWAGE;
@@ -150,6 +151,18 @@ public class EmiDataResource {
         List<SewEmiVM> sewEmiVMS= sewEmiService.convertToSewDetailDtoByDocumentCode(documentCode);
         return ResponseEntity.ok().body(sewEmiVMS);
     }
+
+    @PostMapping("/bulk_edit")
+    @ApiOperation(value = "批量编辑", notes = "作者：董玉祥")
+    public ResponseEntity<Void> bulkEdit(@ApiParam(value = "单据号") @RequestParam(required = false) List<String> documentCodes,
+                                         @ApiParam(value = "仪表数据") @RequestBody SewDetailsDTO.SewProcessDTO sewProcessDTO) {
+
+        for (String str:documentCodes) {
+            sewEmiService.modificationByDocumentCode(str,sewProcessDTO);
+        }
+        return ResponseEntity.ok().build();
+    }
+
 
     @GetMapping("/carbon-emission-data/with-pagination")
     @ApiOperation(value = "获取碳排放数据核算列表接口——带分页", notes = "作者：林宏栋")
