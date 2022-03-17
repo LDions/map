@@ -76,7 +76,7 @@ public class EnterpriseResource {
 
     @PostMapping("/enterprise")
     @Transactional
-    @ApiOperation(value = "新增企业接口", notes = "作者：张锴")
+    @ApiOperation(value = "新增企业接口", notes = "作者：孙小楠")
     public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) throws URISyntaxException {
         log.debug("REST request to save Enterprise : {}", vm);
 
@@ -84,7 +84,7 @@ public class EnterpriseResource {
     }
 
     @PutMapping("/enterprise")
-    @ApiOperation(value = "编辑企业接口", notes = "作者：张锴")
+    @ApiOperation(value = "编辑企业接口", notes = "作者：孙小楠")
     public ResponseEntity<Enterprise> editEnterprise(@Valid @RequestBody Enterprise enterprise) {
         log.debug("REST request to update Enterprise : {}", enterprise);
         if (enterprise.getId() == null) {
@@ -97,7 +97,7 @@ public class EnterpriseResource {
 
     @GetMapping("/enterprises")
     @Transactional
-    @ApiOperation(value = "获取带分页的企业列表接口", notes = "作者：张锴")
+    @ApiOperation(value = "获取带分页的企业列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<EnterpriseDTO>> getAllEnterprises(EnterpriseQM qm, Pageable pageable) {
         log.debug("REST request to get a page of Enterprises : {}", qm);
 
@@ -105,7 +105,7 @@ public class EnterpriseResource {
     }
 
     @GetMapping("/enterprise/{id}")
-    @ApiOperation(value = "查询企业详情接口", notes = "作者:张锴")
+    @ApiOperation(value = "查询企业详情接口", notes = "作者:孙小楠")
     public ResponseEntity<Enterprise> getEnterprise(@PathVariable Long id) {
 
         return ResponseEntity.ok().build();
@@ -113,7 +113,7 @@ public class EnterpriseResource {
 
     @DeleteMapping("/enterprise/{id}")
     @Transactional
-    @ApiOperation(value = "删除企业接口", notes = "作者：张锴")
+    @ApiOperation(value = "删除企业接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteEnterprise(@PathVariable Long id) {
         log.debug("REST request to delete Enterprise : {}", id);
         User user = userRepository.findByEnterpriseId(id)
@@ -123,7 +123,7 @@ public class EnterpriseResource {
     }
 
     @GetMapping("/enterprise/drop-down")
-    @ApiOperation(value = "获取当前用户对应的企业下拉列表接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "获取当前用户对应的企业下拉列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<DropDownDTO>> getEnterpriseDropDown(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         List<DropDownDTO> result = new ArrayList<>();
         if (userModel.getEnterpriseId() != null) {
@@ -138,7 +138,7 @@ public class EnterpriseResource {
     }
 
     @GetMapping("/enterprise/province/{id}")
-    @ApiOperation(value = "获取企业所在省份接口", notes = "作者：林宏栋")
+    @ApiOperation(value = "获取企业所在省份接口", notes = "作者：孙小楠")
     public ResponseEntity<DropDownDTO> getProvinceNameOfEnterprise(@PathVariable Long id) {
 
         DropDownDTO result = new DropDownDTO();
