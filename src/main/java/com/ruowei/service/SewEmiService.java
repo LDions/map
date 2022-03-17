@@ -56,10 +56,11 @@ public class SewEmiService {
     private final SewSluRepository sewSluRepository;
     private final OtherIndexRepository otherIndexRepository;
     private final SewPotRepository sewPotRepository;
+    private final SewMeterRepository sewMeterRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private QSewEmi qSewEmi = QSewEmi.sewEmi;
 
-    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, SewEmiRepository sewEmiRepository, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory) {
+    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, SewEmiRepository sewEmiRepository, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, JPAQueryFactory jpaQueryFactory) {
         this.emiFactorRepository = emiFactorRepository;
         this.objectMapper = objectMapper;
         this.applicationProperties = applicationProperties;
@@ -69,6 +70,7 @@ public class SewEmiService {
         this.sewSluRepository = sewSluRepository;
         this.otherIndexRepository = otherIndexRepository;
         this.sewPotRepository = sewPotRepository;
+        this.sewMeterRepository = sewMeterRepository;
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
@@ -719,14 +721,12 @@ public class SewEmiService {
             emiVMS.add(vm);
         }
 
-        /*List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
-        List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
-        for (OtherIndex otherIndex : otherIndexList) {
-            SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
-            BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
-            otherIndexVMS.add(vm);
+        List<SewMeter> sewMeterList = sewMeterRepository.findByDocumentCode(documentCode);
+        for (SewMeter sewMeter : sewMeterList) {
+            SewEmiVM.SewMeterVM vm = new SewEmiVM.SewMeterVM ();
+            BeanUtils.copyProperties(sewMeter, vm, BeanUtil.getNullPropertyNames(sewMeter));
+            emiVMS.add(vm);
         }
-        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);*/
         return emiVMS;
     }
 

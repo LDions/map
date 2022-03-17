@@ -68,9 +68,9 @@ public class Enterprise implements Serializable {
     /**
      * 水厂所属集团编码
      */
-    @ApiModelProperty(value = "水厂所属集团id")
-    @Column(name = "group_id")
-    private Long groupId;
+    @ApiModelProperty(value = "水厂所属集团Code")
+    @Column(name = "group_code")
+    private String groupCode;
 
     /**
      * 水厂所属集团名称
@@ -166,15 +166,15 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public String getGroupCode() {
+        return groupCode;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
-    public Enterprise groupCode(Long groupId) {
-        this.groupId = groupId;
+    public Enterprise groupCode(String groupCode) {
+        this.groupCode = groupCode;
         return this;
     }
 
@@ -218,7 +218,7 @@ public class Enterprise implements Serializable {
             ", dataType='" + getDataType() + "'" +
             ", remark='" + getRemark() + "'" +
             ", pointDataName='" + getPointDataName() + "'" +
-            ", groupId='" + getGroupId() + "'" +
+            ", groupCode='" + getGroupCode() + "'" +
             ", groupName='" + getGroupName() + "'" +
             "}";
     }

@@ -89,22 +89,42 @@ entity RoleMenu(sys_role_menu) {
     roleId Long required /** 角色ID */
     menuId Long required /** 菜单ID */
 }
+/** 工艺信息 */
+entity Craft(){
+    name String /** 工艺名称 */
+    processPeriod String /** 工艺编号 */
+    craftName String /** 工艺段名称 */
+    craftCode String /** 工艺段编号 */
+    craftCapacity BigDecimal /** 工艺段池容 */
+    inRefluxRatio BigDecimal /** 内回流比 */
+    outRefluxRatio BigDecimal /** 外回流比 */
+    aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
+    anoxiaNitrateConcentration BigDecimal /** 传统公式：缺氧区硝酸盐浓度 */
+    bodCodRatio BigDecimal /** 传统公式：BOD/COD */
+    codCalibration BigDecimal /** 传统公式：COD校准参数 */
+    bodNRatio BigDecimal /** 传统公式：BOD/N */
+    bodEquivalentWeight BigDecimal /** 传统公式：BOD当量 */
+    intimacy BigDecimal /** 传统公式：外加碳源相对亲密度 */
+    entCode String /** 上属水厂编号 */
+}
 /** 水厂信息 */
 entity Enterprise(sys_enterprise) {
     name String required /** 水厂名称 */
     enterpriseAddress String required /** 经营详细地址 */
     equipmentName String /** 设备名称 */
     dataType String  /** 数据类型 */
+    entCode String /** 水厂编号 */
     isTry Boolean required /** 是否为试点水厂 */
     remark String /** 备注 */
     pointDataName String  /** 点数据名称  */
-    groupId Long /** 水厂所属集团id */
+    groupCode String /** 水厂所属集团Code */
     }
 
 /** 集团信息 */
 entity Group(sys_group) {
     groupName String required/** 集团名称 */
     groupAddress String required /** 经营详细地址 */
+    groupCode String required /** 集团编号 */
     platformId Long /** 集团所属平台id */
 }
 
@@ -310,6 +330,24 @@ entity SewPot(sew_pot) {
     dayAerobicPoolSvi Bigdecimal /** 生化池-好氧池SVI（）*/
 	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 	dayTime Instant /** 采集时间 */
+}
+/** 数据校验表 */
+entity SewMeter(sew_meter){
+    documentCode String /** 单据号 */
+    assInAmmonia BigDecimal /** 进水氨氮（mg/L） */
+    assInCod BigDecimal /** 进水COD（mg/L） */
+    assInTn BigDecimal /** 进水TN（mg/L） */
+    assInTp BigDecimal /** 进水TP（mg/L） */
+    assAnoxicPoolDoOutNit required /** 缺氧池出口硝酸盐（mg/L） */
+    assAerobicPoolDoOutNit required /** 好氧池出口硝酸盐（mg/L） */
+    assOutAmmonia BigDecimal /** 出水氨氮（mg/L） */
+    assOutCod BigDecimal /** 出水COD（mg/L） */
+    assOutTn BigDecimal /** 出水TN（mg/L） */
+    assOutTp BigDecimal /** 出水TP（mg/L） */
+    dayTime Instant /** 时间 */
+    craftCode String /** 所属工艺段 */
+
+
 }
 
 /** 其他指标 */

@@ -14,6 +14,10 @@
       "fieldType": "String",
       "javadoc": "数据类型"
     },{
+      "fieldName": "entCode",
+      "fieldType": "String",
+      "javadoc": "水厂编码"
+    ,{
       "fieldName": "remark",
       "fieldType": "String",
       "javadoc": "备注"
@@ -22,9 +26,9 @@
       "fieldType": "String",
       "javadoc": "点数据名称"
     },{
-      "fieldName": "groupId",
-      "fieldType": "Long",
-      "javadoc": "水厂所属集团id"
+      "fieldName": "groupCode",
+      "fieldType": "String",
+      "javadoc": "水厂所属集团Code"
     },{
       "fieldName": "groupName",
       "fieldType": "String",

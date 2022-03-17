@@ -11,7 +11,7 @@ public class DataDTO {
     public static class GroupDTO extends DataDTO {
 
         @ApiModelProperty(value = "集团名称")
-        private String name;
+        private String groupName;
 
         @ApiModelProperty(value = "集团编码")
         private String groupCode;

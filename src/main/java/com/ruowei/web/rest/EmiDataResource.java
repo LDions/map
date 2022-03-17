@@ -11,11 +11,13 @@ import com.ruowei.service.SewEmiService;
 import com.ruowei.util.BeanUtil;
 import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.util.OrderByUtil;
+import com.ruowei.util.SelectUtil;
 import com.ruowei.util.excel.ExcelExport;
 import com.ruowei.web.rest.dto.*;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.CarbonEmiQM;
 import com.ruowei.web.rest.vm.SewEmiVM;
+import com.ruowei.web.rest.vm.SituationAnalysisQM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -37,6 +39,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -56,11 +59,13 @@ public class EmiDataResource {
     private final SewSluRepository sewSluRepository;
     private final SewPotRepository sewPotRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private final SelectUtil selectUtil;
     private QEmiData qEmiData = QEmiData.emiData;
     private final QEntCraftData qEntCraftData = QEntCraftData.entCraftData;
+    private final JPAQueryFactory queryFactory;
 
     public EmiDataResource(SewEmiService sewEmiService, SewProcessRepository sewProcessRepository, GroupRepository groupRepository, CraftRepository craftRepository, EnterpriseRepository enterpriseRepository, EntCraftProcessRepository entCraftProcessRepository, SewSluRepository sewSluRepository,
-                           SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory) {
+                           SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory, SelectUtil selectUtil, JPAQueryFactory queryFactory) {
         this.sewEmiService = sewEmiService;
         this.sewProcessRepository = sewProcessRepository;
         this.groupRepository = groupRepository;
@@ -70,7 +75,8 @@ public class EmiDataResource {
         this.sewSluRepository = sewSluRepository;
         this.sewPotRepository = sewPotRepository;
         this.jpaQueryFactory = jpaQueryFactory;
-
+        this.selectUtil = selectUtil;
+        this.queryFactory = queryFactory;
     }
 
     @GetMapping("/entenrprise")
@@ -85,7 +91,8 @@ public class EmiDataResource {
             dataDTOS.add(dto);
         }
         for (Group g : Groups) {
-            List<Enterprise> enterprises = enterpriseRepository.findByGroupId(g.getId());
+            System.out.println(g.getGroupCode());
+            List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
             for (Enterprise enterprise : enterprises) {
                 DataDTO.EntDTO dto = new DataDTO.EntDTO();
                 BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
@@ -146,6 +153,20 @@ public class EmiDataResource {
 
         List<SewEmiVM> sewEmiVMS= sewEmiService.convertToSewDetailDtoByDocumentCode(documentCode);
         return ResponseEntity.ok().body(sewEmiVMS);
+    }
+
+    @PostMapping("/situation_analysis")
+    @ApiOperation(value = "势态分析", notes = "作者：董玉祥")
+    public ResponseEntity<List<List>> select(@RequestBody List<SituationAnalysisQM> situationAnalysisQMS,
+                                                   @ApiParam(value = "开始时间") @RequestParam(required = false) String beginTime,
+                                                   @ApiParam(value = "结束时间") @RequestParam(required = false) String endTime,
+                                                   @ApiParam(value = "分段") @RequestParam(required = false) String subsection) {
+        List<List> list = new ArrayList<>();
+        for (SituationAnalysisQM qm:situationAnalysisQMS) {
+            List<BigDecimal> list1 = selectUtil.getSome(qm.getSource(),qm.getTarget(),beginTime,endTime,subsection);
+            list.add(list1);
+        }
+        return ResponseEntity.ok().body(list);
     }
 
     @PostMapping("/bulk_edit")

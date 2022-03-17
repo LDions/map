@@ -25,9 +25,6 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
-
     /**
      * 集团名称
      */
@@ -41,6 +38,13 @@ public class Group {
     @ApiModelProperty(value = "集团位置")
     @Column(name = "group_address")
     private String groupAddress;
+
+    /**
+     * 集团编号
+     */
+    @ApiModelProperty(value = "集团编号")
+    @Column(name = "group_code")
+    private String groupCode;
 
 
 
@@ -88,6 +92,18 @@ public class Group {
         this.groupAddress = groupAddress;
     }
 
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+    public Group groupCode(String groupCode) {
+        this.groupCode = groupCode;
+        return this;
+    }
+
     public Long getPlatformId() {
         return platformId;
     }
@@ -121,8 +137,9 @@ public class Group {
         return "Group{" +
             "id=" + id +
             ", groupName='" + groupName + '\'' +
-            ", enterpriseAddress='" + groupAddress + '\'' +
-            ", platformId='" + platformId + '\'' +
+            ", groupAddress='" + groupAddress + '\'' +
+            ", groupCode='" + groupCode + '\'' +
+            ", platformId=" + platformId +
             '}';
     }
 }

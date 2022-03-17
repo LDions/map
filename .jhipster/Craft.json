@@ -1,0 +1,78 @@
+{
+  "name": "Craft",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "javadoc": "工艺名称"
+    },{
+      "fieldName": "processPeriod",
+      "fieldType": "String",
+      "javadoc": "工艺编号"
+    },{
+      "fieldName": "craftName",
+      "fieldType": "String",
+      "javadoc": "工艺段名称"
+    },{
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺段编号"
+    },{
+      "fieldName": "craftCapacity",
+      "fieldType": "BigDecimal",
+      "javadoc": "工艺段池容"
+    },{
+      "fieldName": "inRefluxRatio",
+      "fieldType": "BigDecimal",
+      "javadoc": "内回流比"
+    },{
+      "fieldName": "outRefluxRatio",
+      "fieldType": "BigDecimal",
+      "javadoc": "外回流比"
+    },{
+      "fieldName": "aerobioticNitrateConcentration",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：好氧区硝酸盐浓度"
+    },{
+      "fieldName": "anoxiaNitrateConcentration",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：缺氧区硝酸盐浓度"
+    },{
+      "fieldName": "bodCodRatio",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：BOD/COD"
+    },{
+      "fieldName": "codCalibration",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：COD校准参数"
+    },{
+      "fieldName": "bodNRatio",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：BOD/N"
+    },{
+      "fieldName": "bodEquivalentWeight",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：BOD当量"
+    },{
+      "fieldName": "intimacy",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：外加碳源相对亲密度"
+    },{
+      "fieldName": "entCode",
+      "fieldType": "String",
+      "javadoc": "上属水厂编号"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "工艺信息",
+  "entityTableName": "sys_craft",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080844"
+}
