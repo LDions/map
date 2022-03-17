@@ -1,11 +1,10 @@
 package com.ruowei.domain;
 
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import javax.persistence.*;
-import javax.validation.constraints.*;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -69,9 +68,9 @@ public class Enterprise implements Serializable {
     /**
      * 水厂所属集团编码
      */
-    @ApiModelProperty(value = "水厂所属集团编码")
-    @Column(name = "group_code")
-    private String groupCode;
+    @ApiModelProperty(value = "水厂所属集团id")
+    @Column(name = "group_id")
+    private Long groupId;
 
     /**
      * 水厂所属集团名称
@@ -167,15 +166,15 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getGroupCode() {
-        return groupCode;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
-    public Enterprise groupCode(String groupCode) {
-        this.groupCode = groupCode;
+    public Enterprise groupCode(Long groupId) {
+        this.groupId = groupId;
         return this;
     }
 
@@ -219,7 +218,7 @@ public class Enterprise implements Serializable {
             ", dataType='" + getDataType() + "'" +
             ", remark='" + getRemark() + "'" +
             ", pointDataName='" + getPointDataName() + "'" +
-            ", groupCode='" + getGroupCode() + "'" +
+            ", groupId='" + getGroupId() + "'" +
             ", groupName='" + getGroupName() + "'" +
             "}";
     }

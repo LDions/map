@@ -22,9 +22,9 @@
       "fieldType": "String",
       "javadoc": "点数据名称"
     },{
-      "fieldName": "groupCode",
-      "fieldType": "String",
-      "javadoc": "水厂所属集团编码"
+      "fieldName": "groupId",
+      "fieldType": "Long",
+      "javadoc": "水厂所属集团id"
     },{
       "fieldName": "groupName",
       "fieldType": "String",
@@ -32,7 +32,7 @@
     }
   ],
   "relationships": [],
-  "javadoc": "企业信息",
+  "javadoc": "水厂信息",
   "entityTableName": "sys_enterprise",
   "dto": "no",
   "pagination": "no",

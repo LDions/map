@@ -1,0 +1,26 @@
+{
+  "name": "Platform",
+  "fields": [
+    {
+      "fieldName": "platformName",
+      "fieldType": "String",
+      "javadoc": "平台名称"
+    },{
+      "fieldName": "platformAddress",
+      "fieldType": "String",
+      "javadoc": "平台详细地址"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "水厂信息",
+  "entityTableName": "sys_platform",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080844"
+}

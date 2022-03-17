@@ -37,10 +37,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.*;
-
-import static com.ruowei.config.Constants.SEWAGE;
 
 @RestController
 @RequestMapping("/api")
@@ -61,10 +58,9 @@ public class EmiDataResource {
     private final JPAQueryFactory jpaQueryFactory;
     private QEmiData qEmiData = QEmiData.emiData;
     private final QEntCraftData qEntCraftData = QEntCraftData.entCraftData;
-    private final JPAQueryFactory queryFactory;
 
     public EmiDataResource(SewEmiService sewEmiService, SewProcessRepository sewProcessRepository, GroupRepository groupRepository, CraftRepository craftRepository, EnterpriseRepository enterpriseRepository, EntCraftProcessRepository entCraftProcessRepository, SewSluRepository sewSluRepository,
-                           SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory, JPAQueryFactory queryFactory) {
+                           SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory) {
         this.sewEmiService = sewEmiService;
         this.sewProcessRepository = sewProcessRepository;
         this.groupRepository = groupRepository;
@@ -74,7 +70,7 @@ public class EmiDataResource {
         this.sewSluRepository = sewSluRepository;
         this.sewPotRepository = sewPotRepository;
         this.jpaQueryFactory = jpaQueryFactory;
-        this.queryFactory = queryFactory;
+
     }
 
     @GetMapping("/entenrprise")
@@ -89,7 +85,7 @@ public class EmiDataResource {
             dataDTOS.add(dto);
         }
         for (Group g : Groups) {
-            List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
+            List<Enterprise> enterprises = enterpriseRepository.findByGroupId(g.getId());
             for (Enterprise enterprise : enterprises) {
                 DataDTO.EntDTO dto = new DataDTO.EntDTO();
                 BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));

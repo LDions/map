@@ -89,16 +89,31 @@ entity RoleMenu(sys_role_menu) {
     roleId Long required /** 角色ID */
     menuId Long required /** 菜单ID */
 }
-/** 企业信息 */
+/** 水厂信息 */
 entity Enterprise(sys_enterprise) {
     name String required /** 水厂名称 */
+    enterpriseAddress String required /** 经营详细地址 */
     equipmentName String /** 设备名称 */
     dataType String  /** 数据类型 */
+    isTry Boolean required /** 是否为试点水厂 */
     remark String /** 备注 */
     pointDataName String  /** 点数据名称  */
-    groupCode String /** 水厂所属集团编码 */
-    groupName String /** 水厂所属集团名称 */
+    groupId Long /** 水厂所属集团id */
+    }
+
+/** 集团信息 */
+entity Group(sys_group) {
+    groupName String required/** 集团名称 */
+    groupAddress String required /** 经营详细地址 */
+    platformId Long /** 集团所属平台id */
 }
+
+/** 平台信息 */
+entity Platform(sys_platform) {
+    platformName String required /** 平台名称 */
+    platformAddress String required /** 平台详细地址 */
+}
+
 /**
  * 公司状态类型
  * 正常|删除|停用
@@ -117,6 +132,7 @@ entity District {
     extId             Long            /** 数据源原始编号，如果是添加的数据，此编号为0 */
     extName           String          /** 数据源原始名称，为未精简的名称 */
 }
+
 
 /** 碳排放数据 */
 entity EmiData(emi_data) {

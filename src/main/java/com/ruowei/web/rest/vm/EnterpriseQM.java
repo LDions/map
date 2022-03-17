@@ -7,16 +7,24 @@ import lombok.Data;
 @Data
 public class EnterpriseQM {
 
-    @ApiModelProperty(value = "单位名称")
+    @ApiModelProperty(value = "水厂名称")
     private String name;
 
-    @ApiModelProperty(value = "企业性质")
-    private String nature;
+    @ApiModelProperty(value = "设备名称")
+    private String equipmentName;
 
-    @ApiModelProperty(value = "统一信用代码")
-    private String uniCreditCode;
+    @ApiModelProperty(value = "数据类型")
+    private String dataType;
 
-    @ApiModelProperty(value = "状态(NORMAL|DELETE)")
-    private EnterpriseStatusType status;
+    @ApiModelProperty(value = "备注")
+    private String remark;
 
+    @ApiModelProperty(value = "点数据名称")
+    private String pointDataName;
+
+    @ApiModelProperty(value = "水厂所属集团id")
+    private Long groupId;
+
+    @ApiModelProperty(value = "水厂所属集团名称")
+    private String groupName;
 }

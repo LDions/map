@@ -1,0 +1,30 @@
+{
+  "name": "Enterprise",
+  "fields": [
+    {
+      "fieldName": "groupName",
+      "fieldType": "String",
+      "javadoc": "集团名称"
+    },{
+      "fieldName": "groupAddress",
+      "fieldType": "String",
+      "javadoc": "集团详细地址"
+    },{
+      "fieldName": "platformId",
+      "fieldType": "Long",
+      "javadoc": "平台id"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "集团信息",
+  "entityTableName": "sys_group",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080844"
+}

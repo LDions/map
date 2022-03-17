@@ -195,7 +195,7 @@ public class SewEmiService {
                 vm.getEcoComplexReduction() != null ? vm.getEcoComplexReduction() : new BigDecimal(0)
             );
             enterDTO.setCarbonNegativeDTO(carbonNegativeDTO);
-            // 封装污泥处置信息
+            // 封装其他指标信息
             enterDTO.setMSludge1(new BigDecimal(0));
             enterDTO.setWc1(new BigDecimal(60));
             enterDTO.setMSludge2(new BigDecimal(0));

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class EnterpriseVM {
 
-    @ApiModelProperty(value = "单位名称")
+    @ApiModelProperty(value = "水厂名称")
     private String name;
 
     @ApiModelProperty(value = "设备名称")
@@ -23,8 +23,8 @@ public class EnterpriseVM {
     @ApiModelProperty(value = "点数据名称")
     private String pointDataName;
 
-    @ApiModelProperty(value = "水厂所属集团编码")
-    private String groupCode;
+    @ApiModelProperty(value = "水厂所属集团id")
+    private Long groupId;
 
     @ApiModelProperty(value = "水厂所属集团名称")
     private String groupName;
@@ -69,12 +69,12 @@ public class EnterpriseVM {
         this.pointDataName = pointDataName;
     }
 
-    public String getGroupCode() {
-        return groupCode;
+    public Long groupId() {
+        return groupId;
     }
 
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public String getGroupName() {
