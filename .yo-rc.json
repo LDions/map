@@ -63,7 +63,8 @@
       "Menu",
       "RoleMenu",
       "OtherIndex",
-      "SewMeter"
+      "SewMeter",
+      "Correlation"
     ],
     "lastLiquibaseTimestamp": 1631693326000
   }

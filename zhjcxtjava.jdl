@@ -359,6 +359,12 @@ entity OtherIndex(sew_index) {
 
 }
 
+/** 指标关联表 */
+entity Correlation(sew_correlation){
+    name String /** 关联数据名称 */
+    indicator String /** 关联数据指标 */
+}
+
 /** 核算数据草稿 */
 entity Draft(app_draft) {
 	userId Long required /** 用户ID */
