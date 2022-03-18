@@ -5,6 +5,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.*;
+import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.SewEmiService;
@@ -15,12 +16,11 @@ import com.ruowei.util.SelectUtil;
 import com.ruowei.util.excel.ExcelExport;
 import com.ruowei.web.rest.dto.*;
 import com.ruowei.web.rest.errors.BadRequestProblem;
-import com.ruowei.web.rest.vm.CarbonEmiQM;
-import com.ruowei.web.rest.vm.SewEmiVM;
-import com.ruowei.web.rest.vm.SituationAnalysisQM;
+import com.ruowei.web.rest.vm.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -58,6 +58,8 @@ public class EmiDataResource {
     private final EntCraftProcessRepository entCraftProcessRepository;
     private final SewSluRepository sewSluRepository;
     private final SewPotRepository sewPotRepository;
+    private final CorrelationRepository correlationRepository;
+    private final BeAssociatedRepository beAssociatedRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final SelectUtil selectUtil;
     private QEmiData qEmiData = QEmiData.emiData;
@@ -65,7 +67,7 @@ public class EmiDataResource {
     private final JPAQueryFactory queryFactory;
 
     public EmiDataResource(SewEmiService sewEmiService, SewProcessRepository sewProcessRepository, GroupRepository groupRepository, CraftRepository craftRepository, EnterpriseRepository enterpriseRepository, EntCraftProcessRepository entCraftProcessRepository, SewSluRepository sewSluRepository,
-                           SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory, SelectUtil selectUtil, JPAQueryFactory queryFactory) {
+                           SewPotRepository sewPotRepository, CorrelationRepository correlationRepository, BeAssociatedRepository beAssociatedRepository, JPAQueryFactory jpaQueryFactory, SelectUtil selectUtil, JPAQueryFactory queryFactory) {
         this.sewEmiService = sewEmiService;
         this.sewProcessRepository = sewProcessRepository;
         this.groupRepository = groupRepository;
@@ -74,6 +76,8 @@ public class EmiDataResource {
         this.entCraftProcessRepository = entCraftProcessRepository;
         this.sewSluRepository = sewSluRepository;
         this.sewPotRepository = sewPotRepository;
+        this.correlationRepository = correlationRepository;
+        this.beAssociatedRepository = beAssociatedRepository;
         this.jpaQueryFactory = jpaQueryFactory;
         this.selectUtil = selectUtil;
         this.queryFactory = queryFactory;
@@ -91,8 +95,7 @@ public class EmiDataResource {
             dataDTOS.add(dto);
         }
         for (Group g : Groups) {
-            System.out.println(g.getGroupCode());
-            List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
+            List<Enterprise> enterprises = enterpriseRepository.findByGroupId(g.getId());
             for (Enterprise enterprise : enterprises) {
                 DataDTO.EntDTO dto = new DataDTO.EntDTO();
                 BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
@@ -105,9 +108,9 @@ public class EmiDataResource {
 
     @GetMapping("/process_period")
     @ApiOperation(value = "获取工艺段", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(String industryCode) {
+    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(Long entId) {
 
-        List<Craft> crafts = craftRepository.findByEntCode(industryCode);
+        List<Craft> crafts = craftRepository.findByEntId(entId);
         List<DataDTO.CraftDTO> craftDTOS = new ArrayList<>();
         for (Craft craft : crafts) {
             DataDTO.CraftDTO dto = new DataDTO.CraftDTO();
@@ -118,16 +121,16 @@ public class EmiDataResource {
     }
 
     @GetMapping("/getList")
-    @ApiOperation(value = "获取列表", notes = "作者：董玉祥")
-    public ResponseEntity<List<EntCraftDataDTO>> getList(@ApiParam(value = "水厂编号") @RequestParam String entCode,
-                                                         @ApiParam(value = "工艺段编号") @RequestParam(required = false) String craftCode,
+    @ApiOperation(value = "获取数据展示列表", notes = "作者：董玉祥")
+    public ResponseEntity<List<EntCraftDataDTO>> getList(@ApiParam(value = "水厂id") @RequestParam Long entId,
+                                                         @ApiParam(value = "工艺id") @RequestParam(required = false) Long craftId,
                                                          @ApiParam(value = "数据时间") @RequestParam(required = false) String time,
                                                          @ApiParam(value = "数据来源") @RequestParam String source,
                                                          Pageable pageable) {
 
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
-            .notEmptyAnd(qEntCraftData.entCode::eq, entCode)
-            .notEmptyAnd(qEntCraftData.craftCode::eq, craftCode)
+            .notEmptyAnd(qEntCraftData.entId::eq, entId)
+            .notEmptyAnd(qEntCraftData.craftId::eq, craftId)
             .notEmptyAnd(qEntCraftData.dayTime::eq, sewEmiService.getInstant(time))
             .notEmptyAnd(qEntCraftData.messageSource::eq, source);
 
@@ -155,6 +158,64 @@ public class EmiDataResource {
         return ResponseEntity.ok().body(sewEmiVMS);
     }
 
+    @PostMapping("/bulk_edit")
+    @ApiOperation(value = "批量编辑", notes = "作者：董玉祥")
+    public ResponseEntity<Void> bulkEdit(@ApiParam(value = "单据号") @RequestParam(required = false) List<String> documentCodes,
+                                         @ApiParam(value = "仪表数据") @RequestBody SewDetailsDTO.SewProcessDTO sewProcessDTO) {
+
+        for (String str:documentCodes) {
+            sewEmiService.modificationByDocumentCode(str,sewProcessDTO);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/relevance")
+    @ApiOperation(value = "关联信息新增", notes = "作者：董玉祥")
+    public ResponseEntity<String> relevance(@RequestBody CollectQM qm) {
+
+        beAssociatedRepository.findByBeAssociatedName(qm.getBeAssociated().getTarget())
+            .ifPresent(so -> {
+                throw new BadRequestProblem("新增失败", "该数据已经存在关联，请前往编辑进行编辑");
+            });
+        BeAssociated beAssociated = new BeAssociated();
+        beAssociated.setBeAssociatedName(qm.getBeAssociated().getTarget());
+        beAssociated.setBeAssociatedSource(qm.getBeAssociated().getSource());
+        long id = beAssociatedRepository.save(beAssociated).getId();
+        for (SituationAnalysisQM situationAnalysisQM:qm.getRelation()) {
+            Correlation correlation = new Correlation();
+            correlation.setRelationTarget(situationAnalysisQM.getTarget());
+            correlation.setRelationSource(situationAnalysisQM.getSource());
+            correlation.setRelevanceId(id);
+            correlationRepository.save(correlation);
+        }
+
+        return ResponseEntity.ok().body("新增成功");
+    }
+
+    /*@PostMapping("/relevance_list")
+    @ApiOperation(value = "关联信息列表", notes = "作者：董玉祥")
+    public ResponseEntity<List<CollectQM>> relevanceList() {
+
+        List<CollectQM> collectQMS = new ArrayList<>();
+        List<BeAssociated> beAssociateds = beAssociatedRepository.findAll();
+        for (BeAssociated b:beAssociateds) {
+            CollectQM collectQM = new CollectQM();
+
+            collectQM.setBeAssociated();
+            collectQM.getBeAssociated().setTarget(b.getBeAssociatedName());
+            collectQM.getBeAssociated().setSource(b.getBeAssociatedSource());
+            List<Correlation> correlations = correlationRepository.findByRelevanceId(b.getId());
+            for (Correlation correlation : correlations){
+                int i = 1;
+                collectQM.getRelation().get(i).setSource(correlation.getRelationSource());
+                collectQM.getRelation().get(i).setTarget(correlation.getRelationTarget());
+            }
+            collectQMS.add(collectQM);
+        }
+        return ResponseEntity.ok().body(collectQMS);
+    }
+*/
+
     @PostMapping("/situation_analysis")
     @ApiOperation(value = "势态分析", notes = "作者：董玉祥")
     public ResponseEntity<List<List>> select(@RequestBody List<SituationAnalysisQM> situationAnalysisQMS,
@@ -167,17 +228,6 @@ public class EmiDataResource {
             list.add(list1);
         }
         return ResponseEntity.ok().body(list);
-    }
-
-    @PostMapping("/bulk_edit")
-    @ApiOperation(value = "批量编辑", notes = "作者：董玉祥")
-    public ResponseEntity<Void> bulkEdit(@ApiParam(value = "单据号") @RequestParam(required = false) List<String> documentCodes,
-                                         @ApiParam(value = "仪表数据") @RequestBody SewDetailsDTO.SewProcessDTO sewProcessDTO) {
-
-        for (String str:documentCodes) {
-            sewEmiService.modificationByDocumentCode(str,sewProcessDTO);
-        }
-        return ResponseEntity.ok().build();
     }
 
 

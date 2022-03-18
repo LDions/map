@@ -31,13 +31,6 @@ public class Enterprise implements Serializable {
     private String name;
 
     /**
-     * 水厂编号
-     */
-    @ApiModelProperty(value = "水厂编号")
-    @Column(name = "ent_code")
-    private String entCode;
-
-    /**
      * 设备名称
      */
     @ApiModelProperty(value = "设备名称")
@@ -68,12 +61,12 @@ public class Enterprise implements Serializable {
     /**
      * 水厂所属集团编码
      */
-    @ApiModelProperty(value = "水厂所属集团Code")
-    @Column(name = "group_code")
-    private String groupCode;
+    @ApiModelProperty(value = "水厂所属集团id")
+    @Column(name = "group_Id")
+    private Long groupId;
 
     /**
-     * 水厂所属集团名称
+     * 水厂所属集团编码
      */
     @ApiModelProperty(value = "水厂所属集团名称")
     @Column(name = "group_name")
@@ -103,18 +96,6 @@ public class Enterprise implements Serializable {
     }
     public Enterprise name(String name) {
         this.name = name;
-        return this;
-    }
-
-    public String getEntCode() {
-        return entCode;
-    }
-
-    public void setEntCode(String entCode) {
-        this.entCode = entCode;
-    }
-    public Enterprise entCode(String entCode) {
-        this.entCode = entCode;
         return this;
     }
 
@@ -166,15 +147,15 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getGroupCode() {
-        return groupCode;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
-    public Enterprise groupCode(String groupCode) {
-        this.groupCode = groupCode;
+    public Enterprise groupId(Long groupId) {
+        this.groupId = groupId;
         return this;
     }
 
@@ -189,7 +170,6 @@ public class Enterprise implements Serializable {
         this.groupName = groupName;
         return this;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -213,12 +193,11 @@ public class Enterprise implements Serializable {
         return "Enterprise{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", entCode='" + getEntCode() + "'" +
             ", equipmentName='" + getEquipmentName() + "'" +
             ", dataType='" + getDataType() + "'" +
             ", remark='" + getRemark() + "'" +
             ", pointDataName='" + getPointDataName() + "'" +
-            ", groupCode='" + getGroupCode() + "'" +
+            ", groupCode='" + getGroupId() + "'" +
             ", groupName='" + getGroupName() + "'" +
             "}";
     }

@@ -1,0 +1,54 @@
+{
+  "name": "EntCraftData",
+  "fields": [
+    {
+      "fieldName": "groupId",
+      "fieldType": "Long",
+      "javadoc": "集团Id"
+    },{
+      "fieldName": "groupName",
+      "fieldType": "String",
+      "javadoc": "集团名称"
+    },{
+      "fieldName": "entId",
+      "fieldType": "Long",
+      "javadoc": "水厂Id"
+    },{
+      "fieldName": "entName",
+      "fieldType": "String",
+      "javadoc": "水厂名称"
+    },{
+      "fieldName": "craftId",
+      "fieldType": "Long",
+      "javadoc": "工艺段Id"
+    },{
+      "fieldName": "craftName",
+      "fieldType": "String",
+      "javadoc": "工艺段名称"
+    },{
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号"
+    },{
+      "fieldName": "dayTime",
+      "fieldType": "String",
+      "javadoc": "数据时间"
+    },{
+      "fieldName": "messageSource",
+      "fieldType": "String",
+      "javadoc": "数据来源"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "集团、水厂、工艺关联信息",
+  "entityTableName": "sys_ent_craft_data",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080844"
+}

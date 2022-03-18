@@ -10,10 +10,6 @@
       "fieldType": "String",
       "javadoc": "集团详细地址"
     },{
-      "fieldName": "groupCode",
-      "fieldType": "String",
-      "javadoc": "集团编码"
-    },{
       "fieldName": "platformId",
       "fieldType": "Long",
       "javadoc": "平台id"

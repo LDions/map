@@ -23,6 +23,5 @@ public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
      */
     List<SewProcess> findByDocumentCode(@NotNull String documentCode);
 
-    List<SewProcess> findByCraftCodeAndDayTime(String craftCode,Instant dayTime);
 
 }

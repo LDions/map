@@ -6,21 +6,17 @@
       "fieldType": "String",
       "javadoc": "工艺名称"
     },{
-      "fieldName": "processPeriod",
-      "fieldType": "String",
-      "javadoc": "工艺编号"
-    },{
       "fieldName": "craftName",
       "fieldType": "String",
       "javadoc": "工艺段名称"
     },{
-      "fieldName": "craftCode",
-      "fieldType": "String",
-      "javadoc": "工艺段编号"
-    },{
       "fieldName": "craftCapacity",
       "fieldType": "BigDecimal",
       "javadoc": "工艺段池容"
+    },{
+      "fieldName": "processPeriod",
+      "fieldType": "String",
+      "javadoc": "工艺段编号"
     },{
       "fieldName": "inRefluxRatio",
       "fieldType": "BigDecimal",
@@ -58,9 +54,37 @@
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：外加碳源相对亲密度"
     },{
-      "fieldName": "entCode",
+      "fieldName": "dilutionRatio",
+      "fieldType": "BigDecimal",
+      "javadoc": "传统公式：碳源稀释倍数"
+    },{
+      "fieldName": "phosphate",
+      "fieldType": "BigDecimal",
+      "javadoc": "除磷公式：二沉池出水正磷酸盐设定值"
+    },{
+      "fieldName": "FeAlRatio",
+      "fieldType": "BigDecimal",
+      "javadoc": "除磷公式：铁盐或铝盐的摩尔质量比"
+    },{
+      "fieldName": "phosphorusDosing",
+      "fieldType": "BigDecimal",
+      "javadoc": "除磷公式：投加系数"
+    },{
+      "fieldName": "feAlActiveIngredients",
+      "fieldType": "BigDecimal",
+      "javadoc": "除磷公式：铁盐或铝盐的有效成分"
+    },{
+      "fieldName": "concentration",
+      "fieldType": "BigDecimal",
+      "javadoc": "除磷公式：除磷药剂配药浓度或者相对密度"
+    },{
+      "fieldName": "entId",
+      "fieldType": "Long",
+      "javadoc": "上属水厂Id"
+    },{
+      "fieldName": "entName",
       "fieldType": "String",
-      "javadoc": "上属水厂编号"
+      "javadoc": "上属水厂Name"
     }
   ],
   "relationships": [],

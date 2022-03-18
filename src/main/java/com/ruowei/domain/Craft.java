@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 @Table(name = "sew_craft")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
+
 public class Craft {
 
     private static final long serialVersionUID = 1L;
@@ -34,13 +35,6 @@ public class Craft {
     private String name;
 
     /**
-     * 工艺编号
-     */
-    @ApiModelProperty(value = "工艺编号")
-    @Column(name = "process_period")
-    private String processPeriod;
-
-    /**
      * 工艺段名称
      */
     @ApiModelProperty(value = "工艺段名称")
@@ -51,8 +45,8 @@ public class Craft {
      * 工艺段编号
      */
     @ApiModelProperty(value = "工艺段编号")
-    @Column(name = "craft_code")
-    private String craftCode;
+    @Column(name = "process_period")
+    private String processPeriod;
 
     /**
      * 工艺段池容
@@ -118,18 +112,67 @@ public class Craft {
     private BigDecimal bodEquivalentWeight;
 
     /**
+     * 传统公式：碳源稀释倍数
+     */
+    @ApiModelProperty(value = "传统公式：碳源稀释倍数")
+    @Column(name = "dilution_ratio")
+    private BigDecimal dilutionRatio;
+
+    /**
      * 传统公式：外加碳源相对亲密度
      */
     @ApiModelProperty(value = "传统公式：外加碳源相对亲密度")
-    @Column(name = "intimacy ")
+    @Column(name = "intimacy")
     private BigDecimal intimacy ;
+
+    /**
+     * 除磷公式：二沉池出水正磷酸盐设定值
+     */
+    @ApiModelProperty(value = "除磷公式：二沉池出水正磷酸盐设定值 ")
+    @Column(name = "phosphate")
+    private BigDecimal phosphate ;
+
+    /**
+     * 除磷公式：铁盐或铝盐的摩尔质量比
+     */
+    @ApiModelProperty(value = "除磷公式：铁盐或铝盐的摩尔质量比")
+    @Column(name = "fe_al_ratio ")
+    private BigDecimal FeAlRatio ;
+
+    /**
+     * 除磷公式：投加系数
+     */
+    @ApiModelProperty(value = "除磷公式：投加系数")
+    @Column(name = "phosphorus_dosing")
+    private BigDecimal phosphorusDosing ;
+
+    /**
+     * 除磷公式：铁盐或铝盐的有效成分
+     */
+    @ApiModelProperty(value = "除磷公式：铁盐或铝盐的有效成分")
+    @Column(name = "fe_al_active_ingredients")
+    private BigDecimal feAlActiveIngredients ;
+
+    /**
+     * 除磷公式：除磷药剂配药浓度或者相对密度
+     */
+    @ApiModelProperty(value = "除磷公式：除磷药剂配药浓度或者相对密度  ")
+    @Column(name = "concentration")
+    private BigDecimal concentration ;
 
     /**
      * 上属水厂编号
      */
-    @ApiModelProperty(value = "上属水厂编号")
-    @Column(name = "ent_code")
-    private String entCode;
+    @ApiModelProperty(value = "上属水厂Id")
+    @Column(name = "ent_Id")
+    private Long entId;
+
+    /**
+     * 上属水厂名称
+     */
+    @ApiModelProperty(value = "上属水厂名称")
+    @Column(name = "ent_name")
+    private String entName;
 
     public Long getId() {
         return id;
@@ -171,17 +214,6 @@ public class Craft {
     }
     public void setCraftName(String craftName) {
         this.craftName = craftName;
-    }
-
-    public String getCraftCode() {
-        return craftCode;
-    }
-    public Craft craftCode(String craftCode) {
-        this.craftCode = craftCode;
-        return this;
-    }
-    public void setCraftCode(String craftCode) {
-        this.craftCode = craftCode;
     }
 
     public BigDecimal getCraftCapacity() {
@@ -294,15 +326,92 @@ public class Craft {
         this.intimacy = intimacy;
     }
 
-    public String getEntCode() {
-        return entCode;
+    public Long getEntId() {
+        return entId;
     }
-    public Craft entCode(String entCode) {
-        this.entCode = entCode;
+    public Craft entId(Long entId) {
+        this.entId = entId;
         return this;
     }
-    public void setEntCode(String entCode) {
-        this.entCode = entCode;
+    public void setEntId(Long entId) {
+        this.entId = entId;
+    }
+
+    public BigDecimal getDilutionRatio() {
+        return dilutionRatio;
+    }
+    public Craft dilutionRatio(BigDecimal dilutionRatio) {
+        this.dilutionRatio = dilutionRatio;
+        return this;
+    }
+    public void setDilutionRatio(BigDecimal dilutionRatio) {
+        this.dilutionRatio = dilutionRatio;
+    }
+
+    public BigDecimal getPhosphate() {
+        return phosphate;
+    }
+    public Craft phosphate(BigDecimal phosphate) {
+        this.phosphate = phosphate;
+        return this;
+    }
+    public void setPhosphate(BigDecimal phosphate) {
+        this.phosphate = phosphate;
+    }
+
+    public BigDecimal getFeAlRatio() {
+        return FeAlRatio;
+    }
+    public Craft FeAlRatio(BigDecimal FeAlRatio) {
+        this.FeAlRatio = FeAlRatio;
+        return this;
+    }
+    public void setFeAlRatio(BigDecimal feAlRatio) {
+        FeAlRatio = feAlRatio;
+    }
+
+    public BigDecimal getPhosphorusDosing() {
+        return phosphorusDosing;
+    }
+    public Craft phosphorusDosing(BigDecimal phosphorusDosing) {
+        this.phosphorusDosing = phosphorusDosing;
+        return this;
+    }
+    public void setPhosphorusDosing(BigDecimal phosphorusDosing) {
+        this.phosphorusDosing = phosphorusDosing;
+    }
+
+    public BigDecimal getFeAlActiveIngredients() {
+        return feAlActiveIngredients;
+    }
+    public Craft feAlActiveIngredients(BigDecimal feAlActiveIngredients) {
+        this.feAlActiveIngredients = feAlActiveIngredients;
+        return this;
+    }
+    public void setFeAlActiveIngredients(BigDecimal feAlActiveIngredients) {
+        this.feAlActiveIngredients = feAlActiveIngredients;
+    }
+
+    public BigDecimal getConcentration() {
+        return concentration;
+    }
+    public Craft concentration(BigDecimal concentration) {
+        this.concentration = concentration;
+        return this;
+    }
+    public void setConcentration(BigDecimal concentration) {
+        this.concentration = concentration;
+    }
+
+    public String getEntName() {
+        return entName;
+    }
+    public Craft entName(String entName) {
+        this.entName = entName;
+        return this;
+    }
+    public void setEntName(String entName) {
+        this.entName = entName;
     }
 
     @Override
@@ -327,9 +436,8 @@ public class Craft {
         return "Craft{" +
             "id=" + id +
             ", name='" + name + '\'' +
-            ", processPeriod='" + processPeriod + '\'' +
             ", craftName='" + craftName + '\'' +
-            ", craftCode='" + craftCode + '\'' +
+            ", processPeriod='" + processPeriod + '\'' +
             ", craftCapacity=" + craftCapacity +
             ", inRefluxRatio=" + inRefluxRatio +
             ", outRefluxRatio=" + outRefluxRatio +
@@ -339,8 +447,14 @@ public class Craft {
             ", codCalibration=" + codCalibration +
             ", bodNRatio=" + bodNRatio +
             ", bodEquivalentWeight=" + bodEquivalentWeight +
+            ", dilutionRatio=" + dilutionRatio +
             ", intimacy=" + intimacy +
-            ", entCode='" + entCode + '\'' +
+            ", phosphate=" + phosphate +
+            ", FeAlRatio=" + FeAlRatio +
+            ", phosphorusDosing=" + phosphorusDosing +
+            ", feAlActiveIngredients=" + feAlActiveIngredients +
+            ", concentration=" + concentration +
+            ", entId=" + entId +
             '}';
     }
 }

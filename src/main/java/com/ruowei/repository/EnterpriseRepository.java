@@ -17,9 +17,6 @@ import java.util.Optional;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, QuerydslPredicateExecutor<Enterprise> {
 
-    List<Enterprise> findByGroupCode(String code);
-
-
-    Enterprise findByEntCode(String code);
+    List<Enterprise> findByGroupId(Long id);
 
 }

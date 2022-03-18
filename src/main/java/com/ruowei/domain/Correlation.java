@@ -11,6 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @ApiModel(description = "指标关联表")
 @Entity
@@ -28,16 +29,23 @@ public class Correlation {
     /**
      * 关联数据名称
      */
-    @ApiModelProperty(value = "关联数据名称")
-    @Column(name = "name")
-    private String name;
+    @ApiModelProperty(value = "关联数据来源")
+    @Column(name = "relation_source")
+    private String relationSource;
 
     /**
-     * 关联数据指标
+     * 关联数据来源
      */
-    @ApiModelProperty(value = "关联数据指标")
-    @Column(name = "indicator")
-    private String indicator;
+    @ApiModelProperty(value = "关联数据名称")
+    @Column(name = "relation_target")
+    private String relationTarget;
+
+    /**
+     * 关联数据来源
+     */
+    @ApiModelProperty(value = "关联数据Id")
+    @Column(name = "relevance_id")
+    private Long relevanceId;
 
     public Long getId() {
         return id;
@@ -47,26 +55,37 @@ public class Correlation {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRelationSource() {
+        return relationSource;
     }
-    public Correlation name(String name) {
-        this.name = name;
+    public Correlation relationSource(String relationSource) {
+        this.relationSource = relationSource;
         return this;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setRelationSource(String relationSource) {
+        this.relationSource = relationSource;
     }
 
-    public String getIndicator() {
-        return indicator;
+    public String getRelationTarget() {
+        return relationTarget;
     }
-    public Correlation indicator(String indicator) {
-        this.indicator = indicator;
+    public Correlation relationTarget(String relationTarget) {
+        this.relationTarget = relationTarget;
         return this;
     }
-    public void setIndicator(String indicator) {
-        this.indicator = indicator;
+    public void setRelationTarget(String relationTarget) {
+        this.relationTarget = relationTarget;
+    }
+
+    public Long getRelevanceId() {
+        return relevanceId;
+    }
+    public Correlation relevanceId(Long relevanceId) {
+        this.relevanceId = relevanceId;
+        return this;
+    }
+    public void setRelevanceId(Long relevanceId) {
+        this.relevanceId = relevanceId;
     }
 
     @Override
@@ -90,8 +109,9 @@ public class Correlation {
     public String toString() {
         return "Correlation{" +
             "id=" + id +
-            ", name='" + name + '\'' +
-            ", indicator='" + indicator + '\'' +
+            ", relationSource='" + relationSource + '\'' +
+            ", relationTarget='" + relationTarget + '\'' +
+            ", relevanceId=" + relevanceId +
             '}';
     }
 }

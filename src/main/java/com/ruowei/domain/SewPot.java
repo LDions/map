@@ -603,6 +603,7 @@ public class SewPot implements Serializable {
         this.dayTime = dayTime;
         return this;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

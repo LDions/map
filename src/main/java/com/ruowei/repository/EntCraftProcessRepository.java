@@ -12,6 +12,5 @@ import java.util.List;
 @Repository
 public interface EntCraftProcessRepository extends JpaRepository<EntCraftData, Long>, QuerydslPredicateExecutor<EntCraftData> {
 
-    List<EntCraftData> findByEntCodeAndCraftCodeAndDayTimeAndMessageSource(String entCode,String craftCode,Instant daytime,String leixing);
 
 }

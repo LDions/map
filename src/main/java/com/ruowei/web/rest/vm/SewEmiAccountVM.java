@@ -403,9 +403,6 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "采集时间")
         private Instant dayTime;
 
-        @ApiModelProperty(value = "所属工艺段")
-        private String craftCode;
-
     }
 
 }

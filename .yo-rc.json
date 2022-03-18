@@ -64,7 +64,9 @@
       "RoleMenu",
       "OtherIndex",
       "SewMeter",
-      "Correlation"
+      "Correlation",
+      "EntCraftData",
+      "BeAssociated"
     ],
     "lastLiquibaseTimestamp": 1631693326000
   }

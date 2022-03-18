@@ -111,13 +111,6 @@ public class SewMeter {
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 
-    /**
-     * 所属工艺段
-     */
-    @ApiModelProperty(value = "所属工艺段", required = true)
-    @Column(name = "craft_code", nullable = false)
-    private String craftCode;
-
     public Long getId() {
         return id;
     }
@@ -258,16 +251,6 @@ public class SewMeter {
         this.dayTime = dayTime;
     }
 
-    public String getCraftCode() {
-        return craftCode;
-    }
-    public SewMeter craftCode(String craftCode) {
-        this.craftCode = craftCode;
-        return this;
-    }
-    public void setCraftCode(String craftCode) {
-        this.craftCode = craftCode;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -302,7 +285,6 @@ public class SewMeter {
             ", assOutTn=" + assOutTn +
             ", assOutTp=" + assOutTp +
             ", dayTime=" + dayTime +
-            ", craftCode='" + craftCode + '\'' +
             '}';
     }
 }

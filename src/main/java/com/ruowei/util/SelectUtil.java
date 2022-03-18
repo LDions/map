@@ -3,16 +3,25 @@ package com.ruowei.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ruowei.domain.Correlation;
 import com.ruowei.domain.QSewPot;
 import com.ruowei.domain.QSewProcess;
 import com.ruowei.domain.QSewSlu;
+import com.ruowei.repository.CorrelationRepository;
 import com.ruowei.service.SewEmiService;
+import com.ruowei.web.rest.vm.CollectQM;
+import com.ruowei.web.rest.vm.RelationQM;
+import com.ruowei.web.rest.vm.SituationAnalysisQM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static liquibase.pro.license.keymgr.e.d;
 
 @Component
 public class SelectUtil {
@@ -21,16 +30,26 @@ public class SelectUtil {
     private final Logger log = LoggerFactory.getLogger(SelectUtil.class);
     private final ObjectMapper objectMapper;
     private final SewEmiService sewEmiService;
+    private final CorrelationRepository correlationRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final QSewProcess qSewProcess = QSewProcess.sewProcess;
     private final QSewPot qSewPot = QSewPot.sewPot;
     private final QSewSlu qSewSlu = QSewSlu.sewSlu;
 
-    public SelectUtil(ObjectMapper objectMapper, SewEmiService sewEmiService, JPAQueryFactory jpaQueryFactory) {
+    public SelectUtil(ObjectMapper objectMapper, SewEmiService sewEmiService, CorrelationRepository correlationRepository, JPAQueryFactory jpaQueryFactory) {
         this.objectMapper = objectMapper;
         this.sewEmiService = sewEmiService;
+        this.correlationRepository = correlationRepository;
         this.jpaQueryFactory = jpaQueryFactory;
     }
+
+    /*public List<String> relevance(List<CollectQM> collectQMS){
+
+        for (CollectQM c:collectQMS) {
+
+        }
+
+    }*/
 
     public List<BigDecimal> getSome(String source, String target, String beginTime, String endTime,String subsection) {
         JPAQuery<BigDecimal> bigDecimalJPAQuery = null;

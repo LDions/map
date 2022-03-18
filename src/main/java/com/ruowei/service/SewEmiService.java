@@ -540,8 +540,7 @@ public class SewEmiService {
                 .aerobicPoolDo(processVm.getAerobicPoolDo())
                 .anoxicPoolDoOutNit(processVm.getAnoxicPoolDoOutNit())
                 .aerobicPoolNit(processVm.getAerobicPoolNit())
-                .dayTime(processVm.getDayTime())
-                .craftCode(processVm.getCraftCode());
+                .dayTime(processVm.getDayTime());
             sewProcessList.add(sewProcess);
         }
         List<SewPot> sewPotList = new ArrayList<>();

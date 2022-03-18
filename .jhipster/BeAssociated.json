@@ -1,18 +1,14 @@
 {
-  "name": "Correlation",
+  "name": "BeAssociated",
   "fields": [
     {
-      "fieldName": "relationTarget",
+      "fieldName": "beAssociatedName",
       "fieldType": "String",
       "javadoc": "数据名称"
     },{
-      "fieldName": "relationSource",
+      "fieldName": "beAssociatedSource",
       "fieldType": "String",
       "javadoc": "数据来源"
-    },{
-      "fieldName": "relevanceId",
-      "fieldType": "Long",
-      "javadoc": "关联数据Id"
     }
   ],
   "relationships": [],

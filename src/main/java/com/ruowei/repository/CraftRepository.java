@@ -15,7 +15,5 @@ import java.util.List;
 @Repository
 public interface CraftRepository extends JpaRepository<Craft, Long>, QuerydslPredicateExecutor<Craft> {
 
-    List<Craft> findByEntCode(String entCode);
-
-    Craft findByCraftCode(String code);
+    List<Craft> findByEntId(Long Id);
 }

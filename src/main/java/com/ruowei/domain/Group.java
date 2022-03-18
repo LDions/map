@@ -40,15 +40,6 @@ public class Group {
     private String groupAddress;
 
     /**
-     * 集团编号
-     */
-    @ApiModelProperty(value = "集团编号")
-    @Column(name = "group_code")
-    private String groupCode;
-
-
-
-    /**
      * 上属平台
      */
     @ApiModelProperty(value = "上属平台")
@@ -92,18 +83,6 @@ public class Group {
         this.groupAddress = groupAddress;
     }
 
-    public String getGroupCode() {
-        return groupCode;
-    }
-
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
-    }
-    public Group groupCode(String groupCode) {
-        this.groupCode = groupCode;
-        return this;
-    }
-
     public Long getPlatformId() {
         return platformId;
     }
@@ -138,7 +117,6 @@ public class Group {
             "id=" + id +
             ", groupName='" + groupName + '\'' +
             ", groupAddress='" + groupAddress + '\'' +
-            ", groupCode='" + groupCode + '\'' +
             ", platformId=" + platformId +
             '}';
     }

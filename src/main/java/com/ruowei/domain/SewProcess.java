@@ -179,14 +179,6 @@ public class SewProcess implements Serializable {
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 
-    /**
-     * 所属工艺段
-     */
-    @ApiModelProperty(value = "所属工艺段", required = true)
-    @Column(name = "craft_code", nullable = false)
-    private String craftCode;
-
-
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -474,17 +466,6 @@ public class SewProcess implements Serializable {
         return this;
     }
 
-    public String getCraftCode() {
-        return craftCode;
-    }
-
-    public void setCraftCode(String craftCode) {
-        this.craftCode = craftCode;
-    }
-    public SewProcess craftCode(String craftCode) {
-        this.craftCode = craftCode;
-        return this;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -531,7 +512,6 @@ public class SewProcess implements Serializable {
             ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
             ", aerobicPoolNit=" + getAerobicPoolNit() +
             ", dayTime=" + getDayTime() +
-            ", craftCode=" + getCraftCode() +
             "}";
     }
 }
