@@ -13,4 +13,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "cnsp-java"
+rootProject.name = "zhjcxt-java"

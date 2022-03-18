@@ -59,6 +59,11 @@ public class CacheConfiguration {
             createCache(cm, com.ruowei.domain.Menu.class.getName());
             createCache(cm, com.ruowei.domain.RoleMenu.class.getName());
             createCache(cm, com.ruowei.domain.OtherIndex.class.getName());
+            createCache(cm, com.ruowei.domain.Group.class.getName());
+            createCache(cm, com.ruowei.domain.Platform.class.getName());
+            createCache(cm, com.ruowei.domain.SewMeter.class.getName());
+            createCache(cm, com.ruowei.domain.Craft.class.getName());
+            createCache(cm, com.ruowei.domain.EntCraftData.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
