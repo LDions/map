@@ -92,9 +92,8 @@ entity RoleMenu(sys_role_menu) {
 /** 工艺信息 */
 entity Craft(){
     name String /** 工艺名称 */
-    processPeriod String /** 工艺编号 */
     craftName String /** 工艺段名称 */
-    craftCode String /** 工艺段编号 */
+    processPeriod String /** 工艺段编号 */
     craftCapacity BigDecimal /** 工艺段池容 */
     inRefluxRatio BigDecimal /** 内回流比 */
     outRefluxRatio BigDecimal /** 外回流比 */
@@ -105,7 +104,14 @@ entity Craft(){
     bodNRatio BigDecimal /** 传统公式：BOD/N */
     bodEquivalentWeight BigDecimal /** 传统公式：BOD当量 */
     intimacy BigDecimal /** 传统公式：外加碳源相对亲密度 */
-    entCode String /** 上属水厂编号 */
+    dilutionRatio BigDecimal /** 传统公式：碳源稀释倍数 */
+    phosphate BigDecimal /** 除磷公式：二沉池出水正磷酸盐设定值 */
+    FeAlRatio BigDecimal /** 除磷公式：铁盐或铝盐的摩尔质量比 */
+    phosphorusDosing BigDecimal /** 除磷公式：投加系数 */
+    feAlActiveIngredients BigDecimal /** 除磷公式：铁盐或铝盐的有效成分 */
+    concentration BigDecimal /** 除磷公式：除磷药剂配药浓度或者相对密度 */
+    entId Long /** 上属水厂Id */
+    entId String /** 上属水厂名称 */
 }
 /** 水厂信息 */
 entity Enterprise(sys_enterprise) {
@@ -113,19 +119,31 @@ entity Enterprise(sys_enterprise) {
     enterpriseAddress String required /** 经营详细地址 */
     equipmentName String /** 设备名称 */
     dataType String  /** 数据类型 */
-    entCode String /** 水厂编号 */
     isTry Boolean required /** 是否为试点水厂 */
     remark String /** 备注 */
     pointDataName String  /** 点数据名称  */
-    groupCode String /** 水厂所属集团Code */
+    groupId Long /** 水厂所属集团Id */
+    groupId String /** 水厂所属集团名称 */
     }
 
 /** 集团信息 */
 entity Group(sys_group) {
     groupName String required/** 集团名称 */
     groupAddress String required /** 经营详细地址 */
-    groupCode String required /** 集团编号 */
     platformId Long /** 集团所属平台id */
+}
+
+/** 集团、水厂、工艺关联信息 */
+entity EntCraftData(sys_ent_craft_data){
+    groupId Long /** 集团Id */
+    groupName String /** 集团名称 */
+    entId Long /** 水厂Id */
+    entName String /** 水厂名称 */
+    craftId Long /** 工艺段Id */
+    craftName String /** 工艺段名称 */
+    documentCode String /** 单据号 */
+    dayTime Instant /** 数据时间 */
+    messageSource String /** 数据来源 */
 }
 
 /** 平台信息 */
@@ -345,9 +363,6 @@ entity SewMeter(sew_meter){
     assOutTn BigDecimal /** 出水TN（mg/L） */
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 时间 */
-    craftCode String /** 所属工艺段 */
-
-
 }
 
 /** 其他指标 */
@@ -356,13 +371,18 @@ entity OtherIndex(sew_index) {
     methodCode String required /** 其他指标编码 */
     methodName String required /** 其他指标名称 */
     indexCapacity BigDecimal /** 指标量（kg/m）*/
-
+}
+/** 被指标关联表 */
+entity BeAssociated(sew_be_associated){
+    beAssociatedName String /** 数据名称 */
+    beAssociatedSource String /** 数据来源 */
 }
 
 /** 指标关联表 */
 entity Correlation(sew_correlation){
-    name String /** 关联数据名称 */
-    indicator String /** 关联数据指标 */
+    relationTarget String /** 数据名称 */
+    relationSource String /** 数据来源 */
+    relevanceId Long /** 关联数据Id */
 }
 
 /** 核算数据草稿 */
