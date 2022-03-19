@@ -4,7 +4,6 @@ import com.ruowei.domain.Role;
 import com.ruowei.domain.RoleMenu;
 import com.ruowei.domain.User;
 import com.ruowei.domain.UserRole;
-import com.ruowei.domain.enumeration.UserStatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
@@ -22,15 +21,9 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
 
     Optional<User> findOneByLogin(@NotNull String login);
 
-    Optional<User> findOneByLoginAndStatusNot(@NotNull String login, @NotNull UserStatusType status);
+    List<User> findAllByIdIn(Collection<Long> id);
 
-    List<User> findAllByIdInAndStatusNot(Collection<Long> id, @NotNull UserStatusType status);
-
-    Optional<User> findFirstByLoginAndIdNotAndStatusNot(@NotNull String login, Long id, @NotNull UserStatusType status);
-
-    Optional<User> findByIdAndStatus(Long id, @NotNull UserStatusType status);
-
-    Optional<User> findOneByLoginAndStatus(@NotNull String login, @NotNull UserStatusType status);
+    Optional<User> findFirstByLoginAndIdNot(@NotNull String login, Long id);
 
     Optional<User> findByEnterpriseId(Long enterpriseId);
 }

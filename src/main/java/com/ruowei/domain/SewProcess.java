@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -37,28 +38,7 @@ public class SewProcess implements Serializable {
      */
     @ApiModelProperty(value = "工艺类型编码", required = true)
     @Column(name = "process_type_code", nullable = false)
-    private String processTypeCode;
-
-    /**
-     * 工艺类型名称
-     */
-    @ApiModelProperty(value = "工艺类型名称", required = true)
-    @Column(name = "process_type_name", nullable = false)
-    private String processTypeName;
-
-    /**
-     * 日均规模（m3/d）
-     */
-    @ApiModelProperty(value = "日均规模（m3/d）", required = true)
-    @Column(name = "daily_scale", precision = 21, scale = 2, nullable = false)
-    private BigDecimal dailyScale;
-
-    /**
-     * 本月运行天数
-     */
-    @ApiModelProperty(value = "本月运行天数", required = true)
-    @Column(name = "operating_days", nullable = false)
-    private Integer operatingDays;
+    private String craftCode;
 
     /**
      * 进水总氮（mg/L）
@@ -179,6 +159,13 @@ public class SewProcess implements Serializable {
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 
+    /**
+     * 数据推送状态
+     */
+    @ApiModelProperty(value = "数据推送状态", required = true)
+    @Column(name = "status", nullable = false)
+    private SendStatusType status;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -206,57 +193,19 @@ public class SewProcess implements Serializable {
         this.documentCode = documentCode;
     }
 
-    public String getProcessTypeCode() {
-        return this.processTypeCode;
+    public String getCraftCode() {
+        return this.craftCode;
     }
 
-    public SewProcess processTypeCode(String processTypeCode) {
-        this.processTypeCode = processTypeCode;
+    public SewProcess craftCode(String craftCode) {
+        this.craftCode = craftCode;
         return this;
     }
 
-    public void setProcessTypeCode(String processTypeCode) {
-        this.processTypeCode = processTypeCode;
+    public void setCraftCode(String processTypeCode) {
+        this.craftCode = craftCode;
     }
 
-    public String getProcessTypeName() {
-        return this.processTypeName;
-    }
-
-    public SewProcess processTypeName(String processTypeName) {
-        this.processTypeName = processTypeName;
-        return this;
-    }
-
-    public void setProcessTypeName(String processTypeName) {
-        this.processTypeName = processTypeName;
-    }
-
-    public BigDecimal getDailyScale() {
-        return this.dailyScale;
-    }
-
-    public SewProcess dailyScale(BigDecimal dailyScale) {
-        this.dailyScale = dailyScale;
-        return this;
-    }
-
-    public void setDailyScale(BigDecimal dailyScale) {
-        this.dailyScale = dailyScale;
-    }
-
-    public Integer getOperatingDays() {
-        return this.operatingDays;
-    }
-
-    public SewProcess operatingDays(Integer operatingDays) {
-        this.operatingDays = operatingDays;
-        return this;
-    }
-
-    public void setOperatingDays(Integer operatingDays) {
-        this.operatingDays = operatingDays;
-    }
 
     public BigDecimal getInFlow() {
         return this.inFlow;
@@ -466,6 +415,17 @@ public class SewProcess implements Serializable {
         return this;
     }
 
+    public SendStatusType getStatus() {
+        return status;
+    }
+    public SewProcess status(SendStatusType status) {
+        this.status = status;
+        return this;
+    }
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -491,10 +451,7 @@ public class SewProcess implements Serializable {
         return "SewProcess{" +
             "id=" + getId() +
             ", documentCode='" + getDocumentCode() + "'" +
-            ", processTypeCode='" + getProcessTypeCode() + "'" +
-            ", processTypeName='" + getProcessTypeName() + "'" +
-            ", dailyScale=" + getDailyScale() +
-            ", operatingDays=" + getOperatingDays() +
+            ", craftCode='" + getCraftCode() + "'" +
             ", inFlow=" + getInFlow() +
             ", inAmmonia=" + getInAmmonia() +
             ", inCod=" + getInCod() +
@@ -512,6 +469,7 @@ public class SewProcess implements Serializable {
             ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
             ", aerobicPoolNit=" + getAerobicPoolNit() +
             ", dayTime=" + getDayTime() +
+            ", status=" + getStatus() +
             "}";
     }
 }

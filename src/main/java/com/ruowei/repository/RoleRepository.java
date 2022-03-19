@@ -18,15 +18,15 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long>, QuerydslPredicateExecutor<Role> {
 
-    Optional<Role> getFirstByNameAndStatusNot(@NotNull String name, @NotNull RoleStatusType status);
+    Optional<Role> getFirstByName(@NotNull String name);
 
-    Optional<Role> getFirstByCodeAndStatusNot(@NotNull String code, @NotNull RoleStatusType status);
+    Optional<Role> getFirstByCode(@NotNull String code);
 
-    Optional<Role> getByCodeAndStatus(@NotNull String code, @NotNull RoleStatusType status);
+    Optional<Role> getByCode(@NotNull String code);
 
-    Optional<Role> getFirstByNameAndIdNotAndStatusNot(@NotNull String name, Long id, @NotNull RoleStatusType status);
+    Optional<Role> getFirstByNameAndIdNot(@NotNull String name, Long id);
 
-    Optional<Role> getFirstByCodeAndIdNotAndStatusNot(@NotNull String code, Long id, @NotNull RoleStatusType status);
+    Optional<Role> getFirstByCodeAndIdNot(@NotNull String code, Long id);
 
-    List<Role> findAllByIdInAndStatus(Collection<Long> id, @NotNull RoleStatusType status);
+    List<Role> findAllByIdIn(Collection<Long> id);
 }

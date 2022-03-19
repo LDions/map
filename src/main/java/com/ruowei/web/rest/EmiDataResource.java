@@ -5,7 +5,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.*;
-import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.SewEmiService;
@@ -106,19 +105,19 @@ public class EmiDataResource {
         return ResponseEntity.ok().body(dataDTOS);
     }
 
-    @GetMapping("/process_period")
-    @ApiOperation(value = "获取工艺段", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(Long entId) {
-
-        List<Craft> crafts = craftRepository.findByEntId(entId);
-        List<DataDTO.CraftDTO> craftDTOS = new ArrayList<>();
-        for (Craft craft : crafts) {
-            DataDTO.CraftDTO dto = new DataDTO.CraftDTO();
-            BeanUtils.copyProperties(craft, dto, BeanUtil.getNullPropertyNames(craft));
-            craftDTOS.add(dto);
-        }
-        return ResponseEntity.ok().body(craftDTOS);
-    }
+//    @GetMapping("/process_period")
+//    @ApiOperation(value = "获取工艺段", notes = "作者：董玉祥")
+//    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(Long entId) {
+//
+//        List<Craft> crafts = craftRepository.findByEntCode(entId);
+//        List<DataDTO.CraftDTO> craftDTOS = new ArrayList<>();
+//        for (Craft craft : crafts) {
+//            DataDTO.CraftDTO dto = new DataDTO.CraftDTO();
+//            BeanUtils.copyProperties(craft, dto, BeanUtil.getNullPropertyNames(craft));
+//            craftDTOS.add(dto);
+//        }
+//        return ResponseEntity.ok().body(craftDTOS);
+//    }
 
     @GetMapping("/getList")
     @ApiOperation(value = "获取数据展示列表", notes = "作者：董玉祥")

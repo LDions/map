@@ -14,23 +14,9 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "type",
-      "fieldType": "RoleType",
-      "javadoc": "角色类型",
-      "fieldValues": "ADMIN,EMI,SINK",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "isSys",
       "fieldType": "Boolean",
       "javadoc": "是否内置角色",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "status",
-      "fieldType": "RoleStatusType",
-      "javadoc": "状态",
-      "fieldValues": "NORMAL,DELETE,DISABLE",
       "fieldValidateRules": ["required"]
     }
   ],

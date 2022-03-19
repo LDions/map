@@ -2,7 +2,6 @@ package com.ruowei.web.rest;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ruowei.domain.QSewEmi;
 import com.ruowei.service.SewStatisticsService;
 import com.ruowei.util.DateUtil;
 import com.ruowei.util.OptionalBooleanBuilder;
@@ -36,7 +35,6 @@ public class EmiStatisticsResource {
     private final Logger log = LoggerFactory.getLogger(EmiStatisticsResource.class);
     private final JPAQueryFactory jpaQueryFactory;
     private final SewStatisticsService sewStatisticsService;
-    private QSewEmi qSewEmi = QSewEmi.sewEmi;
 
     public EmiStatisticsResource(JPAQueryFactory jpaQueryFactory, SewStatisticsService sewStatisticsService) {
         this.jpaQueryFactory = jpaQueryFactory;
@@ -104,27 +102,27 @@ public class EmiStatisticsResource {
 
         List<CompletableFuture<SewEmiQueryDTO>> futures = new ArrayList<>();
 
-        for (String accTime : accTimeList) {
-            // 拼接查询条件
-            OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
-                .notEmptyAnd(qSewEmi.enterpriseId::eq, qm.getEnterpriseId())
-                .notEmptyAnd(qSewEmi.accTime::eq, accTime);
-            // 查询碳排放数据
-            futures.add(CompletableFuture.supplyAsync(() ->
-                jpaQueryFactory.select(Projections.bean(SewEmiQueryDTO.class, qSewEmi.accYear, qSewEmi.accMonth,
-                    qSewEmi.level1PotEmi, qSewEmi.level2PotEmi, qSewEmi.level3PotEmi, qSewEmi.sluTreatPotEmi,
-                    qSewEmi.totalPotEmi, qSewEmi.inletPumpPowEmi, qSewEmi.blowerPowEmi, qSewEmi.retSluPumpPowEmi,
-                    qSewEmi.sluTreatPowEmi, qSewEmi.facilityPowEmi, qSewEmi.disinfectPowEmi, qSewEmi.otherPowEmi,
-                    qSewEmi.totalPowEmi, qSewEmi.sewTreatCh4Emi, qSewEmi.sewTreatN2oEmi, qSewEmi.totalSewTreatEmi,
-                    qSewEmi.sluHandleCh4Emi, qSewEmi.sluHandleN2oEmi, qSewEmi.totalSluHandleDirEmi, qSewEmi.sluHandlePotEmi,
-                    qSewEmi.sluHandlePowEmi, qSewEmi.totalSluHandleIndirEmi, qSewEmi.solarPowRed, qSewEmi.heatPumpRed,
-                    qSewEmi.thermoElecRed, qSewEmi.thermoEnerRed, qSewEmi.otherEmiRed, qSewEmi.windPowRed,
-                    qSewEmi.ecoComplexRed, qSewEmi.carbonEmi, qSewEmi.carbonRed, qSewEmi.carbonDirEmi, qSewEmi.carbonIndirEmi))
-                    .from(qSewEmi)
-                    .where(builder.build())
-                    .fetchFirst()
-            ));
-        }
+//        for (String accTime : accTimeList) {
+//            // 拼接查询条件
+//            OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
+//                .notEmptyAnd(qSewEmi.enterpriseId::eq, qm.getEnterpriseId())
+//                .notEmptyAnd(qSewEmi.accTime::eq, accTime);
+//            // 查询碳排放数据
+//            futures.add(CompletableFuture.supplyAsync(() ->
+//                jpaQueryFactory.select(Projections.bean(SewEmiQueryDTO.class, qSewEmi.accYear, qSewEmi.accMonth,
+//                    qSewEmi.level1PotEmi, qSewEmi.level2PotEmi, qSewEmi.level3PotEmi, qSewEmi.sluTreatPotEmi,
+//                    qSewEmi.totalPotEmi, qSewEmi.inletPumpPowEmi, qSewEmi.blowerPowEmi, qSewEmi.retSluPumpPowEmi,
+//                    qSewEmi.sluTreatPowEmi, qSewEmi.facilityPowEmi, qSewEmi.disinfectPowEmi, qSewEmi.otherPowEmi,
+//                    qSewEmi.totalPowEmi, qSewEmi.sewTreatCh4Emi, qSewEmi.sewTreatN2oEmi, qSewEmi.totalSewTreatEmi,
+//                    qSewEmi.sluHandleCh4Emi, qSewEmi.sluHandleN2oEmi, qSewEmi.totalSluHandleDirEmi, qSewEmi.sluHandlePotEmi,
+//                    qSewEmi.sluHandlePowEmi, qSewEmi.totalSluHandleIndirEmi, qSewEmi.solarPowRed, qSewEmi.heatPumpRed,
+//                    qSewEmi.thermoElecRed, qSewEmi.thermoEnerRed, qSewEmi.otherEmiRed, qSewEmi.windPowRed,
+//                    qSewEmi.ecoComplexRed, qSewEmi.carbonEmi, qSewEmi.carbonRed, qSewEmi.carbonDirEmi, qSewEmi.carbonIndirEmi))
+//                    .from(qSewEmi)
+//                    .where(builder.build())
+//                    .fetchFirst()
+//            ));
+//        }
 
         for (CompletableFuture<SewEmiQueryDTO> future : futures) {
             SewEmiQueryDTO tableDto = future.get();

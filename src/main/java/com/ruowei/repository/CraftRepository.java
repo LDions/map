@@ -15,10 +15,10 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 @Repository
 public interface CraftRepository extends JpaRepository<Craft, Long>, QuerydslPredicateExecutor<Craft> {
-
-    List<Craft> findByEntCode(String entCode);
-
-    Craft findByCraftCode(String code);
+//
+//    List<Craft> findByEntCode(String entCode);
+//
+//    Craft findByCraftCode(String code);
 
     Optional<Craft> getFirstByName(String name);
 }

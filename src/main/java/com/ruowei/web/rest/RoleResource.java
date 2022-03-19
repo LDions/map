@@ -4,8 +4,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
-import com.ruowei.domain.enumeration.RoleStatusType;
-import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.RoleMenuRepository;
 import com.ruowei.repository.RoleRepository;
 import com.ruowei.repository.UserRepository;
@@ -70,11 +68,11 @@ public class RoleResource {
         if (vm.getId() != null) {
             throw new BadRequestProblem("新增失败", "新增时ID必须为空");
         }
-        roleRepository.getFirstByNameAndStatusNot(vm.getName(), RoleStatusType.DELETE)
+        roleRepository.getFirstByName(vm.getName())
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "角色名称已存在");
             });
-        roleRepository.getFirstByCodeAndStatusNot(vm.getCode(), RoleStatusType.DELETE)
+        roleRepository.getFirstByCode(vm.getCode())
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "角色编码已存在");
             });
@@ -93,11 +91,11 @@ public class RoleResource {
         if (role.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        roleRepository.getFirstByNameAndIdNotAndStatusNot(role.getName(), role.getId(), RoleStatusType.DELETE)
+        roleRepository.getFirstByNameAndIdNot(role.getName(), role.getId())
             .ifPresent(so -> {
                 throw new BadRequestProblem("编辑失败", "角色名称已存在");
             });
-        roleRepository.getFirstByCodeAndIdNotAndStatusNot(role.getCode(), role.getId(), RoleStatusType.DELETE)
+        roleRepository.getFirstByCodeAndIdNot(role.getCode(), role.getId())
             .ifPresent(so -> {
                 throw new BadRequestProblem("编辑失败", "角色代码已存在");
             });
@@ -113,9 +111,7 @@ public class RoleResource {
             .notEmptyAnd(qRole.code::ne, Constants.SYS_ADMIN)
             .notEmptyAnd(qRole.name::contains, qm.getName())
             .notEmptyAnd(qRole.code::contains, qm.getCode())
-            .notEmptyAnd(qRole.type::eq, qm.getType())
-            .notEmptyAnd(qRole.isSys::eq, qm.getIsSys())
-            .notEmptyAnd(qRole.status::ne, RoleStatusType.DELETE);
+            .notEmptyAnd(qRole.isSys::eq, qm.getIsSys());
         Page<Role> page = roleRepository.findAll(predicate.build(), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -143,7 +139,7 @@ public class RoleResource {
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete SysRole : {}", id);
         List<Long> userIds = userRoleRepository.findAllByRoleId(id).stream().map(UserRole::getUserId).collect(Collectors.toList());
-        List<User> usersInRole = userRepository.findAllByIdInAndStatusNot(userIds, UserStatusType.DELETE);
+        List<User> usersInRole = userRepository.findAllByIdIn(userIds);
         if (!usersInRole.isEmpty()) {
             throw new BadRequestProblem("删除失败", "存在使用此角色的用户");
         }
@@ -151,7 +147,6 @@ public class RoleResource {
         userRoleRepository.deleteAllByRoleId(id);
         jpaQueryFactory
             .update(qRole)
-            .set(qRole.status, RoleStatusType.DELETE)
             .where(qRole.id.eq(id))
             .execute();
         return ResponseEntity.noContent().build();
@@ -163,20 +158,18 @@ public class RoleResource {
     public ResponseEntity<Void> changeUsingOfRole(@PathVariable Long id,
                                                   @ApiParam(value = "TRUE为启用，FALSE为停用", required = true) @RequestParam Boolean using) {
         List<Long> userIds = userRoleRepository.findAllByRoleId(id).stream().map(UserRole::getUserId).collect(Collectors.toList());
-        List<User> usersInRole = userRepository.findAllByIdInAndStatusNot(userIds, UserStatusType.DELETE);
+        List<User> usersInRole = userRepository.findAllByIdIn(userIds);
         if (!usersInRole.isEmpty()) {
             throw new BadRequestProblem("操作失败", "存在使用此角色的用户");
         }
         if (using) {
             jpaQueryFactory
                 .update(qRole)
-                .set(qRole.status, RoleStatusType.NORMAL)
                 .where(qRole.id.eq(id))
                 .execute();
         }else {
             jpaQueryFactory
                 .update(qRole)
-                .set(qRole.status, RoleStatusType.DISABLE)
                 .where(qRole.id.eq(id))
                 .execute();
         }
@@ -188,7 +181,6 @@ public class RoleResource {
     @ApiOperation(value = "获取角色下拉列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<DropDownDTO>> getDropDownOfRole(@ApiParam(value = "TRUE为带有污水处理厂，FALSE为不带有污水处理厂", required = true) @RequestParam Boolean haveSewTreat) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        booleanBuilder.and(qRole.status.eq(RoleStatusType.NORMAL));
         booleanBuilder.and(qRole.code.ne(Constants.SYS_ADMIN));
         if (!haveSewTreat) {
             booleanBuilder.and(qRole.code.ne(Constants.SEW_TREAT));

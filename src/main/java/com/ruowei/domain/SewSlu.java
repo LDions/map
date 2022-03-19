@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -138,6 +139,23 @@ public class SewSlu implements Serializable {
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 
+    /**
+     * 数据推送状态
+     */
+    @ApiModelProperty(value = "数据推送状态", required = true)
+    @Column(name = "status", nullable = false)
+    private SendStatusType status;
+
+    public SendStatusType getStatus() {
+        return status;
+    }
+    public SewSlu status(SendStatusType status) {
+        this.status = status;
+        return this;
+    }
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -376,6 +394,7 @@ public class SewSlu implements Serializable {
             ", assOutTn='" + getAssOutTn() + "'" +
             ", assOutTp='" + getAssOutTp() + "'" +
             ", dayTime='" + getDayTime() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

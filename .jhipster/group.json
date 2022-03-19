@@ -10,9 +10,13 @@
       "fieldType": "String",
       "javadoc": "集团详细地址"
     },{
-      "fieldName": "platformId",
-      "fieldType": "Long",
-      "javadoc": "平台id"
+      "fieldName": "groupContactName",
+      "fieldType": "String",
+      "javadoc": "集团联系人"
+    },{
+      "fieldName": "groupContactPhone",
+      "fieldType": "String",
+      "javadoc": "集团联系人电话"
     }
   ],
   "relationships": [],

@@ -2,7 +2,6 @@ package com.ruowei.web.rest;
 
 import com.github.yitter.idgen.YitIdHelper;
 import com.ruowei.config.ApplicationProperties;
-import com.ruowei.repository.DraftRepository;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.SewEmiService;
 import com.ruowei.service.dto.*;
@@ -50,12 +49,11 @@ public class SewEmiResource {
     private final Logger log = LoggerFactory.getLogger(SewEmiResource.class);
 
     private final SewEmiService sewEmiService;
-    private final DraftRepository draftRepository;
+
     private final ApplicationProperties applicationProperties;
 
-    public SewEmiResource(SewEmiService sewEmiService, DraftRepository draftRepository, ApplicationProperties applicationProperties) {
+    public SewEmiResource(SewEmiService sewEmiService, ApplicationProperties applicationProperties) {
         this.sewEmiService = sewEmiService;
-        this.draftRepository = draftRepository;
         this.applicationProperties = applicationProperties;
     }
 
@@ -121,68 +119,65 @@ public class SewEmiResource {
             waterCarbonEmissionOutputDTO
         );
         // 判断核算数据是否来源于草稿箱
-        if (vm.getDraftId() != null) {
-            draftRepository.findById(vm.getDraftId()).orElseThrow(() -> new BadRequestProblem("核算失败", "该草稿不存在"));
-            draftRepository.deleteById(vm.getDraftId());
-        }
+
         return ResponseEntity.ok().body(sewEmiAccountOutputDTO);
     }
 
-    @PostMapping("/carbon-emission-data/water/print")
-    @ApiOperation(value = "污水厂碳排放PDF报告打印接口", notes = "作者：林宏栋")
-    public ResponseEntity<Resource> print(@Valid @RequestBody CarbonEmiReportVM vm) {
-        // 根据核算年份、核算月份、单据号判断待下载的污水厂碳排放报告是否存在，若存在，则直接下载
-        String reportDuringAccountPath = applicationProperties.getReportPath() + vm.getAccYear() + "/" + vm.getAccMonth() + "/" + vm.getDocumentCode() + ".pdf";
-        File reportDuringAccount = new File(reportDuringAccountPath);
-        if (!reportDuringAccount.exists()) {
-            // 若不存在报告，则需要根据单据号和行业类型查询详情
-            if (SEWAGE.equals(vm.getIndustryCode())) {
-                SewEmiDTO sewEmiDTO = sewEmiService.convertToSewEmiDtoByDocumentCode(vm.getDocumentCode());
-                // 生成核算报告
-                sewEmiService.syncGenerateReport(sewEmiDTO);
-            } else {
-                throw new BadRequestProblem("打印失败", "不存在该行业类型");
-            }
-        }
-        File reportNew = new File(reportDuringAccountPath);
-        if (!reportNew.exists()) {
-            throw new BadRequestProblem("打印失败", "污水厂碳排放报告不存在");
-        }
-        // 下载
-        Resource resource = new FileSystemResource(reportNew);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-            "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
-    }
-
-    @PostMapping("/carbon-emission-data/water/download")
-    @ApiOperation(value = "污水厂碳排放Excel报告下载接口", notes = "作者：林宏栋")
-    public ResponseEntity<Resource> download(@Valid @RequestBody CarbonEmiReportVM vm) {
-        byte[] buffer = new byte[1024];
-        if (SEWAGE.equals(vm.getIndustryCode())) {
-            SewEmiDTO sewEmiDTO = sewEmiService.convertToSewEmiDtoByDocumentCode(vm.getDocumentCode());
-            // 调用生成Excel方法
-            buffer = CarbonAccountingExcel2.createExcel(sewEmiDTO);
-        } else {
-            throw new BadRequestProblem("打印失败", "不存在该行业类型");
-        }
-        if (buffer == null) {
-            throw new BadRequestProblem("生成Excel失败", "Excel字节数组为空");
-        }
-        Resource resource = new ByteArrayResource(buffer);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-            "attachment;").body(resource);
-    }
-
-    @PostMapping("/carbon-emission-data/water/month")
-    @ApiOperation(value = "获取上一个月（下一个月）污水厂碳排放详情接口", notes = "作者：林宏栋")
-    public ResponseEntity<SewEmiDetailDTO> getDetailOfPreviousOrNextMonth(@Valid @RequestBody CarbonEmiMonthVM vm) {
-        if (SEWAGE.equals(vm.getIndustryCode())) {
-            SewEmiDetailDTO sewEmiDetailDTO = sewEmiService.getAndConvertDetailOfPreviousOrNextMonth(vm);
-            return ResponseEntity.ok().body(sewEmiDetailDTO);
-        }else {
-            throw new BadRequestProblem("查询失败", "不存在该行业类型");
-        }
-    }
+//    @PostMapping("/carbon-emission-data/water/print")
+//    @ApiOperation(value = "污水厂碳排放PDF报告打印接口", notes = "作者：林宏栋")
+//    public ResponseEntity<Resource> print(@Valid @RequestBody CarbonEmiReportVM vm) {
+//        // 根据核算年份、核算月份、单据号判断待下载的污水厂碳排放报告是否存在，若存在，则直接下载
+//        String reportDuringAccountPath = applicationProperties.getReportPath() + vm.getAccYear() + "/" + vm.getAccMonth() + "/" + vm.getDocumentCode() + ".pdf";
+//        File reportDuringAccount = new File(reportDuringAccountPath);
+//        if (!reportDuringAccount.exists()) {
+//            // 若不存在报告，则需要根据单据号和行业类型查询详情
+//            if (SEWAGE.equals(vm.getIndustryCode())) {
+//                SewEmiDTO sewEmiDTO = sewEmiService.convertToSewEmiDtoByDocumentCode(vm.getDocumentCode());
+//                // 生成核算报告
+//                sewEmiService.syncGenerateReport(sewEmiDTO);
+//            } else {
+//                throw new BadRequestProblem("打印失败", "不存在该行业类型");
+//            }
+//        }
+//        File reportNew = new File(reportDuringAccountPath);
+//        if (!reportNew.exists()) {
+//            throw new BadRequestProblem("打印失败", "污水厂碳排放报告不存在");
+//        }
+//        // 下载
+//        Resource resource = new FileSystemResource(reportNew);
+//        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+//            "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
+//    }
+//
+//    @PostMapping("/carbon-emission-data/water/download")
+//    @ApiOperation(value = "污水厂碳排放Excel报告下载接口", notes = "作者：林宏栋")
+//    public ResponseEntity<Resource> download(@Valid @RequestBody CarbonEmiReportVM vm) {
+//        byte[] buffer = new byte[1024];
+//        if (SEWAGE.equals(vm.getIndustryCode())) {
+//            SewEmiDTO sewEmiDTO = sewEmiService.convertToSewEmiDtoByDocumentCode(vm.getDocumentCode());
+//            // 调用生成Excel方法
+//            buffer = CarbonAccountingExcel2.createExcel(sewEmiDTO);
+//        } else {
+//            throw new BadRequestProblem("打印失败", "不存在该行业类型");
+//        }
+//        if (buffer == null) {
+//            throw new BadRequestProblem("生成Excel失败", "Excel字节数组为空");
+//        }
+//        Resource resource = new ByteArrayResource(buffer);
+//        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+//            "attachment;").body(resource);
+//    }
+//
+//    @PostMapping("/carbon-emission-data/water/month")
+//    @ApiOperation(value = "获取上一个月（下一个月）污水厂碳排放详情接口", notes = "作者：林宏栋")
+//    public ResponseEntity<SewEmiDetailDTO> getDetailOfPreviousOrNextMonth(@Valid @RequestBody CarbonEmiMonthVM vm) {
+//        if (SEWAGE.equals(vm.getIndustryCode())) {
+//            SewEmiDetailDTO sewEmiDetailDTO = sewEmiService.getAndConvertDetailOfPreviousOrNextMonth(vm);
+//            return ResponseEntity.ok().body(sewEmiDetailDTO);
+//        }else {
+//            throw new BadRequestProblem("查询失败", "不存在该行业类型");
+//        }
+//    }
 
 //    @PostMapping("/generate")
 //    @ApiOperation(value = "初始化", notes = "作者：林宏栋")

@@ -50,7 +50,6 @@ public class SewEmiService {
     private final EmiFactorRepository emiFactorRepository;
     private final ObjectMapper objectMapper;
     private final ApplicationProperties applicationProperties;
-    private final SewEmiRepository sewEmiRepository;
     private final EmiDataRepository emiDataRepository;
     private final SewProcessRepository sewProcessRepository;
     private final SewSluRepository sewSluRepository;
@@ -58,13 +57,12 @@ public class SewEmiService {
     private final SewPotRepository sewPotRepository;
     private final SewMeterRepository sewMeterRepository;
     private final JPAQueryFactory jpaQueryFactory;
-    private QSewEmi qSewEmi = QSewEmi.sewEmi;
 
-    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, SewEmiRepository sewEmiRepository, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, JPAQueryFactory jpaQueryFactory) {
+
+    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, JPAQueryFactory jpaQueryFactory) {
         this.emiFactorRepository = emiFactorRepository;
         this.objectMapper = objectMapper;
         this.applicationProperties = applicationProperties;
-        this.sewEmiRepository = sewEmiRepository;
         this.emiDataRepository = emiDataRepository;
         this.sewProcessRepository = sewProcessRepository;
         this.sewSluRepository = sewSluRepository;
@@ -139,16 +137,16 @@ public class SewEmiService {
             // 封装工艺水质信息
             List<WaterCarbonEmissionEnterDTO.WaterQualityDTO> waterQualityDTOList = new ArrayList<>();
             for (SewEmiAccountVM.SewProcessVM sewProcessVm : vm.getSewProcesss()) {
-                if (StringUtils.isBlank(sewProcessVm.getProcessTypeCode())) {
+                if (StringUtils.isBlank(sewProcessVm.getCraftCode())) {
                     throw new BadRequestProblem("核算失败", "工艺类型编码不能为空");
                 }
-                if (sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getProcessTypeCode()) == null) {
+                if (sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getCraftCode()) == null) {
                     throw new BadRequestProblem("核算失败", "不存在" + sewProcessVm.getProcessTypeName() + "工艺");
                 }
                 WaterCarbonEmissionEnterDTO.WaterQualityDTO waterQualityDTO = new WaterCarbonEmissionEnterDTO.WaterQualityDTO(
                     sewProcessVm.getDailyScale(),
                     new BigDecimal(sewProcessVm.getOperatingDays()),
-                    sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getProcessTypeCode()).getValue(),
+                    sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getCraftCode()).getValue(),
                     sewProcessVm.getInFlow(),
                     sewProcessVm.getInCod(),
                     sewProcessVm.getInAmmonia(),
@@ -447,83 +445,11 @@ public class SewEmiService {
             .carbonDirEmi(outputDTO.getCDirect())
             .carbonIndirEmi(outputDTO.getCIndirect())
             .carbonRed(outputDTO.getCReduction());
-        SewEmi sewEmi = new SewEmi()
-            .documentCode(documentCode)
-            .enterpriseId(vm.getEnterpriseId())
-            .enterpriseName(vm.getEnterpriseName())
-            .reporterId(userModel.getUserId())
-            .reporterName(userModel.getNickName())
-            .reportTime(nowInstant)
-            .provinceCode(vm.getProvinceCode())
-            .provinceName(vm.getProvinceName())
-            .accYear(vm.getAccYear())
-            .accMonth(vm.getAccMonth())
-            .accTime(vm.getAccYear().concat(vm.getAccMonth()))
-            .totalPow(vm.getTotalPow())
-            .inPumpPow(vm.getInPumpPow())
-            .blowerPow(vm.getBlowerPow())
-            .retSluPumpPow(vm.getRetSluPumpPow())
-            .sluTreatPow(vm.getSluTreatPow())
-            .disinfectPow(vm.getDisinfectPow())
-            .facilityPow(vm.getFacilityPow())
-            .otherPow(vm.getOtherPow())
-            .sluHandlePow(vm.getSluHandlePow())
-            .solarPow(vm.getSolarPow())
-            .heatPumpHeat(vm.getHeatPumpHeat())
-            .heatPumpRefr(vm.getHeatPumpRefr())
-            .heatPumpHotHours(vm.getHeatPumpHotHours())
-            .heatPumpColdHours(vm.getHeatPumpColdHours())
-            .thermoElec(vm.getThermoElec())
-            .thermoEner(vm.getThermoEner())
-            .toGirdPow(vm.getToGirdPow())
-            .otherText(vm.getOtherText())
-            .otherEmiReduction(vm.getOtherEmiReduction())
-            .windPow(vm.getWindPow())
-            .ecoComplexReduction(vm.getEcoComplexReduction())
-            .managedBySelf(vm.getManagedBySelf())
-            .sluMoistureAfterTreat(vm.getSluMoistureAfterTreat())
-            .factorVersionNum(enterDTO.getFactorVersionNum())
-            .level1PotEmi(outputDTO.getC11())
-            .level2PotEmi(outputDTO.getC12())
-            .level3PotEmi(outputDTO.getC13())
-            .sluTreatPotEmi(outputDTO.getC14())
-            .totalPotEmi(outputDTO.getTotalC1())
-            .inletPumpPowEmi(outputDTO.getC21())
-            .blowerPowEmi(outputDTO.getC22())
-            .retSluPumpPowEmi(outputDTO.getC23())
-            .sluTreatPowEmi(outputDTO.getC24())
-            .facilityPowEmi(outputDTO.getC25())
-            .disinfectPowEmi(outputDTO.getC26())
-            .otherPowEmi(outputDTO.getC27())
-            .totalPowEmi(outputDTO.getTotalC2())
-            .sewTreatCh4Emi(outputDTO.getC31())
-            .sewTreatN2oEmi(outputDTO.getC32())
-            .totalSewTreatEmi(outputDTO.getTotalC3())
-            .sluHandleCh4Emi(outputDTO.getC41())
-            .sluHandleN2oEmi(outputDTO.getC42())
-            .totalSluHandleDirEmi(outputDTO.getTotalC4())
-            .sluHandlePotEmi(outputDTO.getC91())
-            .sluHandlePowEmi(outputDTO.getC92())
-            .totalSluHandleIndirEmi(outputDTO.getTotalC9())
-            .solarPowRed(outputDTO.getTotalC5())
-            .heatPumpRed(outputDTO.getTotalC6())
-            .thermoElecRed(outputDTO.getTotalC7())
-            .thermoEnerRed(outputDTO.getTotalC8())
-            .otherEmiRed(outputDTO.getTotalC11())
-            .windPowRed(outputDTO.getTotalC12())
-            .ecoComplexRed(outputDTO.getTotalC13())
-            .carbonRed(outputDTO.getCReduction())
-            .carbonDirEmi(outputDTO.getCDirect())
-            .carbonIndirEmi(outputDTO.getCIndirect())
-            .carbonEmi(outputDTO.getC());
         List<SewProcess> sewProcessList = new ArrayList<>();
         for (SewEmiAccountVM.SewProcessVM processVm : vm.getSewProcesss()) {
             SewProcess sewProcess = new SewProcess()
                 .documentCode(documentCode)
-                .processTypeCode(processVm.getProcessTypeCode())
-                .processTypeName(processVm.getProcessTypeName())
-                .dailyScale(processVm.getDailyScale())
-                .operatingDays(processVm.getOperatingDays())
+                .craftCode(processVm.getCraftCode())
                 .inFlow(processVm.getInFlow())
                 .inAmmonia(processVm.getInAmmonia())
                 .inCod(processVm.getInCod())
@@ -609,7 +535,7 @@ public class SewEmiService {
             otherIndexList.add(otherIndex);
         }
         emiDataRepository.save(emiData);
-        sewEmiRepository.save(sewEmi);
+
         sewProcessRepository.saveAll(sewProcessList);
         sewPotRepository.saveAll(sewPotList);
         sewSluRepository.saveAll(sewSluList);
@@ -755,50 +681,6 @@ public class SewEmiService {
         }
     }
 
-    /**
-     * 根据单据号获取污水厂碳排放数据，并封装为SewEmiDTO
-     *
-     * @param documentCode 单据号
-     * @return
-     */
-    public SewEmiDTO convertToSewEmiDtoByDocumentCode(String documentCode) {
-        SewEmi sewEmi = sewEmiRepository.findByDocumentCode(documentCode).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));
-        SewEmiDTO sewEmiDTO = new SewEmiDTO();
-        BeanUtils.copyProperties(sewEmi, sewEmiDTO, BeanUtil.getNullPropertyNames(sewEmi));
-        List<SewProcess> sewProcessList = sewProcessRepository.findByDocumentCode(documentCode);
-        List<SewEmiAccountVM.SewProcessVM> sewProcessVms = new ArrayList<>();
-        for (SewProcess sewProcess : sewProcessList) {
-            SewEmiAccountVM.SewProcessVM vm = new SewEmiAccountVM.SewProcessVM();
-            BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
-            sewProcessVms.add(vm);
-        }
-        sewEmiDTO.setSewProcesss(sewProcessVms);
-        List<SewPot> sewPotList = sewPotRepository.findByDocumentCode(documentCode);
-        List<SewEmiAccountVM.SewPotVM> sewPotVms = new ArrayList<>();
-        for (SewPot sewPot : sewPotList) {
-            SewEmiAccountVM.SewPotVM vm = new SewEmiAccountVM.SewPotVM();
-            BeanUtils.copyProperties(sewPot, vm, BeanUtil.getNullPropertyNames(sewPot));
-            sewPotVms.add(vm);
-        }
-        sewEmiDTO.setSewPots(sewPotVms);
-        List<SewSlu> sewSluList = sewSluRepository.findByDocumentCode(documentCode);
-        List<SewEmiAccountVM.SewSluVM> sewSluVms = new ArrayList<>();
-        for (SewSlu sewSlu : sewSluList) {
-            SewEmiAccountVM.SewSluVM vm = new SewEmiAccountVM.SewSluVM();
-            BeanUtils.copyProperties(sewSlu, vm, BeanUtil.getNullPropertyNames(sewSlu));
-            sewSluVms.add(vm);
-        }
-        sewEmiDTO.setSewSlus(sewSluVms);
-        List<OtherIndex> otherIndexList = otherIndexRepository.findByDocumentCode(documentCode);
-        List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
-        for (OtherIndex otherIndex : otherIndexList) {
-            SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
-            BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
-            otherIndexVMS.add(vm);
-        }
-        sewEmiDTO.setOtherIndexs(otherIndexVMS);
-        return sewEmiDTO;
-    }
 
     /**
      * 封装碳排放核算列表数据查询条件
@@ -840,49 +722,49 @@ public class SewEmiService {
         return booleanBuilder;
     }
 
-    /**
-     * 获取上一个月（下一个月）污水厂碳排放详情接口
-     *
-     * @param vm
-     * @return
-     */
-    public SewEmiDetailDTO getAndConvertDetailOfPreviousOrNextMonth(CarbonEmiMonthVM vm) {
-        if (vm.getIsNext()) {
-            List<SewEmiMonthDTO> list = jpaQueryFactory
-                .select(Projections.bean(SewEmiMonthDTO.class, qSewEmi.id, qSewEmi.documentCode, qSewEmi.accYear, qSewEmi.accMonth))
-                .from(qSewEmi)
-                .where(qSewEmi.enterpriseId.eq(vm.getEnterpriseId()).and(qSewEmi.accTime.goe(vm.getAccYear().concat(vm.getAccMonth()))))
-                .orderBy(qSewEmi.accYear.asc())
-                .orderBy(qSewEmi.accMonth.asc())
-                .fetch();
-            Integer index = IntStream.range(0, list.size())
-                .filter(i -> vm.getDocumentCode().equals(list.get(i).getDocumentCode()))
-                .boxed()
-                .findFirst()
-                .orElseThrow(() -> new BadRequestProblem("查询失败", "定位当前核算时间的碳排放核算数据失败"));
-            if (index + 1 == list.size()) {
-                throw new BadRequestProblem("暂无下一个月数据");
-            }
-            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
-        } else {
-            List<SewEmiMonthDTO> list = jpaQueryFactory
-                .select(Projections.bean(SewEmiMonthDTO.class, qSewEmi.id, qSewEmi.documentCode, qSewEmi.accYear, qSewEmi.accMonth))
-                .from(qSewEmi)
-                .where(qSewEmi.enterpriseId.eq(vm.getEnterpriseId()).and(qSewEmi.accYear.loe(vm.getAccYear().concat(vm.getAccMonth()))))
-                .orderBy(qSewEmi.accYear.desc())
-                .orderBy(qSewEmi.accMonth.desc())
-                .fetch();
-            Integer index = IntStream.range(0, list.size())
-                .filter(i -> vm.getDocumentCode().equals(list.get(i).getDocumentCode()))
-                .boxed()
-                .findFirst()
-                .orElseThrow(() -> new BadRequestProblem("查询失败", "定位当前核算时间的碳排放核算数据失败"));
-            if (index + 1 == list.size()) {
-                throw new BadRequestProblem("暂无上一个月数据");
-            }
-            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
-        }
-    }
+//    /**
+//     * 获取上一个月（下一个月）污水厂碳排放详情接口
+//     *
+//     * @param vm
+//     * @return
+//     */
+//    public SewEmiDetailDTO getAndConvertDetailOfPreviousOrNextMonth(CarbonEmiMonthVM vm) {
+//        if (vm.getIsNext()) {
+//            List<SewEmiMonthDTO> list = jpaQueryFactory
+//                .select(Projections.bean(SewEmiMonthDTO.class, qSewEmi.id, qSewEmi.documentCode, qSewEmi.accYear, qSewEmi.accMonth))
+//                .from(qSewEmi)
+//                .where(qSewEmi.enterpriseId.eq(vm.getEnterpriseId()).and(qSewEmi.accTime.goe(vm.getAccYear().concat(vm.getAccMonth()))))
+//                .orderBy(qSewEmi.accYear.asc())
+//                .orderBy(qSewEmi.accMonth.asc())
+//                .fetch();
+//            Integer index = IntStream.range(0, list.size())
+//                .filter(i -> vm.getDocumentCode().equals(list.get(i).getDocumentCode()))
+//                .boxed()
+//                .findFirst()
+//                .orElseThrow(() -> new BadRequestProblem("查询失败", "定位当前核算时间的碳排放核算数据失败"));
+//            if (index + 1 == list.size()) {
+//                throw new BadRequestProblem("暂无下一个月数据");
+//            }
+//            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
+//        } else {
+//            List<SewEmiMonthDTO> list = jpaQueryFactory
+//                .select(Projections.bean(SewEmiMonthDTO.class, qSewEmi.id, qSewEmi.documentCode, qSewEmi.accYear, qSewEmi.accMonth))
+//                .from(qSewEmi)
+//                .where(qSewEmi.enterpriseId.eq(vm.getEnterpriseId()).and(qSewEmi.accYear.loe(vm.getAccYear().concat(vm.getAccMonth()))))
+//                .orderBy(qSewEmi.accYear.desc())
+//                .orderBy(qSewEmi.accMonth.desc())
+//                .fetch();
+//            Integer index = IntStream.range(0, list.size())
+//                .filter(i -> vm.getDocumentCode().equals(list.get(i).getDocumentCode()))
+//                .boxed()
+//                .findFirst()
+//                .orElseThrow(() -> new BadRequestProblem("查询失败", "定位当前核算时间的碳排放核算数据失败"));
+//            if (index + 1 == list.size()) {
+//                throw new BadRequestProblem("暂无上一个月数据");
+//            }
+//            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
+//        }
+//    }
 
     /**
      * 初始化碳排放因子

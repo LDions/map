@@ -6,7 +6,6 @@ import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
 import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import com.ruowei.domain.enumeration.RoleStatusType;
-import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;

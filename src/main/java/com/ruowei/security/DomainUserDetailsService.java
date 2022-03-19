@@ -3,7 +3,6 @@ package com.ruowei.security;
 import com.ruowei.domain.Enterprise;
 import com.ruowei.domain.User;
 import com.ruowei.domain.enumeration.EnterpriseStatusType;
-import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
@@ -56,9 +55,6 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .map(SimpleGrantedAuthority::new)
                 .distinct()
                 .collect(Collectors.toList());
-        if (user.getStatus() != UserStatusType.NORMAL) {
-            throw new LockedException("该用户已停用，请联系系统管理员");
-        }
 
         return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), null, null);
     }

@@ -39,13 +39,20 @@ public class Group {
     @Column(name = "group_address")
     private String groupAddress;
 
-    /**
-     * 上属平台
-     */
-    @ApiModelProperty(value = "上属平台")
-    @Column(name = "platform_id")
-    private Long platformId;
 
+    /**
+     * 联系人
+     */
+    @ApiModelProperty(value = "集团联系人")
+    @Column(name = "group_contact_name")
+    private String groupContactName;
+
+    /**
+     * 电话
+     */
+    @ApiModelProperty(value = "联系人电话")
+    @Column(name = "group_contact_phone")
+    private String groupContactPhone;
 
     public Group id(Long id) {
         this.id = id;
@@ -83,15 +90,26 @@ public class Group {
         this.groupAddress = groupAddress;
     }
 
-    public Long getPlatformId() {
-        return platformId;
+    public String getGroupContactName() {
+        return groupContactName;
     }
-    public Group platformId(Long platformId) {
-        this.platformId = platformId;
+    public Group groupContactName(String groupContactName) {
+        this.groupContactName = groupContactName;
         return this;
     }
-    public void setPlatformId(Long platformId) {
-        this.platformId = platformId;
+    public void setGroupContactName(String groupContactName) {
+        this.groupContactName = groupContactName;
+    }
+
+    public String getGroupContactPhone() {
+        return groupContactPhone;
+    }
+    public Group groupContactPhone(String groupContactPhone) {
+        this.groupContactPhone = groupContactPhone;
+        return this;
+    }
+    public void setGroupContactPhone(String groupContactPhone) {
+        this.groupContactPhone = groupContactPhone;
     }
 
     @Override
@@ -117,7 +135,8 @@ public class Group {
             "id=" + id +
             ", groupName='" + groupName + '\'' +
             ", groupAddress='" + groupAddress + '\'' +
-            ", platformId=" + platformId +
+            ", groupContactName='" + groupContactName + '\'' +
+            ", groupContactPhone='" + groupContactPhone + '\'' +
             '}';
     }
 }

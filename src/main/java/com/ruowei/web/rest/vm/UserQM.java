@@ -10,4 +10,10 @@ public class UserQM {
 
     @ApiModelProperty(value = "用户昵称")
     private String nickname;
+
+    @ApiModelProperty(value = "水厂ID")
+    private Long enterpriseId;
+
+    @ApiModelProperty(value = "水厂ID")
+    private Long groupId;
 }

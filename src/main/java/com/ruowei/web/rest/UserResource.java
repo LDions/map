@@ -3,8 +3,7 @@ package com.ruowei.web.rest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
-import com.ruowei.domain.enumeration.UserStatusType;
-import com.ruowei.repository.SewEmiRepository;
+
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
 import com.ruowei.service.mapper.UserVMMapper;
@@ -14,7 +13,6 @@ import com.ruowei.web.rest.vm.UserQM;
 import com.ruowei.web.rest.vm.UserVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +45,13 @@ public class UserResource {
     private final JPAQueryFactory jpaQueryFactory;
     private final UserRoleRepository userRoleRepository;
     private final UserVMMapper userVMMapper;
-    private final SewEmiRepository sewEmiRepository;
     private QUser qUser = QUser.user;
-    public UserResource(UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper, SewEmiRepository sewEmiRepository) {
+    public UserResource(UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jpaQueryFactory = jpaQueryFactory;
         this.userRoleRepository = userRoleRepository;
         this.userVMMapper = userVMMapper;
-        this.sewEmiRepository = sewEmiRepository;
     }
 
     @PostMapping("/user")
@@ -66,7 +62,7 @@ public class UserResource {
         if (vm.getId() != null) {
             throw new BadRequestProblem("新增失败", "新增时ID必须为空");
         }
-        userRepository.findOneByLoginAndStatusNot(vm.getLogin(), UserStatusType.DELETE)
+        userRepository.findOneByLogin(vm.getLogin())
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "用户名已存在");
             });
@@ -88,7 +84,7 @@ public class UserResource {
         if (vm.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        userRepository.findFirstByLoginAndIdNotAndStatusNot(vm.getLogin(), vm.getId(), UserStatusType.DELETE)
+        userRepository.findFirstByLoginAndIdNot(vm.getLogin(), vm.getId())
             .ifPresent(so -> {
                 throw new BadRequestProblem("编辑失败", "用户已存在");
             });
@@ -102,9 +98,6 @@ public class UserResource {
         }
         if (vm.getRemark() != null) {
             user.setRemark(vm.getRemark());
-        }
-        if (vm.getStatus() != null) {
-            user.setStatus(vm.getStatus());
         }
         User result = userRepository.save(user);
         if (vm.getRoleIds() != null) {
@@ -123,8 +116,7 @@ public class UserResource {
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
             .notEmptyAnd(qUser.login::ne, Constants.ADMIN)
             .notEmptyAnd(qUser.login::contains, qm.getLogin())
-            .notEmptyAnd(qUser.nickName::contains, qm.getNickname())
-            .notEmptyAnd(qUser.status::ne, UserStatusType.DELETE);
+            .notEmptyAnd(qUser.nickName::contains, qm.getNickname());
         Page<User> page = userRepository.findAll(predicate.build(), pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -151,38 +143,17 @@ public class UserResource {
     @ApiOperation(value = "删除用户接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.debug("REST request to delete SysUser : {}", id);
-        //TODO 无法删除进行过水务碳排放核算的用户
-        if (sewEmiRepository.existsByReporterId(id)) {
-            throw new BadRequestProblem("删除失败", "该用户进行过水务碳排放核算");
-        }
+        //TODO 无法删除进行过核算的用户
+//        if (sewEmiRepository.existsByReporterId(id)) {
+//            throw new BadRequestProblem("删除失败", "该用户进行过水务碳排放核算");
+//        }
 
         userRoleRepository.deleteAllByUserId(id);
         jpaQueryFactory
             .update(qUser)
-            .set(qUser.status, UserStatusType.DELETE)
             .where(qUser.id.eq(id))
             .execute();
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/user/using/{id}")
-    @Transactional
-    @ApiOperation(value = "停用/启用用户接口", notes = "作者：孙小楠")
-    public ResponseEntity<Void> changeUsingOfUser(@PathVariable Long id,
-                                                  @ApiParam(value = "TRUE为启用，FALSE为停用", required = true) @RequestParam Boolean using) {
-        if (using) {
-            jpaQueryFactory
-                .update(qUser)
-                .set(qUser.status, UserStatusType.NORMAL)
-                .where(qUser.id.eq(id))
-                .execute();
-        }else {
-            jpaQueryFactory
-                .update(qUser)
-                .set(qUser.status, UserStatusType.DISABLE)
-                .where(qUser.id.eq(id))
-                .execute();
-        }
-        return ResponseEntity.ok().build();
-    }
 }

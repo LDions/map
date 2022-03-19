@@ -129,10 +129,14 @@
       "fieldName": "dayTime",
       "fieldType": "Instant",
       "javadoc": "采集时间"
+    },{
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "数据推送状态"
     }
   ],
   "relationships": [],
-  "javadoc": "污水处理工艺数据",
+  "javadoc": "仪表数据",
   "entityTableName": "sew_process",
   "dto": "no",
   "pagination": "no",

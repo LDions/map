@@ -4,30 +4,67 @@ import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 public class EnterpriseVM {
 
+
+    /**
+     * 水厂名称
+     */
     @ApiModelProperty(value = "水厂名称")
+    @Column(name = "name")
     private String name;
 
+    /**
+     * 设备名称
+     */
     @ApiModelProperty(value = "设备名称")
+    @Column(name = "equipment_name")
     private String equipmentName;
 
-    @ApiModelProperty(value = "数据类型")
-    private String dataType;
+    /**
+     * 数据类型
+     */
+    @ApiModelProperty(value = "经营详细地址")
+    @Column(name = "enterprise_address")
+    private String enterpriseAddress;
 
+    /**
+     * 备注
+     */
     @ApiModelProperty(value = "备注")
+    @Column(name = "remark")
     private String remark;
 
-    @ApiModelProperty(value = "点数据名称")
-    private String pointDataName;
+    /**
+     * 点数据名称
+     */
+    @ApiModelProperty(value = "是否为试点水厂")
+    @Column(name = "is_try")
+    private String isTry;
 
+    /**
+     * 水厂所属集团编码
+     */
     @ApiModelProperty(value = "水厂所属集团id")
+    @Column(name = "group_Id")
     private Long groupId;
 
-    @ApiModelProperty(value = "水厂所属集团名称")
-    private String groupName;
+    /**
+     * 联系人
+     */
+    @ApiModelProperty(value = "集团联系人")
+    @Column(name = "contact_name")
+    private String contactName;
+
+    /**
+     * 电话
+     */
+    @ApiModelProperty(value = "联系人电话")
+    @Column(name = "contact_phone")
+    private String contactPhone;
 
     public String getName() {
         return name;
@@ -45,12 +82,12 @@ public class EnterpriseVM {
         this.equipmentName = equipmentName;
     }
 
-    public String getDataType() {
-        return dataType;
+    public String getEnterpriseAddress() {
+        return enterpriseAddress;
     }
 
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
+    public void setEnterpriseAddress(String enterpriseAddress) {
+        this.enterpriseAddress = enterpriseAddress;
     }
 
     public String getRemark() {
@@ -61,12 +98,12 @@ public class EnterpriseVM {
         this.remark = remark;
     }
 
-    public String getPointDataName() {
-        return pointDataName;
+    public String getIsTry() {
+        return isTry;
     }
 
-    public void setPointDataName(String pointDataName) {
-        this.pointDataName = pointDataName;
+    public void setIsTry(String isTry) {
+        this.isTry = isTry;
     }
 
     public Long groupId() {
@@ -77,11 +114,18 @@ public class EnterpriseVM {
         this.groupId = groupId;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 }

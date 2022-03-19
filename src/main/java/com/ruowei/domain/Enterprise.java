@@ -40,9 +40,9 @@ public class Enterprise implements Serializable {
     /**
      * 数据类型
      */
-    @ApiModelProperty(value = "数据类型")
-    @Column(name = "data_type")
-    private String dataType;
+    @ApiModelProperty(value = "经营详细地址")
+    @Column(name = "enterprise_address")
+    private String enterpriseAddress;
 
     /**
      * 备注
@@ -54,9 +54,9 @@ public class Enterprise implements Serializable {
     /**
      * 点数据名称
      */
-    @ApiModelProperty(value = "点数据名称")
-    @Column(name = "point_data_name")
-    private String pointDataName;
+    @ApiModelProperty(value = "是否为试点水厂")
+    @Column(name = "is_try")
+    private String isTry;
 
     /**
      * 水厂所属集团编码
@@ -66,11 +66,19 @@ public class Enterprise implements Serializable {
     private Long groupId;
 
     /**
-     * 水厂所属集团编码
+     * 联系人
      */
-    @ApiModelProperty(value = "水厂所属集团名称")
-    @Column(name = "group_name")
-    private String groupName;
+    @ApiModelProperty(value = "集团联系人")
+    @Column(name = "contact_name")
+    private String contactName;
+
+    /**
+     * 电话
+     */
+    @ApiModelProperty(value = "联系人电话")
+    @Column(name = "contact_phone")
+    private String contactPhone;
+
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -111,15 +119,15 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getDataType() {
-        return dataType;
+    public String getEnterpriseAddress() {
+        return enterpriseAddress;
     }
 
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
+    public void setEnterpriseAddress(String enterpriseAddress) {
+        this.enterpriseAddress = enterpriseAddress;
     }
-    public Enterprise dataType(String dataType) {
-        this.dataType = dataType;
+    public Enterprise enterpriseAddress(String enterpriseAddress) {
+        this.enterpriseAddress = enterpriseAddress;
         return this;
     }
 
@@ -135,15 +143,15 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getPointDataName() {
-        return pointDataName;
+    public String getIsTry() {
+        return isTry;
     }
 
-    public void setPointDataName(String pointDataName) {
-        this.pointDataName = pointDataName;
+    public void setIsTry(String isTry) {
+        this.isTry = isTry;
     }
-    public Enterprise pointDataName(String pointDataName) {
-        this.pointDataName = pointDataName;
+    public Enterprise isTry(String isTry) {
+        this.isTry = isTry;
         return this;
     }
 
@@ -159,17 +167,28 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getContactName() {
+        return contactName;
     }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-    public Enterprise groupName(String groupName) {
-        this.groupName = groupName;
+    public Enterprise contactName(String contactName) {
+        this.contactName = contactName;
         return this;
     }
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+    public Enterprise contactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+        return this;
+    }
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -194,11 +213,12 @@ public class Enterprise implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", equipmentName='" + getEquipmentName() + "'" +
-            ", dataType='" + getDataType() + "'" +
+            ", enterpriseAddress='" + getEnterpriseAddress() + "'" +
             ", remark='" + getRemark() + "'" +
-            ", pointDataName='" + getPointDataName() + "'" +
+            ", isTry='" + getIsTry() + "'" +
             ", groupCode='" + getGroupId() + "'" +
-            ", groupName='" + getGroupName() + "'" +
+            ", contactName='" + getContactName() + "'" +
+            ", contactPhone='" + getContactPhone() + "'" +
             "}";
     }
 }

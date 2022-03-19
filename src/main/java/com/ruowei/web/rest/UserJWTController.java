@@ -3,10 +3,7 @@ package com.ruowei.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ruowei.config.ApplicationProperties;
 import com.ruowei.domain.*;
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
-import com.ruowei.domain.enumeration.RoleStatusType;
 import com.ruowei.domain.enumeration.SysType;
-import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.RoleRepository;
 import com.ruowei.repository.UserRepository;
@@ -15,7 +12,6 @@ import com.ruowei.security.jwt.JWTFilter;
 import com.ruowei.security.jwt.TokenProvider;
 import com.ruowei.service.MenuService;
 import com.ruowei.service.dto.SimpleMenuTreeDTO;
-import com.ruowei.web.rest.dto.MenuTreeDTO;
 import com.ruowei.web.rest.dto.VerifyTokenDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.LoginVM;
@@ -65,11 +61,8 @@ public class UserJWTController {
     @PostMapping("/authenticate")
     @ApiOperation(value = "登录")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-        User user = userRepository.findOneByLoginAndStatusNot(loginVM.getUsername(), UserStatusType.DELETE)
+        User user = userRepository.findOneByLogin(loginVM.getUsername())
             .orElseThrow(() -> new BadRequestProblem("登录失败", "账号不存在，请重新输入"));
-        if (UserStatusType.DISABLE.equals(user.getStatus())) {
-            throw new BadRequestProblem("登录失败", "账号已停用，请联系管理员");
-        }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginVM.getUsername(),
@@ -86,7 +79,7 @@ public class UserJWTController {
         jwtToken.setEnterpriseId(user.getEnterpriseId());
 
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
-        List<String> roleCodes = roleRepository.findAllByIdInAndStatus(roleIds, RoleStatusType.NORMAL).stream().map(Role::getCode).collect(Collectors.toList());
+        List<String> roleCodes = roleRepository.findAllByIdIn(roleIds).stream().map(Role::getCode).collect(Collectors.toList());
         jwtToken.setRoleCodes(roleCodes);
         List<String> permissions = menuService.getCurrentUserPermissions(SysType.WEB, user.getId())
             .stream().map(Menu::getMenuHref).collect(Collectors.toList());

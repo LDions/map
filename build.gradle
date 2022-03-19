@@ -1,9 +1,11 @@
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/public'  }
+        gradlePluginPortal()
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE")
     }
 }
 
@@ -177,9 +179,9 @@ dependencies {
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
     implementation 'junit:junit:4.13.1'
-    implementation 'junit:junit:4.13.1'
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibaseHibernate5Version}"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     liquibaseRuntime sourceSets.main.compileClasspath
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-mail"
@@ -273,6 +275,12 @@ if (project.hasProperty("gae")) {
 
 task cleanResources(type: Delete) {
     delete "build/resources"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.ruowei.ZhicxtJavaApp'
+    }
 }
 
 wrapper {

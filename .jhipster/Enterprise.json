@@ -4,31 +4,35 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "javadoc": "单位名称"
+      "javadoc": "水厂名称"
     },{
       "fieldName": "equipmentName",
       "fieldType": "String",
       "javadoc": "设备名称"
     },{
-      "fieldName": "dataType",
-      "fieldType": "String",
-      "javadoc": "数据类型"
-    },{
       "fieldName": "remark",
       "fieldType": "String",
       "javadoc": "备注"
-    },{
-      "fieldName": "pointDataName",
-      "fieldType": "String",
-      "javadoc": "点数据名称"
     },{
       "fieldName": "groupId",
       "fieldType": "Long",
       "javadoc": "水厂所属集团Id"
     },{
-      "fieldName": "groupName",
+      "fieldName": "isTry",
+      "fieldType": "Boolean",
+      "javadoc": "是否为试点水厂"
+    },{
+      "fieldName": "contactName",
       "fieldType": "String",
-      "javadoc": "水厂所属集团名称"
+      "javadoc": "水厂联系人"
+    },{
+      "fieldName": "contactPhone",
+      "fieldType": "String",
+      "javadoc": "水厂联系人电话"
+    },{
+      "fieldName": "enterpriseAddress",
+      "fieldType": "String",
+      "javadoc": "经营详细地址"
     }
   ],
   "relationships": [],

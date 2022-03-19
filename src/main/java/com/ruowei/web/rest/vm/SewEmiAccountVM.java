@@ -344,7 +344,7 @@ public class SewEmiAccountVM {
         private Integer operatingDays;
 
         @ApiModelProperty(value = "工艺类型编码")
-        private String processTypeCode;
+        private String craftCode;
 
         @ApiModelProperty(value = "工艺类型名称")
         private String processTypeName;

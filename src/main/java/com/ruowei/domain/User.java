@@ -1,7 +1,6 @@
 package com.ruowei.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ruowei.domain.enumeration.UserStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
@@ -48,15 +47,13 @@ public class User implements Serializable {
     @Column(name = "remark")
     private String remark;
 
-    @ApiModelProperty(value = "企业ID")
+    @ApiModelProperty(value = "水厂ID")
     @Column(name = "enterprise_id")
     private Long enterpriseId;
 
-    @NotNull
-    @ApiModelProperty(value = "用户状态", required = true)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private UserStatusType status;
+    @ApiModelProperty(value = "水厂ID")
+    @Column(name = "group_id")
+    private Long groupId;
 
     public Long getId() {
         return id;
@@ -132,17 +129,15 @@ public class User implements Serializable {
         this.enterpriseId = enterpriseId;
     }
 
-    public UserStatusType getStatus() {
-        return status;
+    public Long getGroupId() {
+        return groupId;
     }
-
-    public User status(UserStatusType status) {
-        this.status = status;
+    public User groupId(Long groupId) {
+        this.groupId = groupId;
         return this;
     }
-
-    public void setStatus(UserStatusType status) {
-        this.status = status;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     @Override
@@ -172,7 +167,7 @@ public class User implements Serializable {
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
             ", enterpriseId=" + enterpriseId +
-            ", status=" + status +
+            ", groupId=" + groupId +
             '}';
     }
 }

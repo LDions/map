@@ -22,18 +22,18 @@ import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
-public class ZhicxtJavaApp {
+public class ZhjcxtJavaApp {
 
-    private static final Logger log = LoggerFactory.getLogger(ZhicxtJavaApp.class);
+    private static final Logger log = LoggerFactory.getLogger(ZhjcxtJavaApp.class);
 
     private final Environment env;
 
-    public ZhicxtJavaApp(Environment env) {
+    public ZhjcxtJavaApp(Environment env) {
         this.env = env;
     }
 
     /**
-     * Initializes ZhicxtJavaApp.
+     * Initializes ZhjcxtJavaApp.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>
@@ -66,7 +66,7 @@ public class ZhicxtJavaApp {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(ZhicxtJavaApp.class);
+        SpringApplication app = new SpringApplication(ZhjcxtJavaApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);

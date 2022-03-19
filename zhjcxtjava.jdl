@@ -1,46 +1,17 @@
 /** 用户 */
 entity User(sys_user) {
+	groupId Long /** 集团ID */
+    enterpriseId Long /** 水厂ID */
     login String required /** 登录账号 */
 	password String required minlength(60) maxlength(60)  /** 密码 */
 	nickName String required /** 用户昵称 */
 	remark String /** 备注 */
-	enterpriseId Long /** 企业ID */
-	status UserStatusType required /** 用户状态 */
-}
-/**
- * 用户状态类型
- * 正常|删除|停用|冻结
- */
-enum UserStatusType {
-    NORMAL,
-    DELETE,
-    DISABLE
 }
 /** 角色 */
 entity Role(sys_role) {
     code String required /** 角色编码 */
 	name String required /** 角色名称 */
-	type RoleType required /** 角色类型 */
 	isSys Boolean required /** 是否内置角色 */
-	status RoleStatusType required /** 状态 */
-}
-/**
- * 角色类型
- * 管理员角色|碳排放相关角色|碳汇相关角色
- */
-enum RoleType {
-    ADMIN,
-    EMI,
-    SINK
-}
-/**
- * 角色状态类型
- * 正常|删除|停用
- */
-enum RoleStatusType {
-    NORMAL,
-    DELETE,
-    DISABLE
 }
 /** 用户角色 */
 entity UserRole(sys_user_role) {
@@ -89,8 +60,27 @@ entity RoleMenu(sys_role_menu) {
     roleId Long required /** 角色ID */
     menuId Long required /** 菜单ID */
 }
+/** 集团信息 */
+entity Group(sys_group) {
+    groupName String required/** 集团名称 */
+    groupAddress String required /** 经营详细地址 */
+    groupContactName String /** 联系人姓名 */
+    groupContactPhone String /** 联系人手机 */
+}
+/** 水厂信息 */
+entity Enterprise(sys_enterprise) {
+	groupId Long /** 水厂所属集团Id */
+    name String required /** 水厂名称 */
+    enterpriseAddress String required /** 经营详细地址 */
+    contactName String /** 联系人姓名 */
+    contactPhone String /** 联系人手机 */
+    equipmentName String /** 设备名称 */
+    isTry Boolean required /** 是否为试点水厂 */
+    remark String /** 备注 */
+}
 /** 工艺信息 */
-entity Craft(){
+entity Craft(craft){
+	enterpriseId Long required/** 所属水厂Id */
     name String /** 工艺名称 */
     craftName String /** 工艺段名称 */
     processPeriod String /** 工艺段编号 */
@@ -106,175 +96,32 @@ entity Craft(){
     intimacy BigDecimal /** 传统公式：外加碳源相对亲密度 */
     dilutionRatio BigDecimal /** 传统公式：碳源稀释倍数 */
     phosphate BigDecimal /** 除磷公式：二沉池出水正磷酸盐设定值 */
-    FeAlRatio BigDecimal /** 除磷公式：铁盐或铝盐的摩尔质量比 */
+    feAlRatio BigDecimal /** 除磷公式：铁盐或铝盐的摩尔质量比 */
     phosphorusDosing BigDecimal /** 除磷公式：投加系数 */
     feAlActiveIngredients BigDecimal /** 除磷公式：铁盐或铝盐的有效成分 */
     concentration BigDecimal /** 除磷公式：除磷药剂配药浓度或者相对密度 */
-    entId Long /** 上属水厂Id */
-    entId String /** 上属水厂名称 */
 }
-/** 水厂信息 */
-entity Enterprise(sys_enterprise) {
-    name String required /** 水厂名称 */
-    enterpriseAddress String required /** 经营详细地址 */
-    equipmentName String /** 设备名称 */
-    dataType String  /** 数据类型 */
-    isTry Boolean required /** 是否为试点水厂 */
-    remark String /** 备注 */
-    pointDataName String  /** 点数据名称  */
-    groupId Long /** 水厂所属集团Id */
-    groupId String /** 水厂所属集团名称 */
-    }
-
-/** 集团信息 */
-entity Group(sys_group) {
-    groupName String required/** 集团名称 */
-    groupAddress String required /** 经营详细地址 */
-    platformId Long /** 集团所属平台id */
-}
-
-/** 集团、水厂、工艺关联信息 */
-entity EntCraftData(sys_ent_craft_data){
-    groupId Long /** 集团Id */
-    groupName String /** 集团名称 */
-    entId Long /** 水厂Id */
-    entName String /** 水厂名称 */
-    craftId Long /** 工艺段Id */
-    craftName String /** 工艺段名称 */
-    documentCode String /** 单据号 */
-    dayTime Instant /** 数据时间 */
-    messageSource String /** 数据来源 */
-}
-
-/** 平台信息 */
-entity Platform(sys_platform) {
-    platformName String required /** 平台名称 */
-    platformAddress String required /** 平台详细地址 */
-}
-
-/**
- * 公司状态类型
- * 正常|删除|停用
- */
-enum EnterpriseStatusType {
-    NORMAL,
-    DELETE
-}
-/** 省市区 */
-entity District {
-    pid               Long            /** 上级id */
-    deep              Integer         /** 层级深度[0:省,1:市,2:区,3:镇] */
-    name              String          /** 城市名称 */
-    pinyin            String          /** 城市名称的全拼 */
-    prefix            String          /** 城市名称拼音第一个字母 */
-    extId             Long            /** 数据源原始编号，如果是添加的数据，此编号为0 */
-    extName           String          /** 数据源原始名称，为未精简的名称 */
-}
-
-
-/** 碳排放数据 */
+/**计算数据 */
 entity EmiData(emi_data) {
 	documentCode String required /** 单据号 */
-	enterpriseId Long required /** 企业ID */
-    enterpriseName String required /** 企业名称 */
-    reporterId Long required /** 录入员ID */
-    reporterName String required /** 录入员姓名 */
-    reportTime Instant required /** 填报时间 */
+	enterpriseId Long required /** 水厂ID */
+    acctype String required /** 核算方式（自动、手动） */
     accYear String required /** 核算年份 */
     accMonth String required /** 核算月份 */
-    accTime String required /** 核算时间 */
-    industryCode String required /** 行业类型编码 */
-    industryName String required /** 行业类型名称 */
-    carbonEmi BigDecimal required /** 本月碳排放（kg/m） */
-    carbonDirEmi BigDecimal required /** 本月直接碳排放（kg） */
-    carbonIndirEmi BigDecimal required /** 本月间接碳排放（kg） */
-    carbonRed BigDecimal required /** 本月负碳排放（kg） */
+    accTimeStart String required /** 核算时间范围起 */
+    accTimeStop String required /** 核算时间范围止 */
+    predictTime String required /** 预测未来时间 */
+    craftId String required /** 工艺id */
+    totalOutN BigDecimal required /** 出水总氮 */
+    outAN BigDecimal required /** 出水氨氮 */
+    carbonAdd BigDecimal required /** 碳源投加量 */
+    phosphorusremover BigDecimal required /** 除磷药剂  */
 }
 
-/** 污水处理碳排放数据 */
-entity SewEmi(sew_emi) {
-	documentCode String required /** 单据号 */
-    enterpriseId Long required /** 企业ID */
-    enterpriseName String required /** 企业名称 */
-    reporterId Long required /** 录入员ID */
-    reporterName String required /** 录入员姓名 */
-    reportTime Instant required /** 填报时间 */
-	// 输入项目-进水指标
-    provinceCode String required /** 省份编码 */
-    provinceName String required /** 省份名称 */
-    accYear String required /** 核算年份 */
-    accMonth String required /** 核算月份 */
-    accTime String required /** 核算时间 */
-    // 输入项目-电量信息
-    totalPow BigDecimal required /** 月度总电量消耗（kWh/m） */
-    inPumpPow BigDecimal /** 进水总泵站耗电（kWh/m） */
-    blowerPow BigDecimal /** 鼓风机房耗电（kWh/m） */
-    retSluPumpPow BigDecimal /** 回流污泥泵房耗电（kWh） */
-    sluTreatPow BigDecimal /** 污泥处理耗电（kWh/m） */
-    disinfectPow BigDecimal /** 紫外+氯消毒耗电（kWh/m） */
-    facilityPow BigDecimal /** 附属设施耗电（kWh/m） */
-    otherPow BigDecimal /** 其他耗电（kWh/m） */
-    sluHandlePow BigDecimal /** 污泥处置用电（kWh/m） */
-    // 输入项目-负碳信息
-    solarPow BigDecimal /** 太阳能月发电量（kWh/m） */
-    heatPumpHeat BigDecimal /** 热泵月供热量（GJ/m） */
-    heatPumpRefr BigDecimal /** 热泵月制冷量（GJ/m） */
-    heatPumpHotHours BigDecimal /** 热泵供热运行时间（h） */
-    heatPumpColdHours BigDecimal /** 热泵制冷运行时间（h） */
-    thermoElec BigDecimal /** 热电联产月产电量（kWh/m） */
-    thermoEner BigDecimal /** 热电联产月产热量（GJ/m） */
-    toGirdPow BigDecimal /** 负碳发电输送到电网的电量 */
-    otherText String /** 其他负碳项目文字说明 */
-    otherEmiReduction BigDecimal /** 其他负碳项目减排量 */
-    windPow BigDecimal /** 风能月发电量 */
-    ecoComplexReduction BigDecimal /** 生态综合体碳减排量 */
-    // 输入项目-污泥处置模块
-    managedBySelf Boolean /** 污泥处置是否为本厂管理 */
-    sluMoistureAfterTreat BigDecimal /** 污泥处理后含水率 */
-    // 输入项目-碳排放因子
-    factorVersionNum String required /** 碳排放因子版本号 */
-    // 输出项目
-    level1PotEmi BigDecimal /** 一级处理药剂投加产生的间接碳排放（kg/m） */
-    level2PotEmi BigDecimal /** 二级处理药剂投加产生的间接碳排放（kg/m） */
-    level3PotEmi BigDecimal /** 三级处理药剂投加产生的间接碳排放（kg/m） */
-    sluTreatPotEmi BigDecimal /** 污泥处理药剂投加产生的间接碳排放（kg/m） */
-    totalPotEmi BigDecimal required /** 药剂投加产生的间接碳排放（kg/m） */
-    inletPumpPowEmi BigDecimal /** 进水总泵站耗电产生的间接碳排放（kg/m） */
-    blowerPowEmi BigDecimal /** 鼓风机房耗电产生的间接碳排放（kg/m） */
-    retSluPumpPowEmi BigDecimal /** 回流污泥泵房耗电产生的间接碳排放（kg/m） */
-    sluTreatPowEmi BigDecimal /** 污泥处理用电耗电产生的间接碳排放（kg/m） */
-    facilityPowEmi BigDecimal /** 紫外+氯消毒耗电产生的间接碳排放（kg/m） */
-    disinfectPowEmi BigDecimal /** 附属设施用电耗电产生的间接碳排放（kg/m） */
-    otherPowEmi BigDecimal /** 其他耗电产生的间接碳排放（kg/m） */
-    totalPowEmi BigDecimal required /** 耗电产生的间接碳排放（kg/m） */
-    sewTreatCh4Emi BigDecimal /** 污水处理CH4的CO2当量（kg/m） */
-    sewTreatN2oEmi BigDecimal /** 污水处理N2O的CO2当量（kg/m） */
-    totalSewTreatEmi BigDecimal required /** 污水处理的直接碳排放（kg/m） */
-    sluHandleCh4Emi BigDecimal /** 污泥处置CH4的CO2当量（kg/m） */
-    sluHandleN2oEmi BigDecimal /** 污泥处置N2O的CO2当量（kg/m） */
-    totalSluHandleDirEmi BigDecimal required /** 污泥处置的直接碳排放（kg/m） */
-    sluHandlePotEmi BigDecimal required /** 污泥处置药剂投加产生的间接碳排放 */
-    sluHandlePowEmi BigDecimal required /** 污泥处置用电产生的间接碳排放 */
-    totalSluHandleIndirEmi BigDecimal required /** 污泥处置间接碳排放 */
-    solarPowRed BigDecimal /** 太阳能间接减少的碳排放（kg/m） */
-    heatPumpRed BigDecimal /** 热泵间接减少的碳排放（kg/m） */
-    thermoElecRed BigDecimal /** 热电联产发电间接减少的碳排放（kg/m） */
-    thermoEnerRed BigDecimal /** 热电联产产热间接减少的碳排放（kg/m） */
-    otherEmiRed BigDecimal /** 其他负碳项目减少的碳排放 */
-    windPowRed BigDecimal /** 风电间接减少的碳排放 */
-    ecoComplexRed BigDecimal /** 生态综合体减少的碳排放 */
-    carbonRed BigDecimal required /** 污水厂本月负碳排放（kg/m） */
-    carbonDirEmi BigDecimal required /** 污水厂本月直接碳排放（kg/m） */
-    carbonIndirEmi BigDecimal required /** 污水厂本月间接碳排放（kg/m） */
-    carbonEmi BigDecimal required /** 污水厂本月碳排放（kg/m） */
-}
 /** 仪表数据 */
 entity SewProcess(sew_process) {
     documentCode String required /** 单据号 */
-    processTypeCode String required /** 工艺类型编码 */
-    processTypeName String required /** 工艺类型名称 */
-    dailyScale BigDecimal required /** 日均规模（m3/d） */
-    operatingDays Integer required /** 本月运行天数 */
+    craftCode String required /** 工艺编码 */
     // 输入项目-水质信息
     inFlow BigDecimal required /** 进水流量（mg/L） */
     inAmmonia BigDecimal required /** 进水氨氮（mg/L） */
@@ -295,6 +142,7 @@ entity SewProcess(sew_process) {
     anoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
     aerobicPoolNit BigDecimal /** 好氧池出口亚硝酸盐（mg/L） */
     dayTime Instant /** 采集时间 */
+    status SendStatusType required /** 数据推送状态 */
 }
 /** 化验数据 */
 entity SewSlu(sew_slu) {
@@ -310,6 +158,7 @@ entity SewSlu(sew_slu) {
     assOutTn BigDecimal required /** 出水TN（mg/L） */
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 采集时间 */
+    status SendStatusType required /** 数据推送状态 */
 }
 /** 日报表数据 */
 entity SewPot(sew_pot) {
@@ -348,6 +197,7 @@ entity SewPot(sew_pot) {
     dayAerobicPoolSvi Bigdecimal /** 生化池-好氧池SVI（）*/
 	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 	dayTime Instant /** 采集时间 */
+	status SendStatusType required /** 数据推送状态 */
 }
 /** 数据校验表 */
 entity SewMeter(sew_meter){
@@ -356,13 +206,14 @@ entity SewMeter(sew_meter){
     assInCod BigDecimal /** 进水COD（mg/L） */
     assInTn BigDecimal /** 进水TN（mg/L） */
     assInTp BigDecimal /** 进水TP（mg/L） */
-    assAnoxicPoolDoOutNit required /** 缺氧池出口硝酸盐（mg/L） */
-    assAerobicPoolDoOutNit required /** 好氧池出口硝酸盐（mg/L） */
+    assAnoxicPoolDoOutNit BigDecimal required /** 缺氧池出口硝酸盐（mg/L） */
+    assAerobicPoolDoOutNit BigDecimal required /** 好氧池出口硝酸盐（mg/L） */
     assOutAmmonia BigDecimal /** 出水氨氮（mg/L） */
     assOutCod BigDecimal /** 出水COD（mg/L） */
     assOutTn BigDecimal /** 出水TN（mg/L） */
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 时间 */
+    status SendStatusType required /** 数据推送状态 */
 }
 
 /** 其他指标 */
@@ -371,6 +222,16 @@ entity OtherIndex(sew_index) {
     methodCode String required /** 其他指标编码 */
     methodName String required /** 其他指标名称 */
     indexCapacity BigDecimal /** 指标量（kg/m）*/
+    status SendStatusType required /** 数据推送状态 */
+}
+
+/**
+ * 数据推送类型
+ * 成功|失败
+ */
+enum SendStatusType {
+    SUCCESS,
+    FAILED
 }
 /** 被指标关联表 */
 entity BeAssociated(sew_be_associated){
@@ -385,21 +246,6 @@ entity Correlation(sew_correlation){
     relevanceId Long /** 关联数据Id */
 }
 
-/** 核算数据草稿 */
-entity Draft(app_draft) {
-	userId Long required /** 用户ID */
-    modifyTime Instant required /** 最后更新时间 */
-    type DraftType required /** 草稿类型 */
-    industryCode String required /** 行业类型编码 */
-    documentCode String /** 单据号 */
-    content TextBlob required /** 数据内容 */
-}
-/** 草稿类型 */
-enum DraftType {
-    EMI,
-    SIN,
-    OLD
-}
 /** 数据字典 */
 entity Dict(sys_dict) {
     catagoryCode String required /** 分类编码 */
@@ -409,30 +255,17 @@ entity Dict(sys_dict) {
     disabled Boolean required /** 禁用状态 */
     sortNo Integer required /** 排序号 */
 }
-/** 碳排放因子 */
-entity EmiFactor(emi_factor) {
-    versionNum String required /** 版本号 */
-    historicalId Long /** 历史因子ID */
-    projectCode String required /** 项目编码 */
-    projectName String required /** 项目名称 */
-    operatorId Long required /** 操作员ID */
-    operatorName String required /** 操作员姓名 */
-    modifyDate LocalDate required /** 最后更新日期 */
-    remark TextBlob required /** 备注 */
-    content TextBlob required /** 数据内容 */
+
+/** 进出水指标阈值 */
+entity SewEmithreshold(sew_emi_threshold) {
+    enterpriseId Long required /** 企业id */
+    inCodLimit BigDecimal required /** 进水COD阈值 */
+    inTotalNLimit BigDecimal required /** 进水总氮上限 */
+    inTotalANLimit BigDecimal required /** 进水氨氮期上限 */
+    inTotalPLimit BigDecimal required /** 进水总磷期上限 */
+    outCodLimit BigDecimal required /** 出水COD阈值 */
+    outTotalNLimit BigDecimal required /** 出水总氮上限 */
+    outTotalANLimit BigDecimal required /** 出水氨氮期上限 */
+    outTotalPLimit BigDecimal required /** 出水总磷期上限 */
+    status SendStatusType required /** 数据推送状态 */
 }
-
-/** 污水处理厂碳排放因子 */
-entity SewEmiFactor(sew_emi_factor) {
-    explain TextBlob required /** 字段含义解释 */
-    proElecEmiFactor TextBlob required /** 省市电网平均CO2排放因子 */
-    chemicalsEmiFactor TextBlob required /** 药剂CO2排放因子 */
-    processTypeNi TextBlob required /** 工艺类型排放因子 */
-    heatPumpFactor TextBlob required /** 热泵对应参数 */
-    gasEmiFactor TextBlob required /** 气体排放系数 */
-    sewTreatFactor TextBlob required /** 污水处理排放系数 */
-    sluTreatFactor TextBlob required /** 污泥处置排放系数 */
-}
-
-
-
