@@ -7,6 +7,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the Craft entity.
@@ -15,5 +16,9 @@ import java.util.List;
 @Repository
 public interface CraftRepository extends JpaRepository<Craft, Long>, QuerydslPredicateExecutor<Craft> {
 
-    List<Craft> findByEntId(Long Id);
+    List<Craft> findByEntCode(String entCode);
+
+    Craft findByCraftCode(String code);
+
+    Optional<Craft> getFirstByName(String name);
 }
