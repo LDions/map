@@ -17,7 +17,7 @@ plugins {
     id "jacoco"
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
-    id "com.gorylenko.gradle-git-properties"
+    id "com.gorylenko.gradle-git-properties" version "2.4.0-rc1"
     id "org.liquibase.gradle"
     id "io.spring.nohttp"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
@@ -226,6 +226,7 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jpa"
     implementation "com.github.xiaoymin:knife4j-spring-ui:3.0.3"
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient'
     implementation "org.springframework.boot:spring-boot-starter-webflux"
     // https://mvnrepository.com/artifact/org.apache.poi/poi
     implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
