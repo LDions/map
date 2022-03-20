@@ -3,11 +3,7 @@ package com.ruowei.web.rest.vm;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.Instant;
 
 @Data
 public class SewEmiVM {
@@ -181,38 +177,5 @@ public class SewEmiVM {
         @ApiModelProperty(value = "生化池-好氧池温度（mg/L）")
         private BigDecimal dayAerobicPoolTemper;
     }
-    @Data
-    @EqualsAndHashCode(callSuper = true)
-    public static class SewMeterVM extends SewEmiVM {
 
-        @ApiModelProperty(value = "进水氨氮（mg/L）")
-        private BigDecimal assInAmmonia;
-
-        @ApiModelProperty(value = "进水COD（mg/L）")
-        private BigDecimal assInCod;
-
-        @ApiModelProperty(value = "进水TN（mg/L）")
-        private BigDecimal assInTn;
-
-        @ApiModelProperty(value = "进水TP（mg/L）")
-        private BigDecimal assInTp;
-
-        @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
-        private BigDecimal assAnoxicPoolDoOutNit;
-
-        @ApiModelProperty(value = "好氧池出口硝酸盐（mg/L）")
-        private BigDecimal assAerobicPoolDoOutNit;
-
-        @ApiModelProperty(value = "出水氨氮（mg/L）")
-        private BigDecimal assOutAmmonia;
-
-        @ApiModelProperty(value = "出水COD（mg/L）")
-        private BigDecimal assOutCod;
-
-        @ApiModelProperty(value = "出水TN（mg/L）")
-        private BigDecimal assOutTn;
-
-        @ApiModelProperty(value = "出水TP（mg/L）")
-        private BigDecimal assOutTp;
-    }
 }

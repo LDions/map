@@ -105,7 +105,6 @@ public class EmiDataDTO {
         this.accYear = vm.getAccYear();
         this.accMonth = vm.getAccMonth();
         this.accTime = vm.getAccYear().concat(vm.getAccMonth());
-        this.industryCode = vm.getIndustryCode();
         this.industryName = vm.getIndustryName();
         this.carbonEmi = outputDTO.getC();
         this.carbonDirEmi = outputDTO.getCDirect();

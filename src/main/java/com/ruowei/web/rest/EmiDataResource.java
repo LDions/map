@@ -8,10 +8,7 @@ import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.SewEmiService;
-import com.ruowei.util.BeanUtil;
-import com.ruowei.util.OptionalBooleanBuilder;
-import com.ruowei.util.OrderByUtil;
-import com.ruowei.util.SelectUtil;
+import com.ruowei.util.*;
 import com.ruowei.util.excel.ExcelExport;
 import com.ruowei.web.rest.dto.*;
 import com.ruowei.web.rest.errors.BadRequestProblem;
@@ -153,8 +150,8 @@ public class EmiDataResource {
     @ApiOperation(value = "详情数据", notes = "作者：董玉祥")
     public ResponseEntity<List<SewEmiVM>> get(@ApiParam(value = "单据号") @RequestParam(required = false) String documentCode) {
 
-        List<SewEmiVM> sewEmiVMS= sewEmiService.convertToSewDetailDtoByDocumentCode(documentCode);
-        return ResponseEntity.ok().body(sewEmiVMS);
+        List<SewEmiVM> SewEmiAccountVMS= sewEmiService.convertToSewDetailDtoByDocumentCode(documentCode);
+        return ResponseEntity.ok().body(SewEmiAccountVMS);
     }
 
     @PostMapping("/bulk_edit")
@@ -283,26 +280,66 @@ public class EmiDataResource {
         return null;
     }
 
-    @PostMapping("/carbon-emission-data/exportAll")
-    @ApiOperation(value = "碳排放核算数据导出接口", notes = "作者：林宏栋")
-    public ResponseEntity<Resource> exportAll(@Valid @RequestBody CarbonEmiQM qm,
-                                              Pageable pageable,
-                                              @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
-        BooleanBuilder booleanBuilder = sewEmiService.convertCarbonEmiQuery(qm, qEmiData, userModel);
-        JPAQuery<CarbonEmiDataDTO> jpaQuery = jpaQueryFactory
-            .select(Projections.bean(CarbonEmiDataDTO.class, qEmiData.documentCode, qEmiData.enterpriseName,
-                qEmiData.reporterName, qEmiData.reportTime, qEmiData.accYear, qEmiData.accMonth, qEmiData.industryCode,
-                qEmiData.industryName, qEmiData.carbonEmi, qEmiData.carbonDirEmi, qEmiData.carbonIndirEmi, qEmiData.carbonRed))
-            .from(qEmiData)
-            .where(booleanBuilder)
-            .orderBy(OrderByUtil.createOrderSpecifierBy(qEmiData, pageable.getSort()));
-        // 调用生成Excel方法
-        byte[] buffer = ExcelExport.createExcel(jpaQuery.fetch());
-        if (buffer == null) {
-            throw new BadRequestProblem("生成Excel失败", "Excel字节数组为空");
+    /**
+     * 封装碳排放核算列表数据查询条件
+     *
+     * @param qm
+     * @param qEmiData
+     * @param userModel
+     * @return
+     */
+    public BooleanBuilder convertCarbonEmiQuery(CarbonEmiQM qm, QEmiData qEmiData, UserModel userModel) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (StringUtils.isNotBlank(qm.getDocumentCode())) {
+            booleanBuilder.and(qEmiData.documentCode.contains(qm.getDocumentCode()));
         }
-        Resource resource = new ByteArrayResource(buffer);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-            "attachment;").body(resource);
+        if (StringUtils.isNotBlank(qm.getIndustryCode())) {
+            booleanBuilder.and(qEmiData.industryCode.eq(qm.getIndustryCode()));
+        }
+        if (userModel.getEnterpriseId() != null) {
+            booleanBuilder.and(qEmiData.enterpriseId.eq(userModel.getEnterpriseId()));
+        }
+        if (StringUtils.isNotBlank(qm.getEnterpriseName())) {
+            booleanBuilder.and(qEmiData.enterpriseName.contains(qm.getEnterpriseName()));
+        }
+        if (StringUtils.isNotBlank(qm.getReporterName())) {
+            booleanBuilder.and(qEmiData.reporterName.contains(qm.getReporterName()));
+        }
+        if (StringUtils.isNotBlank(qm.getAccYearFrom()) && StringUtils.isNotBlank(qm.getAccMonthFrom())) {
+            booleanBuilder.and(qEmiData.accTime.goe(qm.getAccYearFrom().concat(qm.getAccMonthFrom())));
+        }
+        if (StringUtils.isNotBlank(qm.getAccYearTo()) && StringUtils.isNotBlank(qm.getAccMonthTo())) {
+            booleanBuilder.and(qEmiData.accTime.loe(qm.getAccYearTo().concat(qm.getAccMonthTo())));
+        }
+        if (StringUtils.isNotBlank(qm.getReportTimeFrom())) {
+            booleanBuilder.and(qEmiData.reportTime.after(DateUtil.stringToInstant(qm.getReportTimeFrom())));
+        }
+        if (StringUtils.isNotBlank(qm.getReportTimeTo())) {
+            booleanBuilder.and(qEmiData.reportTime.before(DateUtil.stringToInstant(qm.getReportTimeTo())));
+        }
+        return booleanBuilder;
     }
+
+//    @PostMapping("/carbon-emission-data/exportAll")
+//    @ApiOperation(value = "碳排放核算数据导出接口", notes = "作者：林宏栋")
+//    public ResponseEntity<Resource> exportAll(@Valid @RequestBody CarbonEmiQM qm,
+//                                              Pageable pageable,
+//                                              @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+//        BooleanBuilder booleanBuilder = sewEmiService.convertCarbonEmiQuery(qm, qEmiData, userModel);
+//        JPAQuery<CarbonEmiDataDTO> jpaQuery = jpaQueryFactory
+//            .select(Projections.bean(CarbonEmiDataDTO.class, qEmiData.documentCode, qEmiData.enterpriseName,
+//                qEmiData.reporterName, qEmiData.reportTime, qEmiData.accYear, qEmiData.accMonth, qEmiData.industryCode,
+//                qEmiData.industryName, qEmiData.carbonEmi, qEmiData.carbonDirEmi, qEmiData.carbonIndirEmi, qEmiData.carbonRed))
+//            .from(qEmiData)
+//            .where(booleanBuilder)
+//            .orderBy(OrderByUtil.createOrderSpecifierBy(qEmiData, pageable.getSort()));
+//        // 调用生成Excel方法
+//        byte[] buffer = ExcelExport.createExcel(jpaQuery.fetch());
+//        if (buffer == null) {
+//            throw new BadRequestProblem("生成Excel失败", "Excel字节数组为空");
+//        }
+//        Resource resource = new ByteArrayResource(buffer);
+//        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+//            "attachment;").body(resource);
+//    }
 }

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class SewEmiAccountOutputDTO {
-
+//TODO 待修改
     @ApiModelProperty(value = "核算年份")
     private String accYear;
 
@@ -126,44 +126,11 @@ public class SewEmiAccountOutputDTO {
     @ApiModelProperty(value = "污水厂本月间接碳排放（kg/m）")
     private BigDecimal carbonIndirEmi;
 
-    public SewEmiAccountOutputDTO(String accYear, String accMonth, String documentCode, String industryCode, String enterpriseName, WaterCarbonEmissionOutputDTO outputDTO) {
+    public SewEmiAccountOutputDTO(String accYear, String accMonth, String documentCode, String enterpriseName) {
         this.accYear = accYear;
         this.accMonth = accMonth;
         this.documentCode = documentCode;
-        this.industryCode = industryCode;
         this.enterpriseName = enterpriseName;
-        this.level1PotEmi = outputDTO.getC11();
-        this.level2PotEmi = outputDTO.getC12();
-        this.level3PotEmi = outputDTO.getC13();
-        this.sluTreatPotEmi = outputDTO.getC14();
-        this.totalPotEmi = outputDTO.getTotalC1();
-        this.inletPumpPowEmi = outputDTO.getC21();
-        this.blowerPowEmi = outputDTO.getC22();
-        this.retSluPumpPowEmi = outputDTO.getC23();
-        this.sluTreatPowEmi = outputDTO.getC24();
-        this.facilityPowEmi = outputDTO.getC25();
-        this.disinfectPowEmi = outputDTO.getC26();
-        this.otherPowEmi = outputDTO.getC27();
-        this.totalPowEmi = outputDTO.getTotalC2();
-        this.sewTreatCh4Emi = outputDTO.getC31();
-        this.sewTreatN2oEmi = outputDTO.getC32();
-        this.totalSewTreatEmi = outputDTO.getTotalC3();
-        this.sluHandleCh4Emi = outputDTO.getC41();
-        this.sluHandleN2oEmi = outputDTO.getC42();
-        this.totalSluHandleDirEmi = outputDTO.getTotalC4();
-        this.sluHandlePotEmi = outputDTO.getC91();
-        this.sluHandlePowEmi = outputDTO.getC92();
-        this.totalSluHandleIndirEmi = outputDTO.getTotalC9();
-        this.solarPowRed = outputDTO.getTotalC5();
-        this.heatPumpRed = outputDTO.getTotalC6();
-        this.thermoElecRed = outputDTO.getTotalC7();
-        this.thermoEnerRed = outputDTO.getTotalC8();
-        this.otherEmiRed = outputDTO.getTotalC11();
-        this.windPowRed = outputDTO.getTotalC12();
-        this.ecoComplexRed = outputDTO.getTotalC13();
-        this.carbonEmi = outputDTO.getC();
-        this.carbonRed = outputDTO.getCReduction();
-        this.carbonDirEmi = outputDTO.getCDirect();
-        this.carbonIndirEmi = outputDTO.getCIndirect();
+
     }
 }

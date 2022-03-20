@@ -2,6 +2,7 @@ package com.ruowei.web.rest.vm;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -10,21 +11,11 @@ import java.time.Instant;
 import java.util.List;
 
 /**
- * 污水碳排放核算请求参数
+ * 污水核算请求参数
  */
 @Data
 public class SewEmiAccountVM {
-
-    @ApiModelProperty(value = "草稿箱ID")
-    private Long draftId;
-
-    @NotEmpty(message = "请选择省直辖市")
-    @ApiModelProperty(value = "省直辖市编码", required = true)
-    private String provinceCode;
-
-    @NotEmpty(message = "请选择省直辖市")
-    @ApiModelProperty(value = "省直辖市名称", required = true)
-    private String provinceName;
+    //TODO 待修改 一次核算所需所有参数
 
     @NotNull(message = "请选择企业")
     @ApiModelProperty(value = "企业ID", required = true)
@@ -33,10 +24,6 @@ public class SewEmiAccountVM {
     @NotEmpty(message = "请选择企业")
     @ApiModelProperty(value = "企业名称", required = true)
     private String enterpriseName;
-
-    @NotEmpty(message = "请选择省直辖市")
-    @ApiModelProperty(value = "行业类型编码", required = true)
-    private String industryCode;
 
     @NotEmpty(message = "请选择行业类型")
     @ApiModelProperty(value = "行业类型名称", required = true)
@@ -50,91 +37,55 @@ public class SewEmiAccountVM {
     @ApiModelProperty(value = "核算月份", required = true)
     private String accMonth;
 
-    @ApiModelProperty(value = "工艺水质信息")
+    @ApiModelProperty(value = "仪表数据")
     private List<SewProcessVM> sewProcesss;
 
-    @NotNull(message = "请输入月度总电量消耗")
-    @ApiModelProperty(value = "月度总电量消耗（kWh/m）", required = true)
-    private BigDecimal totalPow;
-
-    @ApiModelProperty(value = "进水总泵站耗电（kWh/m）")
-    private BigDecimal inPumpPow;
-
-    @ApiModelProperty(value = "鼓风机房耗电（kWh/m）")
-    private BigDecimal blowerPow;
-
-    @ApiModelProperty(value = "回流污泥泵房耗电（kWh）")
-    private BigDecimal retSluPumpPow;
-
-    @ApiModelProperty(value = "污泥处理耗电（kWh/m）")
-    private BigDecimal sluTreatPow;
-
-    @ApiModelProperty(value = "紫外+氯消毒耗电（kWh/m）")
-    private BigDecimal disinfectPow;
-
-    @ApiModelProperty(value = "附属设施耗电（kWh/m）")
-    private BigDecimal facilityPow;
-
-    @ApiModelProperty(value = "其他耗电（kWh/m）")
-    private BigDecimal otherPow;
-
-    @ApiModelProperty(value = "污泥处置用电（kWh/m）")
-    private BigDecimal sluHandlePow;
-
-    @ApiModelProperty(value = "药剂月投加情况")
+    @ApiModelProperty(value = "日报表数据")
     private List<SewPotVM> sewPots;
 
-    @ApiModelProperty(value = "太阳能月发电量（kWh/m）")
-    private BigDecimal solarPow;
-
-    @ApiModelProperty(value = "热泵月供热量（GJ/m）")
-    private BigDecimal heatPumpHeat;
-
-    @ApiModelProperty(value = "热泵月制冷量（GJ/m）")
-    private BigDecimal heatPumpRefr;
-
-    @ApiModelProperty(value = "热泵供热运行时间（h）")
-    private BigDecimal heatPumpHotHours;
-
-    @ApiModelProperty(value = "热泵制冷运行时间（h）")
-    private BigDecimal heatPumpColdHours;
-
-    @ApiModelProperty(value = "热电联产月产电量（kWh/m）")
-    private BigDecimal thermoElec;
-
-    @ApiModelProperty(value = "热电联产月产热量（GJ/m）")
-    private BigDecimal thermoEner;
-
-    @ApiModelProperty(value = "负碳发电输送到电网的电量")
-    private BigDecimal toGirdPow;
-
-    @ApiModelProperty(value = "其他负碳项目文字说明")
-    private String otherText;
-
-    @ApiModelProperty(value = "其他负碳项目减排量")
-    private BigDecimal otherEmiReduction;
-
-    @ApiModelProperty(value = "风能月发电量")
-    private BigDecimal windPow;
-
-    @ApiModelProperty(value = "生态综合体碳减排量")
-    private BigDecimal ecoComplexReduction;
-
-    @ApiModelProperty(value = "污泥处置是否为本厂管理")
-    private Boolean managedBySelf;
-
-    @NotNull(message = "请输入污泥处理后含水率")
-    @ApiModelProperty(value = "污泥处理后含水率")
-    private BigDecimal sluMoistureAfterTreat;
-
-    @ApiModelProperty(value = "污泥处置情况")
+    @ApiModelProperty(value = "化验数据")
     private List<SewSluVM> sewSlus;
 
-    @ApiModelProperty(value = "污泥处置情况")
+    @ApiModelProperty(value = "其他指标")
     private List<OtherIndexVM> otherIndexs;
 
-    @Data
-    public static class SewPotVM {
+    @ApiModelProperty(value = "校表数据")
+    private List<SewMeterVM> sewMeterVMS;
+
+
+    public static class SewMeterVM extends SewEmiAccountVM{
+
+        @ApiModelProperty(value = "进水氨氮（mg/L）")
+        private BigDecimal assInAmmonia;
+
+        @ApiModelProperty(value = "进水COD（mg/L）")
+        private BigDecimal assInCod;
+
+        @ApiModelProperty(value = "进水TN（mg/L）")
+        private BigDecimal assInTn;
+
+        @ApiModelProperty(value = "进水TP（mg/L）")
+        private BigDecimal assInTp;
+
+        @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
+        private BigDecimal assAnoxicPoolDoOutNit;
+
+        @ApiModelProperty(value = "好氧池出口硝酸盐（mg/L）")
+        private BigDecimal assAerobicPoolDoOutNit;
+
+        @ApiModelProperty(value = "出水氨氮（mg/L）")
+        private BigDecimal assOutAmmonia;
+
+        @ApiModelProperty(value = "出水COD（mg/L）")
+        private BigDecimal assOutCod;
+
+        @ApiModelProperty(value = "出水TN（mg/L）")
+        private BigDecimal assOutTn;
+
+        @ApiModelProperty(value = "出水TP（mg/L）")
+        private BigDecimal assOutTp;
+    }
+    public static class SewPotVM extends SewEmiAccountVM{
 
         @NotNull(message = "请输入进水PH")
         @ApiModelProperty(value = "进水PH（mg/L）")
@@ -257,8 +208,7 @@ public class SewEmiAccountVM {
         private Instant dayTime;
     }
 
-    @Data
-    public static class SewSluVM {
+    public static class SewSluVM extends SewEmiAccountVM{
 
         @NotEmpty(message = "请选择处置方法")
         @ApiModelProperty(value = "污泥处置方法编码")
@@ -321,8 +271,7 @@ public class SewEmiAccountVM {
         private Instant dayTime;
     }
 
-    @Data
-    public static class OtherIndexVM {
+    public static class OtherIndexVM extends SewEmiAccountVM{
 
         @ApiModelProperty(value = "其他指标编码")
         private String methodCode;
@@ -334,14 +283,7 @@ public class SewEmiAccountVM {
         private BigDecimal indexCapacity;
     }
 
-    @Data
-    public static class SewProcessVM {
-
-        @ApiModelProperty(value = "日均规模（m3/d）")
-        private BigDecimal dailyScale;
-
-        @ApiModelProperty(value = "本月运行天数")
-        private Integer operatingDays;
+    public static class SewProcessVM extends SewEmiAccountVM{
 
         @ApiModelProperty(value = "工艺类型编码")
         private String craftCode;

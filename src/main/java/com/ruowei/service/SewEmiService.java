@@ -14,7 +14,6 @@ import com.ruowei.service.dto.*;
 import com.ruowei.service.enumeration.FunctionEnum;
 import com.ruowei.service.enumeration.OperationTypeEnum;
 import com.ruowei.util.BeanUtil;
-import com.ruowei.util.CarbonAccountingReport;
 import com.ruowei.util.DateUtil;
 import com.ruowei.web.rest.dto.SewDetailsDTO;
 import com.ruowei.web.rest.dto.SewEmiDetailDTO;
@@ -39,7 +38,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 
 import static com.ruowei.config.Constants.*;
 
@@ -72,37 +70,6 @@ public class SewEmiService {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    /**
-     * 计算各设施耗电量之和
-     *
-     * @param vm
-     * @return
-     */
-    public BigDecimal calculateSumOfEachPower(SewEmiAccountVM vm) {
-        BigDecimal sum = new BigDecimal(0);
-        if (vm.getInPumpPow() != null) {
-            sum = sum.add(vm.getInPumpPow());
-        }
-        if (vm.getBlowerPow() != null) {
-            sum = sum.add(vm.getBlowerPow());
-        }
-        if (vm.getRetSluPumpPow() != null) {
-            sum = sum.add(vm.getRetSluPumpPow());
-        }
-        if (vm.getSluTreatPow() != null) {
-            sum = sum.add(vm.getSluTreatPow());
-        }
-        if (vm.getDisinfectPow() != null) {
-            sum = sum.add(vm.getDisinfectPow());
-        }
-        if (vm.getFacilityPow() != null) {
-            sum = sum.add(vm.getFacilityPow());
-        }
-        if (vm.getOtherPow() != null) {
-            sum = sum.add(vm.getOtherPow());
-        }
-        return sum;
-    }
 
     /**
      * 计算某种药剂各投加量之和
@@ -132,125 +99,12 @@ public class SewEmiService {
             SewEmiFactorDTO sewEmiFactorDTO = objectMapper.readValue(emiFactor.getContent(), SewEmiFactorDTO.class);
             // 创建碳排放核算输入对象
             WaterCarbonEmissionEnterDTO enterDTO = new WaterCarbonEmissionEnterDTO();
-            // 封装碳排放因子版本号
-            enterDTO.setFactorVersionNum(emiFactor.getVersionNum());
+
             // 封装工艺水质信息
             List<WaterCarbonEmissionEnterDTO.WaterQualityDTO> waterQualityDTOList = new ArrayList<>();
-            for (SewEmiAccountVM.SewProcessVM sewProcessVm : vm.getSewProcesss()) {
-                if (StringUtils.isBlank(sewProcessVm.getCraftCode())) {
-                    throw new BadRequestProblem("核算失败", "工艺类型编码不能为空");
-                }
-                if (sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getCraftCode()) == null) {
-                    throw new BadRequestProblem("核算失败", "不存在" + sewProcessVm.getProcessTypeName() + "工艺");
-                }
-                WaterCarbonEmissionEnterDTO.WaterQualityDTO waterQualityDTO = new WaterCarbonEmissionEnterDTO.WaterQualityDTO(
-                    sewProcessVm.getDailyScale(),
-                    new BigDecimal(sewProcessVm.getOperatingDays()),
-                    sewEmiFactorDTO.getProcessTypeNi().get(sewProcessVm.getCraftCode()).getValue(),
-                    sewProcessVm.getInFlow(),
-                    sewProcessVm.getInCod(),
-                    sewProcessVm.getInAmmonia(),
-                    sewProcessVm.getInTp(),
-                    sewProcessVm.getInTn() != null ? sewProcessVm.getInTn() : new BigDecimal(0),
-                    sewProcessVm.getOutFlow(),
-                    sewProcessVm.getOutCod(),
-                    sewProcessVm.getOutAmmonia(),
-                    sewProcessVm.getOutTp(),
-                    sewProcessVm.getOutTn() != null ? sewProcessVm.getOutTn() : new BigDecimal(0)
-                );
-                waterQualityDTOList.add(waterQualityDTO);
-            }
-            enterDTO.setWaterQualityDTOList(waterQualityDTOList);
-            // 封装电量信息
-            WaterCarbonEmissionEnterDTO.ElectricityDTO electricityDTO = new WaterCarbonEmissionEnterDTO.ElectricityDTO(
-                vm.getTotalPow(),
-                vm.getInPumpPow() != null ? vm.getInPumpPow() : new BigDecimal(0),
-                vm.getBlowerPow() != null ? vm.getBlowerPow() : new BigDecimal(0),
-                vm.getRetSluPumpPow() != null ? vm.getRetSluPumpPow() : new BigDecimal(0),
-                vm.getSluTreatPow() != null ? vm.getSluTreatPow() : new BigDecimal(0),
-                vm.getDisinfectPow() != null ? vm.getDisinfectPow() : new BigDecimal(0),
-                vm.getFacilityPow() != null ? vm.getFacilityPow() : new BigDecimal(0),
-                vm.getOtherPow() != null ? vm.getOtherPow() : new BigDecimal(0),
-                vm.getSluHandlePow() != null ? vm.getSluHandlePow() : new BigDecimal(0)
-            );
-            enterDTO.setElectricityDTO(electricityDTO);
-            // TODO 日报表数据核算
-            List<WaterCarbonEmissionEnterDTO.PharmacyDTO> pharmacyDTOList = new ArrayList<>();
-            for (SewEmiAccountVM.SewPotVM sewPotVm : vm.getSewPots()) {
 
-            }
-            enterDTO.setPharmacyDTOList(pharmacyDTOList);
-            // 封装碳减排信息
-            WaterCarbonEmissionEnterDTO.CarbonNegativeDTO carbonNegativeDTO = new WaterCarbonEmissionEnterDTO.CarbonNegativeDTO(
-                vm.getSolarPow() != null ? vm.getSolarPow() : new BigDecimal(0),
-                vm.getHeatPumpHeat() != null ? vm.getHeatPumpHeat() : new BigDecimal(0),
-                vm.getHeatPumpRefr() != null ? vm.getHeatPumpRefr() : new BigDecimal(0),
-                vm.getHeatPumpHotHours() != null ? vm.getHeatPumpHotHours() : new BigDecimal(0),
-                vm.getHeatPumpColdHours() != null ? vm.getHeatPumpColdHours() : new BigDecimal(0),
-                vm.getThermoElec() != null ? vm.getThermoElec() : new BigDecimal(0),
-                vm.getThermoEner() != null ? vm.getThermoEner() : new BigDecimal(0),
-                vm.getToGirdPow() != null ? vm.getToGirdPow() : new BigDecimal(0),
-                vm.getOtherEmiReduction() != null ? vm.getOtherEmiReduction() : new BigDecimal(0),
-                vm.getWindPow() != null ? vm.getWindPow() : new BigDecimal(0),
-                vm.getEcoComplexReduction() != null ? vm.getEcoComplexReduction() : new BigDecimal(0)
-            );
-            enterDTO.setCarbonNegativeDTO(carbonNegativeDTO);
-            // 封装其他指标信息
-            enterDTO.setMSludge1(new BigDecimal(0));
-            enterDTO.setWc1(new BigDecimal(60));
-            enterDTO.setMSludge2(new BigDecimal(0));
-            enterDTO.setWc2(new BigDecimal(60));
-            enterDTO.setMSludge3(new BigDecimal(0));
-            enterDTO.setWc3(new BigDecimal(60));
-            for (SewEmiAccountVM.SewSluVM sewSluVm : vm.getSewSlus()) {
-
-            }
-            enterDTO.setOdeg1(new BigDecimal(0));
-            enterDTO.setOdeg2(new BigDecimal(0));
-            enterDTO.setOdeg3(new BigDecimal(0));
-            enterDTO.setOdeg4(new BigDecimal(0));
-            enterDTO.setOdeg5(new BigDecimal(0));
-            enterDTO.setOdeg6(new BigDecimal(0));
-            enterDTO.setOdeg7(new BigDecimal(0));
-            enterDTO.setOdeg8(new BigDecimal(0));
-            enterDTO.setOdeg9(new BigDecimal(0));
-            for (SewEmiAccountVM.OtherIndexVM otherIndexVM : vm.getOtherIndexs()) {
-                switch (otherIndexVM.getMethodCode()) {
-                    case INRETURNFLOW:
-                        enterDTO.setOdeg1(otherIndexVM.getIndexCapacity());
-                        break;
-                    case OUTRETURNFLOW:
-                        enterDTO.setOdeg2(otherIndexVM.getIndexCapacity());
-                        break;
-                    case FIRSTMUD:
-                        enterDTO.setOdeg3(otherIndexVM.getIndexCapacity());
-                        break;
-                    case SECONDMUD:
-                        enterDTO.setOdeg4(otherIndexVM.getIndexCapacity());
-                        break;
-                    case REFLUX:
-                        enterDTO.setOdeg5(otherIndexVM.getIndexCapacity());
-                        break;
-                    case CARADD:
-                        enterDTO.setOdeg6(otherIndexVM.getIndexCapacity());
-                        break;
-                    case INRETURNPUMP:
-                        enterDTO.setOdeg7(otherIndexVM.getIndexCapacity());
-                        break;
-                    case OUTRETURNPUMP:
-                        enterDTO.setOdeg8(otherIndexVM.getIndexCapacity());
-                        break;
-                    case FANSTATE:
-                        enterDTO.setOdeg9(otherIndexVM.getIndexCapacity());
-                        break;
-                    default:
-                        throw new BadRequestProblem("核算失败", "不存在该指标");
-                }
-            }
-            // 污泥处置是否为本厂管理
-            enterDTO.setManagedBySelf(vm.getManagedBySelf());
             // 封装因子项
-            enterDTO.setCfE(sewEmiFactorDTO.getProElecEmiFactor().get(vm.getProvinceCode()).getValue());
+
             enterDTO.setCfHp(sewEmiFactorDTO.getGasEmiFactor().getCfhp().getValue());
             enterDTO.setCfCo2(sewEmiFactorDTO.getGasEmiFactor().getCfco2().getValue());
             enterDTO.setCfCh4(sewEmiFactorDTO.getGasEmiFactor().getCfch4().getValue());
@@ -313,7 +167,7 @@ public class SewEmiService {
     }
 
     /**
-     * 封装碳排放数据
+     * 封装数据
      *
      * @param documentCode
      * @param userModel
@@ -339,37 +193,7 @@ public class SewEmiService {
         );
     }
 
-    /**
-     * 封装污水碳排放核算数据
-     *
-     * @param documentCode
-     * @param userModel
-     * @param vm
-     * @param factorVersionNum
-     * @param outputDTO
-     * @param nowInstant
-     * @return
-     */
-    public SewEmiDTO convertToSewEmiDTO(String documentCode,
-                                        UserModel userModel,
-                                        SewEmiAccountVM vm,
-                                        String factorVersionNum,
-                                        WaterCarbonEmissionOutputDTO outputDTO,
-                                        Instant nowInstant) {
-        return new SewEmiDTO(
-            documentCode,
-            vm.getEnterpriseId(),
-            vm.getEnterpriseName(),
-            userModel.getUserId(),
-            userModel.getNickName(),
-            nowInstant,
-            vm.getProvinceCode(),
-            vm.getProvinceName(),
-            vm,
-            factorVersionNum,
-            outputDTO
-        );
-    }
+
 
     /**
      * 调用智能合约接口保存污水厂碳排放核算数据（现将数据保存在MySQL数据库中，此方法暂未用到）
@@ -392,8 +216,6 @@ public class SewEmiService {
         List<Object> list = new ArrayList<>();
         EmiDataDTO emiDataDTO = convertToEmiDataDTO(documentCode, userModel, vm, outputDTO, nowInstant);
         list.add(emiDataDTO);
-        SewEmiDTO sewEmiDTO = convertToSewEmiDTO(documentCode, userModel, vm, enterDTO.getFactorVersionNum(), outputDTO, nowInstant);
-        list.add(sewEmiDTO);
         String requestArgs = "";
         try {
             requestArgs = objectMapper.writeValueAsString(list);
@@ -419,7 +241,7 @@ public class SewEmiService {
     }
 
     /**
-     * 保存碳排放核算信息
+     * 保存核算信息
      *
      * @param documentCode
      * @param userModel
@@ -428,6 +250,7 @@ public class SewEmiService {
      * @param outputDTO
      * @param nowInstant
      */
+    //TODO 保存所有数据到数据库
     public void saveAccountingResultToMySQL(String documentCode, UserModel userModel, SewEmiAccountVM vm, WaterCarbonEmissionEnterDTO enterDTO, WaterCarbonEmissionOutputDTO outputDTO, Instant nowInstant) {
         EmiData emiData = new EmiData()
             .documentCode(documentCode)
@@ -439,7 +262,6 @@ public class SewEmiService {
             .accYear(vm.getAccYear())
             .accMonth(vm.getAccMonth())
             .accTime(vm.getAccYear().concat(vm.getAccMonth()))
-            .industryCode(vm.getIndustryCode())
             .industryName(vm.getIndustryName())
             .carbonEmi(outputDTO.getC())
             .carbonDirEmi(outputDTO.getCDirect())
@@ -448,90 +270,28 @@ public class SewEmiService {
         List<SewProcess> sewProcessList = new ArrayList<>();
         for (SewEmiAccountVM.SewProcessVM processVm : vm.getSewProcesss()) {
             SewProcess sewProcess = new SewProcess()
-                .documentCode(documentCode)
-                .craftCode(processVm.getCraftCode())
-                .inFlow(processVm.getInFlow())
-                .inAmmonia(processVm.getInAmmonia())
-                .inCod(processVm.getInCod())
-                .inTn(processVm.getInTp())
-                .inTp(processVm.getInTn())
-                .inSs(processVm.getInSs())
-                .outFlow(processVm.getOutFlow())
-                .outAmmonia(processVm.getOutAmmonia())
-                .outCod(processVm.getOutCod())
-                .outTn(processVm.getOutTp())
-                .outTp(processVm.getOutTn())
-                .outSs(processVm.getOutSs())
-                .anoxicPoolDo(processVm.getAnoxicPoolDo())
-                .aerobicPoolDo(processVm.getAerobicPoolDo())
-                .anoxicPoolDoOutNit(processVm.getAnoxicPoolDoOutNit())
-                .aerobicPoolNit(processVm.getAerobicPoolNit())
-                .dayTime(processVm.getDayTime());
+                .documentCode(documentCode);
             sewProcessList.add(sewProcess);
         }
         List<SewPot> sewPotList = new ArrayList<>();
         for (SewEmiAccountVM.SewPotVM potVm : vm.getSewPots()) {
             SewPot sewPot = new SewPot()
-                .documentCode(documentCode)
-                .dayInPh(potVm.getDayInPh())
-                .dayOutPh(potVm.getDayOutPh())
-                .dayFirstMud(potVm.getDayFirstMud())
-                .daySecondMud(potVm.getDaySecondMud())
-                .dayReflux(potVm.getDayReflux())
-                .dayCarAdd(potVm.getDayCarAdd())
-                .dayAnaerobicPoolPh(potVm.getDayAnaerobicPoolPh())
-                .dayAnaerobicPoolOrp(potVm.getDayAnaerobicPoolOrp())
-                .dayAnaerobicPoolDo(potVm.getDayAnaerobicPoolDo())
-                .dayAnaerobicPoolSour(potVm.getDayAnaerobicPoolSour())
-                .dayAnaerobicPoolSv(potVm.getDayAnaerobicPoolSv())
-                .dayAnaerobicPoolMlss(potVm.getDayAnaerobicPoolMlss())
-                .dayAnaerobicPoolTemper(potVm.getDayAnaerobicPoolTemper())
-                .dayAnoxicPoolPh(potVm.getDayAnoxicPoolPh())
-                .dayAnoxicPoolOrp(potVm.getDayAnoxicPoolOrp())
-                .dayAnoxicPoolDo(potVm.getDayAnoxicPoolDo())
-                .dayAnoxicPoolSour(potVm.getDayAnoxicPoolSour())
-                .dayAnoxicPoolSv(potVm.getDayAnoxicPoolSv())
-                .dayAnoxicPoolMlss(potVm.getDayAnoxicPoolMlss())
-                .dayAnoxicPoolTemper(potVm.getDayAnoxicPoolTemper())
-                .dayAerobicPoolPh(potVm.getDayAerobicPoolPh())
-                .dayAerobicPoolOrp(potVm.getDayAerobicPoolOrp())
-                .dayAerobicPoolDo(potVm.getDayAerobicPoolDo())
-                .dayAerobicPoolSour(potVm.getDayAerobicPoolSour())
-                .dayAerobicPoolSv(potVm.getDayAerobicPoolSv())
-                .dayAerobicPoolMlss(potVm.getDayAerobicPoolMlss())
-                .dayAerobicPoolMlvss(potVm.getDayAerobicPoolMlvss())
-                .dayAerobicPoolSvi(potVm.getDayAerobicPoolSvi())
-                .dayAerobicPoolTemper(potVm.getDayAerobicPoolTemper())
-                .dayTime(potVm.getDayTime());
+                .documentCode(documentCode);
+
             sewPotList.add(sewPot);
         }
         List<SewSlu> sewSluList = new ArrayList<>();
         for (SewEmiAccountVM.SewSluVM sluVm : vm.getSewSlus()) {
             SewSlu sewSlu = new SewSlu()
-                .documentCode(documentCode)
-                .methodCode(sluVm.getMethodCode())
-                .methodName(sluVm.getMethodName())
-                .assInFlow(sluVm.getInFlow())
-                .assInAmmonia(sluVm.getAssInAmmonia())
-                .assInCod(sluVm.getAssInCod())
-                .assInTp(sluVm.getAssInTp())
-                .assAnoxicPoolDoOutNit(sluVm.getAssAnoxicPoolDoOutNit())
-                .assAerobicPoolDoOutNit(sluVm.getAssAerobicPoolDoOutNit())
-                .assOutFlow(sluVm.getAssOutFlow())
-                .assOutAmmonia(sluVm.getAssOutAmmonia())
-                .assOutCod(sluVm.getAssOutCod())
-                .assOutTn(sluVm.getAssOutTn())
-                .assOutTp(sluVm.getAssOutTp())
-                .dayTime(sluVm.getDayTime());
+                .documentCode(documentCode);
+
             sewSluList.add(sewSlu);
         }
         List<OtherIndex> otherIndexList = new ArrayList<>();
         for (SewEmiAccountVM.OtherIndexVM otherIndexVM : vm.getOtherIndexs()) {
             OtherIndex otherIndex = new OtherIndex()
-                .documentCode(documentCode)
-                .methodCode(otherIndexVM.getMethodCode())
-                .methodName(otherIndexVM.getMethodName())
-                .indexCapacity(otherIndexVM.getIndexCapacity());
+                .documentCode(documentCode);
+
             otherIndexList.add(otherIndex);
         }
         emiDataRepository.save(emiData);
@@ -540,33 +300,6 @@ public class SewEmiService {
         sewPotRepository.saveAll(sewPotList);
         sewSluRepository.saveAll(sewSluList);
         otherIndexRepository.saveAll(otherIndexList);
-    }
-
-    /**
-     * 生成/重新生成 碳排放核算报告（异步）
-     *
-     * @param sewEmiDTO
-     */
-    @Async("taskExecutor")
-    public void asyncGenerateReport(SewEmiDTO sewEmiDTO) {
-        try {
-            CarbonAccountingReport.MergePdf(sewEmiDTO);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    /**
-     * 生成/重新生成 碳排放核算报告（同步）
-     *
-     * @param sewEmiDTO
-     */
-    public void syncGenerateReport(SewEmiDTO sewEmiDTO) {
-        try {
-            CarbonAccountingReport.MergePdf(sewEmiDTO);
-        } catch (Exception e) {
-            throw new BadRequestProblem("生成报告失败", e.getMessage());
-        }
     }
 
     /**
@@ -646,12 +379,6 @@ public class SewEmiService {
             emiVMS.add(vm);
         }
 
-        List<SewMeter> sewMeterList = sewMeterRepository.findByDocumentCode(documentCode);
-        for (SewMeter sewMeter : sewMeterList) {
-            SewEmiVM.SewMeterVM vm = new SewEmiVM.SewMeterVM ();
-            BeanUtils.copyProperties(sewMeter, vm, BeanUtil.getNullPropertyNames(sewMeter));
-            emiVMS.add(vm);
-        }
         return emiVMS;
     }
 

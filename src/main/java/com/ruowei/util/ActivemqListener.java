@@ -2,6 +2,8 @@ package com.ruowei.util;
 
 
 import com.google.gson.Gson;
+import com.ruowei.web.rest.dto.MqReceiveDTO;
+import com.ruowei.web.rest.vm.SewEmiVM;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -38,18 +40,17 @@ public class ActivemqListener {
 
     @JmsListener(destination = "activemq-topic-test3", containerFactory = "topicListener")
     public void readActiveQueue2(Message message) {
-        System.out.println("topic2接受到：" + message);
-//        try {
-//            final MapMessage mapmessage=(MapMessage) message;
-//            final String json =mapmessage.getString("json");
-//
-//            DataDto dataDto = JsonUtil.toEntity(json, DataDto.class,"a");
-////            System.out.println();
-//
-//
-//        } catch (final JMSException e) {
-//            e.printStackTrace();
-//        }
+        System.out.println("topic2接受到：");
+
+        try {
+            final MapMessage mapmessage=(MapMessage) message;
+            final String json =mapmessage.getString("json");
+            final Gson gson= new Gson();
+            final SewEmiVM mqReceiveDTO = gson.fromJson(json, SewEmiVM.class);
+            System.out.println("s");
+        } catch (final JMSException e) {
+            e.printStackTrace();
+        }
     }
 
 }

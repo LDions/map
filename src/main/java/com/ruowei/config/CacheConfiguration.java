@@ -1,6 +1,8 @@
 package com.ruowei.config;
 
 import java.time.Duration;
+
+import com.ruowei.domain.SewEmiThreshold;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.hibernate.cache.jcache.ConfigSettings;
@@ -61,7 +63,7 @@ public class CacheConfiguration {
             createCache(cm, com.ruowei.domain.SewMeter.class.getName());
             createCache(cm, com.ruowei.domain.Craft.class.getName());
             createCache(cm, com.ruowei.domain.EntCraftData.class.getName());
-            createCache(cm, com.ruowei.domain.SewEmithreshold.class.getName());
+            createCache(cm, SewEmiThreshold.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

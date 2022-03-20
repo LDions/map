@@ -9,7 +9,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 
 /**
  * 进出水指标阈值
@@ -18,7 +17,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "sew_emi_threshold")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class SewEmithreshold implements Serializable {
+public class SewEmiThreshold implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -105,7 +104,7 @@ public class SewEmithreshold implements Serializable {
         this.id = id;
     }
 
-    public SewEmithreshold id(Long id) {
+    public SewEmiThreshold id(Long id) {
         this.id = id;
         return this;
     }
@@ -114,7 +113,7 @@ public class SewEmithreshold implements Serializable {
         return this.enterpriseId;
     }
 
-    public SewEmithreshold enterpriseId(Long enterpriseId) {
+    public SewEmiThreshold enterpriseId(Long enterpriseId) {
         this.enterpriseId = enterpriseId;
         return this;
     }
@@ -127,7 +126,7 @@ public class SewEmithreshold implements Serializable {
         return this.inCodLimit;
     }
 
-    public SewEmithreshold inCodLimit(BigDecimal inCodLimit) {
+    public SewEmiThreshold inCodLimit(BigDecimal inCodLimit) {
         this.inCodLimit = inCodLimit;
         return this;
     }
@@ -141,7 +140,7 @@ public class SewEmithreshold implements Serializable {
         return this.inTotalNLimit;
     }
 
-    public SewEmithreshold inTotalNLimit(BigDecimal inTotalNLimit) {
+    public SewEmiThreshold inTotalNLimit(BigDecimal inTotalNLimit) {
         this.inTotalNLimit = inTotalNLimit;
         return this;
     }
@@ -154,7 +153,7 @@ public class SewEmithreshold implements Serializable {
         return this.inTotalANLimit;
     }
 
-    public SewEmithreshold inTotalANLimit(BigDecimal inTotalANLimit) {
+    public SewEmiThreshold inTotalANLimit(BigDecimal inTotalANLimit) {
         this.inTotalANLimit = inTotalANLimit;
         return this;
     }
@@ -167,7 +166,7 @@ public class SewEmithreshold implements Serializable {
         return this.inTotalPLimit;
     }
 
-    public SewEmithreshold inTotalPLimit(BigDecimal inTotalPLimit) {
+    public SewEmiThreshold inTotalPLimit(BigDecimal inTotalPLimit) {
         this.inTotalPLimit = inTotalPLimit;
         return this;
     }
@@ -180,7 +179,7 @@ public class SewEmithreshold implements Serializable {
         return this.outCodLimit;
     }
 
-    public SewEmithreshold outCodLimit(BigDecimal outCodLimit) {
+    public SewEmiThreshold outCodLimit(BigDecimal outCodLimit) {
         this.outCodLimit = outCodLimit;
         return this;
     }
@@ -193,7 +192,7 @@ public class SewEmithreshold implements Serializable {
         return this.outTotalNLimit;
     }
 
-    public SewEmithreshold outTotalNLimit(BigDecimal outTotalNLimit) {
+    public SewEmiThreshold outTotalNLimit(BigDecimal outTotalNLimit) {
         this.outTotalNLimit = outTotalNLimit;
         return this;
     }
@@ -206,7 +205,7 @@ public class SewEmithreshold implements Serializable {
         return this.outTotalANLimit;
     }
 
-    public SewEmithreshold outTotalANLimit(BigDecimal outTotalANLimit) {
+    public SewEmiThreshold outTotalANLimit(BigDecimal outTotalANLimit) {
         this.outTotalANLimit = outTotalANLimit;
         return this;
     }
@@ -219,7 +218,7 @@ public class SewEmithreshold implements Serializable {
         return this.outTotalPLimit;
     }
 
-    public SewEmithreshold outTotalPLimit(BigDecimal outTotalPLimit) {
+    public SewEmiThreshold outTotalPLimit(BigDecimal outTotalPLimit) {
         this.outTotalPLimit = outTotalPLimit;
         return this;
     }
@@ -231,7 +230,7 @@ public class SewEmithreshold implements Serializable {
     public SendStatusType getStatus() {
         return status;
     }
-    public SewEmithreshold status(SendStatusType status) {
+    public SewEmiThreshold status(SendStatusType status) {
         this.status = status;
         return this;
     }
@@ -246,10 +245,10 @@ public class SewEmithreshold implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SewEmithreshold)) {
+        if (!(o instanceof SewEmiThreshold)) {
             return false;
         }
-        return id != null && id.equals(((SewEmithreshold) o).id);
+        return id != null && id.equals(((SewEmiThreshold) o).id);
     }
 
     @Override
