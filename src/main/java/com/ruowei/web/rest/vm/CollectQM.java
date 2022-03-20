@@ -8,6 +8,10 @@ import java.util.List;
 @Data
 public class CollectQM {
 
+    private Long total;
+
+    private Long id;
+
     @ApiModelProperty(value = "被关联的数据")
     private SituationAnalysisQM beAssociated;
 

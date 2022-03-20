@@ -4,6 +4,7 @@ import com.ruowei.domain.SewMeter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ import java.util.List;
 public interface SewMeterRepository extends JpaRepository<SewMeter,Long>{
 
     List<SewMeter> findByDocumentCode(String documentCode);
+
+    List<SewMeter> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 }

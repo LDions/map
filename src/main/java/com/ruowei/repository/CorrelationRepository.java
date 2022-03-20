@@ -17,4 +17,6 @@ public interface CorrelationRepository extends JpaRepository<Correlation, Long>,
 
     List<Correlation> findByRelevanceId(Long id);
 
+    void deleteAllByRelevanceId(Long id);
+
 }

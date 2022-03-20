@@ -153,11 +153,18 @@ public class SewProcess implements Serializable {
     private BigDecimal aerobicPoolNit;
 
     /**
-     * 日报表时间 yyyy/MM/dd HH:mm:ss
+     * 时间 yyyy/MM/dd HH:mm:ss
      */
     @ApiModelProperty(value = "日报表时间", required = true)
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
+
+    /**
+     * 所属工艺ID
+     */
+    @ApiModelProperty(value = "日报表时间", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
 
     /**
      * 数据推送状态
@@ -415,6 +422,17 @@ public class SewProcess implements Serializable {
         return this;
     }
 
+    public Long getCraftId() {
+        return craftId;
+    }
+    public SewProcess craftId(Long craftId) {
+        this.craftId = craftId;
+        return this;
+    }
+    public void setCraftId(Long craftId) {
+        this.craftId = craftId;
+    }
+
     public SendStatusType getStatus() {
         return status;
     }
@@ -469,6 +487,7 @@ public class SewProcess implements Serializable {
             ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
             ", aerobicPoolNit=" + getAerobicPoolNit() +
             ", dayTime=" + getDayTime() +
+            ", craftId=" + getCraftId() +
             ", status=" + getStatus() +
             "}";
     }

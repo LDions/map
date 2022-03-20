@@ -22,6 +22,7 @@ import com.ruowei.web.rest.vm.CarbonEmiMonthVM;
 import com.ruowei.web.rest.vm.CarbonEmiQM;
 import com.ruowei.web.rest.vm.SewEmiAccountVM;
 import com.ruowei.web.rest.vm.SewEmiVM;
+import liquibase.pro.packaged.S;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -194,7 +195,6 @@ public class SewEmiService {
     }
 
 
-
     /**
      * 调用智能合约接口保存污水厂碳排放核算数据（现将数据保存在MySQL数据库中，此方法暂未用到）
      *
@@ -255,18 +255,17 @@ public class SewEmiService {
         EmiData emiData = new EmiData()
             .documentCode(documentCode)
             .enterpriseId(vm.getEnterpriseId())
-            .enterpriseName(vm.getEnterpriseName())
-            .reporterId(userModel.getUserId())
-            .reporterName(userModel.getNickName())
-            .reportTime(nowInstant)
+            .acctype(vm.getAcctype())
             .accYear(vm.getAccYear())
             .accMonth(vm.getAccMonth())
-            .accTime(vm.getAccYear().concat(vm.getAccMonth()))
-            .industryName(vm.getIndustryName())
-            .carbonEmi(outputDTO.getC())
-            .carbonDirEmi(outputDTO.getCDirect())
-            .carbonIndirEmi(outputDTO.getCIndirect())
-            .carbonRed(outputDTO.getCReduction());
+            .accTimeStart(vm.getAccTimeStart())
+            .accTimeStop(vm.getAccTimeStop())
+            .predictTime(vm.getPredictTime())
+            .craftId(vm.getCraftId())
+            .totalOutN(vm.getTotalOutN())
+            .outAN(vm.getOutAN())
+            .carbonAdd(vm.getCarbonAdd())
+            .phosphorusremover(vm.getPhosphorusremover());
         List<SewProcess> sewProcessList = new ArrayList<>();
         for (SewEmiAccountVM.SewProcessVM processVm : vm.getSewProcesss()) {
             SewProcess sewProcess = new SewProcess()
@@ -383,71 +382,74 @@ public class SewEmiService {
     }
 
     /**
-     * 根据单据号获取污水厂碳排放数据，并封装为SewDetailDTO
-     *
-     * @param documentCode 单据号
-     * @return
+     * 根据来源及id获取详情数据
      */
-    public void modificationByDocumentCode(String documentCode,SewDetailsDTO.SewProcessDTO sewProcessDTO) {
+    public List<SewEmiVM> getTerget(Long id, String source) {
 
-        for (SewProcess sew:sewProcessRepository.findByDocumentCode(documentCode)) {
-            sew.setId(sewProcessDTO.getId());
-            sew.setInAmmonia(sewProcessDTO.getInAmmonia());
-            sew.setInCod(sewProcessDTO.getInCod());
-            sew.setInFlow(sewProcessDTO.getInFlow());
-            sew.setInSs(sewProcessDTO.getInSs());
-            sew.setInTn(sewProcessDTO.getInTn());
-            sew.setInTp(sewProcessDTO.getInTp());
-            sew.setOutAmmonia(sewProcessDTO.getOutAmmonia());
-            sew.setOutCod(sewProcessDTO.getOutCod());
-            sew.setOutFlow(sewProcessDTO.getOutFlow());
-            sew.setOutSs(sewProcessDTO.getOutSs());
-            sew.setOutTn(sewProcessDTO.getOutTn());
-            sew.setOutTp(sewProcessDTO.getOutTp());
-            sewProcessRepository.save(sew);
+        List<SewEmiVM> emiVMS = new ArrayList<>();
+
+        switch (source) {
+            case "meter":
+                SewProcess sewProcess = sewProcessRepository.findById(id).get();
+                SewEmiVM.SewProcessVM vm = new SewEmiVM.SewProcessVM();
+                BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
+                emiVMS.add(vm);
+                break;
+            case "assay":
+                SewPot sewPot = sewPotRepository.findById(id).get();
+                SewEmiVM.SewPotVM vm1 = new SewEmiVM.SewPotVM();
+                BeanUtils.copyProperties(sewPot, vm1, BeanUtil.getNullPropertyNames(sewPot));
+                emiVMS.add(vm1);
+                break;
+            case "daily":
+                SewSlu sewSlu = sewSluRepository.findById(id).get();
+
+                    SewEmiVM.SewSluVM vm2 = new SewEmiVM.SewSluVM();
+                    BeanUtils.copyProperties(sewSlu, vm2, BeanUtil.getNullPropertyNames(sewSlu));
+                    emiVMS.add(vm2);
+                break;
+            case "verify":
+                SewMeter sewMeter = sewMeterRepository.findById(id).get();
+                SewEmiVM.SewMeterVM vm3 = new SewEmiVM.SewMeterVM();
+                BeanUtils.copyProperties(sewMeter, vm3, BeanUtil.getNullPropertyNames(sewMeter));
+                emiVMS.add(vm3);
         }
+        return emiVMS;
     }
-
 
     /**
-     * 封装碳排放核算列表数据查询条件
      *
-     * @param qm
-     * @param qEmiData
-     * @param userModel
-     * @return
-     */
-    public BooleanBuilder convertCarbonEmiQuery(CarbonEmiQM qm, QEmiData qEmiData, UserModel userModel) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (StringUtils.isNotBlank(qm.getDocumentCode())) {
-            booleanBuilder.and(qEmiData.documentCode.contains(qm.getDocumentCode()));
-        }
-        if (StringUtils.isNotBlank(qm.getIndustryCode())) {
-            booleanBuilder.and(qEmiData.industryCode.eq(qm.getIndustryCode()));
-        }
-        if (userModel.getEnterpriseId() != null) {
-            booleanBuilder.and(qEmiData.enterpriseId.eq(userModel.getEnterpriseId()));
-        }
-        if (StringUtils.isNotBlank(qm.getEnterpriseName())) {
-            booleanBuilder.and(qEmiData.enterpriseName.contains(qm.getEnterpriseName()));
-        }
-        if (StringUtils.isNotBlank(qm.getReporterName())) {
-            booleanBuilder.and(qEmiData.reporterName.contains(qm.getReporterName()));
-        }
-        if (StringUtils.isNotBlank(qm.getAccYearFrom()) && StringUtils.isNotBlank(qm.getAccMonthFrom())) {
-            booleanBuilder.and(qEmiData.accTime.goe(qm.getAccYearFrom().concat(qm.getAccMonthFrom())));
-        }
-        if (StringUtils.isNotBlank(qm.getAccYearTo()) && StringUtils.isNotBlank(qm.getAccMonthTo())) {
-            booleanBuilder.and(qEmiData.accTime.loe(qm.getAccYearTo().concat(qm.getAccMonthTo())));
-        }
-        if (StringUtils.isNotBlank(qm.getReportTimeFrom())) {
-            booleanBuilder.and(qEmiData.reportTime.after(DateUtil.stringToInstant(qm.getReportTimeFrom())));
-        }
-        if (StringUtils.isNotBlank(qm.getReportTimeTo())) {
-            booleanBuilder.and(qEmiData.reportTime.before(DateUtil.stringToInstant(qm.getReportTimeTo())));
-        }
-        return booleanBuilder;
-    }
+     * 批量修改
+     *
+     * */
+    public void modificationByDocumentCode(Long id, SewDetailsDTO sewProcessDTO,String source) {
+
+       /* switch (source){
+            case "meter":
+                SewProcess sewProcess = sewProcessRepository.findById(id).get();
+                sewProcess.setAerobicPoolDo(sewProcessDTO.getClass());
+                for (SewProcess sew : sewProcessRepository.findByDocumentCode(documentCode)) {
+                    sew.setId(sewProcessDTO.getId());
+                    sew.setInAmmonia(sewProcessDTO.getInAmmonia());
+                    sew.setInCod(sewProcessDTO.getInCod());
+                    sew.setInFlow(sewProcessDTO.getInFlow());
+                    sew.setInSs(sewProcessDTO.getInSs());
+                    sew.setInTn(sewProcessDTO.getInTn());
+                    sew.setInTp(sewProcessDTO.getInTp());
+                    sew.setOutAmmonia(sewProcessDTO.getOutAmmonia());
+                    sew.setOutCod(sewProcessDTO.getOutCod());
+                    sew.setOutFlow(sewProcessDTO.getOutFlow());
+                    sew.setOutSs(sewProcessDTO.getOutSs());
+                    sew.setOutTn(sewProcessDTO.getOutTn());
+                    sew.setOutTp(sewProcessDTO.getOutTp());
+                    sewProcessRepository.save(sew);
+                };
+            case "assay":;
+            case "daily":;
+            case "verify":;
+            default:;
+        }*/
+}
 
 //    /**
 //     * 获取上一个月（下一个月）污水厂碳排放详情接口
@@ -628,7 +630,7 @@ public class SewEmiService {
         return emiFactorRepository.save(emiFactor);
     }
 
-    public Instant getInstant(String string){
+    public Instant getInstant(String string) {
         if (string == null) return null;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         //将 string 装换成带有 T 的国际时间，但是没有进行，时区的转换，即没有将时间转为国际时间，只是格式转为国际时间

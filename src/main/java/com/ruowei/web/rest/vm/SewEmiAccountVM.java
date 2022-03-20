@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -17,25 +18,44 @@ import java.util.List;
 public class SewEmiAccountVM {
     //TODO 待修改 一次核算所需所有参数
 
-    @NotNull(message = "请选择企业")
-    @ApiModelProperty(value = "企业ID", required = true)
+    @ApiModelProperty(value = "单据号", required = true)
+    private String documentCode;
+
+    @ApiModelProperty(value = "水厂ID", required = true)
     private Long enterpriseId;
 
-    @NotEmpty(message = "请选择企业")
-    @ApiModelProperty(value = "企业名称", required = true)
-    private String enterpriseName;
+    @ApiModelProperty(value = "核算方式（自动、手动）", required = true)
+    private String acctype;
 
-    @NotEmpty(message = "请选择行业类型")
-    @ApiModelProperty(value = "行业类型名称", required = true)
-    private String industryName;
-
-    @NotEmpty(message = "请输入核算时间")
     @ApiModelProperty(value = "核算年份", required = true)
     private String accYear;
 
-    @NotEmpty(message = "请输入核算时间")
     @ApiModelProperty(value = "核算月份", required = true)
     private String accMonth;
+
+    @ApiModelProperty(value = "核算时间范围起", required = true)
+    private String accTimeStart;
+
+    @ApiModelProperty(value = "核算时间范围止", required = true)
+    private String accTimeStop;
+
+    @ApiModelProperty(value = "预测未来时间", required = true)
+    private String predictTime;
+
+    @ApiModelProperty(value = "工艺id", required = true)
+    private Long craftId;
+
+    @ApiModelProperty(value = "出水总氮", required = true)
+    private BigDecimal totalOutN;
+
+    @ApiModelProperty(value = "出水氨氮", required = true)
+    private BigDecimal outAN;
+
+    @ApiModelProperty(value = "碳源投加量）", required = true)
+    private BigDecimal carbonAdd;
+
+    @ApiModelProperty(value = "除磷药剂）", required = true)
+    private BigDecimal phosphorusremover;
 
     @ApiModelProperty(value = "仪表数据")
     private List<SewProcessVM> sewProcesss;

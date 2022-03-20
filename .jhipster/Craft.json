@@ -2,15 +2,15 @@
   "name": "Craft",
   "fields": [
     {
-      "fieldName": "name",
+      "fieldName": "craftName",
       "fieldType": "String",
       "javadoc": "工艺名称"
     },{
-      "fieldName": "craftName",
+      "fieldName": "processName",
       "fieldType": "String",
       "javadoc": "工艺段名称"
     },{
-      "fieldName": "craftCapacity",
+      "fieldName": "processCapacity",
       "fieldType": "BigDecimal",
       "javadoc": "工艺段池容"
     },{

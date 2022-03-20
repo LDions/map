@@ -23,5 +23,5 @@ public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
      */
     List<SewProcess> findByDocumentCode(@NotNull String documentCode);
 
-
+    List<SewProcess> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 }

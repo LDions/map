@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -20,4 +21,6 @@ public interface SewSluRepository extends JpaRepository<SewSlu, Long> {
      * @return
      */
     List<SewSlu> findByDocumentCode(@NotNull String documentCode);
+
+    List<SewSlu> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 }

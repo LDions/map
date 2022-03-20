@@ -15,7 +15,7 @@ import java.time.Instant;
 
 @ApiModel(description = "指标关联表")
 @Entity
-@Table(name = "sew_Correlation")
+@Table(name = "sew_correlation")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
 public class Correlation {
@@ -43,7 +43,7 @@ public class Correlation {
     /**
      * 关联数据来源
      */
-    @ApiModelProperty(value = "关联数据Id")
+    @ApiModelProperty(value = "被关联数据Id")
     @Column(name = "relevance_id")
     private Long relevanceId;
 

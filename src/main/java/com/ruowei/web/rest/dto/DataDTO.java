@@ -34,6 +34,6 @@ public class DataDTO {
         private Long id;
 
         @ApiModelProperty(value = "工艺段名称")
-        private String name;
+        private String craftName;
     }
 }

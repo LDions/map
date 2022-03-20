@@ -31,15 +31,15 @@ public class Craft {
      * 工艺名称
      */
     @ApiModelProperty(value = "工艺名称")
-    @Column(name = "name")
-    private String name;
+    @Column(name = "craft_name")
+    private String craftName;
 
     /**
      * 工艺段名称
      */
     @ApiModelProperty(value = "工艺段名称")
-    @Column(name = "craft_name")
-    private String craftName;
+    @Column(name = "process_name")
+    private String processName;
 
     /**
      * 工艺段编号
@@ -52,8 +52,8 @@ public class Craft {
      * 工艺段池容
      */
     @ApiModelProperty(value = "工艺段池容")
-    @Column(name = "craft_capacity")
-    private BigDecimal craftCapacity;
+    @Column(name = "process_capacity")
+    private BigDecimal processCapacity;
 
     /**
      * 内回流比
@@ -182,17 +182,7 @@ public class Craft {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-    public Craft name(String name) {
-        this.name = name;
-        return this;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getProcessPeriod() {
         return processPeriod;
@@ -216,15 +206,26 @@ public class Craft {
         this.craftName = craftName;
     }
 
-    public BigDecimal getCraftCapacity() {
-        return craftCapacity;
+    public String getProcessName() {
+        return processName;
     }
-    public Craft craftCapacity(BigDecimal craftCapacity) {
-        this.craftCapacity = craftCapacity;
+    public Craft processName(String processName) {
+        this.processName = processName;
         return this;
     }
-    public void setCraftCapacity(BigDecimal craftCapacity) {
-        this.craftCapacity = craftCapacity;
+    public void setProcessName(String processName) {
+        this.processName = processName;
+    }
+
+    public BigDecimal getProcessCapacity() {
+        return processCapacity;
+    }
+    public Craft processCapacity(BigDecimal processCapacity) {
+        this.processCapacity = processCapacity;
+        return this;
+    }
+    public void setProcessCapacity(BigDecimal processCapacity) {
+        this.processCapacity = processCapacity;
     }
 
     public BigDecimal getInRefluxRatio() {
@@ -435,10 +436,10 @@ public class Craft {
     public String toString() {
         return "Craft{" +
             "id=" + id +
-            ", name='" + name + '\'' +
             ", craftName='" + craftName + '\'' +
+            ", processName='" + processName + '\'' +
             ", processPeriod='" + processPeriod + '\'' +
-            ", craftCapacity=" + craftCapacity +
+            ", processCapacity=" + processCapacity +
             ", inRefluxRatio=" + inRefluxRatio +
             ", outRefluxRatio=" + outRefluxRatio +
             ", aerobioticNitrateConcentration=" + aerobioticNitrateConcentration +
@@ -455,6 +456,7 @@ public class Craft {
             ", feAlActiveIngredients=" + feAlActiveIngredients +
             ", concentration=" + concentration +
             ", entId=" + entId +
+            ", entName='" + entName + '\'' +
             '}';
     }
 }

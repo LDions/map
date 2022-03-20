@@ -135,6 +135,10 @@
       "fieldName": "status",
       "fieldType": "SendStatusType",
       "javadoc": "数据推送状态"
+    },{
+      "fieldName": "craftId",
+      "fieldType": "Long",
+      "javadoc": "所属工艺Id"
     }
   ],
   "relationships": [],

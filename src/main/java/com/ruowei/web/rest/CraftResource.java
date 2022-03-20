@@ -55,7 +55,7 @@ public class CraftResource {
         if (craft.getId() != null) {
             throw new BadRequestProblem("新增失败", "新增时ID必须为空");
         }
-        craftRepository.getFirstByName(craft.getName())
+        craftRepository.getFirstByCraftName(craft.getCraftName())
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "工艺名称已存在");
             });

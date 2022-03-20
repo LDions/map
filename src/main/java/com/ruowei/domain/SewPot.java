@@ -250,6 +250,13 @@ public class SewPot implements Serializable {
     @Column(name = "status", nullable = false)
     private SendStatusType status;
 
+    /**
+     * 所属工艺ID
+     */
+    @ApiModelProperty(value = "日报表时间", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
+
     public SendStatusType getStatus() {
         return status;
     }
@@ -622,6 +629,18 @@ public class SewPot implements Serializable {
         return this;
     }
 
+    public Long getCraftId() {
+        return craftId;
+    }
+
+    public void setCraftId(Long craftId) {
+        this.craftId = craftId;
+    }
+    public SewPot craftId(Long craftId) {
+        this.craftId = craftId;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -675,6 +694,7 @@ public class SewPot implements Serializable {
             ", dayAerobicPoolSvi='" + getDayAerobicPoolSvi() + "'" +
             ", dayAerobicPoolTemper='" + getDayAerobicPoolTemper() + "'" +
             ", dayTime='" + getDayTime() + "'" +
+            ", craftId='" + getCraftId() + "'" +
             ", status='" + getStatus() + "'" +
             "}";
     }

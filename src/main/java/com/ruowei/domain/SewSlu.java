@@ -146,6 +146,13 @@ public class SewSlu implements Serializable {
     @Column(name = "status", nullable = false)
     private SendStatusType status;
 
+    /**
+     * 所属工艺ID
+     */
+    @ApiModelProperty(value = "日报表时间", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
+
     public SendStatusType getStatus() {
         return status;
     }
@@ -354,6 +361,17 @@ public class SewSlu implements Serializable {
         return this;
     }
 
+    public Long getCraftId() {
+        return craftId;
+    }
+
+    public void setCraftId(Long craftId) {
+        this.craftId = craftId;
+    }
+    public SewSlu craftId(Long craftId) {
+        this.craftId = craftId;
+        return this;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -373,28 +391,28 @@ public class SewSlu implements Serializable {
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "SewSlu{" +
-            "id=" + getId() +
-            ", documentCode='" + getDocumentCode() + "'" +
-            ", methodCode='" + getMethodCode() + "'" +
-            ", methodName='" + getMethodName() + "'" +
-            ", assInFlow='" + getAssInFlow() + "'" +
-            ", assInAmmonia='" + getAssInAmmonia() + "'" +
-            ", assInCod='" + getAssInCod() + "'" +
-            ", assInTn='" + getAssInTn() + "'" +
-            ", assInTp='" + getAssInTp() + "'" +
-            ", assAnoxicPoolDoOutNit='" + getAssAnoxicPoolDoOutNit() + "'" +
-            ", assAerobicPoolDoOutNit='" + getAssAerobicPoolDoOutNit() + "'" +
-            ", assOutFlow='" + getAssOutFlow() + "'" +
-            ", assOutAmmonia='" + getAssOutAmmonia() + "'" +
-            ", assOutCod='" + getAssOutCod() + "'" +
-            ", assOutTn='" + getAssOutTn() + "'" +
-            ", assOutTp='" + getAssOutTp() + "'" +
-            ", dayTime='" + getDayTime() + "'" +
-            ", status='" + getStatus() + "'" +
-            "}";
+            "id=" + id +
+            ", documentCode='" + documentCode + '\'' +
+            ", methodCode='" + methodCode + '\'' +
+            ", methodName='" + methodName + '\'' +
+            ", assInFlow=" + assInFlow +
+            ", assInAmmonia=" + assInAmmonia +
+            ", assInCod=" + assInCod +
+            ", assInTn=" + assInTn +
+            ", assInTp=" + assInTp +
+            ", assAnoxicPoolDoOutNit=" + assAnoxicPoolDoOutNit +
+            ", assAerobicPoolDoOutNit=" + assAerobicPoolDoOutNit +
+            ", assOutFlow=" + assOutFlow +
+            ", assOutAmmonia=" + assOutAmmonia +
+            ", assOutCod=" + assOutCod +
+            ", assOutTn=" + assOutTn +
+            ", assOutTp=" + assOutTp +
+            ", dayTime=" + dayTime +
+            ", status=" + status +
+            ", craftId=" + craftId +
+            '}';
     }
 }

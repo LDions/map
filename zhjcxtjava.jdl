@@ -81,10 +81,10 @@ entity Enterprise(sys_enterprise) {
 /** 工艺信息 */
 entity Craft(craft){
 	enterpriseId Long required/** 所属水厂Id */
-    name String /** 工艺名称 */
-    craftName String /** 工艺段名称 */
+    craftName String /** 工艺名称 */
+    processName String /** 工艺段名称 */
     processPeriod String /** 工艺段编号 */
-    craftCapacity BigDecimal /** 工艺段池容 */
+    processCapacity BigDecimal /** 工艺段池容 */
     inRefluxRatio BigDecimal /** 内回流比 */
     outRefluxRatio BigDecimal /** 外回流比 */
     aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
@@ -111,7 +111,7 @@ entity EmiData(emi_data) {
     accTimeStart String required /** 核算时间范围起 */
     accTimeStop String required /** 核算时间范围止 */
     predictTime String required /** 预测未来时间 */
-    craftId String required /** 工艺id */
+    craftId Long required /** 工艺id */
     totalOutN BigDecimal required /** 出水总氮 */
     outAN BigDecimal required /** 出水氨氮 */
     carbonAdd BigDecimal required /** 碳源投加量 */
@@ -143,6 +143,7 @@ entity SewProcess(sew_process) {
     aerobicPoolNit BigDecimal /** 好氧池出口亚硝酸盐（mg/L） */
     dayTime Instant /** 采集时间 */
     status SendStatusType required /** 数据推送状态 */
+    craftId Long required /** 上属工艺ID */
 }
 /** 化验数据 */
 entity SewSlu(sew_slu) {
@@ -159,6 +160,7 @@ entity SewSlu(sew_slu) {
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 采集时间 */
     status SendStatusType required /** 数据推送状态 */
+    craftId Long required /** 上属工艺ID */
 }
 /** 日报表数据 */
 entity SewPot(sew_pot) {
@@ -198,6 +200,7 @@ entity SewPot(sew_pot) {
 	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 	dayTime Instant /** 采集时间 */
 	status SendStatusType required /** 数据推送状态 */
+	craftId Long required /** 上属工艺ID */
 }
 /** 数据校验表 */
 entity SewMeter(sew_meter){
@@ -214,6 +217,7 @@ entity SewMeter(sew_meter){
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 时间 */
     status SendStatusType required /** 数据推送状态 */
+    craftId Long required /** 上属工艺ID */
 }
 
 /** 其他指标 */

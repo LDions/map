@@ -52,6 +52,10 @@
       "fieldName": "dayTime",
       "fieldType": "Instant",
       "javadoc": "采集时间"
+    },{
+      "fieldName": "craftId",
+      "fieldType": "Long",
+      "javadoc": "所属工艺Id"
     }
   ],
   "relationships": [],
