@@ -150,7 +150,7 @@ public class EnterpriseResource {
             dto.setName(userModel.getEnterpriseName());
             result.add(dto);
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(result);
     }
 }
 
