@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.Enterprise;
 import com.ruowei.domain.QEnterprise;
 import com.ruowei.domain.QUser;
-import com.ruowei.domain.User;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
