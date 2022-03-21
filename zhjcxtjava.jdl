@@ -143,7 +143,8 @@ entity SewProcess(sew_process) {
     anoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
     aerobicPoolNit BigDecimal /** 好氧池出口亚硝酸盐（mg/L） */
     dayTime Instant /** 采集时间 */
-    status SendStatusType required /** 数据推送状态 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
     craftId Long required /** 工艺ID */
 }
 /** 化验数据 */
@@ -160,7 +161,8 @@ entity SewSlu(sew_slu) {
     assOutTn BigDecimal required /** 出水TN（mg/L） */
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 采集时间 */
-    status SendStatusType required /** 数据推送状态 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
     craftId Long required /** 工艺ID */
 }
 /** 日报表数据 */
@@ -200,7 +202,8 @@ entity SewPot(sew_pot) {
     dayAerobicPoolSvi Bigdecimal /** 生化池-好氧池SVI（）*/
 	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
 	dayTime Instant /** 采集时间 */
-	status SendStatusType required /** 数据推送状态 */
+	status SendStatusType required /** 集团数据推送状态 */
+	plateStatus SendStatusType required /** 平台数据推送状态 */
 	craftId Long required /** 工艺ID */
 }
 /** 数据校验表 */
@@ -217,7 +220,8 @@ entity SewMeter(sew_meter){
     assOutTn BigDecimal /** 出水TN（mg/L） */
     assOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 时间 */
-    status SendStatusType required /** 数据推送状态 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
     craftId Long required /** 工艺ID */
 }
 
@@ -227,7 +231,8 @@ entity OtherIndex(sew_index) {
     methodCode String required /** 其他指标编码 */
     methodName String required /** 其他指标名称 */
     indexCapacity BigDecimal /** 指标量（kg/m）*/
-    status SendStatusType required /** 数据推送状态 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
 }
 
 /**
@@ -272,5 +277,6 @@ entity SewEmithreshold(sew_emi_threshold) {
     outTotalNLimit BigDecimal required /** 出水总氮上限 */
     outTotalANLimit BigDecimal required /** 出水氨氮期上限 */
     outTotalPLimit BigDecimal required /** 出水总磷期上限 */
-    status SendStatusType required /** 数据推送状态 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
 }

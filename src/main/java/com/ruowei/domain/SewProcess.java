@@ -167,12 +167,18 @@ public class SewProcess implements Serializable {
     private Long craftId;
 
     /**
-     * 数据推送状态
+     * 集团数据推送状态
      */
-    @ApiModelProperty(value = "数据推送状态", required = true)
-    @Enumerated(EnumType.STRING)
+    @ApiModelProperty(value = "集团数据推送状态", required = true)
     @Column(name = "status", nullable = false)
     private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态", required = true)
+    @Column(name = "plate_status", nullable = false)
+    private SendStatusType plateStatus;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -445,7 +451,14 @@ public class SewProcess implements Serializable {
         this.status = status;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
+// jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
