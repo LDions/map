@@ -79,7 +79,7 @@ public class EnterpriseResource {
         Enterprise enterprise = new Enterprise();
         BeanUtils.copyProperties(vm, enterprise);
         Enterprise save = enterpriseRepository.save(enterprise);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(save);
     }
 
     @PutMapping("/enterprise")
