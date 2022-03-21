@@ -140,11 +140,18 @@ public class SewSlu implements Serializable {
     private Instant dayTime;
 
     /**
-     * 数据推送状态
+     * 集团数据推送状态
      */
-    @ApiModelProperty(value = "数据推送状态", required = true)
+    @ApiModelProperty(value = "集团数据推送状态", required = true)
     @Column(name = "status", nullable = false)
     private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态", required = true)
+    @Column(name = "plate_status", nullable = false)
+    private SendStatusType plateStatus;
 
     /**
      * 所属工艺ID
@@ -372,6 +379,15 @@ public class SewSlu implements Serializable {
         this.craftId = craftId;
         return this;
     }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

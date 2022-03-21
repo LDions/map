@@ -1,6 +1,7 @@
 package com.ruowei.domain;
 
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -117,6 +118,20 @@ public class SewMeter {
     @ApiModelProperty(value = "日报表时间", required = true)
     @Column(name = "craft_id", nullable = false)
     private Long craftId;
+
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态", required = true)
+    @Column(name = "status", nullable = false)
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态", required = true)
+    @Column(name = "plate_status", nullable = false)
+    private SendStatusType plateStatus;
 
     public Long getId() {
         return id;
@@ -269,6 +284,23 @@ public class SewMeter {
         this.craftId = craftId;
         return this;
     }
+
+    public SendStatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

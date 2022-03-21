@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
@@ -55,6 +56,20 @@ public class OtherIndex implements Serializable {
     @ApiModelProperty(value = "污泥处置量（kg/m）")
     @Column(name = "index_capacity", precision = 21, scale = 2)
     private BigDecimal indexCapacity;
+
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态", required = true)
+    @Column(name = "status", nullable = false)
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态", required = true)
+    @Column(name = "plate_status", nullable = false)
+    private SendStatusType plateStatus;
 
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -123,7 +138,21 @@ public class OtherIndex implements Serializable {
         this.indexCapacity = indexCapacity;
     }
 
+    public SendStatusType getStatus() {
+        return status;
+    }
 
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
