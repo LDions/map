@@ -31,13 +31,6 @@ public class Enterprise implements Serializable {
     private String name;
 
     /**
-     * 设备名称
-     */
-    @ApiModelProperty(value = "设备名称")
-    @Column(name = "equipment_name")
-    private String equipmentName;
-
-    /**
      * 数据类型
      */
     @ApiModelProperty(value = "经营详细地址")
@@ -52,9 +45,9 @@ public class Enterprise implements Serializable {
     private String remark;
 
     /**
-     * 点数据名称
+     * 是否为试点水厂
      */
-    @ApiModelProperty(value = "是否为试点水厂")
+    @ApiModelProperty(value = "是否为试点水厂",required = true)
     @Column(name = "is_try")
     private String isTry;
 
@@ -104,18 +97,6 @@ public class Enterprise implements Serializable {
     }
     public Enterprise name(String name) {
         this.name = name;
-        return this;
-    }
-
-    public String getEquipmentName() {
-        return equipmentName;
-    }
-
-    public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
-    }
-    public Enterprise equipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
         return this;
     }
 
@@ -212,7 +193,6 @@ public class Enterprise implements Serializable {
         return "Enterprise{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", equipmentName='" + getEquipmentName() + "'" +
             ", enterpriseAddress='" + getEnterpriseAddress() + "'" +
             ", remark='" + getRemark() + "'" +
             ", isTry='" + getIsTry() + "'" +

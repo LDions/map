@@ -395,18 +395,17 @@ public class SewEmiService {
                 BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
                 emiVMS.add(vm);
                 break;
-            case "assay":
+            case "daily":
                 SewPot sewPot = sewPotRepository.findById(id).get();
                 SewEmiVM.SewPotVM vm1 = new SewEmiVM.SewPotVM();
                 BeanUtils.copyProperties(sewPot, vm1, BeanUtil.getNullPropertyNames(sewPot));
                 emiVMS.add(vm1);
                 break;
-            case "daily":
+            case "assay":
                 SewSlu sewSlu = sewSluRepository.findById(id).get();
-
-                    SewEmiVM.SewSluVM vm2 = new SewEmiVM.SewSluVM();
-                    BeanUtils.copyProperties(sewSlu, vm2, BeanUtil.getNullPropertyNames(sewSlu));
-                    emiVMS.add(vm2);
+                SewEmiVM.SewSluVM vm2 = new SewEmiVM.SewSluVM();
+                BeanUtils.copyProperties(sewSlu, vm2, BeanUtil.getNullPropertyNames(sewSlu));
+                emiVMS.add(vm2);
                 break;
             case "verify":
                 SewMeter sewMeter = sewMeterRepository.findById(id).get();
@@ -449,7 +448,7 @@ public class SewEmiService {
             case "verify":;
             default:;
         }*/
-}
+    }
 
 //    /**
 //     * 获取上一个月（下一个月）污水厂碳排放详情接口
@@ -494,141 +493,6 @@ public class SewEmiService {
 //            return convertToSewEmiDetailDtoByDocumentCode(list.get(index + 1).getDocumentCode());
 //        }
 //    }
-
-    /**
-     * 初始化碳排放因子
-     *
-     * @return
-     */
-    public EmiFactor create() {
-        EmiFactor emiFactor = new EmiFactor();
-        emiFactor.setModifyDate(LocalDate.now());
-        emiFactor.setProjectCode(SEW_TREAT);
-        emiFactor.setProjectName("污水处理厂碳排放因子");
-        emiFactor.setVersionNum("污水处理厂碳排放因子-" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-        emiFactor.setRemark("因子默认值初始化");
-        emiFactor.setOperatorId(1L);
-        emiFactor.setOperatorName("system");
-
-        SewEmiFactorDTO sewEmiFactorDTO = new SewEmiFactorDTO();
-        // 字段含义解释
-        List<SewEmiFactorDTO.Explain> explainList = new ArrayList<>();
-        explainList.add(new SewEmiFactorDTO.Explain("proElecEmiFactor", "省电网排放系数"));
-        explainList.add(new SewEmiFactorDTO.Explain("chemicalsEmiFactor", "药剂排放参数"));
-        explainList.add(new SewEmiFactorDTO.Explain("processTypeNi", "工艺排放系数"));
-        explainList.add(new SewEmiFactorDTO.Explain("heatPumpFactor", "热泵对应参数"));
-        explainList.add(new SewEmiFactorDTO.Explain("gasEmiFactor", "气体排放系数"));
-        explainList.add(new SewEmiFactorDTO.Explain("sewTreatFactor", "污水处理排放系数"));
-        explainList.add(new SewEmiFactorDTO.Explain("sluTreatFactor", "污泥处置排放系数"));
-        sewEmiFactorDTO.setExplain(explainList);
-        // 省市电网平均CO2排放因子
-        LinkedHashMap<String, SewEmiFactorDTO.InfoPro> proElecEmiFactorMap = new LinkedHashMap<>();
-        proElecEmiFactorMap.put("11", new SewEmiFactorDTO.InfoPro("北京", "CF_E_1", "11", BigDecimal.valueOf(0.6168), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("12", new SewEmiFactorDTO.InfoPro("天津", "CF_E_2", "12", BigDecimal.valueOf(0.8119), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("13", new SewEmiFactorDTO.InfoPro("河北", "CF_E_3", "13", BigDecimal.valueOf(0.9029), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("14", new SewEmiFactorDTO.InfoPro("山西", "CF_E_4", "14", BigDecimal.valueOf(0.7399), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("15", new SewEmiFactorDTO.InfoPro("内蒙古", "CF_E_5", "15", BigDecimal.valueOf(0.7533), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("22", new SewEmiFactorDTO.InfoPro("吉林", "CF_E_6", "22", BigDecimal.valueOf(0.6147), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("23", new SewEmiFactorDTO.InfoPro("黑龙江", "CF_E_7", "23", BigDecimal.valueOf(0.6634), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("21", new SewEmiFactorDTO.InfoPro("辽宁", "CF_E_8", "21", BigDecimal.valueOf(0.7219), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("31", new SewEmiFactorDTO.InfoPro("上海", "CF_E_9", "31", BigDecimal.valueOf(0.5641), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("32", new SewEmiFactorDTO.InfoPro("江苏", "CF_E_10", "32", BigDecimal.valueOf(0.6829), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("33", new SewEmiFactorDTO.InfoPro("浙江", "CF_E_11", "33", BigDecimal.valueOf(0.5246), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("34", new SewEmiFactorDTO.InfoPro("安徽", "CF_E_12", "34", BigDecimal.valueOf(0.7759), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("35", new SewEmiFactorDTO.InfoPro("福建", "CF_E_13", "35", BigDecimal.valueOf(0.391), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("36", new SewEmiFactorDTO.InfoPro("江西", "CF_E_14", "36", BigDecimal.valueOf(0.6339), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("37", new SewEmiFactorDTO.InfoPro("山东", "CF_E_15", "37", BigDecimal.valueOf(0.8606), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("41", new SewEmiFactorDTO.InfoPro("河南", "CF_E_16", "41", BigDecimal.valueOf(0.7906), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("43", new SewEmiFactorDTO.InfoPro("湖南", "CF_E_17", "43", BigDecimal.valueOf(0.4987), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("42", new SewEmiFactorDTO.InfoPro("湖北", "CF_E_18", "42", BigDecimal.valueOf(0.3574), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("44", new SewEmiFactorDTO.InfoPro("广东", "CF_E_19", "44", BigDecimal.valueOf(0.4512), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("45", new SewEmiFactorDTO.InfoPro("广西", "CF_E_20", "45", BigDecimal.valueOf(0.3938), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("46", new SewEmiFactorDTO.InfoPro("海南", "CF_E_21", "46", BigDecimal.valueOf(0.5147), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("51", new SewEmiFactorDTO.InfoPro("四川", "CF_E_22", "51", BigDecimal.valueOf(0.1031), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("52", new SewEmiFactorDTO.InfoPro("贵州", "CF_E_23", "52", BigDecimal.valueOf(0.4275), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("53", new SewEmiFactorDTO.InfoPro("云南", "CF_E_24", "53", BigDecimal.valueOf(0.0921), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("61", new SewEmiFactorDTO.InfoPro("陕西", "CF_E_25", "61", BigDecimal.valueOf(0.7673), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("64", new SewEmiFactorDTO.InfoPro("宁夏", "CF_E_26", "64", BigDecimal.valueOf(0.6195), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("63", new SewEmiFactorDTO.InfoPro("青海", "CF_E_27", "63", BigDecimal.valueOf(0.2602), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("50", new SewEmiFactorDTO.InfoPro("重庆", "CF_E_28", "50", BigDecimal.valueOf(0.4405), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("62", new SewEmiFactorDTO.InfoPro("甘肃", "CF_E_29", "62", BigDecimal.valueOf(0.4912), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("65", new SewEmiFactorDTO.InfoPro("新疆", "CF_E_30", "65", BigDecimal.valueOf(0.622), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("54", new SewEmiFactorDTO.InfoPro("西藏", "CF_E_31", "54", BigDecimal.valueOf(0.6031), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("81", new SewEmiFactorDTO.InfoPro("香港", "CF_E_32", "81", new BigDecimal(0), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("82", new SewEmiFactorDTO.InfoPro("澳门", "CF_E_33", "82", new BigDecimal(0), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        proElecEmiFactorMap.put("71", new SewEmiFactorDTO.InfoPro("台湾", "CF_E_34", "71", new BigDecimal(0), "kg CO2 eq / kWh", "proElecEmiFactor"));
-        sewEmiFactorDTO.setProElecEmiFactor(proElecEmiFactorMap);
-        // 药剂CO2排放因子
-        LinkedHashMap<String, SewEmiFactorDTO.Info> chemicalsEmiFactorMap = new LinkedHashMap<>();
-        chemicalsEmiFactorMap.put("CF_M_1", new SewEmiFactorDTO.Info("氯化铝", "CF_M_1", BigDecimal.valueOf(6.98248755057367), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_2", new SewEmiFactorDTO.Info("硫酸铝|粉", "CF_M_2", BigDecimal.valueOf(0.756288833442325), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_3", new SewEmiFactorDTO.Info("硫酸铝|无水|含硫酸铝4.33%", "CF_M_3", BigDecimal.valueOf(0.559368134327201), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_4", new SewEmiFactorDTO.Info("硫酸亚铁", "CF_M_4", BigDecimal.valueOf(0.259138217385877), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_5", new SewEmiFactorDTO.Info("硫酸铁|无水|含硫酸铁12.5%", "CF_M_5", BigDecimal.valueOf(0.303814581820279), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_6", new SewEmiFactorDTO.Info("氯化亚铁", "CF_M_6", BigDecimal.valueOf(0.242343451466328), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_7", new SewEmiFactorDTO.Info("氯化铁|无水|含氯化铁40%", "CF_M_7", BigDecimal.valueOf(1.05836918051482), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_8", new SewEmiFactorDTO.Info("氯化铁|无水|含氯化铁14%", "CF_M_8", BigDecimal.valueOf(0.643396285826687), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_9", new SewEmiFactorDTO.Info("氯化铁|无水|含氯化铁12%", "CF_M_9", BigDecimal.valueOf(0.628227564402345), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_10", new SewEmiFactorDTO.Info("PAC (聚合氯化铝)", "CF_M_10", BigDecimal.valueOf(1.65484334133258), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_11", new SewEmiFactorDTO.Info("PAM (聚丙烯酰胺)", "CF_M_11", BigDecimal.valueOf(2.84525201426426), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_12", new SewEmiFactorDTO.Info("乙酸|无水|含乙酸98%", "CF_M_12", BigDecimal.valueOf(1.92087590438908), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_13", new SewEmiFactorDTO.Info("葡萄糖", "CF_M_13", BigDecimal.valueOf(1.40029217235606), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_14", new SewEmiFactorDTO.Info("甲醇", "CF_M_14", BigDecimal.valueOf(0.648435046545033), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_15", new SewEmiFactorDTO.Info("次氯酸钠|含次氯酸钠15%", "CF_M_15", BigDecimal.valueOf(2.99030768545925), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_16", new SewEmiFactorDTO.Info("生石灰|研磨", "CF_M_16", BigDecimal.valueOf(0.0384503323345839), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_17", new SewEmiFactorDTO.Info("二氧化氯", "CF_M_17", BigDecimal.valueOf(9.31336987800091), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        chemicalsEmiFactorMap.put("CF_M_18", new SewEmiFactorDTO.Info("乙酸钠", "CF_M_18", BigDecimal.valueOf(2.89602995303398), "kg CO2 eq / kg", "chemicalsEmiFactor"));
-        sewEmiFactorDTO.setChemicalsEmiFactor(chemicalsEmiFactorMap);
-        // 工艺类型排放因子
-        LinkedHashMap<String, SewEmiFactorDTO.Info> processTypeNiMap = new LinkedHashMap<>();
-        processTypeNiMap.put("N1", new SewEmiFactorDTO.Info("AO", "N1", BigDecimal.valueOf(0.013), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N2", new SewEmiFactorDTO.Info("AAO", "N2", BigDecimal.valueOf(0.013), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N3", new SewEmiFactorDTO.Info("CAST(CASS)", "N3", BigDecimal.valueOf(0.013), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N4", new SewEmiFactorDTO.Info("氧化沟", "N4", BigDecimal.valueOf(0.00016), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N5", new SewEmiFactorDTO.Info("SBR", "N5", BigDecimal.valueOf(0.029), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N6", new SewEmiFactorDTO.Info("其他活性污泥法", "N6", BigDecimal.valueOf(0.016), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N7", new SewEmiFactorDTO.Info("其他工艺", "N7", BigDecimal.valueOf(0.016), "kg N2O-N / kg N", "processTypeNi"));
-        processTypeNiMap.put("N8", new SewEmiFactorDTO.Info("MBR", "N8", BigDecimal.valueOf(0.016), "kg N2O-N / kg N", "processTypeNi"));
-        sewEmiFactorDTO.setProcessTypeNi(processTypeNiMap);
-        // 热泵对应参数
-        SewEmiFactorDTO.HeatPumpFactor heatPumpFactor = new SewEmiFactorDTO.HeatPumpFactor();
-        heatPumpFactor.setY(new SewEmiFactorDTO.Info("燃气电厂供热的热电折算系数", "y", new BigDecimal(6500), "kJ/kWh", "heatPumpFactor"));
-        sewEmiFactorDTO.setHeatPumpFactor(heatPumpFactor);
-        // 气体排放系数
-        SewEmiFactorDTO.GasEmiFactor gasEmiFactor = new SewEmiFactorDTO.GasEmiFactor();
-        gasEmiFactor.setCfhp(new SewEmiFactorDTO.Info("燃煤锅炉二氧化碳排放因子", "CF_HP", BigDecimal.valueOf(96.1), "kg CO2 eq / GJ", "gasEmiFactor"));
-        gasEmiFactor.setCfco2(new SewEmiFactorDTO.Info("CO2", "CF_CO2", new BigDecimal(1), "kg CO2 eq / kg CO2", "gasEmiFactor"));
-        gasEmiFactor.setCfch4(new SewEmiFactorDTO.Info("CH4", "CF_CH4", new BigDecimal(28), "kg CO2 eq / kg CH4", "gasEmiFactor"));
-        gasEmiFactor.setCfn2o(new SewEmiFactorDTO.Info("N2O", "CF_N2O", new BigDecimal(298), "kg CO2 eq / kg N2O", "gasEmiFactor"));
-        sewEmiFactorDTO.setGasEmiFactor(gasEmiFactor);
-        // 污水处理排放系数
-        SewEmiFactorDTO.SewTreatFactor sewTreatFactor = new SewEmiFactorDTO.SewTreatFactor();
-        sewTreatFactor.setB0bod(new SewEmiFactorDTO.Info("最大CH4生产能力", "B0_BOD", BigDecimal.valueOf(0.6), "kg CH4 / kg BOD", "sewTreatFactor"));
-        sewTreatFactor.setB0cod(new SewEmiFactorDTO.Info("最大CH4生产能力", "B0_COD", BigDecimal.valueOf(0.25), "kg CH4 / kg COD", "sewTreatFactor"));
-        sewTreatFactor.setMcf(new SewEmiFactorDTO.Info("CH4修正因子_集中好氧处理厂", "MCF", BigDecimal.valueOf(0.03), "1", "sewTreatFactor"));
-        sewEmiFactorDTO.setSewTreatFactor(sewTreatFactor);
-        // 污泥处置排放系数
-        SewEmiFactorDTO.SluTreatFactor sluTreatFactor = new SewEmiFactorDTO.SluTreatFactor();
-        sluTreatFactor.setWc(new SewEmiFactorDTO.Info("污泥处置工艺污泥含水率", "wc", BigDecimal.valueOf(60.0), "%", "sluTreatFactor"));
-        sluTreatFactor.setEfs1(new SewEmiFactorDTO.Info("堆肥CH4排放系数", "EFS_1", BigDecimal.valueOf(0.004), "kg CH4 / kg 湿物质", "sluTreatFactor"));
-        sluTreatFactor.setEfs2(new SewEmiFactorDTO.Info("厌氧消化CH4排放系数", "EFS_2", BigDecimal.valueOf(0.0008), "kg CH4 / kg 湿物质", "sluTreatFactor"));
-        sluTreatFactor.setDoc(new SewEmiFactorDTO.Info("污泥脱水后填埋CH4排放系数DOC", "DOC", BigDecimal.valueOf(0.3), "kg碳/kg 湿物质", "sluTreatFactor"));
-        sluTreatFactor.setDocf(new SewEmiFactorDTO.Info("污泥脱水后填埋CH4排放系数DOCf", "DOCf", BigDecimal.valueOf(0.5), "1", "sluTreatFactor"));
-        sluTreatFactor.setMcf(new SewEmiFactorDTO.Info("污泥脱水后填埋CH4排放系数MCF", "MCF", new BigDecimal(1), "1", "sluTreatFactor"));
-        sluTreatFactor.setF(new SewEmiFactorDTO.Info("污泥脱水后填埋CH4排放系数F", "F", BigDecimal.valueOf(0.5), "1", "sluTreatFactor"));
-        sluTreatFactor.setOx(new SewEmiFactorDTO.Info("污泥脱水后填埋CH4排放系数OX", "OX", BigDecimal.valueOf(0.1), "1", "sluTreatFactor"));
-        sluTreatFactor.setEfs3(new SewEmiFactorDTO.Info("堆肥N2O排放系数", "EFS_3", BigDecimal.valueOf(0.00024), "kg N2O / kg 湿物质", "sluTreatFactor"));
-        sluTreatFactor.setEfs4(new SewEmiFactorDTO.Info("厌氧消化N2O排放系数", "EFS_4", new BigDecimal(0), "kg N2O / kg 湿物质", "sluTreatFactor"));
-        sewEmiFactorDTO.setSluTreatFactor(sluTreatFactor);
-
-        try {
-            emiFactor.setContent(objectMapper.writeValueAsString(sewEmiFactorDTO));
-        } catch (JsonProcessingException e) {
-            throw new BadRequestProblem("初始化失败");
-        }
-
-        return emiFactorRepository.save(emiFactor);
-    }
 
     public Instant getInstant(String string) {
         if (string == null) return null;

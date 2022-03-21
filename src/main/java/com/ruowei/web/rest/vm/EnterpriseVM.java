@@ -1,11 +1,8 @@
 package com.ruowei.web.rest.vm;
 
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
 
 public class EnterpriseVM {
 
@@ -18,18 +15,20 @@ public class EnterpriseVM {
     private String name;
 
     /**
-     * 设备名称
+     * 数据类型
      */
-    @ApiModelProperty(value = "设备名称")
-    @Column(name = "equipment_name")
-    private String equipmentName;
+    @ApiModelProperty(value = "经营详细地址经度")
+    @Column(name = "enterprise_address")
+    private String enterpriseLongitude;
+
+
 
     /**
      * 数据类型
      */
-    @ApiModelProperty(value = "经营详细地址")
-    @Column(name = "enterprise_address")
-    private String enterpriseAddress;
+    @ApiModelProperty(value = "经营详细地址纬度")
+    @Column(name = "enterprise_latitude")
+    private String enterpriseLatitude;
 
     /**
      * 备注
@@ -41,7 +40,7 @@ public class EnterpriseVM {
     /**
      * 点数据名称
      */
-    @ApiModelProperty(value = "是否为试点水厂")
+    @ApiModelProperty(value = "是否为试点水厂", required = true)
     @Column(name = "is_try")
     private String isTry;
 
@@ -74,22 +73,21 @@ public class EnterpriseVM {
         this.name = name;
     }
 
-    public String getEquipmentName() {
-        return equipmentName;
+    public String getEnterpriseLongitude() {
+        return enterpriseLongitude;
     }
 
-    public void setEquipmentName(String equipmentName) {
-        this.equipmentName = equipmentName;
+    public void setEnterpriseLongitude(String enterpriseLongitude) {
+        this.enterpriseLongitude = enterpriseLongitude;
     }
 
-    public String getEnterpriseAddress() {
-        return enterpriseAddress;
+    public String getEnterpriseLatitude() {
+        return enterpriseLatitude;
     }
 
-    public void setEnterpriseAddress(String enterpriseAddress) {
-        this.enterpriseAddress = enterpriseAddress;
+    public void setEnterpriseLatitude(String enterpriseLatitude) {
+        this.enterpriseLatitude = enterpriseLatitude;
     }
-
     public String getRemark() {
         return remark;
     }

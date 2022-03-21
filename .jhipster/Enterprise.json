@@ -6,10 +6,6 @@
       "fieldType": "String",
       "javadoc": "水厂名称"
     },{
-      "fieldName": "equipmentName",
-      "fieldType": "String",
-      "javadoc": "设备名称"
-    },{
       "fieldName": "remark",
       "fieldType": "String",
       "javadoc": "备注"
