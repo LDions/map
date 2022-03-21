@@ -1,17 +1,14 @@
 package com.ruowei.web.rest;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ruowei.config.Constants;
-import com.ruowei.domain.*;
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
-import com.ruowei.domain.enumeration.RoleStatusType;
+import com.ruowei.domain.Enterprise;
+import com.ruowei.domain.QEnterprise;
+import com.ruowei.domain.QUser;
+import com.ruowei.domain.User;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
-import com.ruowei.util.OptionalBooleanBuilder;
-import com.ruowei.util.OrderByUtil;
 import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.dto.EnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
@@ -19,9 +16,9 @@ import com.ruowei.web.rest.vm.EnterpriseQM;
 import com.ruowei.web.rest.vm.EnterpriseVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,11 +34,11 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -79,6 +76,9 @@ public class EnterpriseResource {
     public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) throws URISyntaxException {
         log.debug("REST request to save Enterprise : {}", vm);
 
+        Enterprise enterprise = new Enterprise();
+        BeanUtils.copyProperties(vm, enterprise);
+        Enterprise save = enterpriseRepository.save(enterprise);
         return ResponseEntity.ok().build();
     }
 
@@ -100,14 +100,31 @@ public class EnterpriseResource {
     public ResponseEntity<List<EnterpriseDTO>> getAllEnterprises(EnterpriseQM qm, Pageable pageable) {
         log.debug("REST request to get a page of Enterprises : {}", qm);
 
-        return ResponseEntity.ok().build();
+//        OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
+//            .notEmptyAnd(qEnterprise.code::ne, Constants.SYS_ADMIN);
+        List<Enterprise> all = enterpriseRepository.findAll();
+        List<EnterpriseDTO> list =
+            all.stream().map(enterprise -> {
+                EnterpriseDTO enterpriseDTO = new EnterpriseDTO();
+                BeanUtils.copyProperties(enterprise, enterpriseDTO);
+                return enterpriseDTO;
+            }).collect(Collectors.toList());
+        Page<EnterpriseDTO> page = new PageImpl<>(list, pageable, list.size());
+
+        List<EnterpriseDTO> content = page.getContent();
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(content);
+
     }
 
     @GetMapping("/enterprise/{id}")
     @ApiOperation(value = "查询企业详情接口", notes = "作者:孙小楠")
     public ResponseEntity<Enterprise> getEnterprise(@PathVariable Long id) {
+        log.debug("REST request to get enterprise : {}", id);
 
-        return ResponseEntity.ok().build();
+        Optional<Enterprise> optional = enterpriseRepository.findById(id);
+        return ResponseUtil.wrapOrNotFound(optional);
     }
 
     @DeleteMapping("/enterprise/{id}")
@@ -115,9 +132,11 @@ public class EnterpriseResource {
     @ApiOperation(value = "删除企业接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteEnterprise(@PathVariable Long id) {
         log.debug("REST request to delete Enterprise : {}", id);
-        User user = userRepository.findByEnterpriseId(id)
-            .orElseThrow(() -> new BadRequestProblem("删除失败", "企业用户不存在"));
 
+        if (!userRepository.findByEnterpriseId(id).isEmpty()) {
+            new BadRequestProblem("删除失败", "企业下存在用户");
+        }
+        enterpriseRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -130,18 +149,8 @@ public class EnterpriseResource {
             dto.setId(userModel.getEnterpriseId());
             dto.setName(userModel.getEnterpriseName());
             result.add(dto);
-        }else {
-
-            }
+        }
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/enterprise/province/{id}")
-    @ApiOperation(value = "获取企业所在省份接口", notes = "作者：孙小楠")
-    public ResponseEntity<DropDownDTO> getProvinceNameOfEnterprise(@PathVariable Long id) {
-
-        DropDownDTO result = new DropDownDTO();
-
-        return ResponseEntity.ok().body(result);
-    }
 }
+
