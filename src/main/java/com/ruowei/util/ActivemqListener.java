@@ -2,41 +2,44 @@ package com.ruowei.util;
 
 
 import com.google.gson.Gson;
-import com.ruowei.web.rest.dto.MqReceiveDTO;
-import com.ruowei.web.rest.vm.SewEmiVM;
+import com.ruowei.service.SewEmiService;
+import com.ruowei.web.rest.vm.SewEmiAccountVM;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 
 import javax.jms.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
 
 @Component
 public class ActivemqListener {
-    List<String> list = new ArrayList<>();
+    private final SewEmiService sewEmiService;
 
-    @JmsListener(destination = "activemq-topic-test1")
-    public void receive(String msg) {
-        System.out.println("监听器收到msg:" + msg);
-        MYSQLControl control = new MYSQLControl("localhost:3306", "db", "root", "123456");
-        String sql = "insert into test" + "(" + "cod" + ")values('" + msg + "');";
-        control.executeUpdate(sql);
-        list.add(msg);
+    public ActivemqListener(SewEmiService sewEmiService) {
+        this.sewEmiService = sewEmiService;
     }
 
-    @JmsListener(destination = "activemq-topic-test2")
-    public void receive2(String msg) {
-        System.out.println("监听器收到msg:" + msg);
-        MYSQLControl control = new MYSQLControl("localhost:3306", "db", "root", "123456");
-        String sql = "insert into test" + "(" + "aop" + ")values('" + msg + "');";
-        control.executeUpdate(sql);
-    }
-
-    @JmsListener(destination = "activemq-topic-test4", containerFactory = "topicListener")
-    public void readActiveQueue(String message) {
-        System.out.println("topic接受到：" + message);
-    }
+//    @JmsListener(destination = "activemq-topic-test1")
+//    public void receive(String msg) {
+//        System.out.println("监听器收到msg:" + msg);
+//        MYSQLControl control = new MYSQLControl("localhost:3306", "db", "root", "123456");
+//        String sql = "insert into test" + "(" + "cod" + ")values('" + msg + "');";
+//        control.executeUpdate(sql);
+//        list.add(msg);
+//    }
+//
+//    @JmsListener(destination = "activemq-topic-test2")
+//    public void receive2(String msg) {
+//        System.out.println("监听器收到msg:" + msg);
+//        MYSQLControl control = new MYSQLControl("localhost:3306", "db", "root", "123456");
+//        String sql = "insert into test" + "(" + "aop" + ")values('" + msg + "');";
+//        control.executeUpdate(sql);
+//    }
+//
+//    @JmsListener(destination = "activemq-topic-test4", containerFactory = "topicListener")
+//    public void readActiveQueue(String message) {
+//        System.out.println("topic接受到：" + message);
+//    }
 
     @JmsListener(destination = "activemq-topic-test3", containerFactory = "topicListener")
     public void readActiveQueue2(Message message) {
@@ -44,9 +47,10 @@ public class ActivemqListener {
 
         try {
             final MapMessage mapmessage=(MapMessage) message;
-            final String json =mapmessage.getString("json");
+            String json =mapmessage.getString("json");
             final Gson gson= new Gson();
-            final SewEmiVM mqReceiveDTO = gson.fromJson(json, SewEmiVM.class);
+            final SewEmiAccountVM.SewProcessVM vm = gson.fromJson(json, SewEmiAccountVM.SewProcessVM.class);
+            sewEmiService.saveAccountingResultToMySQL(1L,vm, Instant.now());
             System.out.println("s");
         } catch (final JMSException e) {
             e.printStackTrace();

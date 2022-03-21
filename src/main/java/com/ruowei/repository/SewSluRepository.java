@@ -1,6 +1,7 @@
 package com.ruowei.repository;
 
 import com.ruowei.domain.SewSlu;
+import liquibase.pro.packaged.L;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -17,10 +18,10 @@ public interface SewSluRepository extends JpaRepository<SewSlu, Long> {
 
     /**
      * 根据单据号查询污水厂污泥处置信息
-     * @param documentCode 单据号
+     * @param craftId 单据号
      * @return
      */
-    List<SewSlu> findByDocumentCode(@NotNull String documentCode);
+    List<SewSlu> findByCraftId(@NotNull Long craftId);
 
     List<SewSlu> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 }

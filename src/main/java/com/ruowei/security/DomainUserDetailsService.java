@@ -1,16 +1,12 @@
 package com.ruowei.security;
 
-import com.ruowei.domain.Enterprise;
 import com.ruowei.domain.User;
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
-import com.ruowei.web.rest.errors.BadRequestProblem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

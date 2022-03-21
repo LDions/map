@@ -2,6 +2,7 @@ package com.ruowei.repository;
 
 import com.ruowei.domain.OtherIndex;
 
+import liquibase.pro.packaged.L;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +17,9 @@ import java.util.List;
 public interface OtherIndexRepository extends JpaRepository<OtherIndex, Long> {
 
     /**
-     * 根据单据号查询污水厂污泥处置信息
-     * @param documentCode 单据号
+     * 根据工艺查询污水厂污泥处置信息
+     * @param craftId 工艺ID
      * @return
      */
-    List<OtherIndex> findByDocumentCode(@NotNull String documentCode);
+    List<OtherIndex> findByCraftId(@NotNull Long craftId);
 }

@@ -1,8 +1,10 @@
 package com.ruowei.web.rest.vm;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
@@ -105,7 +107,10 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "出水TP（mg/L）")
         private BigDecimal assOutTp;
     }
-    public static class SewPotVM extends SewEmiAccountVM{
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SewPotVM{
 
         @NotNull(message = "请输入进水PH")
         @ApiModelProperty(value = "进水PH（mg/L）")
@@ -228,7 +233,10 @@ public class SewEmiAccountVM {
         private Instant dayTime;
     }
 
-    public static class SewSluVM extends SewEmiAccountVM{
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SewSluVM{
 
         @NotEmpty(message = "请选择处置方法")
         @ApiModelProperty(value = "污泥处置方法编码")
@@ -290,8 +298,10 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "采集时间")
         private Instant dayTime;
     }
-
-    public static class OtherIndexVM extends SewEmiAccountVM{
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OtherIndexVM{
 
         @ApiModelProperty(value = "其他指标编码")
         private String methodCode;
@@ -302,8 +312,10 @@ public class SewEmiAccountVM {
         @ApiModelProperty(value = "指标量（kg/m）")
         private BigDecimal indexCapacity;
     }
-
-    public static class SewProcessVM extends SewEmiAccountVM{
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SewProcessVM {
 
         @ApiModelProperty(value = "工艺类型编码")
         private String craftCode;

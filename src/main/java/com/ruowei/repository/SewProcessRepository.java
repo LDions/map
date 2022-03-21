@@ -17,11 +17,11 @@ import java.util.Optional;
 public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
 
     /**
-     * 根据单据号查询污水厂工艺水质信息
-     * @param documentCode 单据号
+     * 根据工艺查询污水厂工艺水质信息
+     * @param craftId 单据号
      * @return
      */
-    List<SewProcess> findByDocumentCode(@NotNull String documentCode);
+    List<SewProcess> findByCraftId(@NotNull Long craftId);
 
     List<SewProcess> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 }

@@ -170,6 +170,7 @@ public class SewProcess implements Serializable {
      * 数据推送状态
      */
     @ApiModelProperty(value = "数据推送状态", required = true)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private SendStatusType status;
 

@@ -213,7 +213,7 @@ public class DataDisplayResource {
                                          @ApiParam(value = "需要改的数据id") @RequestBody String source) {
 
         for (Long id : ids) {
-            sewEmiService.modificationByDocumentCode(id, sewProcessDTO,source);
+            sewEmiService.modificationBycraftId(id, sewProcessDTO,source);
         }
         return ResponseEntity.ok().build();
     }

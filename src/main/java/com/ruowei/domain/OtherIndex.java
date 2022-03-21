@@ -29,9 +29,9 @@ public class OtherIndex implements Serializable {
      * 单据号
      */
     @NotNull
-    @ApiModelProperty(value = "单据号", required = true)
-    @Column(name = "document_code", nullable = false)
-    private String documentCode;
+    @ApiModelProperty(value = "工艺ID", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
 
     /**
      * 污泥处置方法编码
@@ -71,17 +71,17 @@ public class OtherIndex implements Serializable {
         return this;
     }
 
-    public String getDocumentCode() {
-        return this.documentCode;
+    public Long getCraftId() {
+        return this.craftId;
     }
 
-    public OtherIndex documentCode(String documentCode) {
-        this.documentCode = documentCode;
+    public OtherIndex craftId(Long craftId) {
+        this.craftId = craftId;
         return this;
     }
 
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
+    public void setCraftId(Long craftId) {
+        this.craftId = craftId;
     }
 
     public String getMethodCode() {
@@ -148,7 +148,7 @@ public class OtherIndex implements Serializable {
     public String toString() {
         return "OtherIndex{" +
             "id=" + getId() +
-            ", documentCode='" + getDocumentCode() + "'" +
+            ", craftId='" + getCraftId() + "'" +
             ", methodCode='" + getMethodCode() + "'" +
             ", methodName='" + getMethodName() + "'" +
             ", indexCapacity=" + getIndexCapacity() +

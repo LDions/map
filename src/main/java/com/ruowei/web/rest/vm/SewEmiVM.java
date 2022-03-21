@@ -1,6 +1,7 @@
 package com.ruowei.web.rest.vm;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 public class SewEmiVM {
 
     @Data
+    @ApiOperation(value = "仪表数据")
     @EqualsAndHashCode(callSuper = true)
     public static class SewProcessVM extends SewEmiVM {
 
@@ -66,6 +68,7 @@ public class SewEmiVM {
     }
 
     @Data
+    @ApiOperation(value = "校表数据")
     @EqualsAndHashCode(callSuper = true)
     public static class SewMeterVM extends SewEmiVM {
 
@@ -101,6 +104,7 @@ public class SewEmiVM {
     }
 
     @Data
+    @ApiOperation(value = "化验数据")
     @EqualsAndHashCode(callSuper = true)
     public static class SewSluVM extends SewEmiVM {
 
@@ -136,6 +140,7 @@ public class SewEmiVM {
     }
 
     @Data
+    @ApiOperation(value = "日报表数据")
     @EqualsAndHashCode(callSuper = true)
     public static class SewPotVM extends SewEmiVM {
 

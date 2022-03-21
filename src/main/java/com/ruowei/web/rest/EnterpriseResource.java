@@ -72,7 +72,7 @@ public class EnterpriseResource {
     @PostMapping("/enterprise")
     @Transactional
     @ApiOperation(value = "新增企业接口", notes = "作者：孙小楠")
-    public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) throws URISyntaxException {
+    public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) {
         log.debug("REST request to save Enterprise : {}", vm);
 
         Enterprise enterprise = new Enterprise();
@@ -132,8 +132,8 @@ public class EnterpriseResource {
     public ResponseEntity<Void> deleteEnterprise(@PathVariable Long id) {
         log.debug("REST request to delete Enterprise : {}", id);
 
-        if (!userRepository.findByEnterpriseId(id).isEmpty()) {
-            new BadRequestProblem("删除失败", "企业下存在用户");
+        if (userRepository.findByEnterpriseId(id).isPresent()) {
+            throw new BadRequestProblem("删除失败", "企业下存在用户");
         }
         enterpriseRepository.deleteById(id);
         return ResponseEntity.noContent().build();

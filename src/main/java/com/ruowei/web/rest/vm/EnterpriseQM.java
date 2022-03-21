@@ -1,10 +1,7 @@
 package com.ruowei.web.rest.vm;
 
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.persistence.Column;
 
 @Data
 public class EnterpriseQM {
