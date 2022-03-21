@@ -71,6 +71,7 @@ entity Group(sys_group) {
 /** 水厂信息 */
 entity Enterprise(sys_enterprise) {
 	groupId Long /** 水厂所属集团Id */
+	code String required /** 水厂编码 */
     name String required /** 水厂名称 */
     enterpriseLongitude String required /** 经营详细地址经度 */
     enterpriseLatitude String required /** 经营详细地址纬度 */

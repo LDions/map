@@ -31,6 +31,13 @@ public class Enterprise implements Serializable {
     private String name;
 
     /**
+     * 水厂编码
+     */
+    @ApiModelProperty(value = "水厂编码")
+    @Column(name = "code")
+    private String code;
+
+    /**
      * 数据类型
      */
     @ApiModelProperty(value = "经营详细地址")
@@ -97,6 +104,19 @@ public class Enterprise implements Serializable {
     }
     public Enterprise name(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Enterprise code(String code) {
+        this.code = code;
         return this;
     }
 
