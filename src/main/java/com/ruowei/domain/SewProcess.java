@@ -34,6 +34,13 @@ public class SewProcess implements Serializable {
     private String documentCode;
 
     /**
+     * 仪表编码
+     */
+    @ApiModelProperty(value = "仪表编码", required = true)
+    @Column(name = "process_code", nullable = false)
+    private String processCode;
+
+    /**
      * 工艺类型编码
      */
     @ApiModelProperty(value = "工艺类型编码", required = true)
@@ -205,6 +212,14 @@ public class SewProcess implements Serializable {
 
     public void setDocumentCode(String documentCode) {
         this.documentCode = documentCode;
+    }
+
+    public String getProcessCode() {
+        return processCode;
+    }
+
+    public void setProcessCode(String processCode) {
+        this.processCode = processCode;
     }
 
     public String getCraftCode() {

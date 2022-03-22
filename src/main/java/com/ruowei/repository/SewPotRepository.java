@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the SewPot entity.
@@ -20,4 +21,6 @@ public interface SewPotRepository extends JpaRepository<SewPot, Long> {
      * @return
      */
     List<SewPot> findByCraftId(@NotNull Long craftId);
+
+    Optional<SewPot> findByCraftCodeAndPotCode(String craftCode, String potCode);
 }

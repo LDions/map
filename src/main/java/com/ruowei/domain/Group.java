@@ -33,6 +33,13 @@ public class Group {
     private String groupName;
 
     /**
+     * 集团编码
+     */
+    @ApiModelProperty(value = "集团编码")
+    @Column(name = "group_code")
+    private String groupCode;
+
+    /**
      * 集团位置
      */
     @ApiModelProperty(value = "集团位置")
@@ -99,6 +106,14 @@ public class Group {
     }
     public void setGroupContactName(String groupContactName) {
         this.groupContactName = groupContactName;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
 
     public String getGroupContactPhone() {

@@ -34,6 +34,20 @@ public class SewPot implements Serializable {
     private String documentCode;
 
     /**
+     * 日报编码
+     */
+    @ApiModelProperty(value = "日报编码", required = true)
+    @Column(name = "pot_code", nullable = false)
+    private String potCode;
+
+    /**
+     * 工艺编码
+     */
+    @ApiModelProperty(value = "工艺编码", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
+
+    /**
      * 进水PH
      */
     @ApiModelProperty(value = "进水PH", required = true)

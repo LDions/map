@@ -35,6 +35,20 @@ public class SewSlu implements Serializable {
     private String documentCode;
 
     /**
+     * 化验编码
+     */
+    @ApiModelProperty(value = "化验编码", required = true)
+    @Column(name = "slu_code", nullable = false)
+    private String sluCode;
+
+    /**
+     * 工艺编码
+     */
+    @ApiModelProperty(value = "工艺编码", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
+
+    /**
      * 污泥处置方法编码
      */
     @NotNull
@@ -196,6 +210,22 @@ public class SewSlu implements Serializable {
 
     public void setDocumentCode(String documentCode) {
         this.documentCode = documentCode;
+    }
+
+    public String getSluCode() {
+        return sluCode;
+    }
+
+    public void setSluCode(String sluCode) {
+        this.sluCode = sluCode;
+    }
+
+    public String getCraftCode() {
+        return craftCode;
+    }
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
     }
 
     public String getMethodCode() {

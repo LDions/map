@@ -6,6 +6,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the Enterprise entity.
@@ -16,4 +17,7 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, Q
 
     List<Enterprise> findByGroupId(Long id);
 
+    Optional<Enterprise> findByCodeAndIsTryIsTrue(String code);
+
+    Optional<Enterprise> findByCodeAndGroupIdAndIsTryIsTrue(String code,Long groupId);
 }
