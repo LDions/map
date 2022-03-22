@@ -57,7 +57,7 @@ public class DataPushTestResource {
 
     @PostMapping("/push-test/request-test")
     @ApiOperation(value = "请求测试接口", notes = "作者：郑昊天")
-    @Scheduled(fixedRate = 5000)
+//    @Scheduled(fixedRate = 5000)
     public void scheduleTest1() {
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.postForObject("http://localhost:7777/api/push-test/response-test", null, String.class);
