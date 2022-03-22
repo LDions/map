@@ -2,12 +2,6 @@
   "name": "SewProcess",
   "fields": [
     {
-      "fieldName": "documentCode",
-      "fieldType": "String",
-      "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "processTypeCode",
       "fieldType": "String",
       "javadoc": "工艺类型编码",

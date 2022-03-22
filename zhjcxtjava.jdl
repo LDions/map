@@ -84,9 +84,9 @@ entity Enterprise(sys_enterprise) {
 entity Craft(craft){
 	enterpriseId Long required/** 所属水厂Id */
     craftName String /** 工艺名称 */
-    processName String /** 工艺段名称 */
-    processPeriod String /** 工艺段编号 */
-    processCapacity BigDecimal /** 工艺段池容 */
+    AnaerobicPoolVolume BigDecimal /** 厌氧池池容 */
+    AnoxicPoolVolume BigDecimal /** 缺氧池池容 */
+    AerobicPoolVolume BigDecimal /** 好氧池池容 */
     inRefluxRatio BigDecimal /** 内回流比 */
     outRefluxRatio BigDecimal /** 外回流比 */
     aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
@@ -107,12 +107,12 @@ entity Craft(craft){
 entity EmiData(emi_data) {
 	documentCode String required /** 单据号 */
 	enterpriseId Long required /** 水厂ID */
+	craftId Long required /** 工艺id */
     acctype String required /** 核算方式（自动、手动） */
     accYear String required /** 核算年份 */
     accMonth String required /** 核算月份 */
     accTime String required /** 核算时间 */
     predictTime String required /** 预测未来时间 */
-    craftId Long required /** 工艺id */
     totalOutN BigDecimal required /** 出水总氮 */
     outAN BigDecimal required /** 出水氨氮 */
     carbonAdd BigDecimal required /** 碳源投加量 */
@@ -121,8 +121,7 @@ entity EmiData(emi_data) {
 
 /** 仪表数据 */
 entity SewProcess(sew_process) {
-    documentCode String required /** 单据号 */
-    craftCode String required /** 工艺编码 */
+    craftId Long required /** 工艺ID */
     // 输入项目-水质信息
     inFlow BigDecimal required /** 进水流量（mg/L） */
     inAmmonia BigDecimal required /** 进水氨氮（mg/L） */
@@ -145,11 +144,10 @@ entity SewProcess(sew_process) {
     dayTime Instant /** 采集时间 */
     status SendStatusType required /** 集团数据推送状态 */
     plateStatus SendStatusType required /** 平台数据推送状态 */
-    craftId Long required /** 工艺ID */
 }
 /** 化验数据 */
 entity SewSlu(sew_slu) {
-    documentCode String required /** 单据号 */
+    craftId Long required /** 工艺ID */
     assInAmmonia BigDecimal required /** 进水氨氮（mg/L） */
     assInCod BigDecimal required /** 进水COD（mg/L） */
     assInTn BigDecimal required /** 进水TN（mg/L） */
@@ -163,11 +161,11 @@ entity SewSlu(sew_slu) {
     dayTime Instant /** 采集时间 */
     status SendStatusType required /** 集团数据推送状态 */
     plateStatus SendStatusType required /** 平台数据推送状态 */
-    craftId Long required /** 工艺ID */
+
 }
 /** 日报表数据 */
 entity SewPot(sew_pot) {
-    documentCode String required /** 单据号 */
+    craftId Long required /** 工艺ID */
 	dayInPh BigDecimal /** 进水PH（mg/L） */
     dayOutPh BigDecimal /** 出水PH（mg/L） */
 	dayFirstMud BigDecimal /** 初沉池排泥量（mg/L） */
@@ -204,11 +202,11 @@ entity SewPot(sew_pot) {
 	dayTime Instant /** 采集时间 */
 	status SendStatusType required /** 集团数据推送状态 */
 	plateStatus SendStatusType required /** 平台数据推送状态 */
-	craftId Long required /** 工艺ID */
+
 }
 /** 数据校验表 */
 entity SewMeter(sew_meter){
-    documentCode String /** 单据号 */
+    craftId Long required /** 工艺ID */
     assInAmmonia BigDecimal /** 进水氨氮（mg/L） */
     assInCod BigDecimal /** 进水COD（mg/L） */
     assInTn BigDecimal /** 进水TN（mg/L） */
@@ -222,7 +220,7 @@ entity SewMeter(sew_meter){
     dayTime Instant /** 时间 */
     status SendStatusType required /** 集团数据推送状态 */
     plateStatus SendStatusType required /** 平台数据推送状态 */
-    craftId Long required /** 工艺ID */
+
 }
 
 /** 其他指标 */

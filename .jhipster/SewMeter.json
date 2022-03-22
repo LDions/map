@@ -2,12 +2,6 @@
   "name": "SewMeter",
   "fields": [
     {
-      "fieldName": "documentCode",
-      "fieldType": "String",
-      "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "assInAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "进水氨氮（mg/L）"

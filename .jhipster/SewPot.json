@@ -2,11 +2,6 @@
   "name": "SewPot",
   "fields": [
     {
-      "fieldName": "documentCode",
-      "fieldType": "String",
-      "javadoc": "单据号"
-    },
-    {
       "fieldName": "dayInPh",
       "fieldType": "BigDecimal",
       "javadoc": "进水PH（mg/L）"

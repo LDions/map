@@ -2,12 +2,6 @@
   "name": "OtherIndex",
   "fields": [
     {
-      "fieldName": "documentCode",
-      "fieldType": "String",
-      "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "methodCode",
       "fieldType": "String",
       "javadoc": "其他指标编码",
