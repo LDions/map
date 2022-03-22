@@ -2,94 +2,117 @@
   "name": "Craft",
   "fields": [
     {
+      "fieldName": "enterpriseId",
+      "fieldType": "Long",
+      "javadoc": "所属水厂Id",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
       "fieldName": "craftName",
       "fieldType": "String",
       "javadoc": "工艺名称"
-    },{
-      "fieldName": "processName",
-      "fieldType": "String",
-      "javadoc": "工艺段名称"
-    },{
-      "fieldName": "processCapacity",
+    },
+    {
+      "fieldName": "anaerobicPoolVolume",
       "fieldType": "BigDecimal",
-      "javadoc": "工艺段池容"
-    },{
-      "fieldName": "processPeriod",
-      "fieldType": "String",
-      "javadoc": "工艺段编号"
-    },{
+      "javadoc": "厌氧池池容"
+    },
+    {
+      "fieldName": "anoxicPoolVolume",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池池容"
+    },
+    {
+      "fieldName": "aerobicPoolVolume",
+      "fieldType": "BigDecimal",
+      "javadoc": "好氧池池容"
+    },
+    {
+      "fieldName": "waterFlow",
+      "fieldType": "BigDecimal",
+      "javadoc": "进出水参数"
+    },
+    {
       "fieldName": "inRefluxRatio",
       "fieldType": "BigDecimal",
       "javadoc": "内回流比"
-    },{
+    },
+    {
       "fieldName": "outRefluxRatio",
       "fieldType": "BigDecimal",
       "javadoc": "外回流比"
-    },{
+    },
+    {
       "fieldName": "aerobioticNitrateConcentration",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：好氧区硝酸盐浓度"
-    },{
+    },
+    {
       "fieldName": "anoxiaNitrateConcentration",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：缺氧区硝酸盐浓度"
-    },{
+    },
+    {
       "fieldName": "bodCodRatio",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：BOD/COD"
-    },{
+    },
+    {
       "fieldName": "codCalibration",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：COD校准参数"
-    },{
+    },
+    {
       "fieldName": "bodNRatio",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：BOD/N"
-    },{
+    },
+    {
       "fieldName": "bodEquivalentWeight",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：BOD当量"
-    },{
+    },
+    {
       "fieldName": "intimacy",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：外加碳源相对亲密度"
-    },{
+    },
+    {
       "fieldName": "dilutionRatio",
       "fieldType": "BigDecimal",
       "javadoc": "传统公式：碳源稀释倍数"
-    },{
+    },
+    {
       "fieldName": "phosphate",
       "fieldType": "BigDecimal",
       "javadoc": "除磷公式：二沉池出水正磷酸盐设定值"
-    },{
-      "fieldName": "FeAlRatio",
+    },
+    {
+      "fieldName": "feAlRatio",
       "fieldType": "BigDecimal",
       "javadoc": "除磷公式：铁盐或铝盐的摩尔质量比"
-    },{
+    },
+    {
       "fieldName": "phosphorusDosing",
       "fieldType": "BigDecimal",
       "javadoc": "除磷公式：投加系数"
-    },{
+    },
+    {
       "fieldName": "feAlActiveIngredients",
       "fieldType": "BigDecimal",
       "javadoc": "除磷公式：铁盐或铝盐的有效成分"
-    },{
+    },
+    {
       "fieldName": "concentration",
       "fieldType": "BigDecimal",
       "javadoc": "除磷公式：除磷药剂配药浓度或者相对密度"
-    },{
-      "fieldName": "entId",
-      "fieldType": "Long",
-      "javadoc": "上属水厂Id"
-    },{
-      "fieldName": "entName",
-      "fieldType": "String",
-      "javadoc": "上属水厂Name"
     }
   ],
   "relationships": [],
   "javadoc": "工艺信息",
-  "entityTableName": "sys_craft",
+  "entityTableName": "craft",
   "dto": "no",
   "pagination": "no",
   "service": "no",

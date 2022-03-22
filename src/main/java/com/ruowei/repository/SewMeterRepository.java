@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface SewMeterRepository extends JpaRepository<SewMeter,Long>{
 
-    List<SewMeter> findByDocumentCode(String documentCode);
+    List<SewMeter> findByCraftId(Long craftId);
 
     List<SewMeter> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 }

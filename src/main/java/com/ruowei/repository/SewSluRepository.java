@@ -18,8 +18,8 @@ import java.util.Optional;
 public interface SewSluRepository extends JpaRepository<SewSlu, Long> {
 
     /**
-     * 根据单据号查询污水厂污泥处置信息
-     * @param craftId 单据号
+     * 根据工艺ID查询化验数据
+     * @param craftId 工艺ID
      * @return
      */
     List<SewSlu> findByCraftId(@NotNull Long craftId);

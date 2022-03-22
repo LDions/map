@@ -16,8 +16,8 @@ import java.util.Optional;
 public interface SewPotRepository extends JpaRepository<SewPot, Long> {
 
     /**
-     * 根据单据号查询污水厂药剂投加信息
-     * @param craftId 单据号
+     * 根据工艺ID查询日报数据
+     * @param craftId 工艺ID
      * @return
      */
     List<SewPot> findByCraftId(@NotNull Long craftId);

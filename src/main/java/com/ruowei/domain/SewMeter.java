@@ -27,12 +27,11 @@ public class SewMeter {
     private Long id;
 
     /**
-     * 单据号
+     * 所属工艺ID
      */
-    @NotNull
-    @ApiModelProperty(value = "单据号", required = true)
-    @Column(name = "document_code", nullable = false)
-    private String documentCode;
+    @ApiModelProperty(value = "工艺ID", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
 
     /**
      * 进水氨氮（mg/L）
@@ -113,13 +112,6 @@ public class SewMeter {
     private Instant dayTime;
 
     /**
-     * 所属工艺ID
-     */
-    @ApiModelProperty(value = "日报表时间", required = true)
-    @Column(name = "craft_id", nullable = false)
-    private Long craftId;
-
-    /**
      * 集团数据推送状态
      */
     @ApiModelProperty(value = "集团数据推送状态", required = true)
@@ -139,17 +131,6 @@ public class SewMeter {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getDocumentCode() {
-        return documentCode;
-    }
-    public SewMeter documentCode(String documentCode) {
-        this.documentCode = documentCode;
-        return this;
-    }
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
     }
 
     public BigDecimal getAssInAmmonia() {
@@ -322,7 +303,7 @@ public class SewMeter {
     public String toString() {
         return "SewMeter{" +
             "id=" + id +
-            ", documentCode='" + documentCode + '\'' +
+            ", craftId=" + craftId +
             ", assInAmmonia=" + assInAmmonia +
             ", assInCod=" + assInCod +
             ", assInTn=" + assInTn +
@@ -334,7 +315,6 @@ public class SewMeter {
             ", assOutTn=" + assOutTn +
             ", assOutTp=" + assOutTp +
             ", dayTime=" + dayTime +
-            ", craftId=" + craftId +
             '}';
     }
 }
