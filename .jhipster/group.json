@@ -1,22 +1,47 @@
 {
-  "name": "Enterprise",
+  "name": "Group",
   "fields": [
+    {
+      "fieldName": "groupCode",
+      "fieldType": "String",
+      "javadoc": "集团编码",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
     {
       "fieldName": "groupName",
       "fieldType": "String",
-      "javadoc": "集团名称"
-    },{
-      "fieldName": "groupAddress",
+      "javadoc": "集团名称",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "groupLongitude",
       "fieldType": "String",
-      "javadoc": "集团详细地址"
-    },{
+      "javadoc": "经营详细地址经度",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "groupLatitude",
+      "fieldType": "String",
+      "javadoc": "经营详细地址纬度",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
       "fieldName": "groupContactName",
       "fieldType": "String",
-      "javadoc": "集团联系人"
-    },{
+      "javadoc": "联系人姓名"
+    },
+    {
       "fieldName": "groupContactPhone",
       "fieldType": "String",
-      "javadoc": "集团联系人电话"
+      "javadoc": "联系人手机"
     }
   ],
   "relationships": [],

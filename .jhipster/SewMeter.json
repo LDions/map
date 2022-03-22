@@ -2,6 +2,14 @@
   "name": "SewMeter",
   "fields": [
     {
+      "fieldName": "craftId",
+      "fieldType": "Long",
+      "javadoc": "工艺ID",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
       "fieldName": "assInAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "进水氨氮（mg/L）"
@@ -10,50 +18,79 @@
       "fieldName": "assInCod",
       "fieldType": "BigDecimal",
       "javadoc": "进水COD（mg/L）"
-    },{
+    },
+    {
       "fieldName": "assInTn",
       "fieldType": "BigDecimal",
       "javadoc": "进水TN（mg/L）"
-    },{
+    },
+    {
       "fieldName": "assInTp",
       "fieldType": "BigDecimal",
       "javadoc": "进水TP（mg/L）"
-    },{
+    },
+    {
       "fieldName": "assAnoxicPoolDoOutNit",
       "fieldType": "BigDecimal",
-      "javadoc": "缺氧池出口硝酸盐（mg/L）"
-    },{
+      "javadoc": "缺氧池出口硝酸盐（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
       "fieldName": "assAerobicPoolDoOutNit",
       "fieldType": "BigDecimal",
-      "javadoc": "好氧池出口硝酸盐（mg/L）"
-    },{
+      "javadoc": "好氧池出口硝酸盐（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
       "fieldName": "assOutAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "出水氨氮（mg/L）"
-    },{
+    },
+    {
       "fieldName": "assOutCod",
       "fieldType": "BigDecimal",
       "javadoc": "出水COD（mg/L）"
-    },{
+    },
+    {
       "fieldName": "assOutTn",
       "fieldType": "BigDecimal",
       "javadoc": "出水TN（mg/L）"
-    },{
+    },
+    {
       "fieldName": "assOutTp",
       "fieldType": "BigDecimal",
       "javadoc": "出水TP（mg/L）"
-    },{
+    },
+    {
       "fieldName": "dayTime",
       "fieldType": "Instant",
-      "javadoc": "采集时间"
-    },{
-      "fieldName": "craftId",
-      "fieldType": "Long",
-      "javadoc": "所属工艺Id"
+      "javadoc": "时间"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [],
-  "javadoc": "污泥处置方法数据",
+  "javadoc": "数据校验表",
   "entityTableName": "sew_meter",
   "dto": "no",
   "pagination": "no",

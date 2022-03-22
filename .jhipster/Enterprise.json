@@ -2,33 +2,64 @@
   "name": "Enterprise",
   "fields": [
     {
-      "fieldName": "name",
-      "fieldType": "String",
-      "javadoc": "水厂名称"
-    },{
-      "fieldName": "remark",
-      "fieldType": "String",
-      "javadoc": "备注"
-    },{
       "fieldName": "groupId",
       "fieldType": "Long",
       "javadoc": "水厂所属集团Id"
-    },{
-      "fieldName": "isTry",
-      "fieldType": "Boolean",
-      "javadoc": "是否为试点水厂"
-    },{
+    },
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "javadoc": "水厂编码",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "javadoc": "水厂名称",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "enterpriseLongitude",
+      "fieldType": "String",
+      "javadoc": "经营详细地址经度",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "enterpriseLatitude",
+      "fieldType": "String",
+      "javadoc": "经营详细地址纬度",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
       "fieldName": "contactName",
       "fieldType": "String",
-      "javadoc": "水厂联系人"
-    },{
+      "javadoc": "联系人姓名"
+    },
+    {
       "fieldName": "contactPhone",
       "fieldType": "String",
-      "javadoc": "水厂联系人电话"
-    },{
-      "fieldName": "enterpriseAddress",
+      "javadoc": "联系人手机"
+    },
+    {
+      "fieldName": "isTry",
+      "fieldType": "Boolean",
+      "javadoc": "是否为试点水厂",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "remark",
       "fieldType": "String",
-      "javadoc": "经营详细地址"
+      "javadoc": "备注"
     }
   ],
   "relationships": [],

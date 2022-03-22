@@ -5,15 +5,16 @@
       "fieldName": "beAssociatedName",
       "fieldType": "String",
       "javadoc": "数据名称"
-    },{
+    },
+    {
       "fieldName": "beAssociatedSource",
       "fieldType": "String",
       "javadoc": "数据来源"
     }
   ],
   "relationships": [],
-  "javadoc": "关联",
-  "entityTableName": "sys_correlation",
+  "javadoc": "被指标关联表",
+  "entityTableName": "sew_be_associated",
   "dto": "no",
   "pagination": "no",
   "service": "no",
