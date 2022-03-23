@@ -19,14 +19,14 @@ public class ActivemqListener {
         this.sewEmiService = sewEmiService;
     }
 
-//    @JmsListener(destination = "activemq-topic-test1")
-//    public void receive(String msg) {
-//        System.out.println("监听器收到msg:" + msg);
-//        MYSQLControl control = new MYSQLControl("localhost:3306", "db", "root", "123456");
-//        String sql = "insert into test" + "(" + "cod" + ")values('" + msg + "');";
-//        control.executeUpdate(sql);
-//        list.add(msg);
-//    }
+    @JmsListener(destination = "my_queue")
+    public void receive(String msg) {
+        System.out.println("监听器收到msg:" + msg);
+        MYSQLControl control = new MYSQLControl("localhost:3306", "db", "root", "123456");
+        String sql = "insert into test" + "(" + "cod" + ")values('" + msg + "');";
+        control.executeUpdate(sql);
+
+    }
 //
 //    @JmsListener(destination = "activemq-topic-test2")
 //    public void receive2(String msg) {
@@ -41,20 +41,20 @@ public class ActivemqListener {
 //        System.out.println("topic接受到：" + message);
 //    }
 
-    @JmsListener(destination = "activemq-topic-test3", containerFactory = "topicListener")
+    @JmsListener(destination = "ActiveMQ.Advisory.Topic", containerFactory = "topicListener")
     public void readActiveQueue2(Message message) {
-        System.out.println("topic2接受到：");
+        System.out.println("topic2接受到："+message);
 
-        try {
-            final MapMessage mapmessage=(MapMessage) message;
-            String json =mapmessage.getString("json");
-            final Gson gson= new Gson();
-            final SewEmiAccountVM.SewProcessVM vm = gson.fromJson(json, SewEmiAccountVM.SewProcessVM.class);
-            sewEmiService.saveAccountingResultToMySQL(1L,vm, Instant.now());
-            System.out.println("s");
-        } catch (final JMSException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            final MapMessage mapmessage=(MapMessage) message;
+//            String json =mapmessage.getString("json");
+//            final Gson gson= new Gson();
+//            final SewEmiAccountVM.SewProcessVM vm = gson.fromJson(json, SewEmiAccountVM.SewProcessVM.class);
+//            sewEmiService.saveAccountingResultToMySQL(1L,vm, Instant.now());
+//            System.out.println("s");
+//        } catch (final JMSException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

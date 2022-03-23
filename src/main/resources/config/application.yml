@@ -118,13 +118,13 @@ spring:
     allow-bean-definition-overriding: true
   task:
     execution:
-      thread-name-prefix: cnsp-java-task-
+      thread-name-prefix: zhjcxt-java-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: cnsp-java-scheduling-
+      thread-name-prefix: zhjcxt-java-scheduling-
       pool:
         size: 2
   thymeleaf:
@@ -157,7 +157,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'cnspJavaApp'
+    name: 'zhjcxtJavaApp'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #   allowed-origins: "http://localhost:8000"
@@ -167,11 +167,11 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: cnspJava@localhost
+    from: zhjcxtJava@localhost
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
-    title: cnspJava API
+    title: zhjcxtJava API
     description: cnspJava API documentation
     version: 0.0.1
     terms-of-service-url:

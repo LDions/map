@@ -25,5 +25,5 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
 
     Optional<User> findFirstByLoginAndIdNot(@NotNull String login, Long id);
 
-    Optional<User> findByEnterpriseId(Long enterpriseId);
+    Optional<User> findByEnterpriseCode(String enterpriseCode);
 }
