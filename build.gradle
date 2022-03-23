@@ -161,6 +161,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-cache"
 
     implementation "io.dropwizard.metrics:metrics-core"
+    implementation 'com.alibaba:fastjson:1.2.5'
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
