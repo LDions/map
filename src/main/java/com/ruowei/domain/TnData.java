@@ -1,13 +1,13 @@
 package com.ruowei.domain;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Data
 public class TnData {
-    private DateTimeFormat time;
+    private Instant time;
     private BigDecimal in_tn; //进水IN
     private BigDecimal in_cod; //进水COD
     private BigDecimal in_flow; //进水流量
