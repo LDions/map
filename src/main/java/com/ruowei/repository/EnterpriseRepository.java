@@ -19,5 +19,7 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, Q
 
     Optional<Enterprise> findByCodeAndIsTryIsTrue(String code);
 
-    Optional<Enterprise> findByCodeAndGroupIdAndIsTryIsTrue(String code,Long groupId);
+    Optional<Enterprise> findByCodeAndGroupIdAndIsTryIsTrue(String code, Long groupId);
+
+    Optional<Enterprise> findByCodeAndGroupIdAndIsTry(String code, Long groupId, Boolean tryed);
 }

@@ -43,13 +43,13 @@ public class PlatePushResource {
 
     @PostMapping("/plate/comprehensive")
     @Transactional
-    @ApiOperation(value = "平台接收水厂推送仪表，化验，日报数据接口", notes = "作者：韩宗晏")
+    @ApiOperation(value = "平台接收水厂（或集团）推送新增仪表，化验，日报数据接口", notes = "作者：韩宗晏")
     public ResponseEntity<String> createData(PlateComprehensiveDataVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
-                //根据水厂编码和所属集团id确定一个水厂
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTryIsTrue(vm.getCode(), group.getId());
+                //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的新增数据，不是试点水厂就是集团推送过来的非试点水厂新增数据
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
@@ -73,12 +73,13 @@ public class PlatePushResource {
 
     @PostMapping("/plate/alter_sewProcess")
     @Transactional
-    @ApiOperation(value = "平台接收水厂更新仪表数据", notes = "作者：韩宗晏")
+    @ApiOperation(value = "平台接收水厂（或集团）更新仪表数据", notes = "作者：韩宗晏")
     public ResponseEntity<String> editSewProcess(PlateEditSewProcessVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTryIsTrue(vm.getCode(), group.getId());
+                //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的更新仪表数据，不是试点水厂就是集团推送过来的非试点水厂更新仪表数据
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
@@ -102,12 +103,13 @@ public class PlatePushResource {
 
     @PostMapping("/plate/alter_sewSlu")
     @Transactional
-    @ApiOperation(value = "平台接收水厂更新化验数据", notes = "作者：韩宗晏")
+    @ApiOperation(value = "平台接收水厂(或集团)更新化验数据", notes = "作者：韩宗晏")
     public ResponseEntity<String> editSewSlu(PlateEditSewSluVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTryIsTrue(vm.getCode(), group.getId());
+                //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的更新化验数据，不是试点水厂就是集团推送过来的非试点水厂更新化验数据
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
@@ -131,12 +133,13 @@ public class PlatePushResource {
 
     @PostMapping("/plate/alter_sewPot")
     @Transactional
-    @ApiOperation(value = "平台接收水厂更新日报数据", notes = "作者：韩宗晏")
+    @ApiOperation(value = "平台接收水厂(或集团)更新日报数据", notes = "作者：韩宗晏")
     public ResponseEntity<String> editSewPot(PlateEditSewPotVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTryIsTrue(vm.getCode(), group.getId());
+                //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的更新日报数据，不是试点水厂就是集团推送过来的非试点水厂更新日报数据
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }

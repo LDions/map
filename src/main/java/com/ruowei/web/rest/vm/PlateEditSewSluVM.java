@@ -8,6 +8,9 @@ import java.time.Instant;
 
 @Data
 public class PlateEditSewSluVM {
+    //用于区分是集团传来的数据还是水厂传来的数据
+    @ApiModelProperty(value = "是否是试点水厂")
+    private Boolean isTry;
 
     //用于在平台中确定某个集团
     @ApiModelProperty(value = "集团编码")

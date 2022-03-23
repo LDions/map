@@ -56,7 +56,7 @@ public class Enterprise implements Serializable {
      */
     @ApiModelProperty(value = "是否为试点水厂",required = true)
     @Column(name = "is_try")
-    private String isTry;
+    private Boolean isTry;
 
     /**
      * 水厂所属集团编码
@@ -144,14 +144,14 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getIsTry() {
+    public Boolean getIsTry() {
         return isTry;
     }
 
-    public void setIsTry(String isTry) {
+    public void setIsTry(Boolean isTry) {
         this.isTry = isTry;
     }
-    public Enterprise isTry(String isTry) {
+    public Enterprise isTry(Boolean isTry) {
         this.isTry = isTry;
         return this;
     }
