@@ -185,7 +185,7 @@ public class SewEmiService {
                                           Instant nowInstant) {
         return new EmiDataDTO(
             craftId,
-            userModel.getEnterpriseId(),
+            userModel.getcode(),
             userModel.getEnterpriseName(),
             userModel.getUserId(),
             userModel.getNickName(),

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Spring Data SQL repository for the Group entity.
  */
@@ -13,4 +15,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long>, QuerydslPredicateExecutor<Group> {
 
+    Optional<Group> findByGroupCode(String groupCode);
 }

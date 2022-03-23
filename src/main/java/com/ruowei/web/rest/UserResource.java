@@ -6,6 +6,7 @@ import com.ruowei.domain.*;
 
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
+import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.UserVMMapper;
 import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.web.rest.errors.BadRequestProblem;
@@ -20,10 +21,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -67,6 +70,8 @@ public class UserResource {
                 throw new BadRequestProblem("新增失败", "用户名已存在");
             });
         User user = userVMMapper.toEntity(vm);
+        user.setEnterpriseCode(vm.getEnterpriseCode());
+        user.setGroupCode(vm.getGroupCode());
         user.setPassword(passwordEncoder.encode(Constants.DEFAULT_PASSWORD));
         User result = userRepository.save(user);
         vm.getRoleIds().forEach(roleId ->
@@ -124,7 +129,7 @@ public class UserResource {
 
     @GetMapping("/user/{id}")
     @ApiOperation(value = "查询用户详情接口", notes = "作者：孙小楠")
-    public ResponseEntity<UserVM> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserVM> getUser(@PathVariable Long id,@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         log.debug("REST request to get SysUser : {}", id);
         Optional<UserVM> optional = userRepository.findById(id)
             .map(sysUser -> {
@@ -135,6 +140,7 @@ public class UserResource {
                 vm.setRoleIds(roleIds);
                 return vm;
             });
+        log.info(userModel.getcode()+userModel.getgroupCode());
         return ResponseUtil.wrapOrNotFound(optional);
     }
 

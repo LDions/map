@@ -5,6 +5,6 @@ package com.ruowei.domain.enumeration;
  */
 public enum RoleType {
     ADMIN,
-    EMI,
-    SINK
+    GROUP,
+    ENTERPRISE
 }

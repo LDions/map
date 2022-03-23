@@ -23,7 +23,7 @@ public class EmiDataDTO {
     /**
      * 企业ID
      */
-    private Long enterpriseId;
+    private String enterpriseCode;
 
     /**
      * 企业名称
@@ -93,11 +93,11 @@ public class EmiDataDTO {
     public EmiDataDTO() {
     }
 
-    public EmiDataDTO(String documentCode, Long enterpriseId, String enterpriseName, Long reporterId, String reporterName, Instant reportTime, SewEmiAccountVM vm, WaterCarbonEmissionOutputDTO outputDTO) {
+    public EmiDataDTO(String documentCode, String enterpriseCode, String enterpriseName, Long reporterId, String reporterName, Instant reportTime, SewEmiAccountVM vm, WaterCarbonEmissionOutputDTO outputDTO) {
         this.key = BusinessEnum.EMIDATA.getCode() + documentCode;
         this.docType = BusinessEnum.EMIDATA.getCode();
         this.documentCode = documentCode;
-        this.enterpriseId = enterpriseId;
+        this.enterpriseCode = enterpriseCode;
         this.enterpriseName = enterpriseName;
         this.reporterId = reporterId;
         this.reporterName = reporterName;

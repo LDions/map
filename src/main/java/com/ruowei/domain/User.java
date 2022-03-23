@@ -47,13 +47,13 @@ public class User implements Serializable {
     @Column(name = "remark")
     private String remark;
 
-    @ApiModelProperty(value = "水厂ID")
-    @Column(name = "enterprise_id")
-    private Long enterpriseId;
+    @ApiModelProperty(value = "水厂编码")
+    @Column(name = "enterprise_code")
+    private String enterpriseCode;
 
-    @ApiModelProperty(value = "水厂ID")
-    @Column(name = "group_id")
-    private Long groupId;
+    @ApiModelProperty(value = "集团编码")
+    @Column(name = "group_code")
+    private String groupCode;
 
     public Long getId() {
         return id;
@@ -115,30 +115,33 @@ public class User implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public Long getEnterpriseId() {
-        return enterpriseId;
+    public String getEnterpriseCode() {
+        return enterpriseCode;
     }
 
-    public User enterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public User enterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
         return this;
     }
 
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-    public User groupId(Long groupId) {
-        this.groupId = groupId;
+    public User groupCode(String groupCode) {
+        this.groupCode = groupCode;
         return this;
     }
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -166,8 +169,8 @@ public class User implements Serializable {
             ", password='" + password + '\'' +
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
-            ", enterpriseId=" + enterpriseId +
-            ", groupId=" + groupId +
+            ", enterpriseCode='" + enterpriseCode + '\'' +
+            ", groupCode='" + groupCode + '\'' +
             '}';
     }
 }

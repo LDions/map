@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the SewSlu entity.
@@ -27,4 +28,6 @@ public interface SewSluRepository extends JpaRepository<SewSlu, Long> {
 
     SewSlu findFirstByIdDesc();
 
+
+    Optional<SewSlu> findByCraftCodeAndSluCode(String craftCode, String sluCode);
 }

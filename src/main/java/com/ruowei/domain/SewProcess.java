@@ -27,6 +27,13 @@ public class SewProcess implements Serializable {
     private Long id;
 
     /**
+     * 仪表编码
+     */
+    @ApiModelProperty(value = "仪表编码")
+    @Column(name = "process_code")
+    private String processCode;
+
+    /**
      * 进水总氮（mg/L）
      */
     @ApiModelProperty(value = "进水流量（mg/L）", required = true)
@@ -151,6 +158,13 @@ public class SewProcess implements Serializable {
     @ApiModelProperty(value = "工艺ID", required = true)
     @Column(name = "craft_id", nullable = false)
     private Long craftId;
+
+    /**
+     * 所属工艺编码
+     */
+    @ApiModelProperty(value = "工艺编码")
+    @Column(name = "craft_code")
+    private String craftCode;
 
     /**
      * 集团数据推送状态
@@ -397,6 +411,22 @@ public class SewProcess implements Serializable {
     }
     public void setCraftId(Long craftId) {
         this.craftId = craftId;
+    }
+
+    public String getCraftCode() {
+        return craftCode;
+    }
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
+    }
+
+    public String getProcessCode() {
+        return processCode;
+    }
+
+    public void setProcessCode(String processCode) {
+        this.processCode = processCode;
     }
 
     public SendStatusType getStatus() {

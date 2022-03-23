@@ -34,6 +34,21 @@ public class SewSlu implements Serializable {
     private Long craftId;
 
     /**
+     * 所属工艺编码
+     */
+    @ApiModelProperty(value = "工艺编码")
+    @Column(name = "craft_code")
+    private String craftCode;
+
+    /**
+     * 化验编码
+     */
+    @ApiModelProperty(value = "化验编码", required = true)
+    @Column(name = "slu_code", nullable = false)
+    private String sluCode;
+
+
+    /**
      * 污泥处置方法编码
      */
     @NotNull
@@ -190,6 +205,22 @@ public class SewSlu implements Serializable {
 
     public void setMethodCode(String methodCode) {
         this.methodCode = methodCode;
+    }
+
+    public String getCraftCode() {
+        return craftCode;
+    }
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
+    }
+
+    public String getSluCode() {
+        return sluCode;
+    }
+
+    public void setSluCode(String sluCode) {
+        this.sluCode = sluCode;
     }
 
     public String getMethodName() {

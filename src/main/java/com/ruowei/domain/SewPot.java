@@ -35,6 +35,20 @@ public class SewPot implements Serializable {
     private Long craftId;
 
     /**
+     * 日报编码
+     */
+    @ApiModelProperty(value = "日报编码", required = true)
+    @Column(name = "pot_code", nullable = false)
+    private String potCode;
+
+    /**
+     * 工艺编码
+     */
+    @ApiModelProperty(value = "工艺编码", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
+
+    /**
      * 进水PH
      */
     @ApiModelProperty(value = "进水PH", required = true)
@@ -282,6 +296,22 @@ public class SewPot implements Serializable {
     public SewPot id(Long id) {
         this.id = id;
         return this;
+    }
+
+    public String getPotCode() {
+        return potCode;
+    }
+
+    public void setPotCode(String potCode) {
+        this.potCode = potCode;
+    }
+
+    public String getCraftCode() {
+        return craftCode;
+    }
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
     }
 
     public BigDecimal getDayInPh() {
