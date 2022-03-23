@@ -20,4 +20,6 @@ public interface SewPotRepository extends JpaRepository<SewPot, Long> {
      * @return
      */
     List<SewPot> findByCraftId(@NotNull Long craftId);
+
+    SewPot findFirstByIdDesc();
 }

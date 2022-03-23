@@ -18,5 +18,5 @@ public class TnData {
     private BigDecimal aerobic_pool_do; //好氧池DO
     private BigDecimal aerobic_pool_temper; //好氧池水温
     private BigDecimal aerobic_pool_mlss; //好氧池MLSS
-    private BigDecimal out_tn; //出水IN
+    private BigDecimal out_tn; //出水TN
 }
