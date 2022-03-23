@@ -27,12 +27,11 @@ public class SewSlu implements Serializable {
     private Long id;
 
     /**
-     * 单据号
+     * 所属工艺ID
      */
-    @NotNull
-    @ApiModelProperty(value = "单据号", required = true)
-    @Column(name = "document_code", nullable = false)
-    private String documentCode;
+    @ApiModelProperty(value = "工艺ID", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
 
     /**
      * 污泥处置方法编码
@@ -153,12 +152,7 @@ public class SewSlu implements Serializable {
     @Column(name = "plate_status", nullable = false)
     private SendStatusType plateStatus;
 
-    /**
-     * 所属工艺ID
-     */
-    @ApiModelProperty(value = "日报表时间", required = true)
-    @Column(name = "craft_id", nullable = false)
-    private Long craftId;
+
 
     public SendStatusType getStatus() {
         return status;
@@ -183,19 +177,6 @@ public class SewSlu implements Serializable {
     public SewSlu id(Long id) {
         this.id = id;
         return this;
-    }
-
-    public String getDocumentCode() {
-        return this.documentCode;
-    }
-
-    public SewSlu documentCode(String documentCode) {
-        this.documentCode = documentCode;
-        return this;
-    }
-
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
     }
 
     public String getMethodCode() {
@@ -411,9 +392,9 @@ public class SewSlu implements Serializable {
     public String toString() {
         return "SewSlu{" +
             "id=" + id +
-            ", documentCode='" + documentCode + '\'' +
-            ", methodCode='" + methodCode + '\'' +
-            ", methodName='" + methodName + '\'' +
+            ", craftId=" + craftId +
+            ", methodCode='" + methodCode +
+            ", methodName='" + methodName +
             ", assInFlow=" + assInFlow +
             ", assInAmmonia=" + assInAmmonia +
             ", assInCod=" + assInCod +
@@ -428,7 +409,6 @@ public class SewSlu implements Serializable {
             ", assOutTp=" + assOutTp +
             ", dayTime=" + dayTime +
             ", status=" + status +
-            ", craftId=" + craftId +
             '}';
     }
 }

@@ -2,97 +2,91 @@
   "name": "SewProcess",
   "fields": [
     {
-      "fieldName": "documentCode",
-      "fieldType": "String",
-      "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "processTypeCode",
-      "fieldType": "String",
-      "javadoc": "工艺类型编码",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "processTypeName",
-      "fieldType": "String",
-      "javadoc": "工艺类型名称",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "dailyScale",
-      "fieldType": "BigDecimal",
-      "javadoc": "日均规模（m3/d）",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "operatingDays",
-      "fieldType": "Integer",
-      "javadoc": "本月运行天数",
-      "fieldValidateRules": ["required"]
+      "fieldName": "craftId",
+      "fieldType": "Long",
+      "javadoc": "工艺ID",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "inFlow",
       "fieldType": "BigDecimal",
       "javadoc": "进水流量（mg/L）",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "inAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "进水氨氮（mg/L）",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "inCod",
       "fieldType": "BigDecimal",
       "javadoc": "进水COD（mg/L）",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "inTn",
       "fieldType": "BigDecimal",
-      "javadoc": "进水总磷（mg/L）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "进水TN（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "inTp",
       "fieldType": "BigDecimal",
-      "javadoc": "进水Tp（mg/L）"
+      "javadoc": "进水TP（mg/L）"
+    },
+    {
+      "fieldName": "inSs",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水SS（mg/L）"
     },
     {
       "fieldName": "outFlow",
       "fieldType": "BigDecimal",
       "javadoc": "出水流量（mg/L）",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "outAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "出水氨氮（mg/L）",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "outCod",
       "fieldType": "BigDecimal",
       "javadoc": "出水COD（mg/L）",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "outTn",
       "fieldType": "BigDecimal",
-      "javadoc": "出水总磷（mg/L）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "出水TN（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "outTp",
       "fieldType": "BigDecimal",
-      "javadoc": "出水Tp（mg/L）"
-    },
-    {
-      "fieldName": "outPh",
-      "fieldType": "BigDecimal",
-      "javadoc": "出水PH（mg/L）"
+      "javadoc": "出水TP（mg/L）"
     },
     {
       "fieldName": "outSs",
@@ -100,43 +94,47 @@
       "javadoc": "出水SS（mg/L）"
     },
     {
-      "fieldName": "anaerobicPoolDo",
-      "fieldType": "BigDecimal",
-      "javadoc": "厌氧池DO（mg/L）",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "anoxicPoolDo",
       "fieldType": "BigDecimal",
-      "javadoc": "缺氧池DO（mg/L）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "缺氧池DO（mg/L）"
     },
     {
       "fieldName": "aerobicPoolDo",
       "fieldType": "BigDecimal",
-      "javadoc": "好氧池DO（mg/L）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "好氧池DO（mg/L）"
     },
     {
       "fieldName": "anoxicPoolDoOutNit",
       "fieldType": "BigDecimal",
       "javadoc": "缺氧池出口硝酸盐（mg/L）"
-    },{
+    },
+    {
       "fieldName": "aerobicPoolNit",
       "fieldType": "BigDecimal",
       "javadoc": "好氧池出口亚硝酸盐（mg/L）"
-    },{
+    },
+    {
       "fieldName": "dayTime",
       "fieldType": "Instant",
       "javadoc": "采集时间"
-    },{
-      "fieldName": "craftId",
-      "fieldType": "Long",
-      "javadoc": "所属工艺Id"
-    },{
+    },
+    {
       "fieldName": "status",
       "fieldType": "SendStatusType",
-      "javadoc": "数据推送状态"
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [],

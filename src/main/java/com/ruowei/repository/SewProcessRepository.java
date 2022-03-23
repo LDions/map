@@ -17,8 +17,8 @@ import java.util.Optional;
 public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
 
     /**
-     * 根据工艺查询污水厂工艺水质信息
-     * @param craftId 单据号
+     * 根据工艺查询仪表数据
+     * @param craftId 工艺ID
      * @return
      */
     List<SewProcess> findByCraftId(@NotNull Long craftId);

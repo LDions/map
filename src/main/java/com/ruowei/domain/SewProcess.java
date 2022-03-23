@@ -27,20 +27,6 @@ public class SewProcess implements Serializable {
     private Long id;
 
     /**
-     * 单据号
-     */
-    @ApiModelProperty(value = "单据号", required = true)
-    @Column(name = "document_code", nullable = false)
-    private String documentCode;
-
-    /**
-     * 工艺类型编码
-     */
-    @ApiModelProperty(value = "工艺类型编码", required = true)
-    @Column(name = "process_type_code", nullable = false)
-    private String craftCode;
-
-    /**
      * 进水总氮（mg/L）
      */
     @ApiModelProperty(value = "进水流量（mg/L）", required = true)
@@ -162,7 +148,7 @@ public class SewProcess implements Serializable {
     /**
      * 所属工艺ID
      */
-    @ApiModelProperty(value = "日报表时间", required = true)
+    @ApiModelProperty(value = "工艺ID", required = true)
     @Column(name = "craft_id", nullable = false)
     private Long craftId;
 
@@ -193,33 +179,6 @@ public class SewProcess implements Serializable {
         this.id = id;
         return this;
     }
-
-    public String getDocumentCode() {
-        return this.documentCode;
-    }
-
-    public SewProcess documentCode(String documentCode) {
-        this.documentCode = documentCode;
-        return this;
-    }
-
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
-    }
-
-    public String getCraftCode() {
-        return this.craftCode;
-    }
-
-    public SewProcess craftCode(String craftCode) {
-        this.craftCode = craftCode;
-        return this;
-    }
-
-    public void setCraftCode(String processTypeCode) {
-        this.craftCode = craftCode;
-    }
-
 
     public BigDecimal getInFlow() {
         return this.inFlow;
@@ -482,8 +441,6 @@ public class SewProcess implements Serializable {
     public String toString() {
         return "SewProcess{" +
             "id=" + getId() +
-            ", documentCode='" + getDocumentCode() + "'" +
-            ", craftCode='" + getCraftCode() + "'" +
             ", inFlow=" + getInFlow() +
             ", inAmmonia=" + getInAmmonia() +
             ", inCod=" + getInCod() +

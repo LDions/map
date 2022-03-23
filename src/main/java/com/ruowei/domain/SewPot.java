@@ -26,12 +26,13 @@ public class SewPot implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     /**
-     * 单据号
+     * 所属工艺ID
      */
-    @ApiModelProperty(value = "单据号", required = true)
-    @Column(name = "document_code", nullable = false)
-    private String documentCode;
+    @ApiModelProperty(value = "工艺ID", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
 
     /**
      * 进水PH
@@ -257,12 +258,6 @@ public class SewPot implements Serializable {
     @Column(name = "plate_status", nullable = false)
     private SendStatusType plateStatus;
 
-    /**
-     * 所属工艺ID
-     */
-    @ApiModelProperty(value = "日报表时间", required = true)
-    @Column(name = "craft_id", nullable = false)
-    private Long craftId;
 
     public SendStatusType getStatus() {
         return status;
@@ -289,17 +284,6 @@ public class SewPot implements Serializable {
         return this;
     }
 
-    public String getDocumentCode() {
-        return documentCode;
-    }
-
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
-    }
-    public SewPot documentCode(String documentCode) {
-        this.documentCode = documentCode;
-        return this;
-    }
     public BigDecimal getDayInPh() {
         return dayInPh;
     }
@@ -678,7 +662,7 @@ public class SewPot implements Serializable {
     public String toString() {
         return "SewPot{" +
             "id=" + getId() +
-            ", documentCode='" + getDocumentCode() + "'" +
+            ", craftId='" + getCraftId() + "'" +
             ", dayInPh='" + getDayInPh() + "'" +
             ", dayOutPh='" + getDayOutPh() + "'" +
             ", dayFirstMud='" + getDayFirstMud() + "'" +
@@ -709,7 +693,6 @@ public class SewPot implements Serializable {
             ", dayAerobicPoolSvi='" + getDayAerobicPoolSvi() + "'" +
             ", dayAerobicPoolTemper='" + getDayAerobicPoolTemper() + "'" +
             ", dayTime='" + getDayTime() + "'" +
-            ", craftId='" + getCraftId() + "'" +
             ", status='" + getStatus() + "'" +
             "}";
     }
