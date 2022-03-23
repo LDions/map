@@ -42,11 +42,11 @@ public class Craft {
     private String processName;
 
     /**
-     * 工艺段编号
+     * 工艺编码
      */
-    @ApiModelProperty(value = "工艺段编号")
-    @Column(name = "process_period")
-    private String processPeriod;
+    @ApiModelProperty(value = "工艺编码")
+    @Column(name = "craft_code")
+    private String craftCode;
 
     /**
      * 工艺段池容
@@ -182,17 +182,12 @@ public class Craft {
         this.id = id;
     }
 
-
-
-    public String getProcessPeriod() {
-        return processPeriod;
+    public String getCraftCode() {
+        return craftCode;
     }
-    public Craft processPeriod(String processPeriod) {
-        this.processPeriod = processPeriod;
-        return this;
-    }
-    public void setProcessPeriod(String processPeriod) {
-        this.processPeriod = processPeriod;
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
     }
 
     public String getCraftName() {
@@ -438,7 +433,6 @@ public class Craft {
             "id=" + id +
             ", craftName='" + craftName + '\'' +
             ", processName='" + processName + '\'' +
-            ", processPeriod='" + processPeriod + '\'' +
             ", processCapacity=" + processCapacity +
             ", inRefluxRatio=" + inRefluxRatio +
             ", outRefluxRatio=" + outRefluxRatio +

@@ -24,5 +24,5 @@ public interface CraftRepository extends JpaRepository<Craft, Long>, QuerydslPre
 
     Optional<Craft> getFirstByCraftName(String name);
 
-    Optional<Craft> findByProcessPeriod(String craftCode);
+    Optional<Craft> findByCraftCode(String craftCode);
 }

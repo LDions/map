@@ -87,7 +87,7 @@ public class PlatePushResource {
                     .map(sewProcess -> {
                         ObjectUtils.copyPropertiesIgnoreNull(vm, sewProcess);
                         //根据工艺编码查到工艺信息,确保与集团端的工艺信息能对应上
-                        craftRepository.findByProcessPeriod(vm.getCraftCode())
+                        craftRepository.findByCraftCode(vm.getCraftCode())
                             .ifPresent(craft -> {
                                 sewProcess.setCraftId(craft.getId());
                             });
@@ -116,7 +116,7 @@ public class PlatePushResource {
                     .map(sewSlu -> {
                         ObjectUtils.copyPropertiesIgnoreNull(vm, sewSlu);
                         //根据工艺编码查到工艺信息,确保与集团端的工艺信息能对应上
-                        craftRepository.findByProcessPeriod(vm.getCraftCode())
+                        craftRepository.findByCraftCode(vm.getCraftCode())
                             .ifPresent(craft -> {
                                 sewSlu.setCraftId(craft.getId());
                             });
@@ -145,7 +145,7 @@ public class PlatePushResource {
                     .map(sewPot -> {
                         ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
                         //根据工艺编码查到工艺信息,确保与集团端的工艺信息能对应上
-                        craftRepository.findByProcessPeriod(vm.getCraftCode())
+                        craftRepository.findByCraftCode(vm.getCraftCode())
                             .ifPresent(craft -> {
                                 sewPot.setCraftId(craft.getId());
                             });

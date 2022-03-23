@@ -298,6 +298,22 @@ public class SewPot implements Serializable {
         return this;
     }
 
+    public String getPotCode() {
+        return potCode;
+    }
+
+    public void setPotCode(String potCode) {
+        this.potCode = potCode;
+    }
+
+    public String getCraftCode() {
+        return craftCode;
+    }
+
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
+    }
+
     public BigDecimal getDayInPh() {
         return dayInPh;
     }
