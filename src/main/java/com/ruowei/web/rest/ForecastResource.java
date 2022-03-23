@@ -78,7 +78,7 @@ public class ForecastResource {
         ammoniaNitrogenVM.setInflowList(this.getInflows());
         //      判断是否试点
         Optional<Enterprise> enterprise = enterpriseRepository.findById(id);
-        String isTry;
+        Boolean isTry;
         if (enterprise.isPresent()) {
             //            试点
             isTry = enterprise.get().getIsTry();
