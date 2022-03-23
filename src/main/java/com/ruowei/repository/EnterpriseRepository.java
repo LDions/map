@@ -15,9 +15,12 @@ import java.util.Optional;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, QuerydslPredicateExecutor<Enterprise> {
 
-    List<Enterprise> findByGroupId(Long id);
+    List<Enterprise> findByGroupId(Long groupId);
+    Optional<Enterprise> findByCode(String code);
 
     Optional<Enterprise> findByCodeAndIsTryIsTrue(String code);
 
     Optional<Enterprise> findByCodeAndGroupIdAndIsTryIsTrue(String code,Long groupId);
+
+    void deleteByCode(String code);
 }

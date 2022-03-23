@@ -27,10 +27,10 @@ public class UserVM {
     private List<String> roleIds = new ArrayList<>();
 
     @ApiModelProperty(value = "水厂ID")
-    private Long enterpriseId;
+    private String enterpriseCode;
 
     @ApiModelProperty(value = "水厂ID")
-    private Long groupId;
+    private String groupCode;
 
 
     public Long getId() {
@@ -73,20 +73,20 @@ public class UserVM {
         this.roleIds = roleIds;
     }
 
-    public Long getEnterpriseId() {
-        return enterpriseId;
+    public String getEnterpriseCode() {
+        return enterpriseCode;
     }
 
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public String getGroupCode() {
+        return groupCode;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
 
     @Override
@@ -112,8 +112,8 @@ public class UserVM {
             ", login='" + login + '\'' +
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
-            ", enterpriseId=" + enterpriseId +
-            ", groupId=" + groupId +
+            ", enterpriseCode=" + enterpriseCode +
+            ", groupCode=" + groupCode +
             '}';
     }
 }

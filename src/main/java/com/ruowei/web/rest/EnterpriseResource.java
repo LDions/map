@@ -33,7 +33,6 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -126,16 +125,16 @@ public class EnterpriseResource {
         return ResponseUtil.wrapOrNotFound(optional);
     }
 
-    @DeleteMapping("/enterprise/{id}")
+    @DeleteMapping("/enterprise/{code}")
     @Transactional
     @ApiOperation(value = "删除企业接口", notes = "作者：孙小楠")
-    public ResponseEntity<Void> deleteEnterprise(@PathVariable Long id) {
-        log.debug("REST request to delete Enterprise : {}", id);
+    public ResponseEntity<Void> deleteEnterprise(@PathVariable String code) {
+        log.debug("REST request to delete Enterprise : {}", code);
 
-        if (userRepository.findByEnterpriseId(id).isPresent()) {
+        if (userRepository.findByEnterpriseCode(code).isPresent()) {
             throw new BadRequestProblem("删除失败", "企业下存在用户");
         }
-        enterpriseRepository.deleteById(id);
+        enterpriseRepository.deleteByCode(code);
         return ResponseEntity.noContent().build();
     }
 
@@ -143,9 +142,9 @@ public class EnterpriseResource {
     @ApiOperation(value = "获取当前用户对应的企业下拉列表接口", notes = "作者：孙小楠")
     public ResponseEntity<List<DropDownDTO>> getEnterpriseDropDown(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         List<DropDownDTO> result = new ArrayList<>();
-        if (userModel.getEnterpriseId() != null) {
+        if (userModel.getcode() != null) {
             DropDownDTO dto = new DropDownDTO();
-            dto.setId(userModel.getEnterpriseId());
+            dto.setCode(userModel.getcode());
             dto.setName(userModel.getEnterpriseName());
             result.add(dto);
         }
