@@ -11,7 +11,6 @@ import com.ruowei.web.rest.vm.AmmoniaNitrogenVM;
 import com.ruowei.web.rest.vm.TotalNitrogenVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,10 +30,6 @@ import java.util.stream.Collectors;
 public class ForecastResource {
     private final EnterpriseRepository enterpriseRepository;
     private final JPAQueryFactory queryFactory;
-    private final SewPotRepository sewPotRepository;
-    private final SewSluRepository sewSluRepository;
-    private final SewMeterRepository sewMeterRepository;
-    private final SewProcessRepository sewProcessRepository;
     private final QSewSlu qSewSlu = QSewSlu.sewSlu;
     private final QSewPot qSewPot = QSewPot.sewPot;
     private final QSewMeter qSewMeter = QSewMeter.sewMeter;
@@ -47,13 +42,9 @@ public class ForecastResource {
     private BigDecimal six = new BigDecimal(6);
     private int i = 0;
 
-    public ForecastResource(EnterpriseRepository enterpriseRepository, JPAQueryFactory queryFactory, SewPotRepository sewPotRepository, SewSluRepository sewSluRepository, SewMeterRepository sewMeterRepository, SewProcessRepository sewProcessRepository) {
+    public ForecastResource(EnterpriseRepository enterpriseRepository, JPAQueryFactory queryFactory) {
         this.enterpriseRepository = enterpriseRepository;
         this.queryFactory = queryFactory;
-        this.sewPotRepository = sewPotRepository;
-        this.sewSluRepository = sewSluRepository;
-        this.sewMeterRepository = sewMeterRepository;
-        this.sewProcessRepository = sewProcessRepository;
     }
 
     //    SewProcess 仪表
@@ -204,11 +195,152 @@ public class ForecastResource {
     @ApiOperation(value = "总氮预测传参", notes = "作者：孙小楠")
     public JSONObject forecastTn(Long id) {
 
+        sewSlus = null;
+        sewMeters = null;
+        sewProcesses = null;
+        TotalNitrogenVM totalNitrogenVM = new TotalNitrogenVM();
+        //          取日报
+        JPAQuery<SewPot> jpaQuery = queryFactory
+            .select(qSewPot)
+            .from(qSewPot)
+            .orderBy(qSewPot.id.desc());
+        SewPot sewPot = jpaQuery.fetchFirst();
+        //          data参数
+        List<TnData> data = new ArrayList<>();
+        //          拿到30小时的所有机器人（化验）数据
+        OptionalBooleanBuilder builder1 = new OptionalBooleanBuilder()
+            .notEmptyAnd(qSewSlu.dayTime::gt, end);
+        JPAQuery<SewSlu> jpaQuery1 = queryFactory
+            .select(qSewSlu)
+            .from(qSewSlu)
+            .where(builder1.build());
+        sewSlus = jpaQuery1.fetch();
+        totalNitrogenVM.setInflowList(this.getInflows());
+//      判断是否试点
+        Optional<Enterprise> enterprise = enterpriseRepository.findById(id);
+        Boolean isTry;
+        if (enterprise.isPresent()) {
+            //            试点
+            isTry = enterprise.get().getIsTry();
+            if (isTry.equals(true)) {
+                OptionalBooleanBuilder builder2 = new OptionalBooleanBuilder()
+                    .notEmptyAnd(qSewMeter.dayTime::gt, end);
+                JPAQuery<SewMeter> jpaQuery2 = queryFactory
+                    .select(qSewMeter)
+                    .from(qSewMeter)
+                    .where(builder2.build());
+                sewMeters = jpaQuery2.fetch();
 
+                Iterator it = sewMeters.listIterator();
+                BigDecimal assInCod = null;
+                BigDecimal inTn = null;
+                BigDecimal assAnoxicPoolDoOutNit = null;
+                BigDecimal assAerobicPoolDoOutNit = null;
+                BigDecimal assOutTn = null;
+                i = 0;
+                while (it.hasNext()) {
+                    i++;
+                    SewMeter s = (SewMeter) it.next();
+                    assInCod = assInCod.add(s.getAssInCod());
+                    inTn = inTn.add(s.getAssInTn());
+                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getAssAnoxicPoolDoOutNit());
+                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getAssAerobicPoolDoOutNit());
+                    assOutTn = assOutTn.add(s.getAssOutTn());
+                    if (i == 6) {
+                        i = 0;
+                        assInCod = assInCod.divide(six);
+                        inTn = inTn.divide(six);
+                        assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.divide(six);
+                        assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.divide(six);
+                        assOutTn = assOutTn.divide(six);
+                        TnData tnData = new TnData();
+                        tnData.setTime(s.getDayTime());
+                        tnData.setIn_tn(inTn);
+                        tnData.setIn_cod(assInCod);
+                        tnData.setAnoxic_pool_do_out_nit(assAnoxicPoolDoOutNit);
+                        tnData.setAerobic_pool_nit(assAerobicPoolDoOutNit);
+                        tnData.setOut_tn(assOutTn);
+                        tnData.setAnaerobic_pool_do(sewPot.getDayAnaerobicPoolDo());
+                        tnData.setCar_add(sewPot.getDayCarAdd());
+                        tnData.setAerobic_pool_temper(sewPot.getDayAerobicPoolTemper());
+                        tnData.setAerobic_pool_mlss(sewPot.getDayAerobicPoolMlss());
+                        data.add(tnData);
+                    }
+                    it.remove();
+                }
+            } else {
+//            非试点 用化验数据（机器人）
+                Iterator it1 = sewSlus.iterator();
+                BigDecimal assInCod = null;
+                BigDecimal inTn = null;
+                BigDecimal assAnoxicPoolDoOutNit = null;
+                BigDecimal assAerobicPoolDoOutNit = null;
+                BigDecimal assOutTn = null;
+                i = 0;
+                while (it1.hasNext()) {
+                    i++;
+                    SewMeter s = (SewMeter) it1.next();
+                    assInCod = assInCod.add(s.getAssInCod());
+                    inTn = inTn.add(s.getAssInTn());
+                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getAssAnoxicPoolDoOutNit());
+                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getAssAerobicPoolDoOutNit());
+                    assOutTn = assOutTn.add(s.getAssOutTn());
+                    if (i == 6) {
+                        i = 0;
+                        assInCod = assInCod.divide(six);
+                        inTn = inTn.divide(six);
+                        assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.divide(six);
+                        assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.divide(six);
+                        assOutTn = assOutTn.divide(six);
+                        TnData tnData = new TnData();
+                        tnData.setTime(s.getDayTime());
+                        tnData.setIn_tn(inTn);
+                        tnData.setIn_cod(assInCod);
+                        tnData.setAnoxic_pool_do_out_nit(assAnoxicPoolDoOutNit);
+                        tnData.setAerobic_pool_nit(assAerobicPoolDoOutNit);
+                        tnData.setOut_tn(assOutTn);
+                        tnData.setAnaerobic_pool_do(sewPot.getDayAnaerobicPoolDo());
+                        tnData.setCar_add(sewPot.getDayCarAdd());
+                        tnData.setAerobic_pool_temper(sewPot.getDayAerobicPoolTemper());
+                        tnData.setAerobic_pool_mlss(sewPot.getDayAerobicPoolMlss());
+                        data.add(tnData);
+                    }
+                    it1.remove();
+                }
+            }
+        }
+        //          30h仪表数据
+        OptionalBooleanBuilder builder3 = new OptionalBooleanBuilder()
+            .notEmptyAnd(qSewProcess.dayTime::gt, end);
+        JPAQuery<SewProcess> jpaQuery3 = queryFactory
+            .select(qSewProcess)
+            .from(qSewProcess)
+            .where(builder3.build());
+        sewProcesses = jpaQuery3.fetch();
+        Iterator it2 = sewProcesses.iterator();
+        BigDecimal in_flow = null;
+        BigDecimal aerobic_pool_do = null;
+        i = 0;
+        for (TnData tnData : data) {
+            while (it2.hasNext()) {
+                i++;
+                SewProcess s = (SewProcess) it2.next();
+                in_flow = in_flow.add(s.getInFlow());
+                aerobic_pool_do = aerobic_pool_do.add(s.getAerobicPoolDo());
+                if (i == 6) {
+                    i = 0;
+                    in_flow = in_flow.divide(six);
+                    aerobic_pool_do = aerobic_pool_do.divide(six);
+                    tnData.setIn_flow(in_flow);
+                    tnData.setAerobic_pool_do(aerobic_pool_do);
+                }
+                it2.remove();
+            }
+        }
 
-//        TnData tnData = new TnData();
-
-        return null;
+        totalNitrogenVM.setData(data);
+        JSONObject obj = JSON.parseObject(String.valueOf(totalNitrogenVM));
+        return obj;
     }
 
     //   进水参数list
@@ -217,7 +349,7 @@ public class ForecastResource {
             .select(qSewSlu)
             .from(qSewSlu)
             .orderBy(qSewSlu.id.desc());
-        start =jpaQuery.fetchFirst().getDayTime();
+        start = jpaQuery.fetchFirst().getDayTime();
         end = start.minus(30, ChronoUnit.HOURS);
 
         List<Inflow> inflowList = new ArrayList<>();
