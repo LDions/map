@@ -1,16 +1,10 @@
 package com.ruowei.web.rest;
 
-import com.ruowei.domain.Enterprise;
-import com.ruowei.domain.SewPot;
-import com.ruowei.domain.SewProcess;
-import com.ruowei.domain.SewSlu;
+import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.util.ObjectUtils;
 import com.ruowei.web.rest.errors.BadRequestAlertException;
-import com.ruowei.web.rest.vm.ComprehensiveDataVM;
-import com.ruowei.web.rest.vm.EditSewPotVM;
-import com.ruowei.web.rest.vm.EditSewProcessVM;
-import com.ruowei.web.rest.vm.EditSewSluVM;
+import com.ruowei.web.rest.vm.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +28,18 @@ public class GroupPushResource {
     private final SewProcessRepository sewProcessRepository;
     private final SewSluRepository sewSluRepository;
     private final SewPotRepository sewPotRepository;
+    private final SewMeterRepository sewMeterRepository;
+    private final SewEmiThresholdRepository sewEmiThresholdRepository;
 
-    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository) {
+    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.groupRepository = groupRepository;
         this.craftRepository = craftRepository;
         this.sewProcessRepository = sewProcessRepository;
         this.sewSluRepository = sewSluRepository;
         this.sewPotRepository = sewPotRepository;
+        this.sewMeterRepository = sewMeterRepository;
+        this.sewEmiThresholdRepository = sewEmiThresholdRepository;
     }
 
     @PostMapping("/comprehensive")
@@ -65,6 +63,7 @@ public class GroupPushResource {
         SewPot sewPot = new SewPot();
         ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
         sewPotRepository.save(sewPot);
+        //TODO 新增校表数据
         result = "推送成功";
         return ResponseEntity.ok().body(result);
     }
@@ -141,6 +140,53 @@ public class GroupPushResource {
                 result.set("推送成功");
                 return sewPot;
             }).orElseThrow(() -> new BadRequestAlertException("日报数据不存在", "", "编辑失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/alter_sewMeter")
+    @Transactional
+    @ApiOperation(value = "集团接收水厂更新校表数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> editSewMeter(EditSewMeterVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("水厂不存在", "", "");
+        }
+        //根据工艺编码和编码确定唯一一条日报数据
+        sewMeterRepository.findByCraftCodeAndMeterCode(vm.getCraftCode(), vm.getMeterCode())
+            .map(sewMeter -> {
+                ObjectUtils.copyPropertiesIgnoreNull(vm, sewMeter);
+                sewMeterRepository.save(sewMeter);
+                result.set("推送成功");
+                return sewMeter;
+            }).orElseThrow(() -> new BadRequestAlertException("校表数据不存在", "", "编辑失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/sewEmithreshold")
+    @Transactional
+    @ApiOperation(value = "集团接收试点水厂新增编辑设定数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> sewEmithreshold(SewEmithresholdVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getEnterpriseCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("水厂不存在", "", "");
+        }
+        //一个水厂对应一条设定数据
+        if (vm.getOperate().equals(0)) {
+            //新增设定数据
+            SewEmiThreshold sewEmiThreshold = new SewEmiThreshold();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, sewEmiThreshold);
+            sewEmiThresholdRepository.save(sewEmiThreshold);
+        } else {
+            //编辑设定数据
+            sewEmiThresholdRepository.findByEnterpriseCode(vm.getEnterpriseCode())
+                .map(sewEmiThreshold -> {
+                    ObjectUtils.copyPropertiesIgnoreNull(vm, sewEmiThreshold);
+                    sewEmiThresholdRepository.save(sewEmiThreshold);
+                    return sewEmiThreshold;
+                }).orElseThrow(() -> new BadRequestAlertException("设定数据不存在", "", ""));
+        }
         return ResponseEntity.ok().body(result.get());
     }
 }
