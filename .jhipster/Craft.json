@@ -2,9 +2,9 @@
   "name": "Craft",
   "fields": [
     {
-      "fieldName": "enterpriseId",
-      "fieldType": "Long",
-      "javadoc": "所属水厂Id",
+      "fieldName": "entCode",
+      "fieldType": "String",
+      "javadoc": "所属水厂Code",
       "fieldValidateRules": [
         "required"
       ]

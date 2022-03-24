@@ -36,7 +36,6 @@ public class ForecastResource {
     private final SewMeterRepository sewMeterRepository;
     private final SewProcessRepository sewProcessRepository;
     private final QSewSlu qSewSlu = QSewSlu.sewSlu;
-    private final QSewPot qSewPot = QSewPot.sewPot;
     private final QSewMeter qSewMeter = QSewMeter.sewMeter;
     private final QSewProcess qSewProcess = QSewProcess.sewProcess;
     private Instant start;
@@ -45,6 +44,7 @@ public class ForecastResource {
     private List<SewMeter> sewMeters;
     private List<SewProcess> sewProcesses;
     private BigDecimal six = new BigDecimal(6);
+    private QSewPot qSewPot = QSewPot.sewPot;
     private int i = 0;
 
     public ForecastResource(EnterpriseRepository enterpriseRepository, JPAQueryFactory queryFactory, SewPotRepository sewPotRepository, SewSluRepository sewSluRepository, SewMeterRepository sewMeterRepository, SewProcessRepository sewProcessRepository) {
@@ -88,15 +88,15 @@ public class ForecastResource {
             //            试点
             isTry = enterprise.get().getIsTry();
             if (isTry.equals(true)) {
-                OptionalBooleanBuilder builder2 = new OptionalBooleanBuilder()
+                OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
                     .notEmptyAnd(qSewMeter.dayTime::gt, end);
                 JPAQuery<SewMeter> jpaQuery2 = queryFactory
                     .select(qSewMeter)
                     .from(qSewMeter)
-                    .where(builder2.build());
+                    .where(builder1.build());
                 sewMeters = jpaQuery2.fetch();
                 Iterator it = sewMeters.listIterator();
-                BigDecimal assInCod = null;
+                BigDecimal corInCod = null;
                 BigDecimal inTn = null;
                 BigDecimal assInAmmonia = null;
                 BigDecimal assOutAmmonia = null;
@@ -104,18 +104,18 @@ public class ForecastResource {
                 while (it.hasNext()) {
                     i++;
                     SewMeter s = (SewMeter) it.next();
-                    assInCod = assInCod.add(s.getAssInCod());
-                    inTn = inTn.add(s.getAssInTn());
-                    assInAmmonia = assInAmmonia.add(s.getAssInAmmonia());
-                    assOutAmmonia = assOutAmmonia.add(s.getAssOutAmmonia());
+                    corInCod = corInCod.add(s.getCorInCod());
+                    inTn = inTn.add(s.getCorInTn());
+                    assInAmmonia = assInAmmonia.add(s.getCorInAmmonia());
+                    assOutAmmonia = assOutAmmonia.add(s.getCorOutAmmonia());
                     if (i == 6) {
                         i = 0;
-                        assInCod = assInCod.divide(six);
+                        corInCod = corInCod.divide(six);
                         inTn = inTn.divide(six);
                         assInAmmonia = assInAmmonia.divide(six);
                         assOutAmmonia = assOutAmmonia.divide(six);
                         AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
-                        ammoniaNitrogen.setIn_cod(assInCod);
+                        ammoniaNitrogen.setIn_cod(corInCod);
                         ammoniaNitrogen.setIn_tn(inTn);
                         ammoniaNitrogen.setIn_ammomia(assInAmmonia);
                         ammoniaNitrogen.setOut_ammoni(assOutAmmonia);
@@ -132,7 +132,7 @@ public class ForecastResource {
             } else {
 //            非试点 用化验数据（机器人）
                 Iterator it1 = sewSlus.iterator();
-                BigDecimal assInCod = null;
+                BigDecimal corInCod = null;
                 BigDecimal inTn = null;
                 BigDecimal assInAmmonia = null;
                 BigDecimal assOutAmmonia = null;
@@ -140,18 +140,18 @@ public class ForecastResource {
                 while (it1.hasNext()) {
                     i++;
                     SewSlu s = (SewSlu) it1.next();
-                    assInCod = assInCod.add(s.getAssInCod());
+                    corInCod = corInCod.add(s.getAssInCod());
                     inTn = inTn.add(s.getAssInTn());
                     assInAmmonia = assInAmmonia.add(s.getAssInAmmonia());
                     assOutAmmonia = assOutAmmonia.add(s.getAssOutAmmonia());
                     if (i == 6) {
                         i = 0;
-                        assInCod = assInCod.divide(six);
+                        corInCod = corInCod.divide(six);
                         inTn = inTn.divide(six);
                         assInAmmonia = assInAmmonia.divide(six);
                         assOutAmmonia = assOutAmmonia.divide(six);
                         AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
-                        ammoniaNitrogen.setIn_cod(assInCod);
+                        ammoniaNitrogen.setIn_cod(corInCod);
                         ammoniaNitrogen.setIn_tn(inTn);
                         ammoniaNitrogen.setIn_ammomia(assInAmmonia);
                         ammoniaNitrogen.setOut_ammoni(assOutAmmonia);

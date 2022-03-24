@@ -161,11 +161,11 @@ public class Craft {
     private BigDecimal concentration ;
 
     /**
-     * 上属水厂编号
+     * 上属水厂code
      */
-    @ApiModelProperty(value = "上属水厂Id")
-    @Column(name = "ent_Id")
-    private Long entId;
+    @ApiModelProperty(value = "上属水厂code")
+    @Column(name = "ent_code")
+    private String entCode;
 
     /**
      * 上属水厂名称
@@ -322,15 +322,15 @@ public class Craft {
         this.intimacy = intimacy;
     }
 
-    public Long getEntId() {
-        return entId;
+    public String getEntCode() {
+        return entCode;
     }
-    public Craft entId(Long entId) {
-        this.entId = entId;
+    public Craft entCode(String entCode) {
+        this.entCode = entCode;
         return this;
     }
-    public void setEntId(Long entId) {
-        this.entId = entId;
+    public void setEntCode(String entCode) {
+        this.entCode = entCode;
     }
 
     public BigDecimal getDilutionRatio() {
@@ -449,7 +449,7 @@ public class Craft {
             ", phosphorusDosing=" + phosphorusDosing +
             ", feAlActiveIngredients=" + feAlActiveIngredients +
             ", concentration=" + concentration +
-            ", entId=" + entId +
+            ", entId=" + entCode +
             ", entName='" + entName + '\'' +
             '}';
     }

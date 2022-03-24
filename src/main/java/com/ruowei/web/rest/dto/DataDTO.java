@@ -12,6 +12,9 @@ public class DataDTO {
 
         @ApiModelProperty(value = "集团名称")
         private String groupName;
+
+        @ApiModelProperty(value = "集团Code")
+        private String groupCode;
     }
 
     @Data
@@ -21,17 +24,20 @@ public class DataDTO {
         @ApiModelProperty(value = "水厂名称")
         private String name;
 
-        private Long id;
+        @ApiModelProperty(value = "水厂Code")
+        private String code;
 
-        @ApiModelProperty(value = "上属集团名称")
-        private String groupName;
+
+        @ApiModelProperty(value = "上属集团Code")
+        private String groupCode;
 
     }
 
     @Data
     public static class CraftDTO{
 
-        private Long id;
+        @ApiModelProperty(value = "工艺段code")
+        private String craftCode;
 
         @ApiModelProperty(value = "工艺段名称")
         private String craftName;

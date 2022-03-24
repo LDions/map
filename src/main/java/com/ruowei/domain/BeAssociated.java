@@ -27,12 +27,4 @@ public class BeAssociated {
     @ApiModelProperty(value = "被关联数据名称")
     @Column(name = "be_associated_name")
     private String beAssociatedName;
-
-    /**
-     * 数据来源
-     */
-    @ApiModelProperty(value = "被关联数据来源")
-    @Column(name = "be_associated_source")
-    private String beAssociatedSource;
-
 }

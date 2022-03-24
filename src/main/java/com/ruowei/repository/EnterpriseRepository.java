@@ -15,14 +15,14 @@ import java.util.Optional;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, QuerydslPredicateExecutor<Enterprise> {
 
-    List<Enterprise> findByGroupId(Long groupId);
+    List<Enterprise> findByGroupCode(String groupCode);
+
     Optional<Enterprise> findByCode(String code);
 
     Optional<Enterprise> findByCodeAndIsTryIsTrue(String code);
 
-    Optional<Enterprise> findByCodeAndGroupIdAndIsTryIsTrue(String code,Long groupId);
+    Optional<Enterprise> findByCodeAndGroupCodeAndIsTry(String code, String groupCode, Boolean tryed);
 
     void deleteByCode(String code);
 
-    Optional<Enterprise> findByCodeAndGroupIdAndIsTry(String code, Long groupId, Boolean tryed);
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Data
 public class SewEmiVM {
@@ -64,7 +65,6 @@ public class SewEmiVM {
 
         @ApiModelProperty(value = "好氧池出口亚硝酸盐（mg/L）")
         private BigDecimal aerobicPoolNit;
-
     }
 
     @Data
@@ -217,5 +217,4 @@ public class SewEmiVM {
         @ApiModelProperty(value = "生化池-好氧池温度（mg/L）")
         private BigDecimal dayAerobicPoolTemper;
     }
-
 }

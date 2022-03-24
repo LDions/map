@@ -15,12 +15,7 @@ import java.util.Optional;
 @Repository
 public interface SewPotRepository extends JpaRepository<SewPot, Long> {
 
-    /**
-     * 根据工艺ID查询日报数据
-     * @param craftId 工艺ID
-     * @return
-     */
-    List<SewPot> findByCraftId(@NotNull Long craftId);
+    List<SewPot> findByCraftCode(String craftCode);
 
     Optional<SewPot> findByCraftCodeAndPotCode(String craftCode, String potCode);
 }

@@ -27,13 +27,6 @@ public class Correlation {
     private Long id;
 
     /**
-     * 关联数据名称
-     */
-    @ApiModelProperty(value = "关联数据来源")
-    @Column(name = "relation_source")
-    private String relationSource;
-
-    /**
      * 关联数据来源
      */
     @ApiModelProperty(value = "关联数据名称")
@@ -53,17 +46,6 @@ public class Correlation {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getRelationSource() {
-        return relationSource;
-    }
-    public Correlation relationSource(String relationSource) {
-        this.relationSource = relationSource;
-        return this;
-    }
-    public void setRelationSource(String relationSource) {
-        this.relationSource = relationSource;
     }
 
     public String getRelationTarget() {
@@ -109,7 +91,6 @@ public class Correlation {
     public String toString() {
         return "Correlation{" +
             "id=" + id +
-            ", relationSource='" + relationSource + '\'' +
             ", relationTarget='" + relationTarget + '\'' +
             ", relevanceId=" + relevanceId +
             '}';

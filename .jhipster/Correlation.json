@@ -7,11 +7,6 @@
       "javadoc": "数据名称"
     },
     {
-      "fieldName": "relationSource",
-      "fieldType": "String",
-      "javadoc": "数据来源"
-    },
-    {
       "fieldName": "relevanceId",
       "fieldType": "Long",
       "javadoc": "关联数据Id"

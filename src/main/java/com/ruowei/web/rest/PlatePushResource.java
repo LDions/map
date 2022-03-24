@@ -49,7 +49,7 @@ public class PlatePushResource {
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
                 //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的新增数据，不是试点水厂就是集团推送过来的非试点水厂新增数据
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getCode(), group.getGroupCode(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
@@ -79,7 +79,7 @@ public class PlatePushResource {
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
                 //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的更新仪表数据，不是试点水厂就是集团推送过来的非试点水厂更新仪表数据
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getCode(), group.getGroupCode(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
@@ -109,7 +109,7 @@ public class PlatePushResource {
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
                 //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的更新化验数据，不是试点水厂就是集团推送过来的非试点水厂更新化验数据
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getCode(), group.getGroupCode(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
@@ -139,7 +139,7 @@ public class PlatePushResource {
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
                 //根据水厂编码和所属集团id确定一个水厂,是试点水厂就是水厂推送过来的更新日报数据，不是试点水厂就是集团推送过来的非试点水厂更新日报数据
-                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupIdAndIsTry(vm.getCode(), group.getId(), vm.getIsTry());
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getCode(), group.getGroupCode(), vm.getIsTry());
                 if (!enterprise.isPresent()) {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }

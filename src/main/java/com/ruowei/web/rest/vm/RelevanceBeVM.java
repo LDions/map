@@ -3,10 +3,10 @@ package com.ruowei.web.rest.vm;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class SituationAnalysisQM {
+public class RelevanceBeVM {
+
+    private Long id;
 
     @ApiModelProperty(value = "指标名称")
     private String target;

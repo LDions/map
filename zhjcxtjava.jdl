@@ -71,7 +71,7 @@ entity Group(sys_group) {
 }
 /** 水厂信息 */
 entity Enterprise(sys_enterprise) {
-	groupId Long /** 水厂所属集团Id */
+	groupCode String /** 水厂所属集团Code */
 	code String required /** 水厂编码 */
     name String required /** 水厂名称 */
     enterpriseLongitude String required /** 经营详细地址经度 */
@@ -83,7 +83,7 @@ entity Enterprise(sys_enterprise) {
 }
 /** 工艺信息 */
 entity Craft(craft){
-	enterpriseId Long required/** 所属水厂Id */
+	enterpriseCode String required/** 所属水厂Code */
     craftName String /** 工艺名称 */
     craftCode String /** 工艺编码 */
     AnaerobicPoolVolume BigDecimal /** 厌氧池池容 */
@@ -215,16 +215,17 @@ entity SewPot(sew_pot) {
 /** 数据校验表 */
 entity SewMeter(sew_meter){
     craftId Long required /** 工艺ID */
-    assInAmmonia BigDecimal /** 进水氨氮（mg/L） */
-    assInCod BigDecimal /** 进水COD（mg/L） */
-    assInTn BigDecimal /** 进水TN（mg/L） */
-    assInTp BigDecimal /** 进水TP（mg/L） */
-    assAnoxicPoolDoOutNit BigDecimal required /** 缺氧池出口硝酸盐（mg/L） */
-    assAerobicPoolDoOutNit BigDecimal required /** 好氧池出口硝酸盐（mg/L） */
-    assOutAmmonia BigDecimal /** 出水氨氮（mg/L） */
-    assOutCod BigDecimal /** 出水COD（mg/L） */
-    assOutTn BigDecimal /** 出水TN（mg/L） */
-    assOutTp BigDecimal /** 出水TP（mg/L） */
+    craftCode String /** 工艺编码 */
+    corInAmmonia BigDecimal /** 进水氨氮（mg/L） */
+    corInCod BigDecimal /** 进水COD（mg/L） */
+    corInTn BigDecimal /** 进水TN（mg/L） */
+    corInTp BigDecimal /** 进水TP（mg/L） */
+    corAnoxicPoolDoOutNit BigDecimal required /** 缺氧池出口硝酸盐（mg/L） */
+    corAerobicPoolDoOutNit BigDecimal required /** 好氧池出口硝酸盐（mg/L） */
+    corOutAmmonia BigDecimal /** 出水氨氮（mg/L） */
+    corOutCod BigDecimal /** 出水COD（mg/L） */
+    corOutTn BigDecimal /** 出水TN（mg/L） */
+    corOutTp BigDecimal /** 出水TP（mg/L） */
     dayTime Instant /** 时间 */
     status SendStatusType required /** 集团数据推送状态 */
     plateStatus SendStatusType required /** 平台数据推送状态 */
@@ -234,6 +235,7 @@ entity SewMeter(sew_meter){
 /** 其他指标 */
 entity OtherIndex(sew_index) {
     craftId Long required /** 工艺ID */
+    craftCode String /** 工艺编码 */
     methodCode String required /** 其他指标编码 */
     methodName String required /** 其他指标名称 */
     indexCapacity BigDecimal /** 指标量（kg/m）*/
@@ -252,13 +254,11 @@ enum SendStatusType {
 /** 被指标关联表 */
 entity BeAssociated(sew_be_associated){
     beAssociatedName String /** 数据名称 */
-    beAssociatedSource String /** 数据来源 */
 }
 
 /** 指标关联表 */
 entity Correlation(sew_correlation){
     relationTarget String /** 数据名称 */
-    relationSource String /** 数据来源 */
     relevanceId Long /** 关联数据Id */
 }
 
@@ -274,7 +274,7 @@ entity Dict(sys_dict) {
 
 /** 进出水指标阈值 */
 entity SewEmithreshold(sew_emi_threshold) {
-    enterpriseId Long required /** 企业id */
+    enterpriseCode String required /** 企业编码 */
     inCodLimit BigDecimal required /** 进水COD阈值 */
     inTotalNLimit BigDecimal required /** 进水总氮上限 */
     inTotalANLimit BigDecimal required /** 进水氨氮期上限 */

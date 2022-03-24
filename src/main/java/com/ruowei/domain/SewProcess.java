@@ -148,7 +148,7 @@ public class SewProcess implements Serializable {
     /**
      * 时间 yyyy/MM/dd HH:mm:ss
      */
-    @ApiModelProperty(value = "日报表时间", required = true)
+    @ApiModelProperty(value = "所属工艺ID", required = true)
     @Column(name = "day_time", nullable = false)
     private Instant dayTime;
 

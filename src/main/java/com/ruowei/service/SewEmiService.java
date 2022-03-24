@@ -326,126 +326,43 @@ public class SewEmiService {
     }
 
     /**
-     * 根据单据号获取污水厂碳排放数据，并封装为SewEmiDetailDTO
-     *
-     * @param craftId 单据号
-     * @return
-     */
-    public SewEmiDetailDTO convertToSewEmiDetailDtoBycraftId(Long craftId) {
-        /*SewEmi sewEmi = sewEmiRepository.findBycraftId(craftId).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));*/
-        SewEmiDetailDTO sewEmiDetailDTO = new SewEmiDetailDTO();
-
-        /*BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));*/
-        List<SewProcess> sewProcessList = sewProcessRepository.findByCraftId(craftId);
-        List<SewEmiAccountVM.SewProcessVM> sewProcessVms = new ArrayList<>();
-        for (SewProcess sewProcess : sewProcessList) {
-            SewEmiAccountVM.SewProcessVM vm = new SewEmiAccountVM.SewProcessVM();
-            BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
-            sewProcessVms.add(vm);
-        }
-        sewEmiDetailDTO.setSewProcesss(sewProcessVms);
-        List<SewPot> sewPotList = sewPotRepository.findByCraftId(craftId);
-        List<SewEmiAccountVM.SewPotVM> sewPotVms = new ArrayList<>();
-        for (SewPot sewPot : sewPotList) {
-            SewEmiAccountVM.SewPotVM vm = new SewEmiAccountVM.SewPotVM();
-            BeanUtils.copyProperties(sewPot, vm, BeanUtil.getNullPropertyNames(sewPot));
-            sewPotVms.add(vm);
-        }
-        sewEmiDetailDTO.setSewPots(sewPotVms);
-        List<SewSlu> sewSluList = sewSluRepository.findByCraftId(craftId);
-        List<SewEmiAccountVM.SewSluVM> sewSluVms = new ArrayList<>();
-        for (SewSlu sewSlu : sewSluList) {
-            SewEmiAccountVM.SewSluVM vm = new SewEmiAccountVM.SewSluVM();
-            BeanUtils.copyProperties(sewSlu, vm, BeanUtil.getNullPropertyNames(sewSlu));
-            sewSluVms.add(vm);
-        }
-        sewEmiDetailDTO.setSewSlus(sewSluVms);
-
-        List<OtherIndex> otherIndexList = otherIndexRepository.findByCraftId(craftId);
-        List<SewEmiAccountVM.OtherIndexVM> otherIndexVMS = new ArrayList<>();
-        for (OtherIndex otherIndex : otherIndexList) {
-            SewEmiAccountVM.OtherIndexVM vm = new SewEmiAccountVM.OtherIndexVM();
-            BeanUtils.copyProperties(otherIndex, vm, BeanUtil.getNullPropertyNames(otherIndex));
-            otherIndexVMS.add(vm);
-        }
-        sewEmiDetailDTO.setOtherIndexs(otherIndexVMS);
-        return sewEmiDetailDTO;
-    }
-
-    /**
-     * 根据单据号获取污水厂碳排放数据，并封装为SewDetailDTO
-     *
-     * @param craftId 单据号
-     * @return
-     */
-    public List<SewEmiVM> convertToSewDetailDtoBycraftId(Long craftId) {
-        /*SewEmi sewEmi = sewEmiRepository.findBycraftId(craftId).orElseThrow(() -> new BadRequestProblem("查询详情失败", "该污水厂碳排放数据不存在"));*/
-
-        List<SewEmiVM> emiVMS = new ArrayList<>();
-        /*BeanUtils.copyProperties(sewEmi, sewEmiDetailDTO, BeanUtil.getNullPropertyNames(sewEmi));*/
-        List<SewProcess> sewProcessList = sewProcessRepository.findByCraftId(craftId);
-        for (SewProcess sewProcess : sewProcessList) {
-            SewEmiVM.SewProcessVM vm = new SewEmiVM.SewProcessVM();
-            BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
-            emiVMS.add(vm);
-        }
-        List<SewPot> sewPotList = sewPotRepository.findByCraftId(craftId);
-        for (SewPot sewPot : sewPotList) {
-            SewEmiVM.SewPotVM vm = new SewEmiVM.SewPotVM();
-            BeanUtils.copyProperties(sewPot, vm, BeanUtil.getNullPropertyNames(sewPot));
-            emiVMS.add(vm);
-        }
-        List<SewSlu> sewSluList = sewSluRepository.findByCraftId(craftId);
-        for (SewSlu sewSlu : sewSluList) {
-            SewEmiVM.SewSluVM vm = new SewEmiVM.SewSluVM();
-            BeanUtils.copyProperties(sewSlu, vm, BeanUtil.getNullPropertyNames(sewSlu));
-            emiVMS.add(vm);
-        }
-
-        return emiVMS;
-    }
-
-    /**
      * 根据来源及id获取详情数据
      */
-    public List<SewEmiVM> getTerget(Long id, String source) {
+    public SewEmiVM getTarget(Long id, String source) {
 
-        List<SewEmiVM> emiVMS = new ArrayList<>();
-
+        SewEmiVM sewEmiVM = new SewEmiVM();
         switch (source) {
             case "meter":
                 SewProcess sewProcess = sewProcessRepository.findById(id).get();
-                SewEmiVM.SewProcessVM vm = new SewEmiVM.SewProcessVM();
-                BeanUtils.copyProperties(sewProcess, vm, BeanUtil.getNullPropertyNames(sewProcess));
-                emiVMS.add(vm);
+                SewEmiVM.SewProcessVM sewProcessVM = new SewEmiVM.SewProcessVM();
+                BeanUtils.copyProperties(sewProcess, sewProcessVM, BeanUtil.getNullPropertyNames(sewProcess));
+                sewEmiVM = sewProcessVM;
                 break;
             case "daily":
                 SewPot sewPot = sewPotRepository.findById(id).get();
-                SewEmiVM.SewPotVM vm1 = new SewEmiVM.SewPotVM();
-                BeanUtils.copyProperties(sewPot, vm1, BeanUtil.getNullPropertyNames(sewPot));
-                emiVMS.add(vm1);
+                SewEmiVM.SewPotVM sewPotVM = new SewEmiVM.SewPotVM();
+                BeanUtils.copyProperties(sewPot, sewPotVM, BeanUtil.getNullPropertyNames(sewPot));
+                sewEmiVM = sewPotVM;
                 break;
             case "assay":
                 SewSlu sewSlu = sewSluRepository.findById(id).get();
-                SewEmiVM.SewSluVM vm2 = new SewEmiVM.SewSluVM();
-                BeanUtils.copyProperties(sewSlu, vm2, BeanUtil.getNullPropertyNames(sewSlu));
-                emiVMS.add(vm2);
+                SewEmiVM.SewSluVM sewSluVM = new SewEmiVM.SewSluVM();
+                BeanUtils.copyProperties(sewSlu, sewSluVM, BeanUtil.getNullPropertyNames(sewSlu));
+                sewEmiVM = sewSluVM;
                 break;
             case "verify":
                 SewMeter sewMeter = sewMeterRepository.findById(id).get();
-                SewEmiVM.SewMeterVM vm3 = new SewEmiVM.SewMeterVM();
-                BeanUtils.copyProperties(sewMeter, vm3, BeanUtil.getNullPropertyNames(sewMeter));
-                emiVMS.add(vm3);
+                SewEmiVM.SewMeterVM sewMeterVM = new SewEmiVM.SewMeterVM();
+                BeanUtils.copyProperties(sewMeter, sewMeterVM, BeanUtil.getNullPropertyNames(sewMeter));
+                sewEmiVM = sewMeterVM;
         }
-        return emiVMS;
+        return sewEmiVM;
     }
 
     /**
-     *
      * 批量修改
-     *
-     * */
-    public void modificationBycraftId(Long id, SewDetailsDTO sewProcessDTO,String source) {
+     */
+    public void modificationByDocumentCode(Long id, SewDetailsDTO sewProcessDTO, String source) {
 
        /* switch (source){
             case "meter":

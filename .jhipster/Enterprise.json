@@ -2,9 +2,9 @@
   "name": "Enterprise",
   "fields": [
     {
-      "fieldName": "groupId",
-      "fieldType": "Long",
-      "javadoc": "水厂所属集团Id"
+      "fieldName": "groupCode",
+      "fieldType": "String",
+      "javadoc": "水厂所属集团Code"
     },
     {
       "fieldName": "code",
