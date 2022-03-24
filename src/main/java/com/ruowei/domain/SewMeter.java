@@ -27,6 +27,13 @@ public class SewMeter {
     private Long id;
 
     /**
+     * 校表编码
+     */
+    @ApiModelProperty(value = "校表编码")
+    @Column(name = "meter_code")
+    private String meterCode;
+
+    /**
      * 所属工艺code
      */
     @ApiModelProperty(value = "工艺code", required = true)
@@ -131,6 +138,14 @@ public class SewMeter {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMeterCode() {
+        return meterCode;
+    }
+
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode;
     }
 
     public BigDecimal getCorInAmmonia() {

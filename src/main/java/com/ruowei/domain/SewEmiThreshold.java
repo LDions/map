@@ -26,11 +26,11 @@ public class SewEmiThreshold implements Serializable {
     private Long id;
 
     /**
-     * 单据号
+     * 水厂编码
      */
-    @ApiModelProperty(value = "企业id", required = true)
-    @Column(name = "enterprise_id", nullable = false)
-    private Long enterpriseId;
+    @ApiModelProperty(value = "水厂编码", required = true)
+    @Column(name = "enterprise_code", nullable = false)
+    private String enterpriseCode;
 
     /**
      * 进水COD阈值
@@ -116,17 +116,17 @@ public class SewEmiThreshold implements Serializable {
         return this;
     }
 
-    public Long getEnterpriseId() {
-        return this.enterpriseId;
+    public String getEnterpriseCode() {
+        return enterpriseCode;
     }
 
-    public SewEmiThreshold enterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
+    }
+
+    public SewEmiThreshold enterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
         return this;
-    }
-
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
     }
 
     public BigDecimal getInCodLimit() {
@@ -237,10 +237,12 @@ public class SewEmiThreshold implements Serializable {
     public SendStatusType getStatus() {
         return status;
     }
+
     public SewEmiThreshold status(SendStatusType status) {
         this.status = status;
         return this;
     }
+
     public void setStatus(SendStatusType status) {
         this.status = status;
     }
@@ -252,6 +254,7 @@ public class SewEmiThreshold implements Serializable {
     public void setPlateStatus(SendStatusType plateStatus) {
         this.plateStatus = plateStatus;
     }
+
     public SewEmiThreshold plateStatus(SendStatusType plateStatus) {
         this.plateStatus = plateStatus;
         return this;
@@ -280,7 +283,7 @@ public class SewEmiThreshold implements Serializable {
     public String toString() {
         return "SewProcess{" +
             "id=" + getId() +
-            ", enterpriseId='" + getEnterpriseId() + "'" +
+            ", enterpriseCode='" + getEnterpriseCode() + "'" +
             ", inCodLimit='" + getInCodLimit() + "'" +
             ", inTotalNLimit=" + getInTotalNLimit() +
             ", inTotalANLimit=" + getInTotalANLimit() +
