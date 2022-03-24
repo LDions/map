@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.ruowei.config.Constants.DEFAULT_PASSWORD;
+
 @RestController
 @RequestMapping("/api")
 @Api(tags = "用户管理")
@@ -74,7 +76,7 @@ public class UserResource {
         User user = userVMMapper.toEntity(vm);
         user.setEnterpriseCode(vm.getEnterpriseCode());
         user.setGroupCode(vm.getGroupCode());
-        user.setPassword(passwordEncoder.encode(Constants.DEFAULT_PASSWORD));
+        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         User result = userRepository.save(user);
         vm.getRoleIds().forEach(roleId ->
             userRoleRepository.save(new UserRole().userId(result.getId()).roleId(Long.valueOf(roleId)))
@@ -162,11 +164,10 @@ public class UserResource {
     @PostMapping("/user/reset/{id}")
     @ApiOperation(value = "重置用户密码接口", notes = "作者：张锴")
     public ResponseEntity<String> resetUserPassword(
-        @PathVariable Long id,
-        @ApiParam(value = "密码", required = true) @RequestParam String password
+        @PathVariable Long id
     ) {
         User user = userRepository.findById(id).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到该用户"));
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         userRepository.save(user);
         return ResponseEntity.ok().body("重置成功");
     }

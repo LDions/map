@@ -40,6 +40,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ruowei.config.Constants.DEFAULT_PASSWORD;
+
 @RestController
 @RequestMapping("/api")
 @Api(tags = "企业管理")
@@ -154,14 +156,14 @@ public class EnterpriseResource {
     }
     @PostMapping("/enterprise/reset/{code}")
     @ApiOperation(value = "重置企业密码接口", notes = "作者：张锴")
-    public ResponseEntity<String> resetEnterprisePassword(@PathVariable String code,@ApiParam(value = "密码", required = true) @RequestParam String password) {
+    public ResponseEntity<String> resetEnterprisePassword(@PathVariable String code) {
         enterpriseRepository
             .findByCode(code)
             .orElseThrow(() -> {
                 throw new BadRequestProblem("重置失败", "该企业不存在");
             });
         User user = userRepository.findByEnterpriseCode(code).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到业主用户"));
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         userRepository.save(user);
         return ResponseEntity.ok().body("重置成功");
     }
