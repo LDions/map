@@ -14,6 +14,7 @@ import com.ruowei.web.rest.vm.UserQM;
 import com.ruowei.web.rest.vm.UserVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import tech.jhipster.web.util.ResponseUtil;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -149,11 +151,6 @@ public class UserResource {
     @ApiOperation(value = "删除用户接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.debug("REST request to delete SysUser : {}", id);
-        //TODO 无法删除进行过核算的用户
-//        if (sewEmiRepository.existsByReporterId(id)) {
-//            throw new BadRequestProblem("删除失败", "该用户进行过水务碳排放核算");
-//        }
-
         userRoleRepository.deleteAllByUserId(id);
         jpaQueryFactory
             .update(qUser)
@@ -162,4 +159,15 @@ public class UserResource {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/user/reset/{id}")
+    @ApiOperation(value = "重置用户密码接口", notes = "作者：张锴")
+    public ResponseEntity<String> resetUserPassword(
+        @PathVariable Long id,
+        @ApiParam(value = "密码", required = true) @RequestParam String password
+    ) {
+        User user = userRepository.findById(id).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到该用户"));
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+        return ResponseEntity.ok().body("重置成功");
+    }
 }
