@@ -1,7 +1,7 @@
 /** 用户 */
 entity User(sys_user) {
-	groupId Long /** 集团ID */
-    enterpriseId Long /** 水厂ID */
+	groupCode String /** 集团编码 */
+    enterpriseCode String /** 水厂编码 */
     login String required /** 登录账号 */
 	password String required minlength(60) maxlength(60)  /** 密码 */
 	nickName String required /** 用户昵称 */
