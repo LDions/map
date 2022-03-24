@@ -36,6 +36,7 @@ public class ForecastResource {
     private final SewMeterRepository sewMeterRepository;
     private final SewProcessRepository sewProcessRepository;
     private final QSewSlu qSewSlu = QSewSlu.sewSlu;
+    private final QSewPot qSewPot = QSewPot.sewPot;
     private final QSewMeter qSewMeter = QSewMeter.sewMeter;
     private final QSewProcess qSewProcess = QSewProcess.sewProcess;
     private Instant start;
@@ -64,7 +65,11 @@ public class ForecastResource {
         sewProcesses = null;
         AmmoniaNitrogenVM ammoniaNitrogenVM = new AmmoniaNitrogenVM();
         //          取日报
-        SewPot sewPot = sewPotRepository.findFirstByIdDesc();
+        JPAQuery<SewPot> jpaQuery = queryFactory
+            .select(qSewPot)
+            .from(qSewPot)
+            .orderBy(qSewPot.id.desc());
+        SewPot sewPot = jpaQuery.fetchFirst();
         //          data参数
         List<AmmoniaNitrogen> data = new ArrayList<>();
         //          拿到30小时的所有机器人（化验）数据
@@ -83,13 +88,13 @@ public class ForecastResource {
             //            试点
             isTry = enterprise.get().getIsTry();
             if (isTry.equals(true)) {
-                OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
+                OptionalBooleanBuilder builder2 = new OptionalBooleanBuilder()
                     .notEmptyAnd(qSewMeter.dayTime::gt, end);
-                JPAQuery<SewMeter> jpaQuery = queryFactory
+                JPAQuery<SewMeter> jpaQuery2 = queryFactory
                     .select(qSewMeter)
                     .from(qSewMeter)
-                    .where(builder1.build());
-                sewMeters = jpaQuery.fetch();
+                    .where(builder2.build());
+                sewMeters = jpaQuery2.fetch();
                 Iterator it = sewMeters.listIterator();
                 BigDecimal assInCod = null;
                 BigDecimal inTn = null;
@@ -163,13 +168,13 @@ public class ForecastResource {
             }
         }
 //          30h仪表数据
-        OptionalBooleanBuilder builder2 = new OptionalBooleanBuilder()
+        OptionalBooleanBuilder builder3 = new OptionalBooleanBuilder()
             .notEmptyAnd(qSewProcess.dayTime::gt, end);
-        JPAQuery<SewProcess> jpaQuery2 = queryFactory
+        JPAQuery<SewProcess> jpaQuery3 = queryFactory
             .select(qSewProcess)
             .from(qSewProcess)
-            .where(builder2.build());
-        sewProcesses = jpaQuery2.fetch();
+            .where(builder3.build());
+        sewProcesses = jpaQuery3.fetch();
         Iterator it2 = sewProcesses.iterator();
         BigDecimal aerobic_pool_do = null;
         BigDecimal aerobic_pool_ss = null;
@@ -199,13 +204,20 @@ public class ForecastResource {
     @ApiOperation(value = "总氮预测传参", notes = "作者：孙小楠")
     public JSONObject forecastTn(Long id) {
 
+
+
+//        TnData tnData = new TnData();
+
         return null;
     }
 
     //   进水参数list
     public List<Inflow> getInflows() {
-        SewSlu first = sewSluRepository.findFirstByIdDesc();
-        start = first.getDayTime();
+        JPAQuery<SewSlu> jpaQuery = queryFactory
+            .select(qSewSlu)
+            .from(qSewSlu)
+            .orderBy(qSewSlu.id.desc());
+        start =jpaQuery.fetchFirst().getDayTime();
         end = start.minus(30, ChronoUnit.HOURS);
 
         List<Inflow> inflowList = new ArrayList<>();

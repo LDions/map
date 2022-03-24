@@ -26,8 +26,5 @@ public interface SewSluRepository extends JpaRepository<SewSlu, Long> {
 
     List<SewSlu> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
 
-    SewSlu findFirstByIdDesc();
-
-
     Optional<SewSlu> findByCraftCodeAndSluCode(String craftCode, String sluCode);
 }
