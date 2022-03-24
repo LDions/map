@@ -182,31 +182,31 @@ entity SewPot(sew_pot) {
 	dayCarAdd BigDecimal /** 碳源投加量（mg/L） */
 
 	//生化池-厌氧池
-	dayAnaerobicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
-	dayAnaerobicPoolOrp Bigdecimal /** 生化池-厌氧池ORP （）*/
-	dayAnaerobicPoolDo Bigdecimal /** 生化池-厌氧池DO （）*/
-	dayAnaerobicPoolSour Bigdecimal /** 生化池-厌氧池SOUR （）*/
-	dayAnaerobicPoolSv Bigdecimal /** 生化池-厌氧池SV （）*/
-	dayAnaerobicPoolMlss Bigdecimal /** 生化池-厌氧池MLSS （）*/
-	dayAnaerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
+	dayAnaerobicPoolPh BigDecimal /** 生化池-厌氧池PH （）*/
+	dayAnaerobicPoolOrp BigDecimal /** 生化池-厌氧池ORP （）*/
+	dayAnaerobicPoolDo BigDecimal /** 生化池-厌氧池DO （）*/
+	dayAnaerobicPoolSour BigDecimal /** 生化池-厌氧池SOUR （）*/
+	dayAnaerobicPoolSv BigDecimal /** 生化池-厌氧池SV （）*/
+	dayAnaerobicPoolMlss BigDecimal /** 生化池-厌氧池MLSS （）*/
+	dayAnaerobicPoolTemper BigDecimal /** 生化池-厌氧池温度 （）*/
 	//生化池-缺氧池
-	dayAnoxicPoolPh Bigdecimal /** 生化池-缺氧池PH （）*/
-	dayAnoxicPoolOrp Bigdecimal /** 生化池-缺氧池ORP （）*/
-	dayAnoxicPoolDo Bigdecimal /** 生化池-缺氧池DO （）*/
-	dayAnoxicPoolSour Bigdecimal /** 生化池-缺氧池SOUR （）*/
-	dayAnoxicPoolSv Bigdecimal /** 生化池-缺氧池SV （）*/
-	dayAnoxicPoolMlss Bigdecimal /** 生化池-缺氧池MLSS （）*/
-	dayAnoxicPoolTemper Bigdecimal /** 生化池-缺氧池温度 （）*/
+	dayAnoxicPoolPh BigDecimal /** 生化池-缺氧池PH （）*/
+	dayAnoxicPoolOrp BigDecimal /** 生化池-缺氧池ORP （）*/
+	dayAnoxicPoolDo BigDecimal /** 生化池-缺氧池DO （）*/
+	dayAnoxicPoolSour BigDecimal /** 生化池-缺氧池SOUR （）*/
+	dayAnoxicPoolSv BigDecimal /** 生化池-缺氧池SV （）*/
+	dayAnoxicPoolMlss BigDecimal /** 生化池-缺氧池MLSS （）*/
+	dayAnoxicPoolTemper BigDecimal /** 生化池-缺氧池温度 （）*/
 	//生化池-好氧池
-	dayAerobicPoolPh Bigdecimal /** 生化池-好氧池PH （）*/
-	dayAerobicPoolOrp Bigdecimal /** 生化池-好氧池ORP （）*/
-	dayAerobicPoolDo Bigdecimal /** 生化池-好氧池DO （）*/
-	dayAerobicPoolSour Bigdecimal /** 生化池-好氧池SOUR （）*/
-	dayAerobicPoolSv Bigdecimal /** 生化池-好氧池SV （）*/
-	dayAerobicPoolMlss Bigdecimal /** 生化池-好氧池MLSS （）*/
-	dayAerobicPoolMlvss Bigdecimal /** 生化池-好氧池MLVSS （）*/
-    dayAerobicPoolSvi Bigdecimal /** 生化池-好氧池SVI（）*/
-	dayAerobicPoolTemper Bigdecimal /** 生化池-厌氧池温度 （）*/
+	dayAerobicPoolPh BigDecimal /** 生化池-好氧池PH （）*/
+	dayAerobicPoolOrp BigDecimal /** 生化池-好氧池ORP （）*/
+	dayAerobicPoolDo BigDecimal /** 生化池-好氧池DO （）*/
+	dayAerobicPoolSour BigDecimal /** 生化池-好氧池SOUR （）*/
+	dayAerobicPoolSv BigDecimal /** 生化池-好氧池SV （）*/
+	dayAerobicPoolMlss BigDecimal /** 生化池-好氧池MLSS （）*/
+	dayAerobicPoolMlvss BigDecimal /** 生化池-好氧池MLVSS （）*/
+    dayAerobicPoolSvi BigDecimal /** 生化池-好氧池SVI（）*/
+	dayAerobicPoolTemper BigDecimal /** 生化池-厌氧池温度 （）*/
 	dayTime Instant /** 采集时间 */
 	status SendStatusType required /** 集团数据推送状态 */
 	plateStatus SendStatusType required /** 平台数据推送状态 */
