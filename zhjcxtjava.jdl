@@ -65,8 +65,8 @@ entity RoleMenu(sys_role_menu) {
 entity Group(sys_group) {
     groupName String required/** 集团名称 */
     groupCode String required /** 集团编码 */
-    groupLongitude String required /** 经营详细地址经度 */
-    groupLatitude String required /** 经营详细地址纬度 */
+    groupLongitude BigDecimal required /** 经营详细地址经度 */
+    groupLatitude BigDecimal required /** 经营详细地址纬度 */
     groupContactName String /** 联系人姓名 */
     groupContactPhone String /** 联系人手机 */
 }
@@ -75,8 +75,8 @@ entity Enterprise(sys_enterprise) {
 	groupCode String /** 水厂所属集团Code */
 	code String required /** 水厂编码 */
     name String required /** 水厂名称 */
-    enterpriseLongitude String required /** 经营详细地址经度 */
-    enterpriseLatitude String required /** 经营详细地址纬度 */
+    enterpriseLongitude BigDecimal required /** 经营详细地址经度 */
+    enterpriseLatitude BigDecimal required /** 经营详细地址纬度 */
     contactName String /** 联系人姓名 */
     contactPhone String /** 联系人手机 */
     isTry Boolean required /** 是否为试点水厂 */
@@ -94,6 +94,7 @@ entity Craft(craft){
     outRefluxRatio BigDecimal /** 外回流比 */
     aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
     anoxiaNitrateConcentration BigDecimal /** 传统公式：缺氧区硝酸盐浓度 */
+    nitrateRefluxRatio BigDecimal /** 传统公式：硝化液回流比 */
     bodCodRatio BigDecimal /** 传统公式：BOD/COD */
     codCalibration BigDecimal /** 传统公式：COD校准参数 */
     bodNRatio BigDecimal /** 传统公式：BOD/N */
@@ -180,7 +181,7 @@ entity SewPot(sew_pot) {
 	dayFirstMud BigDecimal /** 初沉池排泥量（mg/L） */
 	daySecondMud BigDecimal /** 二沉池排泥量（mg/L） */
 	dayReflux BigDecimal /** 回流比（mg/L） */
-	dayCarAdd BigDecimal /** 碳源投加量（mg/L） */
+	dayCarAdd BigDecimal /**碳源 投加量（mg/L） */
 
 	//生化池-厌氧池
 	dayAnaerobicPoolPh Bigdecimal /** 生化池-厌氧池PH （）*/
