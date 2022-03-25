@@ -100,9 +100,9 @@ public class DataDisplayResource {
 
     @GetMapping("/process_period")
     @ApiOperation(value = "获取工艺段", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(String entCode) {
+    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(String code) {
 
-        List<Craft> crafts = craftRepository.findByEntCode(entCode);
+        List<Craft> crafts = craftRepository.findByEntCode(code);
         List<DataDTO.CraftDTO> craftDTOS = new ArrayList<>();
         for (Craft craft : crafts) {
             DataDTO.CraftDTO dto = new DataDTO.CraftDTO();
@@ -114,15 +114,15 @@ public class DataDisplayResource {
 
     @GetMapping("/getList")
     @ApiOperation(value = "获取数据展示列表——带分页", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDisplayVM>> getList(@ApiParam(value = "水厂code") @RequestParam String entCode,
+    public ResponseEntity<List<DataDisplayVM>> getList(@ApiParam(value = "水厂code") @RequestParam String code,
                                                        @ApiParam(value = "工艺code") @RequestParam(required = false) String craftCode,
                                                        @ApiParam(value = "数据时间") @RequestParam(required = false) String time,
                                                        @ApiParam(value = "数据来源") @RequestParam String source,
                                                        Pageable pageable) {
 
-        String groupCode = enterpriseRepository.findByCode(entCode).get().getGroupCode();
+        String groupCode = enterpriseRepository.findByCode(code).get().getGroupCode();
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
-            .notEmptyAnd(qEnterprise.code::eq, entCode)
+            .notEmptyAnd(qEnterprise.code::eq, code)
             .notEmptyAnd(qGroup.groupCode::eq, groupCode)
             .notEmptyAnd(qCraft.craftCode::eq, craftCode);
         JPAQuery<DataDisplayVM> jpaQuery;

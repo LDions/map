@@ -266,7 +266,7 @@ public class SewEmiService {
             .outTn(vm.getInFlow())
             .outTp(vm.getInFlow())
             .outSs(vm.getInFlow())
-            .anoxicPoolDo(vm.getInFlow())
+            .aerobicPoolDoSecond(vm.getInFlow())
             .aerobicPoolDo(vm.getInFlow())
             .anoxicPoolDoOutNit(vm.getInFlow())
             .aerobicPoolNit(vm.getInFlow())

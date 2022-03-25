@@ -9,7 +9,6 @@ import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
-import com.ruowei.util.StringUtil;
 import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.dto.EnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;

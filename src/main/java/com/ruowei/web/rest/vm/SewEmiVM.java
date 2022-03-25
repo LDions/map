@@ -73,34 +73,34 @@ public class SewEmiVM {
     public static class SewMeterVM extends SewEmiVM {
 
         @ApiModelProperty(value = "进水氨氮（mg/L）")
-        private BigDecimal assInAmmonia;
+        private BigDecimal corInAmmonia;
 
         @ApiModelProperty(value = "进水COD（mg/L）")
-        private BigDecimal assInCod;
+        private BigDecimal corInCod;
 
         @ApiModelProperty(value = "进水TN（mg/L）")
-        private BigDecimal assInTn;
+        private BigDecimal corInTn;
 
         @ApiModelProperty(value = "进水TP（mg/L）")
-        private BigDecimal assInTp;
+        private BigDecimal corInTp;
 
         @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
-        private BigDecimal assAnoxicPoolDoOutNit;
+        private BigDecimal corAnoxicPoolDoOutNit;
 
         @ApiModelProperty(value = "好氧池出口硝酸盐（mg/L）")
-        private BigDecimal assAerobicPoolDoOutNit;
+        private BigDecimal corAerobicPoolDoOutNit;
 
         @ApiModelProperty(value = "出水氨氮（mg/L）")
-        private BigDecimal assOutAmmonia;
+        private BigDecimal corOutAmmonia;
 
         @ApiModelProperty(value = "出水COD（mg/L）")
-        private BigDecimal assOutCod;
+        private BigDecimal corOutCod;
 
         @ApiModelProperty(value = "出水TN（mg/L）")
-        private BigDecimal assOutTn;
+        private BigDecimal corOutTn;
 
         @ApiModelProperty(value = "出水TP（mg/L）")
-        private BigDecimal assOutTp;
+        private BigDecimal corOutTp;
     }
 
     @Data

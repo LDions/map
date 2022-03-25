@@ -118,18 +118,18 @@ public class SewProcess implements Serializable {
     private BigDecimal outSs;
 
     /**
-     * 缺氧池（mg/L）
-     */
-    @ApiModelProperty(value = "缺氧池（mg/L）")
-    @Column(name = "anoxic_pool_do", precision = 21, scale = 2)
-    private BigDecimal anoxicPoolDo;
-
-    /**
      * 好氧池（mg/L）
      */
-    @ApiModelProperty(value = "好氧池（mg/L）")
+    @ApiModelProperty(value = "好氧池Do（mg/L）")
     @Column(name = "aerobic_pool_do", precision = 21, scale = 2)
     private BigDecimal aerobicPoolDo;
+
+    /**
+     * 缺氧池（mg/L）
+     */
+    @ApiModelProperty(value = "好氧池2Do（mg/L）")
+    @Column(name = "aerobic_pool_do_second", precision = 21, scale = 2)
+    private BigDecimal aerobicPoolDoSecond;
 
     /**
      * 缺氧池出口硝酸盐（mg/L）
@@ -346,16 +346,16 @@ public class SewProcess implements Serializable {
         this.outSs = outSs;
     }
 
-    public BigDecimal getAnoxicPoolDo() {
-        return anoxicPoolDo;
+
+    public BigDecimal getAerobicPoolDoSecond() {
+        return aerobicPoolDoSecond;
     }
-    public SewProcess anoxicPoolDo(BigDecimal anoxicPoolDo) {
-        this.anoxicPoolDo = anoxicPoolDo;
+    public SewProcess aerobicPoolDoSecond(BigDecimal aerobicPoolDoSecond) {
+        this.aerobicPoolDoSecond = aerobicPoolDoSecond;
         return this;
     }
-
-    public void setAnoxicPoolDo(BigDecimal anoxicPoolDo) {
-        this.anoxicPoolDo = anoxicPoolDo;
+    public void setAerobicPoolDoSecond(BigDecimal aerobicPoolDoSecond) {
+        this.aerobicPoolDoSecond = aerobicPoolDoSecond;
     }
 
     public BigDecimal getAerobicPoolDo() {
@@ -483,8 +483,8 @@ public class SewProcess implements Serializable {
             ", outTn=" + getOutTn() +
             ", outTp=" + getOutTp() +
             ", outSs=" + getOutSs() +
-            ", anoxicPoolDo=" + getAnoxicPoolDo() +
             ", aerobicPoolDo=" + getAerobicPoolDo() +
+            ", aerobicPoolDoSecond=" + getAerobicPoolDoSecond() +
             ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
             ", aerobicPoolNit=" + getAerobicPoolNit() +
             ", dayTime=" + getDayTime() +

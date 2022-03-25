@@ -10,17 +10,17 @@
       ]
     },
     {
-      "fieldName": "enterpriseId",
-      "fieldType": "Long",
-      "javadoc": "水厂ID",
+      "fieldName": "enterpriseCode",
+      "fieldType": "String",
+      "javadoc": "水厂Code",
       "fieldValidateRules": [
         "required"
       ]
     },
     {
-      "fieldName": "craftId",
-      "fieldType": "Long",
-      "javadoc": "工艺id",
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺Code",
       "fieldValidateRules": [
         "required"
       ]
@@ -51,7 +51,7 @@
     },
     {
       "fieldName": "accTime",
-      "fieldType": "String",
+      "fieldType": "Instant",
       "javadoc": "核算时间",
       "fieldValidateRules": [
         "required"

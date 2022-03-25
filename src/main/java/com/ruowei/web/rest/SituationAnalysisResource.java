@@ -8,7 +8,7 @@ import com.ruowei.service.SewEmiService;
 import com.ruowei.util.SelectUtil;
 import com.ruowei.util.SituationAnalysisUtil;
 import com.ruowei.web.rest.vm.DateTimeRangeVM;
-import com.ruowei.web.rest.vm.SituationAnalysisQM;
+import com.ruowei.web.rest.vm.SituationAnalysisVM;
 import com.ruowei.web.rest.vm.SituationVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,44 +50,46 @@ public class SituationAnalysisResource {
 
     @PostMapping("/situation_analysis_first")
     @ApiOperation(value = "态势分析图一", notes = "作者：董玉祥")
-    public ResponseEntity<List<SituationVM>> situationAnalysisFirst(@RequestBody List<SituationAnalysisQM> situationAnalysisQMS,
+    public ResponseEntity<List<SituationVM>> situationAnalysisFirst(@RequestBody List<String> targets,
                                                                     @ApiParam(value = "数据所在工艺Id") @RequestParam String craftCode,
                                                                     @ApiParam(value = "日期分段") @RequestParam String subsection,
                                                                     @ApiParam(value = "开始时间") @RequestParam String beginTime,
                                                                     @ApiParam(value = "结束时间") @RequestParam String endTime) {
 
         List<SituationVM> situationVMS = new ArrayList<>();
-        for (SituationAnalysisQM s : situationAnalysisQMS) {
-            situationVMS.add(situationAnalysisUtil.get(beginTime, endTime, subsection, s.getTarget(), craftCode));
+        for (String s : targets) {
+            situationVMS.add(situationAnalysisUtil.getSituationVM(beginTime, endTime, subsection, s, craftCode));
         }
         return ResponseEntity.ok().body(situationVMS);
     }
 
     @PostMapping("/situation_analysis_second")
     @ApiOperation(value = "态势分析图二", notes = "作者：董玉祥")
-    public ResponseEntity<List<SituationVM>> situationAnalysisSecond(@RequestBody SituationAnalysisQM situationAnalysisQM,
-                                                                     @ApiParam(value = "数据所在工艺Id") @RequestParam String craftCode,
-                                                                     @ApiParam(value = "日期分段") @RequestParam String subsection,
-                                                                     @ApiParam(value = "开始时间") @RequestParam List<DateTimeRangeVM> datetimeRange) {
+    public ResponseEntity<List<List<SituationAnalysisVM>>> situationAnalysisSecond(@ApiParam(value = "开始时间") @RequestBody List<DateTimeRangeVM> datetimeRange,
+                                                                             @ApiParam(value = "数据所在工艺Id") @RequestParam String craftCode,
+                                                                             @ApiParam(value = "日期分段") @RequestParam String subsection,
+                                                                             @ApiParam(value = "指标") @RequestParam String target) {
 
-        List<SituationVM> situationVMS = new ArrayList<>();
+        List<List<SituationAnalysisVM>> situationAnalysisVMLists = new ArrayList<>();
         for (DateTimeRangeVM dateTimeRangeVM : datetimeRange) {
-            situationVMS.add(situationAnalysisUtil.get(dateTimeRangeVM.getBeginTime(), dateTimeRangeVM.getEndTime(), subsection, situationAnalysisQM.getTarget(), craftCode));
+            situationAnalysisVMLists.add(situationAnalysisUtil.getSituationAnalysisVM(dateTimeRangeVM.getBeginTime(), dateTimeRangeVM.getEndTime(), subsection, target, craftCode));
         }
-        return ResponseEntity.ok().body(situationVMS);
+        return ResponseEntity.ok().body(situationAnalysisVMLists);
     }
 
     @PostMapping("/situation_analysis_thirdly")
     @ApiOperation(value = "态势分析图三", notes = "作者：董玉祥")
-    public ResponseEntity<List<SituationVM>> situationAnalysisThirdly(@RequestBody List<SituationAnalysisQM> situationAnalysisQMS,
+    public ResponseEntity<List<SituationVM>> situationAnalysisThirdly(@RequestBody List<String> targets,
                                                                       @ApiParam(value = "数据所在工艺Id") @RequestParam String craftCode,
                                                                       @ApiParam(value = "日期分段") @RequestParam String subsection,
                                                                       @ApiParam(value = "开始时间") @RequestParam String beginTime,
                                                                       @ApiParam(value = "结束时间") @RequestParam String endTime) {
 
+
+
         List<SituationVM> situationVMS = new ArrayList<>();
-        for (SituationAnalysisQM s : situationAnalysisQMS) {
-            situationVMS.add(situationAnalysisUtil.get(beginTime, endTime, subsection, s.getTarget(), craftCode));
+        for (String s : targets) {
+            situationVMS.add(situationAnalysisUtil.getSituationVM(beginTime, endTime, subsection, s, craftCode));
         }
         return ResponseEntity.ok().body(situationVMS);
 
@@ -101,12 +103,14 @@ public class SituationAnalysisResource {
                                                                        @ApiParam(value = "开始时间") @RequestParam String beginTime,
                                                                        @ApiParam(value = "结束时间") @RequestParam String endTime) {
 
+
+
         List<SituationVM> situationVMS = new ArrayList<>();
         BeAssociated beAssociated = beAssociatedRepository.findById(id).get();
         List<Correlation> correlations = correlationRepository.findByRelevanceId(id);
-        situationVMS.add(situationAnalysisUtil.get(beginTime, endTime, subsection, beAssociated.getBeAssociatedName(), craftCode));
+        situationVMS.add(situationAnalysisUtil.getSituationVM(beginTime, endTime, subsection, beAssociated.getBeAssociatedName(), craftCode));
         for (Correlation correlationsList : correlations) {
-            situationVMS.add(situationAnalysisUtil.get(beginTime, endTime, subsection, correlationsList.getRelationTarget(), craftCode));
+            situationVMS.add(situationAnalysisUtil.getSituationVM(beginTime, endTime, subsection, correlationsList.getRelationTarget(), craftCode));
         }
         return ResponseEntity.ok().body(situationVMS);
 

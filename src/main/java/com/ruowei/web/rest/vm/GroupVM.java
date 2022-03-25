@@ -1,39 +1,30 @@
 package com.ruowei.web.rest.vm;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
+import javax.persistence.Column;
+import java.math.BigDecimal;
+
+@Data
 public class GroupVM {
 
+    @ApiModelProperty(value = "集团编码")
+    private String groupCode;
+
     @ApiModelProperty(value = "集团名称")
-    private String groupAddress;
-
-    @ApiModelProperty(value = "水厂所属平台id")
-    private Long platformId;
-
-    @ApiModelProperty(value = "集团详细地址")
     private String groupName;
 
-    public String getGroupAddress() {
-        return groupAddress;
-    }
+    @ApiModelProperty(value = "集团位置经度")
+    private BigDecimal groupLongitude;
 
-    public void setGroupAddress(String groupAddress) {
-        this.groupAddress = groupAddress;
-    }
+    @ApiModelProperty(value = "集团位置纬度")
+    private BigDecimal groupLatitude;
 
-    public Long getPlatformId() {
-        return platformId;
-    }
+    @ApiModelProperty(value = "集团联系人")
+    private String groupContactName;
 
-    public void setPlatformId(Long platformId) {
-        this.platformId = platformId;
-    }
+    @ApiModelProperty(value = "联系人电话")
+    private String groupContactPhone;
 
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
 }

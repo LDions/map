@@ -13,9 +13,9 @@ public class CollectQM {
     private Long id;
 
     @ApiModelProperty(value = "被关联的数据")
-    private SituationAnalysisQM beAssociated;
+    private String beAssociated;
 
     @ApiModelProperty(value = "关联到的数据")
-    private List<SituationAnalysisQM> relation;
+    private List<String> relation;
 
 }

@@ -19,7 +19,7 @@
     },
     {
       "fieldName": "groupLongitude",
-      "fieldType": "String",
+      "fieldType": "BigDecimal",
       "javadoc": "经营详细地址经度",
       "fieldValidateRules": [
         "required"
@@ -27,7 +27,7 @@
     },
     {
       "fieldName": "groupLatitude",
-      "fieldType": "String",
+      "fieldType": "BigDecimal",
       "javadoc": "经营详细地址纬度",
       "fieldValidateRules": [
         "required"

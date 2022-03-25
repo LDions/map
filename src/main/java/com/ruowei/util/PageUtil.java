@@ -5,8 +5,6 @@ import java.util.List;
 /**
  * 分页工具类
  *
- * @author yanghaifeng
- * @date 2021/3/1 14:03
  */
 public class PageUtil {
 

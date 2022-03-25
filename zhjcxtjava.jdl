@@ -110,12 +110,12 @@ entity Craft(craft){
 /**计算数据 */
 entity EmiData(emi_data) {
 	documentCode String required /** 单据号 */
-	enterpriseId Long required /** 水厂ID */
-	craftId Long required /** 工艺id */
+	enterpriseCode String required /** 水厂ID */
+	craftCode String required /** 工艺id */
     acctype String required /** 核算方式（自动、手动） */
     accYear String required /** 核算年份 */
     accMonth String required /** 核算月份 */
-    accTime String required /** 核算时间 */
+    accTime Instant required /** 核算时间 */
     predictTime String required /** 预测未来时间 */
     totalOutN BigDecimal required /** 出水总氮 */
     outAN BigDecimal required /** 出水氨氮 */
@@ -228,8 +228,8 @@ entity SewPot(sew_pot) {
 	dayAerobicPoolMlvssSecond BigDecimal /** 生化池-好氧池MLVSS指标2 （）*/
     dayAerobicPoolSvi BigDecimal /** 生化池-好氧池SVI指标1（）*/
     dayAerobicPoolSviSecond BigDecimal /** 生化池-好氧池SVI指标2（）*/
-	dayAerobicPoolTemper BigDecimal /** 生化池-厌氧池温度指标1 （）*/
-	dayAerobicPoolTemperSecond BigDecimal /** 生化池-厌氧池温度指标2 （）*/
+	dayAerobicPoolTemper BigDecimal /** 生化池-好氧池温度指标1 （）*/
+	dayAerobicPoolTemperSecond BigDecimal /** 生化池-好氧池温度指标2 （）*/
 	dayTime Instant /** 采集时间 */
 	status SendStatusType required /** 集团数据推送状态 */
 	plateStatus SendStatusType required /** 平台数据推送状态 */
