@@ -16,7 +16,6 @@ import com.ruowei.web.rest.vm.EnterpriseQM;
 import com.ruowei.web.rest.vm.EnterpriseVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -33,10 +32,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
-import org.apache.commons.lang3.StringUtils;
+
 import javax.validation.Valid;
-import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.ruowei.config.Constants.DEFAULT_PASSWORD;

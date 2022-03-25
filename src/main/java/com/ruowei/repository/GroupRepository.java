@@ -1,6 +1,5 @@
 package com.ruowei.repository;
 
-import com.ruowei.domain.Enterprise;
 import com.ruowei.domain.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -16,4 +15,6 @@ import java.util.Optional;
 public interface GroupRepository extends JpaRepository<Group, Long>, QuerydslPredicateExecutor<Group> {
 
     Optional<Group> findByGroupCode(String groupCode);
+
+    Optional<Group> getFirstByGroupName(String groupName);
 }

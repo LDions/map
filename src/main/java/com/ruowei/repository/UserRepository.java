@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredi
 
     Optional<User> findByEnterpriseCode(String enterpriseCode);
 
+    Optional<User> findByGroupCode(String groupCode);
+
     /**
      * 一条水厂用户数据
      * @param enterpriseCode
