@@ -85,23 +85,24 @@ public class DataDisplayResource {
             dataDTOS.add(dto);
         }
         for (Group g : Groups) {
-            List<Enterprise> enterprises = enterpriseRepository.findByGroupId(g.getId());
+            List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
             for (Enterprise enterprise : enterprises) {
                 DataDTO.EntDTO dto = new DataDTO.EntDTO();
                 BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
-                dto.setGroupName(g.getGroupName());
+                dto.setCode(enterprise.getCode());
+                dto.setName(enterprise.getName());
+                dto.setGroupCode(g.getGroupCode());
                 dataDTOS.add(dto);
             }
         }
-
         return ResponseEntity.ok().body(dataDTOS);
     }
 
     @GetMapping("/process_period")
     @ApiOperation(value = "获取工艺段", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(Long entId) {
+    public ResponseEntity<List<DataDTO.CraftDTO>> getCraft(String entCode) {
 
-        List<Craft> crafts = craftRepository.findByEntId(entId);
+        List<Craft> crafts = craftRepository.findByEntCode(entCode);
         List<DataDTO.CraftDTO> craftDTOS = new ArrayList<>();
         for (Craft craft : crafts) {
             DataDTO.CraftDTO dto = new DataDTO.CraftDTO();
@@ -113,80 +114,74 @@ public class DataDisplayResource {
 
     @GetMapping("/getList")
     @ApiOperation(value = "获取数据展示列表——带分页", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDisplayVM>> getList(@ApiParam(value = "水厂id") @RequestParam Long entId,
-                                                       @ApiParam(value = "工艺id") @RequestParam(required = false) Long craftId,
-                                                       @ApiParam(value = "开始时间") @RequestParam(required = false) String beginTime,
-                                                       @ApiParam(value = "结束时间") @RequestParam(required = false) String endTime,
+    public ResponseEntity<List<DataDisplayVM>> getList(@ApiParam(value = "水厂code") @RequestParam String entCode,
+                                                       @ApiParam(value = "工艺code") @RequestParam(required = false) String craftCode,
+                                                       @ApiParam(value = "数据时间") @RequestParam(required = false) String time,
                                                        @ApiParam(value = "数据来源") @RequestParam String source,
                                                        Pageable pageable) {
 
-        Long id = enterpriseRepository.findById(entId).get().getGroupId();
+        String groupCode = enterpriseRepository.findByCode(entCode).get().getGroupCode();
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
-            .notEmptyAnd(qEnterprise.id::eq, entId)
-            .notEmptyAnd(qGroup.id::eq, id)
-            .notEmptyAnd(qCraft.id::eq, craftId);
+            .notEmptyAnd(qEnterprise.code::eq, entCode)
+            .notEmptyAnd(qGroup.groupCode::eq, groupCode)
+            .notEmptyAnd(qCraft.craftCode::eq, craftCode);
         JPAQuery<DataDisplayVM> jpaQuery;
         long count;
-
         switch (source) {
             case "meter":
-                predicate.notEmptyAnd(qSewProcess.dayTime::goe, sewEmiService.getInstant(beginTime))
-                    .notEmptyAnd(qSewProcess.dayTime::loe, sewEmiService.getInstant(endTime))
-                    .notEmptyAnd(qSewProcess.craftId::eq,craftId);
+                predicate.notEmptyAnd(qSewProcess.dayTime::eq, sewEmiService.getInstant(time))
+                    .notEmptyAnd(qSewProcess.craftCode::eq, craftCode);
                 jpaQuery = jpaQueryFactory
-                    .select(Projections.bean(DataDisplayVM.class,qSewProcess.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewProcess.dayTime))
+                    .select(Projections.bean(DataDisplayVM.class, qSewProcess.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewProcess.dayTime))
                     .from(qSewProcess)
-                    .leftJoin(qCraft).on(qCraft.id.eq(qSewProcess.craftId))
-                    .leftJoin(qEnterprise).on(qEnterprise.id.eq(qCraft.entId))
-                    .leftJoin(qGroup).on(qGroup.id.eq(qEnterprise.groupId))
+                    .leftJoin(qCraft).on(qCraft.craftCode.eq(qSewProcess.craftCode))
+                    .leftJoin(qEnterprise).on(qEnterprise.code.eq(qCraft.entCode))
+                    .leftJoin(qGroup).on(qGroup.groupCode.eq(qEnterprise.groupCode))
                     .where(predicate.build());
                 count = jpaQuery.fetch().stream().count();
-                jpaQuery =jpaQuery.offset(pageable.getOffset())
+                jpaQuery = jpaQuery.offset(pageable.getOffset())
                     .limit(pageable.getPageSize());
                 break;
             case "assay":
-                predicate.notEmptyAnd(qSewSlu.dayTime::goe, sewEmiService.getInstant(beginTime))
-                    .notEmptyAnd(qSewSlu.dayTime::loe, sewEmiService.getInstant(endTime))
-                    .notEmptyAnd(qSewSlu.craftId::eq,craftId);
+                predicate.notEmptyAnd(qSewSlu.dayTime::eq, sewEmiService.getInstant(time))
+                    .notEmptyAnd(qSewSlu.craftCode::eq, craftCode);
                 jpaQuery = jpaQueryFactory
-                    .select(Projections.bean(DataDisplayVM.class,qSewSlu.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewSlu.dayTime))
+                    .select(Projections.bean(DataDisplayVM.class, qSewSlu.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewSlu.dayTime))
                     .from(qSewSlu)
-                    .leftJoin(qCraft).on(qCraft.id.eq(qSewSlu.craftId))
-                    .leftJoin(qEnterprise).on(qEnterprise.id.eq(qCraft.entId))
-                    .leftJoin(qGroup).on(qGroup.id.eq(qEnterprise.groupId))
+                    .leftJoin(qCraft).on(qCraft.craftCode.eq(qSewSlu.craftCode))
+                    .leftJoin(qEnterprise).on(qEnterprise.code.eq(qCraft.entCode))
+                    .leftJoin(qGroup).on(qGroup.groupCode.eq(qEnterprise.groupCode))
                     .where(predicate.build());
                 count = jpaQuery.fetch().stream().count();
-                jpaQuery =jpaQuery.offset(pageable.getOffset())
+                jpaQuery = jpaQuery.offset(pageable.getOffset())
                     .limit(pageable.getPageSize());
                 break;
             case "daily":
-                predicate.notEmptyAnd(qSewPot.dayTime::goe, sewEmiService.getInstant(beginTime))
-                    .notEmptyAnd(qSewPot.dayTime::loe, sewEmiService.getInstant(endTime))
-                    .notEmptyAnd(qSewPot.craftId::eq,craftId);
+                predicate.notEmptyAnd(qSewPot.dayTime::eq, sewEmiService.getInstant(time))
+                    .notEmptyAnd(qSewPot.craftCode::eq, craftCode);
                 jpaQuery = jpaQueryFactory
-                    .select(Projections.bean(DataDisplayVM.class,qSewPot.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewPot.dayTime))
+                    .select(Projections.bean(DataDisplayVM.class, qSewPot.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewPot.dayTime))
                     .from(qSewPot)
-                    .leftJoin(qCraft).on(qCraft.id.eq(qSewPot.craftId))
-                    .leftJoin(qEnterprise).on(qEnterprise.id.eq(qCraft.entId))
-                    .leftJoin(qGroup).on(qGroup.id.eq(qEnterprise.groupId))
+                    .leftJoin(qCraft).on(qCraft.craftCode.eq(qSewPot.craftCode))
+                    .leftJoin(qEnterprise).on(qEnterprise.code.eq(qCraft.entCode))
+                    .leftJoin(qGroup).on(qGroup.groupCode.eq(qEnterprise.groupCode))
                     .where(predicate.build());
                 count = jpaQuery.fetch().stream().count();
-                jpaQuery =jpaQuery.offset(pageable.getOffset())
+                jpaQuery = jpaQuery.offset(pageable.getOffset())
                     .limit(pageable.getPageSize());
                 break;
             case "verify":
-                predicate.notEmptyAnd(qSewMeter.dayTime::goe, sewEmiService.getInstant(beginTime))
-                    .notEmptyAnd(qSewMeter.dayTime::loe, sewEmiService.getInstant(endTime))
-                    .notEmptyAnd(qSewMeter.craftId::eq,craftId);
+                predicate.notEmptyAnd(qSewMeter.dayTime::eq, sewEmiService.getInstant(time))
+                    .notEmptyAnd(qSewMeter.craftCode::eq, craftCode);
                 jpaQuery = jpaQueryFactory
-                    .select(Projections.bean(DataDisplayVM.class,qSewMeter.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewMeter.dayTime))
+                    .select(Projections.bean(DataDisplayVM.class, qSewMeter.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewMeter.dayTime))
                     .from(qSewMeter)
-                    .leftJoin(qCraft).on(qCraft.id.eq(qSewMeter.craftId))
-                    .leftJoin(qEnterprise).on(qEnterprise.id.eq(qCraft.entId))
-                    .leftJoin(qGroup).on(qGroup.id.eq(qEnterprise.groupId))
+                    .leftJoin(qCraft).on(qCraft.craftCode.eq(qSewMeter.craftCode))
+                    .leftJoin(qEnterprise).on(qEnterprise.code.eq(qCraft.entCode))
+                    .leftJoin(qGroup).on(qGroup.groupCode.eq(qEnterprise.groupCode))
                     .where(predicate.build());
                 count = jpaQuery.fetch().stream().count();
-                jpaQuery =jpaQuery.offset(pageable.getOffset())
+                jpaQuery = jpaQuery.offset(pageable.getOffset())
                     .limit(pageable.getPageSize());
                 break;
             default:
@@ -199,11 +194,11 @@ public class DataDisplayResource {
 
     @GetMapping("/detail")
     @ApiOperation(value = "详情数据", notes = "作者：董玉祥")
-    public ResponseEntity<List<SewEmiVM>> get(@ApiParam(value = "来源") @RequestParam(required = false) String source,
-                                              @RequestParam Long id) {
+    public ResponseEntity<SewEmiVM> getTargetParticulars(@ApiParam(value = "来源") @RequestParam(required = false) String source,
+                                        @RequestParam Long id) {
 
-        List<SewEmiVM> SewEmiAccountVMS = sewEmiService.getTerget(id, source);
-        return ResponseEntity.ok().body(SewEmiAccountVMS);
+        SewEmiVM sewEmiVM = sewEmiService.getTarget(id, source);
+        return ResponseEntity.ok().body(sewEmiVM);
     }
 
     @PostMapping("/bulk_edit")
@@ -212,9 +207,9 @@ public class DataDisplayResource {
                                          @ApiParam(value = "数据信息") @RequestBody SewDetailsDTO sewProcessDTO,
                                          @ApiParam(value = "需要改的数据id") @RequestBody String source) {
 
-        for (Long id : ids) {
-            sewEmiService.modificationBycraftId(id, sewProcessDTO,source);
-        }
+//        for (Long id : ids) {
+//            sewEmiService.modificationBycraftId(id, sewProcessDTO,source);
+//        }
         return ResponseEntity.ok().build();
     }
 

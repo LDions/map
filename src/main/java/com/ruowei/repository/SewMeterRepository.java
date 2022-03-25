@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the SewMeter entity.
@@ -14,7 +15,9 @@ import java.util.List;
 @Repository
 public interface SewMeterRepository extends JpaRepository<SewMeter,Long>{
 
-    List<SewMeter> findByCraftId(Long craftId);
+    List<SewMeter> findByCraftCode(String craftCode);
 
-    List<SewMeter> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
+    List<SewMeter> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqualAndCraftCode(Instant time1,Instant time2,String CraftCode);
+
+    Optional<SewMeter> findByCraftCodeAndMeterCode(String craftCode, String meterCode);
 }

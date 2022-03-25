@@ -27,81 +27,88 @@ public class SewMeter {
     private Long id;
 
     /**
-     * 所属工艺ID
+     * 校表编码
      */
-    @ApiModelProperty(value = "工艺ID", required = true)
-    @Column(name = "craft_id", nullable = false)
-    private Long craftId;
+    @ApiModelProperty(value = "校表编码")
+    @Column(name = "meter_code")
+    private String meterCode;
+
+    /**
+     * 所属工艺code
+     */
+    @ApiModelProperty(value = "工艺code", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
 
     /**
      * 进水氨氮（mg/L）
      */
     @ApiModelProperty(value = "进水氨氮（mg/L）")
-    @Column(name = "ass_in_ammonia", precision = 21, scale = 2)
-    private BigDecimal assInAmmonia;
+    @Column(name = "cor_in_ammonia", precision = 21, scale = 2)
+    private BigDecimal corInAmmonia;
 
     /**
      * 进水COD（mg/L）
      */
     @ApiModelProperty(value = "进水COD（mg/L）")
-    @Column(name = "ass_in_cod", precision = 21, scale = 2)
-    private BigDecimal assInCod;
+    @Column(name = "cor_in_cod", precision = 21, scale = 2)
+    private BigDecimal corInCod;
 
     /**
      * 进水TN（mg/L）
      */
     @ApiModelProperty(value = "进水TN（mg/L）")
-    @Column(name = "ass_in_tn", precision = 21, scale = 2)
-    private BigDecimal assInTn;
+    @Column(name = "cor_in_tn", precision = 21, scale = 2)
+    private BigDecimal corInTn;
 
     /**
      * 进水TP（mg/L）
      */
     @ApiModelProperty(value = "进水TP（mg/L）")
-    @Column(name = "ass_in_tp", precision = 21, scale = 2)
-    private BigDecimal assInTp;
+    @Column(name = "cor_in_tp", precision = 21, scale = 2)
+    private BigDecimal corInTp;
 
     /**
      * 缺氧池出口硝酸盐（mg/L）
      */
     @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
-    @Column(name = "ass_anoxic_pool_do_out_nit", precision = 21, scale = 2)
-    private BigDecimal assAnoxicPoolDoOutNit;
+    @Column(name = "cor_anoxic_pool_do_out_nit", precision = 21, scale = 2)
+    private BigDecimal corAnoxicPoolDoOutNit;
 
     /**
      * 好氧池出口硝酸盐（mg/L）
      */
     @ApiModelProperty(value = "好氧池出口硝酸盐（mg/L）")
-    @Column(name = "ass_aerobic_pool_do_out_nit", precision = 21, scale = 2)
-    private BigDecimal assAerobicPoolDoOutNit;
+    @Column(name = "cor_aerobic_pool_do_out_nit", precision = 21, scale = 2)
+    private BigDecimal corAerobicPoolDoOutNit;
 
     /**
      * 出水氨氮（mg/L）
      */
     @ApiModelProperty(value = "出水氨氮（mg/L）")
-    @Column(name = "ass_out_ammonia", precision = 21, scale = 2)
-    private BigDecimal assOutAmmonia;
+    @Column(name = "cor_out_ammonia", precision = 21, scale = 2)
+    private BigDecimal corOutAmmonia;
 
     /**
      * 出水COD（mg/L）
      */
     @ApiModelProperty(value = "出水COD（mg/L）")
-    @Column(name = "ass_out_cod", precision = 21, scale = 2)
-    private BigDecimal assOutCod;
+    @Column(name = "cor_out_cod", precision = 21, scale = 2)
+    private BigDecimal corOutCod;
 
     /**
      * 出水TN（mg/L）
      */
     @ApiModelProperty(value = "出水TN（mg/L）")
-    @Column(name = "ass_out_tn", precision = 21, scale = 2)
-    private BigDecimal assOutTn;
+    @Column(name = "cor_out_tn", precision = 21, scale = 2)
+    private BigDecimal corOutTn;
 
     /**
      * 出水TP（mg/L）
      */
     @ApiModelProperty(value = "出水TP（mg/L）")
-    @Column(name = "ass_out_tp", precision = 21, scale = 2)
-    private BigDecimal assOutTp;
+    @Column(name = "cor_out_tp", precision = 21, scale = 2)
+    private BigDecimal corOutTp;
 
     /**
      * 时间
@@ -133,114 +140,122 @@ public class SewMeter {
         this.id = id;
     }
 
-    public BigDecimal getAssInAmmonia() {
-        return assInAmmonia;
-    }
-    public SewMeter assInAmmonia(BigDecimal assInAmmonia) {
-        this.assInAmmonia = assInAmmonia;
-        return this;
-    }
-    public void setAssInAmmonia(BigDecimal assInAmmonia) {
-        this.assInAmmonia = assInAmmonia;
+    public String getMeterCode() {
+        return meterCode;
     }
 
-    public BigDecimal getAssInCod() {
-        return assInCod;
-    }
-    public SewMeter assInCod(BigDecimal assInCod) {
-        this.assInCod = assInCod;
-        return this;
-    }
-    public void setAssInCod(BigDecimal assInCod) {
-        this.assInCod = assInCod;
+    public void setMeterCode(String meterCode) {
+        this.meterCode = meterCode;
     }
 
-    public BigDecimal getAssInTn() {
-        return assInTn;
+    public BigDecimal getCorInAmmonia() {
+        return corInAmmonia;
     }
-    public SewMeter assInTn(BigDecimal assInTn) {
-        this.assInTn = assInTn;
+    public SewMeter corInAmmonia(BigDecimal corInAmmonia) {
+        this.corInAmmonia = corInAmmonia;
         return this;
     }
-    public void setAssInTn(BigDecimal assInTn) {
-        this.assInTn = assInTn;
+    public void setCorInAmmonia(BigDecimal corInAmmonia) {
+        this.corInAmmonia = corInAmmonia;
     }
 
-    public BigDecimal getAssInTp() {
-        return assInTp;
+    public BigDecimal getCorInCod() {
+        return corInCod;
     }
-    public SewMeter assInTp(BigDecimal assInTp) {
-        this.assInTp = assInTp;
+    public SewMeter corInCod(BigDecimal corInCod) {
+        this.corInCod = corInCod;
         return this;
     }
-    public void setAssInTp(BigDecimal assInTp) {
-        this.assInTp = assInTp;
+    public void setCorInCod(BigDecimal corInCod) {
+        this.corInCod = corInCod;
     }
 
-    public BigDecimal getAssAnoxicPoolDoOutNit() {
-        return assAnoxicPoolDoOutNit;
+    public BigDecimal getCorInTn() {
+        return corInTn;
     }
-    public SewMeter assAnoxicPoolDoOutNit(BigDecimal assAnoxicPoolDoOutNit) {
-        this.assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit;
+    public SewMeter corInTn(BigDecimal corInTn) {
+        this.corInTn = corInTn;
         return this;
     }
-    public void setAssAnoxicPoolDoOutNit(BigDecimal assAnoxicPoolDoOutNit) {
-        this.assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit;
+    public void setCorInTn(BigDecimal corInTn) {
+        this.corInTn = corInTn;
     }
 
-    public BigDecimal getAssAerobicPoolDoOutNit() {
-        return assAerobicPoolDoOutNit;
+    public BigDecimal getCorInTp() {
+        return corInTp;
     }
-    public SewMeter assAerobicPoolDoOutNit(BigDecimal assAerobicPoolDoOutNit) {
-        this.assAerobicPoolDoOutNit = assAerobicPoolDoOutNit;
+    public SewMeter corInTp(BigDecimal corInTp) {
+        this.corInTp = corInTp;
         return this;
     }
-    public void setAssAerobicPoolDoOutNit(BigDecimal assAerobicPoolDoOutNit) {
-        this.assAerobicPoolDoOutNit = assAerobicPoolDoOutNit;
+    public void setCorInTp(BigDecimal corInTp) {
+        this.corInTp = corInTp;
     }
 
-    public BigDecimal getAssOutAmmonia() {
-        return assOutAmmonia;
+    public BigDecimal getCorAnoxicPoolDoOutNit() {
+        return corAnoxicPoolDoOutNit;
     }
-    public SewMeter assOutAmmonia(BigDecimal assOutAmmonia) {
-        this.assOutAmmonia = assOutAmmonia;
+    public SewMeter corAnoxicPoolDoOutNit(BigDecimal corAnoxicPoolDoOutNit) {
+        this.corAnoxicPoolDoOutNit = corAnoxicPoolDoOutNit;
         return this;
     }
-    public void setAssOutAmmonia(BigDecimal assOutAmmonia) {
-        this.assOutAmmonia = assOutAmmonia;
+    public void setCorAnoxicPoolDoOutNit(BigDecimal corAnoxicPoolDoOutNit) {
+        this.corAnoxicPoolDoOutNit = corAnoxicPoolDoOutNit;
     }
 
-    public BigDecimal getAssOutCod() {
-        return assOutCod;
+    public BigDecimal getCorAerobicPoolDoOutNit() {
+        return corAerobicPoolDoOutNit;
     }
-    public SewMeter assOutCod(BigDecimal assOutCod) {
-        this.assOutCod = assOutCod;
+    public SewMeter corAerobicPoolDoOutNit(BigDecimal corAerobicPoolDoOutNit) {
+        this.corAerobicPoolDoOutNit = corAerobicPoolDoOutNit;
         return this;
     }
-    public void setAssOutCod(BigDecimal assOutCod) {
-        this.assOutCod = assOutCod;
+    public void setCorAerobicPoolDoOutNit(BigDecimal corAerobicPoolDoOutNit) {
+        this.corAerobicPoolDoOutNit = corAerobicPoolDoOutNit;
     }
 
-    public BigDecimal getAssOutTn() {
-        return assOutTn;
+    public BigDecimal getCorOutAmmonia() {
+        return corOutAmmonia;
     }
-    public SewMeter assOutTn(BigDecimal assOutTn) {
-        this.assOutTn = assOutTn;
+    public SewMeter corOutAmmonia(BigDecimal corOutAmmonia) {
+        this.corOutAmmonia = corOutAmmonia;
         return this;
     }
-    public void setAssOutTn(BigDecimal assOutTn) {
-        this.assOutTn = assOutTn;
+    public void setCorOutAmmonia(BigDecimal corOutAmmonia) {
+        this.corOutAmmonia = corOutAmmonia;
     }
 
-    public BigDecimal getAssOutTp() {
-        return assOutTp;
+    public BigDecimal getCorOutCod() {
+        return corOutCod;
     }
-    public SewMeter assOutTp(BigDecimal assOutTp) {
-        this.assOutTp = assOutTp;
+    public SewMeter corOutCod(BigDecimal corOutCod) {
+        this.corOutCod = corOutCod;
         return this;
     }
-    public void setAssOutTp(BigDecimal assOutTp) {
-        this.assOutTp = assOutTp;
+    public void setCorOutCod(BigDecimal corOutCod) {
+        this.corOutCod = corOutCod;
+    }
+
+    public BigDecimal getCorOutTn() {
+        return corOutTn;
+    }
+    public SewMeter corOutTn(BigDecimal corOutTn) {
+        this.corOutTn = corOutTn;
+        return this;
+    }
+    public void setCorOutTn(BigDecimal corOutTn) {
+        this.corOutTn = corOutTn;
+    }
+
+    public BigDecimal getCorOutTp() {
+        return corOutTp;
+    }
+    public SewMeter corOutTp(BigDecimal corOutTp) {
+        this.corOutTp = corOutTp;
+        return this;
+    }
+    public void setCorOutTp(BigDecimal corOutTp) {
+        this.corOutTp = corOutTp;
     }
 
     public Instant getDayTime() {
@@ -254,16 +269,12 @@ public class SewMeter {
         this.dayTime = dayTime;
     }
 
-    public Long getCraftId() {
-        return craftId;
+    public String getCraftCode() {
+        return craftCode;
     }
 
-    public void setCraftId(Long craftId) {
-        this.craftId = craftId;
-    }
-    public SewMeter craftId(Long craftId) {
-        this.craftId = craftId;
-        return this;
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
     }
 
     public SendStatusType getStatus() {
@@ -303,18 +314,20 @@ public class SewMeter {
     public String toString() {
         return "SewMeter{" +
             "id=" + id +
-            ", craftId=" + craftId +
-            ", assInAmmonia=" + assInAmmonia +
-            ", assInCod=" + assInCod +
-            ", assInTn=" + assInTn +
-            ", assInTp=" + assInTp +
-            ", assAnoxicPoolDoOutNit=" + assAnoxicPoolDoOutNit +
-            ", assAerobicPoolDoOutNit=" + assAerobicPoolDoOutNit +
-            ", assOutAmmonia=" + assOutAmmonia +
-            ", assOutCod=" + assOutCod +
-            ", assOutTn=" + assOutTn +
-            ", assOutTp=" + assOutTp +
+            ", craftCode='" + craftCode + '\'' +
+            ", corInAmmonia=" + corInAmmonia +
+            ", corInCod=" + corInCod +
+            ", corInTn=" + corInTn +
+            ", corInTp=" + corInTp +
+            ", corAnoxicPoolDoOutNit=" + corAnoxicPoolDoOutNit +
+            ", corAerobicPoolDoOutNit=" + corAerobicPoolDoOutNit +
+            ", corOutAmmonia=" + corOutAmmonia +
+            ", corOutCod=" + corOutCod +
+            ", corOutTn=" + corOutTn +
+            ", corOutTp=" + corOutTp +
             ", dayTime=" + dayTime +
+            ", status=" + status +
+            ", plateStatus=" + plateStatus +
             '}';
     }
 }

@@ -2,9 +2,9 @@
   "name": "SewPot",
   "fields": [
     {
-      "fieldName": "craftId",
-      "fieldType": "Long",
-      "javadoc": "工艺ID",
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺Code",
       "fieldValidateRules": [
         "required"
       ]

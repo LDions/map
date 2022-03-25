@@ -9,23 +9,17 @@ import com.ruowei.domain.QBeAssociated;
 import com.ruowei.repository.BeAssociatedRepository;
 import com.ruowei.repository.CorrelationRepository;
 import com.ruowei.util.PageUtil;
-import com.ruowei.web.rest.dto.EntCraftDataDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.CollectQM;
+import com.ruowei.web.rest.vm.RelevanceBeVM;
 import com.ruowei.web.rest.vm.SituationAnalysisQM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.web.util.PaginationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,12 +55,10 @@ public class RelevanceResource {
             });
         BeAssociated beAssociated = new BeAssociated();
         beAssociated.setBeAssociatedName(qm.getBeAssociated().getTarget());
-        beAssociated.setBeAssociatedSource(qm.getBeAssociated().getSource());
         long id = beAssociatedRepository.save(beAssociated).getId();
         for (SituationAnalysisQM situationAnalysisQM : qm.getRelation()) {
             Correlation correlation = new Correlation();
             correlation.setRelationTarget(situationAnalysisQM.getTarget());
-            correlation.setRelationSource(situationAnalysisQM.getSource());
             correlation.setRelevanceId(id);
             correlationRepository.save(correlation);
         }
@@ -83,13 +75,11 @@ public class RelevanceResource {
                 throw new BadRequestProblem("修改失败", "该数据无关联信息，请先创建再进行修改");
             });
         beAssociated.setBeAssociatedName(qm.getBeAssociated().getTarget());
-        beAssociated.setBeAssociatedSource(qm.getBeAssociated().getSource());
         beAssociatedRepository.save(beAssociated);
         correlationRepository.deleteAllByRelevanceId(qm.getId());
         for (SituationAnalysisQM situationAnalysisQM : qm.getRelation()) {
             Correlation correlation = new Correlation();
             correlation.setRelationTarget(situationAnalysisQM.getTarget());
-            correlation.setRelationSource(situationAnalysisQM.getSource());
             correlation.setRelevanceId(qm.getId());
             correlationRepository.save(correlation);
         }
@@ -108,14 +98,12 @@ public class RelevanceResource {
         SituationAnalysisQM situationAnalysisQM = new SituationAnalysisQM();
         collectQM.setId(id);
         situationAnalysisQM.setTarget(beAssociated.getBeAssociatedName());
-        situationAnalysisQM.setSource(beAssociated.getBeAssociatedSource());
         collectQM.setBeAssociated(situationAnalysisQM);
         List<Correlation> correlations = correlationRepository.findByRelevanceId(beAssociated.getId());
         List<SituationAnalysisQM> situationAnalysisQMS = new ArrayList<>();
         for (Correlation correlation : correlations) {
             SituationAnalysisQM situationAnalysisQM1 = new SituationAnalysisQM();
             situationAnalysisQM1.setTarget(correlation.getRelationTarget());
-            situationAnalysisQM1.setSource(correlation.getRelationSource());
             situationAnalysisQMS.add(situationAnalysisQM1);
             collectQM.setRelation(situationAnalysisQMS);
         }
@@ -141,7 +129,6 @@ public class RelevanceResource {
             collectQM.setTotal(total);
             //被关联数据信息
             situationAnalysisQM.setTarget(b.getBeAssociatedName());
-            situationAnalysisQM.setSource(b.getBeAssociatedSource());
             //存储
             collectQM.setBeAssociated(situationAnalysisQM);
             //通过被关联数据id查关联数据
@@ -150,7 +137,6 @@ public class RelevanceResource {
             for (Correlation correlation : correlations) {
                 SituationAnalysisQM situationAnalysisQM1 = new SituationAnalysisQM();
                 situationAnalysisQM1.setTarget(correlation.getRelationTarget());
-                situationAnalysisQM1.setSource(correlation.getRelationSource());
                 situationAnalysisQMS.add(situationAnalysisQM1);
                 collectQM.setRelation(situationAnalysisQMS);
             }
@@ -170,6 +156,20 @@ public class RelevanceResource {
             }));
         correlationRepository.deleteAllByRelevanceId(id);
         return ResponseEntity.ok().body("删除成功");
+    }
+
+    @PostMapping("/relevance_be_list")
+    @ApiOperation(value = "获取被关联的数据", notes = "作者：董玉祥")
+    public ResponseEntity<List<RelevanceBeVM>> relevanceName() {
+
+        List<RelevanceBeVM> relevanceBeVMS = new ArrayList<>();
+        for (BeAssociated beAssociated : beAssociatedRepository.findAll()){
+            RelevanceBeVM relevanceBeVM = new RelevanceBeVM();
+            relevanceBeVM.setId(beAssociated.getId());
+            relevanceBeVM.setTarget(beAssociated.getBeAssociatedName());
+            relevanceBeVMS.add(relevanceBeVM);
+        }
+        return ResponseEntity.ok().body(relevanceBeVMS);
     }
 
 }

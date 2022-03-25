@@ -8,12 +8,14 @@ import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.RoleRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
+import com.ruowei.security.UserModel;
 import com.ruowei.security.jwt.JWTFilter;
 import com.ruowei.security.jwt.TokenProvider;
 import com.ruowei.service.MenuService;
 import com.ruowei.service.dto.SimpleMenuTreeDTO;
 import com.ruowei.web.rest.dto.VerifyTokenDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.ChangePasswordVM;
 import com.ruowei.web.rest.vm.LoginVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,8 +25,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -46,8 +51,9 @@ public class UserJWTController {
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
     private final MenuService menuService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, ApplicationProperties applicationProperties, UserRepository userRepository, EnterpriseRepository enterpriseRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, MenuService menuService) {
+    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, ApplicationProperties applicationProperties, UserRepository userRepository, EnterpriseRepository enterpriseRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, MenuService menuService, PasswordEncoder passwordEncoder) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.applicationProperties = applicationProperties;
@@ -56,6 +62,7 @@ public class UserJWTController {
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
         this.menuService = menuService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/authenticate")
@@ -90,6 +97,23 @@ public class UserJWTController {
         return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
     }
 
+    @PostMapping("/change-password")
+    @ApiOperation(value = "修改密码")
+    public ResponseEntity<String> changePassWord(
+        @Valid @RequestBody ChangePasswordVM vm,
+        @ApiIgnore @AuthenticationPrincipal UserModel userModel
+    ) {
+        User user = userRepository
+            .findById(userModel.getUserId())
+            .orElseThrow(() -> new BadRequestProblem("修改失败", "该账号不存在"));
+        boolean result = passwordEncoder.matches(vm.getOldPwd(), user.getPassword());
+        if (!result) {
+            throw new BadRequestProblem("修改失败", "原密码错误");
+        }
+        user.setPassword(passwordEncoder.encode(vm.getNewPwd()));
+        userRepository.save(user);
+        return ResponseEntity.ok().body("修改成功");
+    }
     @GetMapping("/verifyToken")
     @ApiOperation(value = "SSO验证Token")
     public ResponseEntity<VerifyTokenDTO> verifyToken() {

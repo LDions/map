@@ -4,10 +4,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.Enterprise;
 import com.ruowei.domain.QEnterprise;
 import com.ruowei.domain.QUser;
+import com.ruowei.domain.User;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
+import com.ruowei.util.StringUtil;
 import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.dto.EnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
@@ -15,6 +17,7 @@ import com.ruowei.web.rest.vm.EnterpriseQM;
 import com.ruowei.web.rest.vm.EnterpriseVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,12 +34,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
-
+import org.apache.commons.lang3.StringUtils;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.ruowei.config.Constants.DEFAULT_PASSWORD;
 
 @RestController
 @RequestMapping("/api")
@@ -149,6 +153,19 @@ public class EnterpriseResource {
             result.add(dto);
         }
         return ResponseEntity.ok(result);
+    }
+    @PostMapping("/enterprise/reset/{code}")
+    @ApiOperation(value = "重置企业密码接口", notes = "作者：张锴")
+    public ResponseEntity<String> resetEnterprisePassword(@PathVariable String code) {
+        enterpriseRepository
+            .findByCode(code)
+            .orElseThrow(() -> {
+                throw new BadRequestProblem("重置失败", "该企业不存在");
+            });
+        User user = userRepository.findByEnterpriseCode(code).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到业主用户"));
+        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        userRepository.save(user);
+        return ResponseEntity.ok().body("重置成功");
     }
 }
 

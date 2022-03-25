@@ -17,14 +17,9 @@ import java.util.Optional;
 @Repository
 public interface SewSluRepository extends JpaRepository<SewSlu, Long> {
 
-    /**
-     * 根据工艺ID查询化验数据
-     * @param craftId 工艺ID
-     * @return
-     */
-    List<SewSlu> findByCraftId(@NotNull Long craftId);
+    List<SewSlu> findByCraftCode(String craftCode);
 
-    List<SewSlu> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
+    List<SewSlu> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqualAndCraftCode(Instant time1,Instant time2,String craftCode);
 
     Optional<SewSlu> findByCraftCodeAndSluCode(String craftCode, String sluCode);
 }

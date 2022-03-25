@@ -16,14 +16,11 @@ import java.util.Optional;
 @Repository
 public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
 
-    /**
-     * 根据工艺查询仪表数据
-     * @param craftId 工艺ID
-     * @return
-     */
-    List<SewProcess> findByCraftId(@NotNull Long craftId);
+    List<SewProcess> findByCraftCode(String craftCode);
 
     List<SewProcess> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
+
+    List<SewProcess> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqualAndCraftCode(Instant time1,Instant time2,String craftCode);
 
     Optional<SewProcess> findByCraftCodeAndProcessCode(String craftCode, String processCode);
 

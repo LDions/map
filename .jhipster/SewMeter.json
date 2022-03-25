@@ -2,35 +2,35 @@
   "name": "SewMeter",
   "fields": [
     {
-      "fieldName": "craftId",
-      "fieldType": "Long",
-      "javadoc": "工艺ID",
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺Code",
       "fieldValidateRules": [
         "required"
       ]
     },
     {
-      "fieldName": "assInAmmonia",
+      "fieldName": "corInAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "进水氨氮（mg/L）"
     },
     {
-      "fieldName": "assInCod",
+      "fieldName": "corInCod",
       "fieldType": "BigDecimal",
       "javadoc": "进水COD（mg/L）"
     },
     {
-      "fieldName": "assInTn",
+      "fieldName": "corInTn",
       "fieldType": "BigDecimal",
       "javadoc": "进水TN（mg/L）"
     },
     {
-      "fieldName": "assInTp",
+      "fieldName": "corInTp",
       "fieldType": "BigDecimal",
       "javadoc": "进水TP（mg/L）"
     },
     {
-      "fieldName": "assAnoxicPoolDoOutNit",
+      "fieldName": "corAnoxicPoolDoOutNit",
       "fieldType": "BigDecimal",
       "javadoc": "缺氧池出口硝酸盐（mg/L）",
       "fieldValidateRules": [
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "fieldName": "assAerobicPoolDoOutNit",
+      "fieldName": "corAerobicPoolDoOutNit",
       "fieldType": "BigDecimal",
       "javadoc": "好氧池出口硝酸盐（mg/L）",
       "fieldValidateRules": [
@@ -46,22 +46,22 @@
       ]
     },
     {
-      "fieldName": "assOutAmmonia",
+      "fieldName": "corOutAmmonia",
       "fieldType": "BigDecimal",
       "javadoc": "出水氨氮（mg/L）"
     },
     {
-      "fieldName": "assOutCod",
+      "fieldName": "corOutCod",
       "fieldType": "BigDecimal",
       "javadoc": "出水COD（mg/L）"
     },
     {
-      "fieldName": "assOutTn",
+      "fieldName": "corOutTn",
       "fieldType": "BigDecimal",
       "javadoc": "出水TN（mg/L）"
     },
     {
-      "fieldName": "assOutTp",
+      "fieldName": "corOutTp",
       "fieldType": "BigDecimal",
       "javadoc": "出水TP（mg/L）"
     },
