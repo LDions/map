@@ -241,11 +241,11 @@ public class ForecastResource {
                 while (it.hasNext()) {
                     i++;
                     SewMeter s = (SewMeter) it.next();
-                    assInCod = assInCod.add(s.getAssInCod());
-                    inTn = inTn.add(s.getAssInTn());
-                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getAssAnoxicPoolDoOutNit());
-                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getAssAerobicPoolDoOutNit());
-                    assOutTn = assOutTn.add(s.getAssOutTn());
+                    assInCod = assInCod.add(s.getCorInCod());
+                    inTn = inTn.add(s.getCorInTn());
+                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getCorAnoxicPoolDoOutNit());
+                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getCorAerobicPoolDoOutNit());
+                    assOutTn = assOutTn.add(s.getCorOutTn());
                     if (i == 6) {
                         i = 0;
                         assInCod = assInCod.divide(six);
@@ -280,11 +280,11 @@ public class ForecastResource {
                 while (it1.hasNext()) {
                     i++;
                     SewMeter s = (SewMeter) it1.next();
-                    assInCod = assInCod.add(s.getAssInCod());
-                    inTn = inTn.add(s.getAssInTn());
-                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getAssAnoxicPoolDoOutNit());
-                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getAssAerobicPoolDoOutNit());
-                    assOutTn = assOutTn.add(s.getAssOutTn());
+                    assInCod = assInCod.add(s.getCorInCod());
+                    inTn = inTn.add(s.getCorInTn());
+                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getCorAnoxicPoolDoOutNit());
+                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getCorAerobicPoolDoOutNit());
+                    assOutTn = assOutTn.add(s.getCorOutTn());
                     if (i == 6) {
                         i = 0;
                         assInCod = assInCod.divide(six);
