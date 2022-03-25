@@ -1,5 +1,6 @@
 /** 用户 */
 entity User(sys_user) {
+    userCode String /** 用户编码 */
 	groupCode String /** 集团编码 */
     enterpriseCode String /** 水厂编码 */
     login String required /** 登录账号 */

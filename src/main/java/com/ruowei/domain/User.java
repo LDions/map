@@ -55,6 +55,10 @@ public class User implements Serializable {
     @Column(name = "group_code")
     private String groupCode;
 
+    @ApiModelProperty(value = "用户编码")
+    @Column(name = "user_code")
+    private String userCode;
+
     public Long getId() {
         return id;
     }
@@ -141,7 +145,13 @@ public class User implements Serializable {
         return this;
     }
 
+    public String getUserCode() {
+        return userCode;
+    }
 
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 
     @Override
     public boolean equals(Object o) {
