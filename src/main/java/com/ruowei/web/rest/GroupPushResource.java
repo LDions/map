@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -30,8 +31,9 @@ public class GroupPushResource {
     private final SewPotRepository sewPotRepository;
     private final SewMeterRepository sewMeterRepository;
     private final SewEmiThresholdRepository sewEmiThresholdRepository;
+    private final UserRepository userRepository;
 
-    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository) {
+    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.groupRepository = groupRepository;
         this.craftRepository = craftRepository;
@@ -40,6 +42,7 @@ public class GroupPushResource {
         this.sewPotRepository = sewPotRepository;
         this.sewMeterRepository = sewMeterRepository;
         this.sewEmiThresholdRepository = sewEmiThresholdRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/comprehensive")
@@ -187,6 +190,50 @@ public class GroupPushResource {
                     return sewEmiThreshold;
                 }).orElseThrow(() -> new BadRequestAlertException("设定数据不存在", "", ""));
         }
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/enterprise_user")
+    @Transactional
+    @ApiOperation(value = "集团接收水厂新增编辑用户数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> addUser(EnterpriseUserVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCode(vm.getEnterpriseCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("水厂不存在", "", "");
+        }
+        if (vm.getOperate().equals(0)) {
+            //集团新增水厂用户数据
+            User user = new User();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, user);
+            userRepository.save(user);
+        } else {
+            //集团更新水厂用户信息 集团编码和水厂编码都不为空是水厂用户
+            userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
+                .map(user -> {
+                    ObjectUtils.copyPropertiesIgnoreNull(vm, user);
+                    userRepository.save(user);
+                    return user;
+                }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+        }
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/delete_enterprise_user")
+    @Transactional
+    @ApiOperation(value = "集团接收水厂删除用户数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> deleteUser(@RequestParam String userCode, @RequestParam String enterpriseCode) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCode(enterpriseCode);
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("该水厂不存在", "", "无法删除用户");
+        }
+        //集团删除水厂用户信息
+        userRepository.findByEnterpriseCodeAndUserCode(enterpriseCode, userCode)
+            .map(user -> {
+                userRepository.delete(user);
+                return user;
+            }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
         return ResponseEntity.ok().body(result.get());
     }
 }

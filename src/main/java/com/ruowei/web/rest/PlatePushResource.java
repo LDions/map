@@ -7,10 +7,12 @@ import com.ruowei.web.rest.errors.BadRequestAlertException;
 import com.ruowei.web.rest.vm.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liquibase.pro.packaged.S;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -29,9 +31,10 @@ public class PlatePushResource {
     private final SewPotRepository sewPotRepository;
     private final SewMeterRepository sewMeterRepository;
     private final SewEmiThresholdRepository sewEmiThresholdRepository;
+    private final UserRepository userRepository;
 
 
-    public PlatePushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository) {
+    public PlatePushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.groupRepository = groupRepository;
         this.craftRepository = craftRepository;
@@ -40,6 +43,7 @@ public class PlatePushResource {
         this.sewPotRepository = sewPotRepository;
         this.sewMeterRepository = sewMeterRepository;
         this.sewEmiThresholdRepository = sewEmiThresholdRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/plate/comprehensive")
@@ -220,4 +224,102 @@ public class PlatePushResource {
         return ResponseEntity.ok().body(result.get());
     }
 
+    @PostMapping("/plate/enterprise_user")
+    @Transactional
+    @ApiOperation(value = "平台接收水厂新增编辑用户数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> addUser(EnterpriseUserVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        groupRepository.findByGroupCode(vm.getGroupCode())
+            .map(group -> {
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCode(vm.getEnterpriseCode(), group.getGroupCode());
+                if (!enterprise.isPresent()) {
+                    throw new BadRequestAlertException("水厂不存在", "", "");
+                }
+                if (vm.getOperate().equals(0)) {
+                    //新增用户数据
+                    User user = new User();
+                    ObjectUtils.copyPropertiesIgnoreNull(vm, user);
+                    userRepository.save(user);
+                } else {
+                    //编辑用户信息 水厂编码和集团编码 用户编码都存在说明是一个水厂用户数据
+                    userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
+                        .map(user -> {
+                            ObjectUtils.copyPropertiesIgnoreNull(vm, user);
+                            userRepository.save(user);
+                            return user;
+                        }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+                }
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "编辑失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/plate/group_user")
+    @Transactional
+    @ApiOperation(value = "平台接收集团新增编辑用户数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> addGroupUser(EnterpriseUserVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        groupRepository.findByGroupCode(vm.getGroupCode())
+            .map(group -> {
+                if (vm.getOperate().equals(0)) {
+                    //新增用户数据
+                    User user = new User();
+                    ObjectUtils.copyPropertiesIgnoreNull(vm, user);
+                    userRepository.save(user);
+                } else {
+                    //编辑用户信息 水厂编码为空 集团编码 用户编码存在说明是一条集团的用户数据
+                    userRepository.findByGroupCodeAndUserCodeAndEnterpriseCodeIsNull(vm.getGroupCode(), vm.getUserCode())
+                        .map(user -> {
+                            ObjectUtils.copyPropertiesIgnoreNull(vm, user);
+                            userRepository.save(user);
+                            return user;
+                        }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+                }
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "编辑失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/plate/delete_enterprise_user")
+    @Transactional
+    @ApiOperation(value = "平台接收水厂删除用户数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> deleteUser(@RequestParam String userCode,
+                                             @RequestParam String enterpriseCode,
+                                             @RequestParam String groupCode) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        groupRepository.findByGroupCode(groupCode)
+            .map(group -> {
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCode(enterpriseCode, group.getGroupCode());
+                if (!enterprise.isPresent()) {
+                    throw new BadRequestAlertException("水厂不存在", "", "");
+                }
+                //水厂编码和集团编码 用户编码都存在说明是一个水厂用户数据
+                userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(enterpriseCode, group.getGroupCode(), userCode)
+                    .map(user -> {
+                        userRepository.delete(user);
+                        return user;
+                    }).orElseThrow(() -> new BadRequestAlertException("所删除的用户不存在", "", ""));
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "删除失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/plate/delete_group_user")
+    @Transactional
+    @ApiOperation(value = "平台接收集团删除用户数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> deleteGroupUser(@RequestParam String userCode,
+                                                  @RequestParam String groupCode) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        groupRepository.findByGroupCode(groupCode)
+            .map(group -> {
+                //水厂编码为空 集团编码 用户编码存在说明是一条集团的用户数据
+                userRepository.findByGroupCodeAndUserCodeAndEnterpriseCodeIsNull(group.getGroupCode(), userCode)
+                    .map(user -> {
+                        userRepository.delete(user);
+                        return user;
+                    }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "删除失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
 }
