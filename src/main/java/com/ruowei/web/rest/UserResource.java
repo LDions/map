@@ -155,7 +155,7 @@ public class UserResource {
         log.debug("REST request to delete SysUser : {}", id);
         userRoleRepository.deleteAllByUserId(id);
         jpaQueryFactory
-            .update(qUser)
+            .delete(qUser)
             .where(qUser.id.eq(id))
             .execute();
         return ResponseEntity.noContent().build();

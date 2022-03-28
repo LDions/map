@@ -179,7 +179,8 @@ entity SewPot(sew_pot) {
 	dayFirstMud BigDecimal /** 初沉池排泥量（mg/L） */
 	daySecondMud BigDecimal /** 二沉池排泥量（mg/L） */
 	dayReflux BigDecimal /** 回流比（mg/L） */
-	dayCarAdd BigDecimal /**碳源投加量（mg/L） */
+	daySodiumCarAdd BigDecimal /**乙酸钠碳源投加量（mg/L） */
+	dayOtherCarAdd BigDecimal /**其他碳源投加量（mg/L） */
 
 	//生化池-厌氧池
 	dayAnaerobicPoolPh BigDecimal /** 生化池-厌氧池PH指标1 （）*/
