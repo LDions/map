@@ -102,7 +102,8 @@ public class MenuResource {
             .selectFrom(qMenu)
             .where(qMenu.status.eq(MenuStatusType.NORMAL).and(qMenu.id.eq(menu.getId()).or(qMenu.parentIds.isNotNull())))
             .stream()
-            .filter(m -> Arrays.asList(m.getParentIds().split(",")).contains(String.valueOf(menu.getId())) || m.getId().equals(menu.getId()))
+//            .filter(m -> Arrays.asList(m.getParentIds().split(",")).contains(String.valueOf(menu.getId())) || m.getId().equals(menu.getId())
+//            )
             .map(Menu::getId)
             .collect(Collectors.toList());
         if (menu.getParentId() != null && menuIds.contains(menu.getParentId())) {
@@ -161,7 +162,8 @@ public class MenuResource {
                 menu.setTreeLevel(1);
             }
         } else { // 如果原先有父级菜单
-            Menu oldParentMenu = menuRepository.findByIdAndStatus(oldMenu.getParentId(), MenuStatusType.NORMAL)
+            Menu oldParentMenu = menuRepository
+                .findByIdAndStatus(oldMenu.getParentId(), MenuStatusType.NORMAL)
                 .orElseThrow(() -> new BadRequestProblem("编辑失败", "原有父级菜单不存在"));
             // 如果编辑后父级菜单不为空且与原先不同
             if (menu.getParentId() != null && !oldMenu.getParentId().equals(menu.getParentId())) {
@@ -227,8 +229,10 @@ public class MenuResource {
                 menu.setTreeLevel(oldMenu.getTreeLevel());
             }
             // 处理原先的父级菜单，如果父级菜单没有子菜单，修改父级菜单treeLeaf字段
-            List<Long> pMenuIds = menuRepository.findAllByParentIdAndStatus(oldParentMenu.getId(), MenuStatusType.NORMAL)
-                .stream().map(Menu::getId)
+            List<Long> pMenuIds = menuRepository
+                .findAllByParentIdAndStatus(oldParentMenu.getId(), MenuStatusType.NORMAL)
+                .stream()
+                .map(Menu::getId)
                 .collect(Collectors.toList());
             if (pMenuIds.size() == 0) {
                 oldParentMenu.setTreeLeaf(true);
