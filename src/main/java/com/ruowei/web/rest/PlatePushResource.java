@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import liquibase.pro.packaged.S;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -187,6 +184,7 @@ public class PlatePushResource {
                         result.set("推送成功");
                         return sewMeter;
                     }).orElseThrow(() -> new BadRequestAlertException("校表数据不存在", "", "编辑失败"));
+                result.set("推送成功");
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "编辑失败"));
         return ResponseEntity.ok().body(result.get());
@@ -219,6 +217,7 @@ public class PlatePushResource {
                             return sewEmiThreshold;
                         }).orElseThrow(() -> new BadRequestAlertException("设定数据不存在", "", ""));
                 }
+                result.set("推送成功");
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "编辑失败"));
         return ResponseEntity.ok().body(result.get());
@@ -249,6 +248,7 @@ public class PlatePushResource {
                             return user;
                         }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
                 }
+                result.set("推送成功");
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "编辑失败"));
         return ResponseEntity.ok().body(result.get());
@@ -275,6 +275,7 @@ public class PlatePushResource {
                             return user;
                         }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
                 }
+                result.set("推送成功");
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "编辑失败"));
         return ResponseEntity.ok().body(result.get());
@@ -299,6 +300,7 @@ public class PlatePushResource {
                         userRepository.delete(user);
                         return user;
                     }).orElseThrow(() -> new BadRequestAlertException("所删除的用户不存在", "", ""));
+                result.set("推送成功");
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "删除失败"));
         return ResponseEntity.ok().body(result.get());
@@ -318,6 +320,7 @@ public class PlatePushResource {
                         userRepository.delete(user);
                         return user;
                     }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+                result.set("推送成功");
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "删除失败"));
         return ResponseEntity.ok().body(result.get());

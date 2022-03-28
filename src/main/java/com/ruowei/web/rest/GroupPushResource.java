@@ -178,6 +178,7 @@ public class GroupPushResource {
             SewEmiThreshold sewEmiThreshold = new SewEmiThreshold();
             ObjectUtils.copyPropertiesIgnoreNull(vm, sewEmiThreshold);
             sewEmiThresholdRepository.save(sewEmiThreshold);
+            result.set("推送成功");
         } else {
             //编辑设定数据
             sewEmiThresholdRepository.findByEnterpriseCode(vm.getEnterpriseCode())
@@ -186,6 +187,7 @@ public class GroupPushResource {
                     sewEmiThresholdRepository.save(sewEmiThreshold);
                     return sewEmiThreshold;
                 }).orElseThrow(() -> new BadRequestAlertException("设定数据不存在", "", ""));
+            result.set("推送成功");
         }
         return ResponseEntity.ok().body(result.get());
     }
