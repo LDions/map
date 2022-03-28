@@ -45,7 +45,7 @@ public class GroupPushResource {
     @PostMapping("/comprehensive")
     @Transactional
     @ApiOperation(value = "集团接收水厂推送仪表，化验，日报数据接口", notes = "作者：韩宗晏")
-    public ResponseEntity<String> createData(ComprehensiveDataVM vm) {
+    public ResponseEntity<String> createData(@RequestBody ComprehensiveDataVM vm) {
         String result = "";
         Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
         if (!enterprise.isPresent()) {
@@ -71,7 +71,7 @@ public class GroupPushResource {
     @PostMapping("/alter_sewProcess")
     @Transactional
     @ApiOperation(value = "集团接收水厂更新仪表数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewProcess(EditSewProcessVM vm) {
+    public ResponseEntity<String> editSewProcess(@RequestBody EditSewProcessVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
         if (!enterprise.isPresent()) {
@@ -96,7 +96,7 @@ public class GroupPushResource {
     @PostMapping("/alter_sewSlu")
     @Transactional
     @ApiOperation(value = "集团接收水厂更新化验数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewSlu(EditSewSluVM vm) {
+    public ResponseEntity<String> editSewSlu(@RequestBody EditSewSluVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
         if (!enterprise.isPresent()) {
@@ -121,7 +121,7 @@ public class GroupPushResource {
     @PostMapping("/alter_sewPot")
     @Transactional
     @ApiOperation(value = "集团接收水厂更新日报数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewPot(EditSewPotVM vm) {
+    public ResponseEntity<String> editSewPot(@RequestBody EditSewPotVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
         if (!enterprise.isPresent()) {
@@ -146,7 +146,7 @@ public class GroupPushResource {
     @PostMapping("/alter_sewMeter")
     @Transactional
     @ApiOperation(value = "集团接收水厂更新校表数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewMeter(EditSewMeterVM vm) {
+    public ResponseEntity<String> editSewMeter(@RequestBody EditSewMeterVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
         if (!enterprise.isPresent()) {
@@ -166,7 +166,7 @@ public class GroupPushResource {
     @PostMapping("/sewEmithreshold")
     @Transactional
     @ApiOperation(value = "集团接收试点水厂新增编辑设定数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> sewEmithreshold(SewEmithresholdVM vm) {
+    public ResponseEntity<String> sewEmithreshold(@RequestBody SewEmithresholdVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getEnterpriseCode());
         if (!enterprise.isPresent()) {
@@ -234,6 +234,15 @@ public class GroupPushResource {
                 result.set("推送成功");
                 return user;
             }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/decision_resultData")
+    @Transactional
+    @ApiOperation(value = "集团接收试点水厂决策预测计算结果数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> decisionData() {
+        AtomicReference<String> result = new AtomicReference<>("");
+
         return ResponseEntity.ok().body(result.get());
     }
 }

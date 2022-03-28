@@ -49,7 +49,7 @@ public class PlatePushResource {
     @PostMapping("/plate/comprehensive")
     @Transactional
     @ApiOperation(value = "平台接收水厂（或集团）推送新增仪表，化验，日报数据接口", notes = "作者：韩宗晏")
-    public ResponseEntity<String> createData(PlateComprehensiveDataVM vm) {
+    public ResponseEntity<String> createData(@RequestBody PlateComprehensiveDataVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -80,7 +80,7 @@ public class PlatePushResource {
     @PostMapping("/plate/alter_sewProcess")
     @Transactional
     @ApiOperation(value = "平台接收水厂（或集团）更新仪表数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewProcess(PlateEditSewProcessVM vm) {
+    public ResponseEntity<String> editSewProcess(@RequestBody PlateEditSewProcessVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -110,7 +110,7 @@ public class PlatePushResource {
     @PostMapping("/plate/alter_sewSlu")
     @Transactional
     @ApiOperation(value = "平台接收水厂(或集团)更新化验数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewSlu(PlateEditSewSluVM vm) {
+    public ResponseEntity<String> editSewSlu(@RequestBody PlateEditSewSluVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -140,7 +140,7 @@ public class PlatePushResource {
     @PostMapping("/plate/alter_sewPot")
     @Transactional
     @ApiOperation(value = "平台接收水厂(或集团)更新日报数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewPot(PlateEditSewPotVM vm) {
+    public ResponseEntity<String> editSewPot(@RequestBody PlateEditSewPotVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -170,7 +170,7 @@ public class PlatePushResource {
     @PostMapping("/plate/alter_sewMeter")
     @Transactional
     @ApiOperation(value = "平台接收水厂（或集团）更新校表数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> editSewPot(PlateEditSewMeterVM vm) {
+    public ResponseEntity<String> editSewPot(@RequestBody PlateEditSewMeterVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -195,7 +195,7 @@ public class PlatePushResource {
     @PostMapping("/plate/sewEmithreshold")
     @Transactional
     @ApiOperation(value = "平台接收试点水厂新增编辑设定数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> sewEmithreshold(PlateSewEmithresholdVM vm) {
+    public ResponseEntity<String> sewEmithreshold(@RequestBody PlateSewEmithresholdVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -227,7 +227,7 @@ public class PlatePushResource {
     @PostMapping("/plate/enterprise_user")
     @Transactional
     @ApiOperation(value = "平台接收水厂新增编辑用户数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> addUser(EnterpriseUserVM vm) {
+    public ResponseEntity<String> addUser(@RequestBody EnterpriseUserVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -257,7 +257,7 @@ public class PlatePushResource {
     @PostMapping("/plate/group_user")
     @Transactional
     @ApiOperation(value = "平台接收集团新增编辑用户数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> addGroupUser(EnterpriseUserVM vm) {
+    public ResponseEntity<String> addGroupUser(@RequestBody EnterpriseUserVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         groupRepository.findByGroupCode(vm.getGroupCode())
             .map(group -> {
@@ -320,6 +320,15 @@ public class PlatePushResource {
                     }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", "删除失败"));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/plate/decision_resultData")
+    @Transactional
+    @ApiOperation(value = "平台接收试点水厂决策预测计算结果数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> decisionData() {
+        AtomicReference<String> result = new AtomicReference<>("");
+
         return ResponseEntity.ok().body(result.get());
     }
 }

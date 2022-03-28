@@ -56,7 +56,7 @@ public class PushService {
         return jsonNode;
     }
 
-    public String postForData(String host, String api, Object urlParams) {
+    public String postForData(String host, String api, Object... urlParams) {
         String url = host + api;
         String result = restTemplate.postForEntity(url, urlParams, String.class).getBody();
         if (result == null) {
