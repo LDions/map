@@ -34,13 +34,11 @@ public class ForecastResource {
     private final QSewMeter qSewMeter = QSewMeter.sewMeter;
     private final QSewProcess qSewProcess = QSewProcess.sewProcess;
     private Instant start;
-    private Instant end;
     private List<SewSlu> sewSlus;
     private List<SewMeter> sewMeters;
     private List<SewProcess> sewProcesses;
-    private BigDecimal six = new BigDecimal(6);
     private QSewPot qSewPot = QSewPot.sewPot;
-    private int i = 0;
+    private Instant time;
 
     public ForecastResource(EnterpriseRepository enterpriseRepository, JPAQueryFactory queryFactory) {
         this.enterpriseRepository = enterpriseRepository;
@@ -50,7 +48,7 @@ public class ForecastResource {
     //    SewProcess 仪表
     @PostMapping("/forecast/ammonia_nitrogen")
     @ApiOperation(value = "氨氮预测传参", notes = "作者：孙小楠")
-    public JSONObject forecastAn(Long id) {
+    public JSONObject forecastAn(Long id,Instant hour,String craftCode) {
         sewSlus = null;
         sewMeters = null;
         sewProcesses = null;
@@ -65,13 +63,15 @@ public class ForecastResource {
         List<AmmoniaNitrogen> data = new ArrayList<>();
         //          拿到30小时的所有机器人（化验）数据
         OptionalBooleanBuilder builder1 = new OptionalBooleanBuilder()
-            .notEmptyAnd(qSewSlu.dayTime::gt, end);
+            .notEmptyAnd(qSewSlu.dayTime::goe, start)
+            .notEmptyAnd(qSewSlu.dayTime::loe,hour)
+            .notEmptyAnd(qSewSlu.craftCode::eq,craftCode);
         JPAQuery<SewSlu> jpaQuery1 = queryFactory
             .select(qSewSlu)
             .from(qSewSlu)
             .where(builder1.build());
         sewSlus = jpaQuery1.fetch();
-        ammoniaNitrogenVM.setInflowList(this.getInflows());
+        ammoniaNitrogenVM.setInflowList(this.getInflows(hour));
         //      判断是否试点
         Optional<Enterprise> enterprise = enterpriseRepository.findById(id);
         Boolean isTry;
@@ -79,37 +79,26 @@ public class ForecastResource {
             //            试点
             isTry = enterprise.get().getIsTry();
             if (isTry.equals(true)) {
-                OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
-                    .notEmptyAnd(qSewMeter.dayTime::gt, end);
+                OptionalBooleanBuilder builder2 = new OptionalBooleanBuilder()
+                    .notEmptyAnd(qSewMeter.dayTime::goe, start)
+                    .notEmptyAnd(qSewMeter.dayTime::loe,hour)
+                    .notEmptyAnd(qSewMeter.craftCode::eq,craftCode);
                 JPAQuery<SewMeter> jpaQuery2 = queryFactory
                     .select(qSewMeter)
                     .from(qSewMeter)
-                    .where(builder1.build());
+                    .where(builder2.build());
                 sewMeters = jpaQuery2.fetch();
                 Iterator it = sewMeters.listIterator();
-                BigDecimal corInCod = null;
-                BigDecimal inTn = null;
-                BigDecimal assInAmmonia = null;
-                BigDecimal assOutAmmonia = null;
-                i = 0;
+                time = hour;
                 while (it.hasNext()) {
-                    i++;
                     SewMeter s = (SewMeter) it.next();
-                    corInCod = corInCod.add(s.getCorInCod());
-                    inTn = inTn.add(s.getCorInTn());
-                    assInAmmonia = assInAmmonia.add(s.getCorInAmmonia());
-                    assOutAmmonia = assOutAmmonia.add(s.getCorOutAmmonia());
-                    if (i == 6) {
-                        i = 0;
-                        corInCod = corInCod.divide(six);
-                        inTn = inTn.divide(six);
-                        assInAmmonia = assInAmmonia.divide(six);
-                        assOutAmmonia = assOutAmmonia.divide(six);
+                    if (s.getDayTime().equals(time)) {
+                        time = time.plus(2,ChronoUnit.HOURS);
                         AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
-                        ammoniaNitrogen.setIn_cod(corInCod);
-                        ammoniaNitrogen.setIn_tn(inTn);
-                        ammoniaNitrogen.setIn_ammomia(assInAmmonia);
-                        ammoniaNitrogen.setOut_ammoni(assOutAmmonia);
+                        ammoniaNitrogen.setIn_cod(s.getCorInCod());
+                        ammoniaNitrogen.setIn_tn(s.getCorInTn());
+                        ammoniaNitrogen.setIn_ammomia(s.getCorInAmmonia());
+                        ammoniaNitrogen.setOut_ammoni(s.getCorOutAmmonia());
                         ammoniaNitrogen.setTime(s.getDayTime());
                         ammoniaNitrogen.setCar_add(sewPot.getDayCarAdd());
                         ammoniaNitrogen.setAerobic_pool_ph(sewPot.getDayAerobicPoolPh());
@@ -118,34 +107,20 @@ public class ForecastResource {
                         ammoniaNitrogen.setSecond_mud(sewPot.getDaySecondMud());
                         data.add(ammoniaNitrogen);
                     }
-                    it.remove();
                 }
             } else {
 //            非试点 用化验数据（机器人）
                 Iterator it1 = sewSlus.iterator();
-                BigDecimal corInCod = null;
-                BigDecimal inTn = null;
-                BigDecimal assInAmmonia = null;
-                BigDecimal assOutAmmonia = null;
-                i = 0;
+                time = hour;
                 while (it1.hasNext()) {
-                    i++;
                     SewSlu s = (SewSlu) it1.next();
-                    corInCod = corInCod.add(s.getAssInCod());
-                    inTn = inTn.add(s.getAssInTn());
-                    assInAmmonia = assInAmmonia.add(s.getAssInAmmonia());
-                    assOutAmmonia = assOutAmmonia.add(s.getAssOutAmmonia());
-                    if (i == 6) {
-                        i = 0;
-                        corInCod = corInCod.divide(six);
-                        inTn = inTn.divide(six);
-                        assInAmmonia = assInAmmonia.divide(six);
-                        assOutAmmonia = assOutAmmonia.divide(six);
+                    if (s.getDayTime().equals(time)) {
+                        time = time.plus(2,ChronoUnit.HOURS);
                         AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
-                        ammoniaNitrogen.setIn_cod(corInCod);
-                        ammoniaNitrogen.setIn_tn(inTn);
-                        ammoniaNitrogen.setIn_ammomia(assInAmmonia);
-                        ammoniaNitrogen.setOut_ammoni(assOutAmmonia);
+                        ammoniaNitrogen.setIn_cod(s.getAssInCod());
+                        ammoniaNitrogen.setIn_tn(s.getAssInTn());
+                        ammoniaNitrogen.setIn_ammomia(s.getAssInAmmonia());
+                        ammoniaNitrogen.setOut_ammoni(s.getAssOutAmmonia());
                         ammoniaNitrogen.setTime(s.getDayTime());
                         ammoniaNitrogen.setCar_add(sewPot.getDayCarAdd());
                         ammoniaNitrogen.setAerobic_pool_ph(sewPot.getDayAerobicPoolPh());
@@ -154,34 +129,29 @@ public class ForecastResource {
                         ammoniaNitrogen.setSecond_mud(sewPot.getDaySecondMud());
                         data.add(ammoniaNitrogen);
                     }
-                    it1.remove();
                 }
             }
         }
 //          30h仪表数据
         OptionalBooleanBuilder builder3 = new OptionalBooleanBuilder()
-            .notEmptyAnd(qSewProcess.dayTime::gt, end);
+            .notEmptyAnd(qSewProcess.dayTime::goe, start)
+            .notEmptyAnd(qSewProcess.dayTime::loe,hour)
+            .notEmptyAnd(qSewProcess.craftCode::eq,craftCode);
         JPAQuery<SewProcess> jpaQuery3 = queryFactory
             .select(qSewProcess)
             .from(qSewProcess)
             .where(builder3.build());
         sewProcesses = jpaQuery3.fetch();
-        Iterator it2 = sewProcesses.iterator();
-        BigDecimal aerobic_pool_do = null;
-        BigDecimal aerobic_pool_ss = null;
-        i = 0;
+        time = hour;
         for (AmmoniaNitrogen ammoniaNitrogen : data) {
+            Iterator it2 = sewProcesses.iterator();
             while (it2.hasNext()) {
-                i++;
                 SewProcess s = (SewProcess) it2.next();
-                aerobic_pool_do = aerobic_pool_do.add(s.getAerobicPoolDo());
-                aerobic_pool_ss = aerobic_pool_ss.add(s.getInSs());
-                if (i == 6) {
-                    i = 0;
-                    aerobic_pool_do = aerobic_pool_do.divide(six);
-                    aerobic_pool_ss = aerobic_pool_ss.divide(six);
-                    ammoniaNitrogen.setAerobic_pool_ss(aerobic_pool_ss);
-                    ammoniaNitrogen.setAerobic_pool_do(aerobic_pool_do);
+                if (s.getDayTime().equals(time)) {
+                    time = time.plus(2,ChronoUnit.HOURS);
+                    ammoniaNitrogen.setAerobic_pool_ss(s.getInSs());
+                    ammoniaNitrogen.setAerobic_pool_do(s.getAerobicPoolDo());
+                    break;
                 }
                 it2.remove();
             }
@@ -193,7 +163,7 @@ public class ForecastResource {
 
     @PostMapping("/forecast/total_nitrogen")
     @ApiOperation(value = "总氮预测传参", notes = "作者：孙小楠")
-    public JSONObject forecastTn(Long id) {
+    public JSONObject forecastTn(Long id,Instant hour,String craftCode) {
 
         sewSlus = null;
         sewMeters = null;
@@ -209,13 +179,15 @@ public class ForecastResource {
         List<TnData> data = new ArrayList<>();
         //          拿到30小时的所有机器人（化验）数据
         OptionalBooleanBuilder builder1 = new OptionalBooleanBuilder()
-            .notEmptyAnd(qSewSlu.dayTime::gt, end);
+            .notEmptyAnd(qSewSlu.dayTime::goe, start)
+            .notEmptyAnd(qSewSlu.dayTime::loe,hour)
+            .notEmptyAnd(qSewSlu.craftCode::eq,craftCode);
         JPAQuery<SewSlu> jpaQuery1 = queryFactory
             .select(qSewSlu)
             .from(qSewSlu)
             .where(builder1.build());
         sewSlus = jpaQuery1.fetch();
-        totalNitrogenVM.setInflowList(this.getInflows());
+        totalNitrogenVM.setInflowList(this.getInflows(hour));
 //      判断是否试点
         Optional<Enterprise> enterprise = enterpriseRepository.findById(id);
         Boolean isTry;
@@ -224,115 +196,79 @@ public class ForecastResource {
             isTry = enterprise.get().getIsTry();
             if (isTry.equals(true)) {
                 OptionalBooleanBuilder builder2 = new OptionalBooleanBuilder()
-                    .notEmptyAnd(qSewMeter.dayTime::gt, end);
+                    .notEmptyAnd(qSewMeter.dayTime::goe, start)
+                    .notEmptyAnd(qSewMeter.dayTime::loe,hour)
+                    .notEmptyAnd(qSewMeter.craftCode::eq,craftCode);
                 JPAQuery<SewMeter> jpaQuery2 = queryFactory
                     .select(qSewMeter)
                     .from(qSewMeter)
                     .where(builder2.build());
                 sewMeters = jpaQuery2.fetch();
-
+                time = hour;
                 Iterator it = sewMeters.listIterator();
-                BigDecimal assInCod = null;
-                BigDecimal inTn = null;
-                BigDecimal assAnoxicPoolDoOutNit = null;
-                BigDecimal assAerobicPoolDoOutNit = null;
-                BigDecimal assOutTn = null;
-                i = 0;
+                time = hour;
                 while (it.hasNext()) {
-                    i++;
                     SewMeter s = (SewMeter) it.next();
-                    assInCod = assInCod.add(s.getCorInCod());
-                    inTn = inTn.add(s.getCorInTn());
-                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getCorAnoxicPoolDoOutNit());
-                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getCorAerobicPoolDoOutNit());
-                    assOutTn = assOutTn.add(s.getCorOutTn());
-                    if (i == 6) {
-                        i = 0;
-                        assInCod = assInCod.divide(six);
-                        inTn = inTn.divide(six);
-                        assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.divide(six);
-                        assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.divide(six);
-                        assOutTn = assOutTn.divide(six);
+                    if (s.getDayTime().equals(time)) {
+                        time = time.plus(2,ChronoUnit.HOURS);
                         TnData tnData = new TnData();
                         tnData.setTime(s.getDayTime());
-                        tnData.setIn_tn(inTn);
-                        tnData.setIn_cod(assInCod);
-                        tnData.setAnoxic_pool_do_out_nit(assAnoxicPoolDoOutNit);
-                        tnData.setAerobic_pool_nit(assAerobicPoolDoOutNit);
-                        tnData.setOut_tn(assOutTn);
+                        tnData.setIn_tn(s.getCorInTn());
+                        tnData.setIn_cod(s.getCorInCod());
+                        tnData.setAnoxic_pool_do_out_nit(s.getCorAnoxicPoolDoOutNit());
+                        tnData.setAerobic_pool_nit(s.getCorAerobicPoolDoOutNit());
+                        tnData.setOut_tn(s.getCorOutTn());
                         tnData.setAnaerobic_pool_do(sewPot.getDayAnaerobicPoolDo());
                         tnData.setCar_add(sewPot.getDayCarAdd());
                         tnData.setAerobic_pool_temper(sewPot.getDayAerobicPoolTemper());
                         tnData.setAerobic_pool_mlss(sewPot.getDayAerobicPoolMlss());
                         data.add(tnData);
                     }
-                    it.remove();
                 }
             } else {
 //            非试点 用化验数据（机器人）
                 Iterator it1 = sewSlus.iterator();
-                BigDecimal assInCod = null;
-                BigDecimal inTn = null;
-                BigDecimal assAnoxicPoolDoOutNit = null;
-                BigDecimal assAerobicPoolDoOutNit = null;
-                BigDecimal assOutTn = null;
-                i = 0;
+                time = hour;
                 while (it1.hasNext()) {
-                    i++;
                     SewMeter s = (SewMeter) it1.next();
-                    assInCod = assInCod.add(s.getCorInCod());
-                    inTn = inTn.add(s.getCorInTn());
-                    assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.add(s.getCorAnoxicPoolDoOutNit());
-                    assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.add(s.getCorAerobicPoolDoOutNit());
-                    assOutTn = assOutTn.add(s.getCorOutTn());
-                    if (i == 6) {
-                        i = 0;
-                        assInCod = assInCod.divide(six);
-                        inTn = inTn.divide(six);
-                        assAnoxicPoolDoOutNit = assAnoxicPoolDoOutNit.divide(six);
-                        assAerobicPoolDoOutNit = assAerobicPoolDoOutNit.divide(six);
-                        assOutTn = assOutTn.divide(six);
+                    if (s.getDayTime().equals(time)) {
+                        time = time.plus(2,ChronoUnit.HOURS);
                         TnData tnData = new TnData();
                         tnData.setTime(s.getDayTime());
-                        tnData.setIn_tn(inTn);
-                        tnData.setIn_cod(assInCod);
-                        tnData.setAnoxic_pool_do_out_nit(assAnoxicPoolDoOutNit);
-                        tnData.setAerobic_pool_nit(assAerobicPoolDoOutNit);
-                        tnData.setOut_tn(assOutTn);
+                        tnData.setIn_tn(s.getCorInTn());
+                        tnData.setIn_cod(s.getCorInCod());
+                        tnData.setAnoxic_pool_do_out_nit(s.getCorAnoxicPoolDoOutNit());
+                        tnData.setAerobic_pool_nit(s.getCorAerobicPoolDoOutNit());
+                        tnData.setOut_tn(s.getCorOutTn());
                         tnData.setAnaerobic_pool_do(sewPot.getDayAnaerobicPoolDo());
                         tnData.setCar_add(sewPot.getDayCarAdd());
                         tnData.setAerobic_pool_temper(sewPot.getDayAerobicPoolTemper());
                         tnData.setAerobic_pool_mlss(sewPot.getDayAerobicPoolMlss());
                         data.add(tnData);
                     }
-                    it1.remove();
                 }
             }
         }
         //          30h仪表数据
         OptionalBooleanBuilder builder3 = new OptionalBooleanBuilder()
-            .notEmptyAnd(qSewProcess.dayTime::gt, end);
+            .notEmptyAnd(qSewProcess.dayTime::goe, start)
+            .notEmptyAnd(qSewProcess.dayTime::loe,hour)
+            .notEmptyAnd(qSewProcess.craftCode::eq,craftCode);
         JPAQuery<SewProcess> jpaQuery3 = queryFactory
             .select(qSewProcess)
             .from(qSewProcess)
             .where(builder3.build());
         sewProcesses = jpaQuery3.fetch();
         Iterator it2 = sewProcesses.iterator();
-        BigDecimal in_flow = null;
-        BigDecimal aerobic_pool_do = null;
-        i = 0;
+        time = hour;
         for (TnData tnData : data) {
             while (it2.hasNext()) {
-                i++;
                 SewProcess s = (SewProcess) it2.next();
-                in_flow = in_flow.add(s.getInFlow());
-                aerobic_pool_do = aerobic_pool_do.add(s.getAerobicPoolDo());
-                if (i == 6) {
-                    i = 0;
-                    in_flow = in_flow.divide(six);
-                    aerobic_pool_do = aerobic_pool_do.divide(six);
-                    tnData.setIn_flow(in_flow);
-                    tnData.setAerobic_pool_do(aerobic_pool_do);
+                if (s.getDayTime().equals(time)) {
+                    time = time.plus(2,ChronoUnit.HOURS);
+                    tnData.setIn_flow(s.getInFlow());
+                    tnData.setAerobic_pool_do(s.getAerobicPoolDo());
+                    break;
                 }
                 it2.remove();
             }
@@ -344,13 +280,9 @@ public class ForecastResource {
     }
 
     //   进水参数list
-    public List<Inflow> getInflows() {
-        JPAQuery<SewSlu> jpaQuery = queryFactory
-            .select(qSewSlu)
-            .from(qSewSlu)
-            .orderBy(qSewSlu.id.desc());
-        start = jpaQuery.fetchFirst().getDayTime();
-        end = start.minus(30, ChronoUnit.HOURS);
+    public List<Inflow> getInflows(Instant hour) {
+
+        start = hour.minus(30, ChronoUnit.HOURS);
 
         List<Inflow> inflowList = new ArrayList<>();
         sewSlus.stream().map(sewSlu -> {
