@@ -144,36 +144,13 @@ public class RoleResource {
             throw new BadRequestProblem("删除失败", "存在使用此角色的用户");
         }
         // 先删除用户角色表数据
+        roleMenuRepository.deleteAllByRoleId(id);
         userRoleRepository.deleteAllByRoleId(id);
         jpaQueryFactory
-            .update(qRole)
+            .delete(qRole)
             .where(qRole.id.eq(id))
             .execute();
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/role/using/{id}")
-    @Transactional
-    @ApiOperation(value = "停用/启用角色接口", notes = "作者：孙小楠")
-    public ResponseEntity<Void> changeUsingOfRole(@PathVariable Long id,
-                                                  @ApiParam(value = "TRUE为启用，FALSE为停用", required = true) @RequestParam Boolean using) {
-        List<Long> userIds = userRoleRepository.findAllByRoleId(id).stream().map(UserRole::getUserId).collect(Collectors.toList());
-        List<User> usersInRole = userRepository.findAllByIdIn(userIds);
-        if (!usersInRole.isEmpty()) {
-            throw new BadRequestProblem("操作失败", "存在使用此角色的用户");
-        }
-        if (using) {
-            jpaQueryFactory
-                .update(qRole)
-                .where(qRole.id.eq(id))
-                .execute();
-        }else {
-            jpaQueryFactory
-                .update(qRole)
-                .where(qRole.id.eq(id))
-                .execute();
-        }
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/role/drop-down")
