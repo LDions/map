@@ -57,8 +57,8 @@ public class GroupResource {
         return ResponseEntity.created(new URI("/api/group/" + result.getId()))
             .body(result);
     }
-    @PutMapping("/craft")
-    @ApiOperation(value = "编辑工艺接口", notes = "作者：孙小楠")
+    @PutMapping("/group")
+    @ApiOperation(value = "编辑集团接口", notes = "作者：孙小楠")
     public ResponseEntity<Group> editCraft(@Valid @RequestBody Group group) {
         log.debug("REST request to update SewGroup : {}", group);
         if (group.getId() == null) {
