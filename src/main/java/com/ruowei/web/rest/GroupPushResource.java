@@ -9,10 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -196,7 +193,7 @@ public class GroupPushResource {
     @PostMapping("/enterprise_user")
     @Transactional
     @ApiOperation(value = "集团接收水厂新增编辑用户数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> addUser(EnterpriseUserVM vm) {
+    public ResponseEntity<String> addUser(@RequestBody EnterpriseUserVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
         Optional<Enterprise> enterprise = enterpriseRepository.findByCode(vm.getEnterpriseCode());
         if (!enterprise.isPresent()) {
@@ -207,6 +204,7 @@ public class GroupPushResource {
             User user = new User();
             ObjectUtils.copyPropertiesIgnoreNull(vm, user);
             userRepository.save(user);
+            result.set("推送成功");
         } else {
             //集团更新水厂用户信息 集团编码和水厂编码都不为空是水厂用户
             userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
@@ -215,6 +213,7 @@ public class GroupPushResource {
                     userRepository.save(user);
                     return user;
                 }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+            result.set("推送成功");
         }
         return ResponseEntity.ok().body(result.get());
     }
@@ -232,6 +231,7 @@ public class GroupPushResource {
         userRepository.findByEnterpriseCodeAndUserCode(enterpriseCode, userCode)
             .map(user -> {
                 userRepository.delete(user);
+                result.set("推送成功");
                 return user;
             }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
         return ResponseEntity.ok().body(result.get());
