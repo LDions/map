@@ -4,6 +4,7 @@ import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -17,13 +18,10 @@ public class ComprehensiveDataVM {
     @ApiModelProperty(value = "采集时间")
     private Instant dayTime;
 
-    @ApiModelProperty(value = "工艺id")
-    private Long craftId;
-
-    //仪表数据
     @ApiModelProperty(value = "工艺类型编码")
     private String craftCode;
 
+    //仪表数据
     @ApiModelProperty(value = "进水流量（mg/L）")
     private BigDecimal inFlow;
 
@@ -202,4 +200,38 @@ public class ComprehensiveDataVM {
 
     @ApiModelProperty(value = "生化池-好氧池温度")
     private BigDecimal dayAerobicPoolTemper;
+
+    //校表数据
+    @ApiModelProperty(value = "校表编码")
+    private String meterCode;
+
+    @ApiModelProperty(value = "进水氨氮（mg/L）")
+    private BigDecimal corInAmmonia;
+
+    @ApiModelProperty(value = "进水COD（mg/L）")
+    private BigDecimal corInCod;
+
+    @ApiModelProperty(value = "进水TN（mg/L）")
+    private BigDecimal corInTn;
+
+    @ApiModelProperty(value = "进水TP（mg/L）")
+    private BigDecimal corInTp;
+
+    @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
+    private BigDecimal corAnoxicPoolDoOutNit;
+
+    @ApiModelProperty(value = "好氧池出口硝酸盐（mg/L）")
+    private BigDecimal corAerobicPoolDoOutNit;
+
+    @ApiModelProperty(value = "出水氨氮（mg/L）")
+    private BigDecimal corOutAmmonia;
+
+    @ApiModelProperty(value = "出水COD（mg/L）")
+    private BigDecimal corOutCod;
+
+    @ApiModelProperty(value = "出水TN（mg/L）")
+    private BigDecimal corOutTn;
+
+    @ApiModelProperty(value = "出水TP（mg/L）")
+    private BigDecimal corOutTp;
 }

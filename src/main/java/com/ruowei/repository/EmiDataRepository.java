@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the EmiData entity.
@@ -17,6 +18,7 @@ import java.util.List;
 public interface EmiDataRepository extends JpaRepository<EmiData, Long> {
 
 
-    List<EmiData> findByPredictTimeIsGreaterThanEqualAndPredictTimeIsLessThanEqualAndCraftCode(Instant time1,Instant time2,String craftCode);
+    List<EmiData> findByPredictTimeIsGreaterThanEqualAndPredictTimeIsLessThanEqualAndCraftCode(Instant time1, Instant time2, String craftCode);
 
+    Optional<EmiData> findFirstByDataCodeAndEnterpriseCodeAndAcctype(String dataCode, String enterpriseCode, String acctype);
 }
