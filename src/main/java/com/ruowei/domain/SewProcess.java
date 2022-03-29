@@ -120,7 +120,7 @@ public class SewProcess implements Serializable {
     /**
      * 好氧池（mg/L）
      */
-    @ApiModelProperty(value = "好氧池Do（mg/L）")
+    @ApiModelProperty(value = "好氧池1Do（mg/L）")
     @Column(name = "aerobic_pool_do", precision = 21, scale = 2)
     private BigDecimal aerobicPoolDo;
 
@@ -466,30 +466,32 @@ public class SewProcess implements Serializable {
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "SewProcess{" +
-            "id=" + getId() +
-            ", inFlow=" + getInFlow() +
-            ", inAmmonia=" + getInAmmonia() +
-            ", inCod=" + getInCod() +
-            ", inTn=" + getInTn() +
-            ", inTp=" + getInTp() +
-            ", inSs=" + getInSs() +
-            ", outFlow=" + getOutFlow() +
-            ", outAmmonia=" + getOutAmmonia() +
-            ", outCod=" + getOutCod() +
-            ", outTn=" + getOutTn() +
-            ", outTp=" + getOutTp() +
-            ", outSs=" + getOutSs() +
-            ", aerobicPoolDo=" + getAerobicPoolDo() +
-            ", aerobicPoolDoSecond=" + getAerobicPoolDoSecond() +
-            ", anoxicPoolDoOutNit=" + getAnoxicPoolDoOutNit() +
-            ", aerobicPoolNit=" + getAerobicPoolNit() +
-            ", dayTime=" + getDayTime() +
-            ", craftId=" + getCraftId() +
-            ", status=" + getStatus() +
-            "}";
+            "id=" + id +
+            ", processCode='" + processCode + '\'' +
+            ", inFlow=" + inFlow +
+            ", inAmmonia=" + inAmmonia +
+            ", inCod=" + inCod +
+            ", inTn=" + inTn +
+            ", inTp=" + inTp +
+            ", inSs=" + inSs +
+            ", outFlow=" + outFlow +
+            ", outAmmonia=" + outAmmonia +
+            ", outCod=" + outCod +
+            ", outTn=" + outTn +
+            ", outTp=" + outTp +
+            ", outSs=" + outSs +
+            ", aerobicPoolDo=" + aerobicPoolDo +
+            ", aerobicPoolDoSecond=" + aerobicPoolDoSecond +
+            ", anoxicPoolDoOutNit=" + anoxicPoolDoOutNit +
+            ", aerobicPoolNit=" + aerobicPoolNit +
+            ", dayTime=" + dayTime +
+            ", craftId=" + craftId +
+            ", craftCode='" + craftCode + '\'' +
+            ", status=" + status +
+            ", plateStatus=" + plateStatus +
+            '}';
     }
 }

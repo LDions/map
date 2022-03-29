@@ -1,16 +1,16 @@
 package com.ruowei.web.rest;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ruowei.domain.Enterprise;
-import com.ruowei.domain.QEnterprise;
-import com.ruowei.domain.QUser;
-import com.ruowei.domain.User;
+import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
+import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.dto.EnterpriseDTO;
+import com.ruowei.web.rest.dto.UserEnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.EnterpriseQM;
 import com.ruowei.web.rest.vm.EnterpriseVM;
@@ -58,8 +58,9 @@ public class EnterpriseResource {
     private final RoleRepository roleRepository;
     private QEnterprise qEnterprise = QEnterprise.enterprise;
     private QUser qUser = QUser.user;
+    private final CraftRepository craftRepository;
 
-    public EnterpriseResource(EnterpriseRepository enterpriseRepository, DistrictRepository districtRepository, EnterpriseVMMapper enterpriseVMMapper, JPAQueryFactory jpaQueryFactory, UserRepository userRepository, UserVMMapper userVMMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, RoleRepository roleRepository) {
+    public EnterpriseResource(EnterpriseRepository enterpriseRepository, DistrictRepository districtRepository, EnterpriseVMMapper enterpriseVMMapper, JPAQueryFactory jpaQueryFactory, UserRepository userRepository, UserVMMapper userVMMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, RoleRepository roleRepository, CraftRepository craftRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.districtRepository = districtRepository;
         this.enterpriseVMMapper = enterpriseVMMapper;
@@ -69,6 +70,7 @@ public class EnterpriseResource {
         this.passwordEncoder = passwordEncoder;
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
+        this.craftRepository = craftRepository;
     }
 
     @PostMapping("/enterprise")
@@ -95,30 +97,6 @@ public class EnterpriseResource {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/enterprises")
-    @Transactional
-    @ApiOperation(value = "获取带分页的企业列表接口", notes = "作者：孙小楠")
-    public ResponseEntity<List<EnterpriseDTO>> getAllEnterprises(EnterpriseQM qm, Pageable pageable) {
-        log.debug("REST request to get a page of Enterprises : {}", qm);
-
-//        OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
-//            .notEmptyAnd(qEnterprise.code::ne, Constants.SYS_ADMIN);
-        List<Enterprise> all = enterpriseRepository.findAll();
-        List<EnterpriseDTO> list =
-            all.stream().map(enterprise -> {
-                EnterpriseDTO enterpriseDTO = new EnterpriseDTO();
-                BeanUtils.copyProperties(enterprise, enterpriseDTO);
-                return enterpriseDTO;
-            }).collect(Collectors.toList());
-        Page<EnterpriseDTO> page = new PageImpl<>(list, pageable, list.size());
-
-        List<EnterpriseDTO> content = page.getContent();
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(content);
-
-    }
-
     @GetMapping("/enterprise/{id}")
     @ApiOperation(value = "查询企业详情接口", notes = "作者:孙小楠")
     public ResponseEntity<Enterprise> getEnterprise(@PathVariable Long id) {
@@ -141,18 +119,23 @@ public class EnterpriseResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/enterprise/drop-down")
-    @ApiOperation(value = "获取当前用户对应的企业下拉列表接口", notes = "作者：孙小楠")
-    public ResponseEntity<List<DropDownDTO>> getEnterpriseDropDown(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
-        List<DropDownDTO> result = new ArrayList<>();
-        if (userModel.getcode() != null) {
-            DropDownDTO dto = new DropDownDTO();
-            dto.setCode(userModel.getcode());
-            dto.setName(userModel.getEnterpriseName());
-            result.add(dto);
-        }
+    @GetMapping("/enterprise/list")
+    @ApiOperation(value = "获取当前用户对应的企业列表接口", notes = "作者：孙小楠")
+    public ResponseEntity<List<Enterprise>> getEnterpriseDropDown(UserEnterpriseDTO userEnterpriseDTO, Pageable pageable) {
+
+        OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
+            .notEmptyAnd(qEnterprise.code::eq, userEnterpriseDTO.getCode())
+            .notEmptyAnd(qEnterprise.groupCode::eq,userEnterpriseDTO.getGroupCode());
+        JPAQuery<Enterprise> jpaQuery = jpaQueryFactory
+            .select(qEnterprise)
+            .from(qEnterprise)
+            .where(builder.build())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize());
+        List<Enterprise> result = jpaQuery.fetch();
         return ResponseEntity.ok(result);
     }
+
     @PostMapping("/enterprise/reset/{code}")
     @ApiOperation(value = "重置企业密码接口", notes = "作者：张锴")
     public ResponseEntity<String> resetEnterprisePassword(@PathVariable String code) {
@@ -166,5 +149,20 @@ public class EnterpriseResource {
         userRepository.save(user);
         return ResponseEntity.ok().body("重置成功");
     }
+
+    @PostMapping("/enterprise/craft-dropdown")
+    @ApiOperation(value = "查询水厂下属工艺", notes = "作者：郑昊天")
+    public ResponseEntity<List<DropDownDTO>> getCraftDropdown(String enterpriseCode) {
+        List<Craft> crafts = craftRepository.findAllByEntCode(enterpriseCode);
+        List<DropDownDTO> dropDownList = new ArrayList<>();
+        for (Craft craft : crafts) {
+            DropDownDTO dropDownDTO = new DropDownDTO();
+            dropDownDTO.setId(craft.getId());
+            dropDownDTO.setName(craft.getCraftName());
+            dropDownList.add(dropDownDTO);
+        }
+        return ResponseEntity.ok().body(dropDownList);
+    }
+
 }
 

@@ -353,8 +353,8 @@ public class SelectUtil {
 
         List<SituationAnalysisQM> situationAnalysisQMList = new ArrayList<>();
         SewProcess sewProcess = jpaQueryFactory.selectFrom(qSewProcess)
-            .where(qSewProcess.craftCode.eq(craftCode))
-            .orderBy(qSewProcess.dayTime.desc()).fetchFirst();
+            /*.where(qSewProcess.craftCode.eq(craftCode))
+            .orderBy(qSewProcess.dayTime.desc()).*/.fetchFirst();
         SewSlu sewSlu = jpaQueryFactory.selectFrom(qSewSlu)
             .where(qSewSlu.craftCode.eq(craftCode))
             .orderBy(qSewSlu.dayTime.desc()).fetchFirst();

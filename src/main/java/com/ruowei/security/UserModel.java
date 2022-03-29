@@ -11,9 +11,9 @@ public class UserModel extends User {
     private Long userId;
     // 用户姓名
     private String nickName;
-    // 水厂ID
+    // 水厂Code
     private String code;
-    // 集团ID
+    // 集团Code
     private String groupCode;
     // 企业名称
     private String enterpriseName;

@@ -25,6 +25,8 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, Q
 
     Optional<Enterprise> findByCodeAndGroupCodeAndIsTry(String code, String groupCode, Boolean tryed);
 
+    List<Enterprise> findAllByGroupCode(String code);
+
     void deleteByCode(String code);
 
 }
