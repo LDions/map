@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,4 +28,25 @@ public class BeAssociated {
     @ApiModelProperty(value = "被关联数据名称")
     @Column(name = "be_associated_name")
     private String beAssociatedName;
+
+    /**
+     * 关联编码
+     */
+    @ApiModelProperty(value = "关联编码")
+    @Column(name = "associate_code")
+    private String associatedCode;
+
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态")
+    @Column(name = "status")
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态")
+    @Column(name = "plate_status")
+    private SendStatusType plateStatus;
 }
