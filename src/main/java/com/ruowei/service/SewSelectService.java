@@ -107,8 +107,8 @@ public class SewSelectService {
                         .where(predicate.build());
                     break;
 
-                case "anoxicPoolDo":
-                    bigDecimalJPAQuery = jpaQueryFactory.select(qSewProcess.anoxicPoolDo)
+                case "aerobicPoolDoSecond":
+                    bigDecimalJPAQuery = jpaQueryFactory.select(qSewProcess.aerobicPoolDoSecond)
                         .from(qSewProcess)
                         .where(predicate.build());
                     break;

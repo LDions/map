@@ -17,6 +17,18 @@ public class ApplicationProperties {
 
     private String host;
 
+    //集团IP地址
+    private String plateHost;
+
+    //平台IP地址
+    public String getPlateHost() {
+        return plateHost;
+    }
+
+    public void setPlateHost(String plateHost) {
+        this.plateHost = plateHost;
+    }
+
     public String getHost() {
         return host;
     }

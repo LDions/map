@@ -1,5 +1,6 @@
 /** 用户 */
 entity User(sys_user) {
+    userCode String /** 用户编码 */
 	groupCode String /** 集团编码 */
     enterpriseCode String /** 水厂编码 */
     login String required /** 登录账号 */
@@ -64,8 +65,8 @@ entity RoleMenu(sys_role_menu) {
 entity Group(sys_group) {
     groupName String required/** 集团名称 */
     groupCode String required /** 集团编码 */
-    groupLongitude String required /** 经营详细地址经度 */
-    groupLatitude String required /** 经营详细地址纬度 */
+    groupLongitude BigDecimal required /** 经营详细地址经度 */
+    groupLatitude BigDecimal required /** 经营详细地址纬度 */
     groupContactName String /** 联系人姓名 */
     groupContactPhone String /** 联系人手机 */
 }
@@ -74,8 +75,8 @@ entity Enterprise(sys_enterprise) {
 	groupCode String /** 水厂所属集团Code */
 	code String required /** 水厂编码 */
     name String required /** 水厂名称 */
-    enterpriseLongitude String required /** 经营详细地址经度 */
-    enterpriseLatitude String required /** 经营详细地址纬度 */
+    enterpriseLongitude BigDecimal required /** 经营详细地址经度 */
+    enterpriseLatitude BigDecimal required /** 经营详细地址纬度 */
     contactName String /** 联系人姓名 */
     contactPhone String /** 联系人手机 */
     isTry Boolean required /** 是否为试点水厂 */
@@ -89,10 +90,13 @@ entity Craft(craft){
     AnaerobicPoolVolume BigDecimal /** 厌氧池池容 */
     AnoxicPoolVolume BigDecimal /** 缺氧池池容 */
     AerobicPoolVolume BigDecimal /** 好氧池池容 */
-    inRefluxRatio BigDecimal /** 内回流比 */
-    outRefluxRatio BigDecimal /** 外回流比 */
+    inRefluxFlow BigDecimal /** 内回流泵流量 (m3/h) */
+    inRefluxNum BigDecimal /** 内回流泵台数 */
+    outRefluxFlow BigDecimal /** 外回流泵流量 (m3/h) */
+    outRefluxNum BigDecimal /** 外回流泵台数 */
     aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
     anoxiaNitrateConcentration BigDecimal /** 传统公式：缺氧区硝酸盐浓度 */
+    nitrateRefluxRatio BigDecimal /** 传统公式：硝化液回流比 */
     bodCodRatio BigDecimal /** 传统公式：BOD/COD */
     codCalibration BigDecimal /** 传统公式：COD校准参数 */
     bodNRatio BigDecimal /** 传统公式：BOD/N */
@@ -108,12 +112,12 @@ entity Craft(craft){
 /**计算数据 */
 entity EmiData(emi_data) {
 	documentCode String required /** 单据号 */
-	enterpriseId Long required /** 水厂ID */
-	craftId Long required /** 工艺id */
+	enterpriseCode String required /** 水厂ID */
+	craftCode String required /** 工艺id */
     acctype String required /** 核算方式（自动、手动） */
     accYear String required /** 核算年份 */
     accMonth String required /** 核算月份 */
-    accTime String required /** 核算时间 */
+    accTime Instant required /** 核算时间 */
     predictTime String required /** 预测未来时间 */
     totalOutN BigDecimal required /** 出水总氮 */
     outAN BigDecimal required /** 出水氨氮 */
@@ -139,10 +143,8 @@ entity SewProcess(sew_process) {
     outTn BigDecimal required /** 出水TN（mg/L） */
     outTp BigDecimal /** 出水TP（mg/L） */
     outSs BigDecimal /** 出水SS（mg/L） */
-    //输入项目-缺氧池
-    anoxicPoolDo BigDecimal /** 缺氧池DO（mg/L） */
-    //输入项目-好氧池
-    aerobicPoolDo BigDecimal /** 好氧池DO（mg/L） */
+    aerobicPoolDo BigDecimal /** 好氧池1 DO（mg/L） */
+    aerobicPoolDoSecond BigDecimal /** 好氧池2 DO（mg/L） */
     anoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
     aerobicPoolNit BigDecimal /** 好氧池出口亚硝酸盐（mg/L） */
     dayTime Instant /** 采集时间 */
@@ -179,34 +181,58 @@ entity SewPot(sew_pot) {
 	dayFirstMud BigDecimal /** 初沉池排泥量（mg/L） */
 	daySecondMud BigDecimal /** 二沉池排泥量（mg/L） */
 	dayReflux BigDecimal /** 回流比（mg/L） */
-	dayCarAdd BigDecimal /** 碳源投加量（mg/L） */
+	daySodiumCarAdd BigDecimal /**乙酸钠碳源投加量（mg/L） */
+	dayOtherCarAdd BigDecimal /**其他碳源投加量（mg/L） */
 
 	//生化池-厌氧池
-	dayAnaerobicPoolPh BigDecimal /** 生化池-厌氧池PH （）*/
-	dayAnaerobicPoolOrp BigDecimal /** 生化池-厌氧池ORP （）*/
-	dayAnaerobicPoolDo BigDecimal /** 生化池-厌氧池DO （）*/
-	dayAnaerobicPoolSour BigDecimal /** 生化池-厌氧池SOUR （）*/
-	dayAnaerobicPoolSv BigDecimal /** 生化池-厌氧池SV （）*/
-	dayAnaerobicPoolMlss BigDecimal /** 生化池-厌氧池MLSS （）*/
-	dayAnaerobicPoolTemper BigDecimal /** 生化池-厌氧池温度 （）*/
+	dayAnaerobicPoolPh BigDecimal /** 生化池-厌氧池PH指标1 （）*/
+	dayAnaerobicPoolPhSecond BigDecimal /** 生化池-厌氧池PH指标2 （）*/
+	dayAnaerobicPoolOrp BigDecimal /** 生化池-厌氧池ORP指标1 （）*/
+	dayAnaerobicPoolOrpSecond BigDecimal /** 生化池-厌氧池ORP指标2 （）*/
+	dayAnaerobicPoolDo BigDecimal /** 生化池-厌氧池DO指标1 （）*/
+	dayAnaerobicPoolDoSecond BigDecimal /** 生化池-厌氧池DO指标2 （）*/
+	dayAnaerobicPoolSour BigDecimal /** 生化池-厌氧池SOUR指标1 （）*/
+	dayAnaerobicPoolSourSecond BigDecimal /** 生化池-厌氧池SOUR指标2 （）*/
+	dayAnaerobicPoolSv BigDecimal /** 生化池-厌氧池SV指标1 （）*/
+	dayAnaerobicPoolSvSecond BigDecimal /** 生化池-厌氧池SV指标2 （）*/
+	dayAnaerobicPoolMlss BigDecimal /** 生化池-厌氧池MLSS指标1 （）*/
+	dayAnaerobicPoolMlssSecond BigDecimal /** 生化池-厌氧池MLSS指标2 （）*/
+	dayAnaerobicPoolTemper BigDecimal /** 生化池-厌氧池温度指标1 （）*/
+	dayAnaerobicPoolTemperSecond BigDecimal /** 生化池-厌氧池温度指标2 （）*/
 	//生化池-缺氧池
-	dayAnoxicPoolPh BigDecimal /** 生化池-缺氧池PH （）*/
-	dayAnoxicPoolOrp BigDecimal /** 生化池-缺氧池ORP （）*/
-	dayAnoxicPoolDo BigDecimal /** 生化池-缺氧池DO （）*/
-	dayAnoxicPoolSour BigDecimal /** 生化池-缺氧池SOUR （）*/
-	dayAnoxicPoolSv BigDecimal /** 生化池-缺氧池SV （）*/
-	dayAnoxicPoolMlss BigDecimal /** 生化池-缺氧池MLSS （）*/
-	dayAnoxicPoolTemper BigDecimal /** 生化池-缺氧池温度 （）*/
+	dayAnoxicPoolPh BigDecimal /** 生化池-缺氧池PH指标1 （）*/
+	dayAnoxicPoolPhSecond BigDecimal /** 生化池-缺氧池PH指标2 （）*/
+	dayAnoxicPoolOrp BigDecimal /** 生化池-缺氧池ORP指标1 （）*/
+	dayAnoxicPoolOrpSecond BigDecimal /** 生化池-缺氧池ORP指标2 （）*/
+	dayAnoxicPoolDo BigDecimal /** 生化池-缺氧池DO指标1 （）*/
+	dayAnoxicPoolDoSecond BigDecimal /** 生化池-缺氧池DO指标2 （）*/
+	dayAnoxicPoolSour BigDecimal /** 生化池-缺氧池SOUR指标1 （）*/
+	dayAnoxicPoolSourSecond BigDecimal /** 生化池-缺氧池SOUR指标2 （）*/
+	dayAnoxicPoolSv BigDecimal /** 生化池-缺氧池SV指标1 （）*/
+	dayAnoxicPoolSvSecond BigDecimal /** 生化池-缺氧池SV指标2 （）*/
+	dayAnoxicPoolMlss BigDecimal /** 生化池-缺氧池MLSS指标1 （）*/
+	dayAnoxicPoolMlssSecond BigDecimal /** 生化池-缺氧池MLSS指标2 （）*/
+	dayAnoxicPoolTemper BigDecimal /** 生化池-缺氧池温度指标1 （）*/
+	dayAnoxicPoolTemperSecond BigDecimal /** 生化池-缺氧池温度指标2 （）*/
 	//生化池-好氧池
-	dayAerobicPoolPh BigDecimal /** 生化池-好氧池PH （）*/
-	dayAerobicPoolOrp BigDecimal /** 生化池-好氧池ORP （）*/
-	dayAerobicPoolDo BigDecimal /** 生化池-好氧池DO （）*/
-	dayAerobicPoolSour BigDecimal /** 生化池-好氧池SOUR （）*/
-	dayAerobicPoolSv BigDecimal /** 生化池-好氧池SV （）*/
-	dayAerobicPoolMlss BigDecimal /** 生化池-好氧池MLSS （）*/
-	dayAerobicPoolMlvss BigDecimal /** 生化池-好氧池MLVSS （）*/
-    dayAerobicPoolSvi BigDecimal /** 生化池-好氧池SVI（）*/
-	dayAerobicPoolTemper BigDecimal /** 生化池-厌氧池温度 （）*/
+	dayAerobicPoolPh BigDecimal /** 生化池-好氧池PH指标1 （）*/
+	dayAerobicPoolPhSecond BigDecimal /** 生化池-好氧池PH指标2 （）*/
+	dayAerobicPoolOrp BigDecimal /** 生化池-好氧池ORP指标1 （）*/
+	dayAerobicPoolOrpSecond BigDecimal /** 生化池-好氧池ORP指标2 （）*/
+	dayAerobicPoolDo BigDecimal /** 生化池-好氧池DO指标1 （）*/
+	dayAerobicPoolDoSecond BigDecimal /** 生化池-好氧池DO指标2 （）*/
+	dayAerobicPoolSour BigDecimal /** 生化池-好氧池SOUR指标1 （）*/
+	dayAerobicPoolSourSecond BigDecimal /** 生化池-好氧池SOUR指标2 （）*/
+	dayAerobicPoolSv BigDecimal /** 生化池-好氧池SV指标1 （）*/
+	dayAerobicPoolSvSecond BigDecimal /** 生化池-好氧池SV指标2 （）*/
+	dayAerobicPoolMlss BigDecimal /** 生化池-好氧池MLSS指标1 （）*/
+	dayAerobicPoolMlssSecond BigDecimal /** 生化池-好氧池MLSS指标2 （）*/
+	dayAerobicPoolMlvss BigDecimal /** 生化池-好氧池MLVSS指标1 （）*/
+	dayAerobicPoolMlvssSecond BigDecimal /** 生化池-好氧池MLVSS指标2 （）*/
+    dayAerobicPoolSvi BigDecimal /** 生化池-好氧池SVI指标1（）*/
+    dayAerobicPoolSviSecond BigDecimal /** 生化池-好氧池SVI指标2（）*/
+	dayAerobicPoolTemper BigDecimal /** 生化池-好氧池温度指标1 （）*/
+	dayAerobicPoolTemperSecond BigDecimal /** 生化池-好氧池温度指标2 （）*/
 	dayTime Instant /** 采集时间 */
 	status SendStatusType required /** 集团数据推送状态 */
 	plateStatus SendStatusType required /** 平台数据推送状态 */

@@ -10,6 +10,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 
 @ApiModel(description = "集团信息")
@@ -42,9 +43,16 @@ public class Group {
     /**
      * 集团位置
      */
-    @ApiModelProperty(value = "集团位置")
-    @Column(name = "group_address")
-    private String groupAddress;
+    @ApiModelProperty(value = "集团位置经度")
+    @Column(name = "group_longitude")
+    private BigDecimal groupLongitude;
+
+    /**
+     * 集团位置
+     */
+    @ApiModelProperty(value = "集团位置纬度")
+    @Column(name = "group_latitude")
+    private BigDecimal groupLatitude;
 
 
     /**
@@ -99,17 +107,28 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public String getGroupAddress() {
-        return groupAddress;
-    }
-    public Group groupAddress(String groupAddress) {
-        this.groupAddress = groupAddress;
-        return this;
-    }
-    public void setGroupAddress(String groupAddress) {
-        this.groupAddress = groupAddress;
+    public BigDecimal getGroupLongitude() {
+        return groupLongitude;
     }
 
+    public void setGroupLongitude(BigDecimal groupLongitude) {
+        this.groupLongitude = groupLongitude;
+    }
+    public Group groupLongitude(BigDecimal groupLongitude) {
+        this.groupLongitude = groupLongitude;
+        return this;
+    }
+    public BigDecimal getGroupLatitude() {
+        return groupLatitude;
+    }
+
+    public void setGroupLatitude(BigDecimal groupLatitude) {
+        this.groupLatitude = groupLatitude;
+    }
+    public Group groupLatitude(BigDecimal groupLatitude) {
+        this.groupLatitude = groupLatitude;
+        return this;
+    }
     public String getGroupContactName() {
         return groupContactName;
     }
@@ -153,11 +172,12 @@ public class Group {
     public String toString() {
         return "Group{" +
             "id=" + id +
+            ", groupCode='" + groupCode + '\'' +
             ", groupName='" + groupName + '\'' +
-            ", groupAddress='" + groupAddress + '\'' +
+            ", groupLongitude=" + groupLongitude +
+            ", groupLatitude=" + groupLatitude +
             ", groupContactName='" + groupContactName + '\'' +
             ", groupContactPhone='" + groupContactPhone + '\'' +
-            ", groupCode='" + groupCode + '\'' +
             '}';
     }
 }

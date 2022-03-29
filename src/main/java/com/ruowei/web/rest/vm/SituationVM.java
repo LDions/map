@@ -9,8 +9,6 @@ public class SituationVM {
 
     private String target;
 
-    private String source;
-
     private List<SituationAnalysisVM> values;
 
 }

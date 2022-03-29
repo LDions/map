@@ -74,9 +74,9 @@ public class PushService {
      * @param urlParams 参数
      * @return json格式返回值
      */
-    public JsonNode postForData(String host, String url, LinkedMultiValueMap<String, String> urlParams) {
+    public String postForData(String host, String url, LinkedMultiValueMap<String, String> urlParams) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host + url).queryParams(urlParams);
-        JsonNode jsonNode = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST, requestEntity(), JsonNode.class).getBody();
+        String jsonNode = restTemplate.exchange(builder.build().toUri(), HttpMethod.POST, requestEntity(), String.class).getBody();
         if (jsonNode == null) {
             log.info("调用接口" + url + "失败");
             throw new BadRequestAlertException("添加失败", "", "");

@@ -11,6 +11,7 @@ import com.ruowei.repository.SewProcessRepository;
 import com.ruowei.repository.SewSluRepository;
 import com.ruowei.service.SewEmiService;
 import com.ruowei.web.rest.vm.SewEmiVM;
+import com.ruowei.web.rest.vm.SituationAnalysisQM;
 import com.ruowei.web.rest.vm.SituationAnalysisVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ public class SelectUtil {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    //查询某段时间内某个指标的值
     public List<SituationAnalysisVM> getSome(String target, String beginTime, String endTime, String craftCode) {
 
         List<SituationAnalysisVM> situationAnalysisVMList = new ArrayList<>();
@@ -148,11 +150,11 @@ public class SelectUtil {
                     situationAnalysisVMList.add(situationAnalysisVM);
                 }
                 break;
-            case "anoxicPoolDo":
+            case "aerobicPoolDoSecond":
                 for (SewProcess sewProcess : sewProcessList) {
                     SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
                     situationAnalysisVM.setTime(GregorianCalendar.from(ZonedDateTime.ofInstant(sewProcess.getDayTime(), ZoneId.systemDefault())));
-                    situationAnalysisVM.setValue(sewProcess.getAnoxicPoolDo());
+                    situationAnalysisVM.setValue(sewProcess.getAerobicPoolDoSecond());
                     situationAnalysisVMList.add(situationAnalysisVM);
                 }
                 break;
@@ -344,5 +346,202 @@ public class SelectUtil {
                 break;
         }
         return situationAnalysisVMList;
+    }
+
+    //查询最新的某个指标的值
+    public List<SituationAnalysisQM> getSome(List<String> targets, String craftCode) {
+
+        List<SituationAnalysisQM> situationAnalysisQMList = new ArrayList<>();
+        SewProcess sewProcess = jpaQueryFactory.selectFrom(qSewProcess)
+            .where(qSewProcess.craftCode.eq(craftCode))
+            .orderBy(qSewProcess.dayTime.desc()).fetchFirst();
+        SewSlu sewSlu = jpaQueryFactory.selectFrom(qSewSlu)
+            .where(qSewSlu.craftCode.eq(craftCode))
+            .orderBy(qSewSlu.dayTime.desc()).fetchFirst();
+        SewMeter sewMeter = jpaQueryFactory.selectFrom(qSewMeter)
+            .where(qSewMeter.craftCode.eq(craftCode))
+            .orderBy(qSewMeter.dayTime.desc()).fetchFirst();
+        for (String target : targets) {
+            SituationAnalysisQM situationAnalysisQM = new SituationAnalysisQM();
+            switch (target) {
+                case "inFlow":
+                    situationAnalysisQM.setTarget("inFlow");
+                    situationAnalysisQM.setValue(sewProcess.getInFlow());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "inAmmonia":
+                    situationAnalysisQM.setTarget("inAmmonia");
+                    situationAnalysisQM.setValue(sewProcess.getInAmmonia());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "inCod":
+                    situationAnalysisQM.setTarget("inCod");
+                    situationAnalysisQM.setValue(sewProcess.getInCod());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "inTp":
+                    situationAnalysisQM.setTarget("inTp");
+                    situationAnalysisQM.setValue(sewProcess.getInTp());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "inTn":
+                    situationAnalysisQM.setTarget("inTn");
+                    situationAnalysisQM.setValue(sewProcess.getInTn());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "inSs":
+                    situationAnalysisQM.setTarget("inSs");
+                    situationAnalysisQM.setValue(sewProcess.getInSs());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "outFlow":
+                    situationAnalysisQM.setTarget("outFlow");
+                    situationAnalysisQM.setValue(sewProcess.getOutFlow());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "outCod":
+                    situationAnalysisQM.setTarget("outCod");
+                    situationAnalysisQM.setValue(sewProcess.getOutCod());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "outTp":
+                    situationAnalysisQM.setTarget("outTp");
+                    situationAnalysisQM.setValue(sewProcess.getOutTp());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "outTn":
+                    situationAnalysisQM.setTarget("outTn");
+                    situationAnalysisQM.setValue(sewProcess.getOutTn());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "outSs":
+                    situationAnalysisQM.setTarget("outSs");
+                    situationAnalysisQM.setValue(sewProcess.getOutSs());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "aerobicPoolDoSecond":
+                    situationAnalysisQM.setTarget("anoxicPoolDo");
+                    situationAnalysisQM.setValue(sewProcess.getAerobicPoolDoSecond());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "aerobicPoolDo":
+                    situationAnalysisQM.setTarget("aerobicPoolDo");
+                    situationAnalysisQM.setValue(sewProcess.getAerobicPoolDo());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "anoxicPoolDoOutNit":
+                    situationAnalysisQM.setTarget("anoxicPoolDoOutNit");
+                    situationAnalysisQM.setValue(sewProcess.getAnoxicPoolDoOutNit());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "aerobicPoolNit":
+                    situationAnalysisQM.setTarget("aerobicPoolNit");
+                    situationAnalysisQM.setValue(sewProcess.getAerobicPoolNit());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assInAmmonia":
+                    situationAnalysisQM.setTarget("assInAmmonia");
+                    situationAnalysisQM.setValue(sewSlu.getAssInAmmonia());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assInCod":
+                    situationAnalysisQM.setTarget("assInCod");
+                    situationAnalysisQM.setValue(sewSlu.getAssInCod());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assInTn":
+                    situationAnalysisQM.setTarget("assInTn");
+                    situationAnalysisQM.setValue(sewSlu.getAssInTn());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assInTp":
+                    situationAnalysisQM.setTarget("assInTp");
+                    situationAnalysisQM.setValue(sewSlu.getAssInTp());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assAnoxicPoolDoOutNit":
+                    situationAnalysisQM.setTarget("assAnoxicPoolDoOutNit");
+                    situationAnalysisQM.setValue(sewSlu.getAssAnoxicPoolDoOutNit());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assAerobicPoolDoOutNit":
+                    situationAnalysisQM.setTarget("assAerobicPoolDoOutNit");
+                    situationAnalysisQM.setValue(sewSlu.getAssAerobicPoolDoOutNit());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assOutAmmonia":
+                    situationAnalysisQM.setTarget("assOutAmmonia");
+                    situationAnalysisQM.setValue(sewSlu.getAssOutAmmonia());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assOutCod":
+                    situationAnalysisQM.setTarget("assOutCod");
+                    situationAnalysisQM.setValue(sewSlu.getAssOutCod());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assOutTn":
+                    situationAnalysisQM.setTarget("assOutTn");
+                    situationAnalysisQM.setValue(sewSlu.getAssOutTn());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "assOutTp":
+                    situationAnalysisQM.setTarget("assOutTp");
+                    situationAnalysisQM.setValue(sewSlu.getAssOutTp());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+
+                case "corInCod":
+                    situationAnalysisQM.setTarget("corInCod");
+                    situationAnalysisQM.setValue(sewMeter.getCorInCod());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corInTn":
+                    situationAnalysisQM.setTarget("corInTn");
+                    situationAnalysisQM.setValue(sewMeter.getCorInTn());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corInTp":
+                    situationAnalysisQM.setTarget("corInTp");
+                    situationAnalysisQM.setValue(sewMeter.getCorInTp());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corInAmmonia":
+                    situationAnalysisQM.setTarget("corInAmmonia");
+                    situationAnalysisQM.setValue(sewMeter.getCorInAmmonia());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corAnoxicPoolDoOutNit":
+                    situationAnalysisQM.setTarget("corAnoxicPoolDoOutNit");
+                    situationAnalysisQM.setValue(sewMeter.getCorAnoxicPoolDoOutNit());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corAerobicPoolDoOutNit":
+                    situationAnalysisQM.setTarget("corAerobicPoolDoOutNit");
+                    situationAnalysisQM.setValue(sewMeter.getCorAerobicPoolDoOutNit());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corOutAmmonia":
+                    situationAnalysisQM.setTarget("corOutAmmonia");
+                    situationAnalysisQM.setValue(sewMeter.getCorOutAmmonia());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corOutCod":
+                    situationAnalysisQM.setTarget("corOutCod");
+                    situationAnalysisQM.setValue(sewMeter.getCorOutCod());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corOutTn":
+                    situationAnalysisQM.setTarget("corOutTn");
+                    situationAnalysisQM.setValue(sewMeter.getCorOutTn());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+                case "corOutTp":
+                    situationAnalysisQM.setTarget("corOutTp");
+                    situationAnalysisQM.setValue(sewMeter.getCorOutTp());
+                    situationAnalysisQMList.add(situationAnalysisQM);
+                    break;
+            }
+        }
+        return situationAnalysisQMList;
     }
 }

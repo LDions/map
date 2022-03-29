@@ -38,8 +38,8 @@ public class EmiData implements Serializable {
      */
     @NotNull
     @ApiModelProperty(value = "水厂ID", required = true)
-    @Column(name = "enterprise_id", nullable = false)
-    private Long enterpriseId;
+    @Column(name = "enterprise_code", nullable = false)
+    private String enterpriseCode;
 
     /**
      * 核算方式（自动、手动）
@@ -87,15 +87,15 @@ public class EmiData implements Serializable {
     @NotNull
     @ApiModelProperty(value = "预测未来时间", required = true)
     @Column(name = "predict_time", nullable = false)
-    private String predictTime;
+    private Instant predictTime;
 
     /**
      * 工艺id
      */
     @NotNull
     @ApiModelProperty(value = "工艺id", required = true)
-    @Column(name = "craft_id", nullable = false)
-    private Long craftId;
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
 
     /**
      * 出水总氮
@@ -148,15 +148,15 @@ public class EmiData implements Serializable {
         this.documentCode = documentCode;
     }
 
-    public Long getEnterpriseId() {
-        return enterpriseId;
+    public String getEnterpriseCode() {
+        return enterpriseCode;
     }
-    public EmiData enterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public EmiData enterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
         return this;
     }
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
     }
 
     public String getAcctype() {
@@ -214,26 +214,26 @@ public class EmiData implements Serializable {
         this.accTimeStop = accTimeStop;
     }
 
-    public String getPredictTime() {
+    public Instant getPredictTime() {
         return predictTime;
     }
-    public EmiData predictTime(String predictTime) {
+    public EmiData predictTime(Instant predictTime) {
         this.predictTime = predictTime;
         return this;
     }
-    public void setPredictTime(String predictTime) {
+    public void setPredictTime(Instant predictTime) {
         this.predictTime = predictTime;
     }
 
-    public Long getCraftId() {
-        return craftId;
+    public String getCraftCode() {
+        return craftCode;
     }
-    public EmiData craftId(Long craftId) {
-        this.craftId = craftId;
+    public EmiData craftCode(String craftCode) {
+        this.craftCode = craftCode;
         return this;
     }
-    public void setCraftId(Long craftId) {
-        this.craftId = craftId;
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
     }
 
     public BigDecimal getTotalOutN() {
@@ -305,14 +305,14 @@ public class EmiData implements Serializable {
         return "EmiData{" +
             "id=" + id +
             ", documentCode='" + documentCode + '\'' +
-            ", enterpriseId=" + enterpriseId +
+            ", enterpriseCode='" + enterpriseCode + '\'' +
             ", acctype='" + acctype + '\'' +
             ", accYear='" + accYear + '\'' +
             ", accMonth='" + accMonth + '\'' +
             ", accTimeStart='" + accTimeStart + '\'' +
             ", accTimeStop='" + accTimeStop + '\'' +
             ", predictTime='" + predictTime + '\'' +
-            ", craftId=" + craftId +
+            ", craftCode='" + craftCode + '\'' +
             ", totalOutN=" + totalOutN +
             ", outAN=" + outAN +
             ", carbonAdd=" + carbonAdd +

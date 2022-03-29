@@ -3,33 +3,21 @@ package com.ruowei.web.rest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.Craft;
 import com.ruowei.domain.QCraft;
-import com.ruowei.domain.Role;
-import com.ruowei.domain.enumeration.RoleStatusType;
 import com.ruowei.repository.CraftRepository;
-import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.web.rest.errors.BadRequestProblem;
-import com.ruowei.web.rest.vm.RoleVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -51,7 +39,7 @@ public class CraftResource {
     @Transactional
     @ApiOperation(value = "新增工艺接口", notes = "作者：孙小楠")
     public ResponseEntity<Craft> createCraft(Craft craft) throws URISyntaxException {
-        log.debug("REST request to save SewRraft : {}", craft);
+        log.debug("REST request to save SewCraft : {}", craft);
         if (craft.getId() != null) {
             throw new BadRequestProblem("新增失败", "新增时ID必须为空");
         }
@@ -68,7 +56,7 @@ public class CraftResource {
     @PutMapping("/craft")
     @ApiOperation(value = "编辑工艺接口", notes = "作者：孙小楠")
     public ResponseEntity<Craft> editCraft(@Valid @RequestBody Craft craft) {
-        log.debug("REST request to update SewRraft : {}", craft);
+        log.debug("REST request to update SewCraft : {}", craft);
         if (craft.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
@@ -81,7 +69,7 @@ public class CraftResource {
     @Transactional
     @ApiOperation(value = "删除工艺接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteCraft(@PathVariable Long id) {
-        log.debug("REST request to delete SewRraft : {}", id);
+        log.debug("REST request to delete SewCraft : {}", id);
         craftRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -89,7 +77,7 @@ public class CraftResource {
 //    @GetMapping("/crafts")
 //    @ApiOperation(value = "获取分页工艺列表接口", notes = "作者：孙小楠")
 //    public ResponseEntity<List<Craft>> getAllCrafts(Craft craft, Pageable pageable) {
-//        log.debug("REST request to get a page of SewRraft : {}", craft);
+//        log.debug("REST request to get a page of SewCraft : {}", craft);
 //        OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
 //            .notEmptyAnd();
 //        Page<Craft> page = craftRepository.findAll(builder.build(), pageable);

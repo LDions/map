@@ -20,4 +20,6 @@ public interface SewMeterRepository extends JpaRepository<SewMeter,Long>{
     List<SewMeter> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqualAndCraftCode(Instant time1,Instant time2,String CraftCode);
 
     Optional<SewMeter> findByCraftCodeAndMeterCode(String craftCode, String meterCode);
+
+    Optional<SewMeter> findFirstByOrderByDayTimeDesc();
 }

@@ -1,19 +1,18 @@
 package com.ruowei.web.rest.vm;
 
-
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.Instant;
 
 @Data
-public class DateTimeRangeVM {
+public class DateTimeRangeQM {
 
 
     @ApiModelProperty(value = "开始数据时间")
-    private String beginTime;
+    private Instant beginTime;
 
     @ApiModelProperty(value = "结束数据时间")
-    private String endTime;
+    private Instant endTime;
 
 }

@@ -1,20 +1,27 @@
 package com.ruowei.web.rest;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ruowei.config.ApplicationProperties;
 import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
 
+import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
 import com.ruowei.security.UserModel;
+import com.ruowei.service.PushService;
 import com.ruowei.service.mapper.UserVMMapper;
+import com.ruowei.util.IDUtils;
+import com.ruowei.util.ObjectUtils;
 import com.ruowei.util.OptionalBooleanBuilder;
+import com.ruowei.web.rest.enumeration.PushApi;
+import com.ruowei.web.rest.errors.BadRequestAlertException;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.EnterpriseUserVM;
 import com.ruowei.web.rest.vm.UserQM;
 import com.ruowei.web.rest.vm.UserVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
@@ -34,7 +42,6 @@ import tech.jhipster.web.util.ResponseUtil;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,18 +54,25 @@ import static com.ruowei.config.Constants.DEFAULT_PASSWORD;
 public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
+    private final ApplicationProperties applicationProperties;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JPAQueryFactory jpaQueryFactory;
     private final UserRoleRepository userRoleRepository;
     private final UserVMMapper userVMMapper;
+    private final PushService pushService;
+    private final EnterpriseRepository enterpriseRepository;
     private QUser qUser = QUser.user;
-    public UserResource(UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper) {
+
+    public UserResource(ApplicationProperties applicationProperties, UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper, PushService pushService, EnterpriseRepository enterpriseRepository) {
+        this.applicationProperties = applicationProperties;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jpaQueryFactory = jpaQueryFactory;
         this.userRoleRepository = userRoleRepository;
         this.userVMMapper = userVMMapper;
+        this.pushService = pushService;
+        this.enterpriseRepository = enterpriseRepository;
     }
 
     @PostMapping("/user")
@@ -76,11 +90,27 @@ public class UserResource {
         User user = userVMMapper.toEntity(vm);
         user.setEnterpriseCode(vm.getEnterpriseCode());
         user.setGroupCode(vm.getGroupCode());
+        user.setUserCode(IDUtils.codeGenerator());
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         User result = userRepository.save(user);
         vm.getRoleIds().forEach(roleId ->
             userRoleRepository.save(new UserRole().userId(result.getId()).roleId(Long.valueOf(roleId)))
         );
+        //推送数据
+        EnterpriseUserVM userVM = new EnterpriseUserVM();
+        ObjectUtils.copyPropertiesIgnoreNull(result, userVM);
+        userVM.setOperate(0);
+        //只传水厂编码是水厂用户新增，只传集团编码是集团用户新增，两者都不传是平台用户新增
+        if (StringUtils.isNotEmpty(vm.getEnterpriseCode())) {
+            //水厂新增用户给集团和平台推送一下数据
+            pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+            //给平台推送水厂用户数据需要提供集团编码以便确定是哪个集团下的水厂新增用户
+            userVM.setGroupCode(enterpriseRepository.findByCode(vm.getEnterpriseCode()).map(Enterprise::getGroupCode).orElse(""));
+            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+        } else if (StringUtils.isNotEmpty(vm.getGroupCode()) && vm.getEnterpriseCode().isEmpty()) {
+            //集团新增用户给平台推送一下数据
+            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
+        }
         return ResponseEntity.created(new URI("/api/user/" + result.getId()))
             .body(result);
     }
@@ -115,6 +145,21 @@ public class UserResource {
                 userRoleRepository.save(new UserRole().userId(vm.getId()).roleId(Long.valueOf(roleId)))
             );
         }
+        //推送数据
+        EnterpriseUserVM userVM = new EnterpriseUserVM();
+        ObjectUtils.copyPropertiesIgnoreNull(result, userVM);
+        userVM.setOperate(1);
+        //只传水厂编码是水厂用户新增，只传集团编码是集团用户新增，两者都不传是平台用户新增
+        if (StringUtils.isNotEmpty(result.getEnterpriseCode())) {
+            //水厂新增用户给集团和平台推送一下数据
+            pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+            //给平台推送水厂用户数据需要提供集团编码以便确定是哪个集团下的水厂新增用户
+            userVM.setGroupCode(enterpriseRepository.findByCode(vm.getEnterpriseCode()).map(Enterprise::getGroupCode).orElse(""));
+            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+        } else if (StringUtils.isNotEmpty(result.getGroupCode()) && result.getEnterpriseCode().isEmpty()) {
+            //集团新增用户给平台推送一下数据
+            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
+        }
         return ResponseEntity.ok().body(result);
     }
 
@@ -133,7 +178,7 @@ public class UserResource {
 
     @GetMapping("/user/{id}")
     @ApiOperation(value = "查询用户详情接口", notes = "作者：孙小楠")
-    public ResponseEntity<UserVM> getUser(@PathVariable Long id,@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+    public ResponseEntity<UserVM> getUser(@PathVariable Long id, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         log.debug("REST request to get SysUser : {}", id);
         Optional<UserVM> optional = userRepository.findById(id)
             .map(sysUser -> {
@@ -144,7 +189,7 @@ public class UserResource {
                 vm.setRoleIds(roleIds);
                 return vm;
             });
-        log.info(userModel.getcode()+userModel.getgroupCode());
+        log.info(userModel.getcode() + userModel.getgroupCode());
         return ResponseUtil.wrapOrNotFound(optional);
     }
 
@@ -153,11 +198,28 @@ public class UserResource {
     @ApiOperation(value = "删除用户接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.debug("REST request to delete SysUser : {}", id);
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            throw new BadRequestAlertException("删除的用户不存在", "", "删除失败");
+        }
         userRoleRepository.deleteAllByUserId(id);
         jpaQueryFactory
-            .update(qUser)
+            .delete(qUser)
             .where(qUser.id.eq(id))
             .execute();
+        //推送数据
+        LinkedMultiValueMap<String, String> urlParams = new LinkedMultiValueMap<>();
+        urlParams.add("userCode", user.get().getUserCode());
+        if (StringUtils.isNotEmpty(user.get().getEnterpriseCode())) {
+            urlParams.add("enterpriseCode", user.get().getEnterpriseCode());
+            pushService.postForData(applicationProperties.getHost(), PushApi.DELETE_ENTERPRISEUSER.getUrl(), urlParams);
+            urlParams.add("groupCode", user.get().getGroupCode());
+            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_DELETE_ENTERPRISEUSER.getUrl(), urlParams);
+        } else if (StringUtils.isNotEmpty(user.get().getGroupCode()) && user.get().getEnterpriseCode().isEmpty()) {
+            //删除集团用户推给平台
+            urlParams.add("groupCode", user.get().getGroupCode());
+            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_DELETE_GROUPUSER.getUrl(), urlParams);
+        }
         return ResponseEntity.noContent().build();
     }
 
