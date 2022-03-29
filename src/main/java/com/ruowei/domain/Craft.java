@@ -36,13 +36,6 @@ public class Craft {
     private String craftName;
 
     /**
-     * 工艺段名称
-     */
-    @ApiModelProperty(value = "工艺段名称")
-    @Column(name = "process_name")
-    private String processName;
-
-    /**
      * 工艺编码
      */
     @ApiModelProperty(value = "工艺编码")
@@ -50,25 +43,53 @@ public class Craft {
     private String craftCode;
 
     /**
-     * 工艺段池容
+     * 厌氧池池容
      */
-    @ApiModelProperty(value = "工艺段池容")
-    @Column(name = "process_capacity")
-    private BigDecimal processCapacity;
+    @ApiModelProperty(value = "厌氧池池容")
+    @Column(name = "anaerobic_pool_volume")
+    private BigDecimal anaerobicPoolVolume;
 
     /**
-     * 内回流比
+     * 缺氧池池容
      */
-    @ApiModelProperty(value = "内回流比")
-    @Column(name = "in_reflux_ratio")
-    private BigDecimal inRefluxRatio;
+    @ApiModelProperty(value = "缺氧池池容")
+    @Column(name = "anoxic_pool_volume")
+    private BigDecimal anoxicPoolVolume;
 
     /**
-     * 外回流比
+     * 好氧池池容
      */
-    @ApiModelProperty(value = "外回流比")
-    @Column(name = "out_reflux_ratio")
-    private BigDecimal outRefluxRatio;
+    @ApiModelProperty(value = "好氧池池容")
+    @Column(name = "aerobic_pool_volume")
+    private BigDecimal aerobicPoolVolume;
+
+    /**
+     * 内回流泵流量
+     */
+    @ApiModelProperty(value = "内回流泵流量")
+    @Column(name = "in_reflux_flow")
+    private BigDecimal inRefluxFlow;
+
+    /**
+     * 内回流泵台数
+     */
+    @ApiModelProperty(value = "内回流泵台数")
+    @Column(name = "in_reflux_num")
+    private BigDecimal inRefluxNum;
+
+    /**
+     * 外回流泵流量
+     */
+    @ApiModelProperty(value = "外回流泵流量")
+    @Column(name = "out_reflux_flow")
+    private BigDecimal outRefluxFlow;
+
+    /**
+     * 外回流泵台数
+     */
+    @ApiModelProperty(value = "外回流泵台数")
+    @Column(name = "out_reflux_num")
+    private BigDecimal outRefluxNum;
 
     /**
      * 传统公式：好氧区硝酸盐浓度
@@ -186,12 +207,20 @@ public class Craft {
         return id;
     }
 
+    public Craft id(Long id) {
+        this.id = id;
+        return this;
+    }
     public void setId(Long id) {
         this.id = id;
     }
 
     public String getCraftCode() {
         return craftCode;
+    }
+    public Craft craftCode(String craftCode) {
+        this.craftCode = craftCode;
+        return this;
     }
 
     public void setCraftCode(String craftCode) {
@@ -209,58 +238,6 @@ public class Craft {
 
     public void setCraftName(String craftName) {
         this.craftName = craftName;
-    }
-
-    public String getProcessName() {
-        return processName;
-    }
-
-    public Craft processName(String processName) {
-        this.processName = processName;
-        return this;
-    }
-
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
-
-    public BigDecimal getProcessCapacity() {
-        return processCapacity;
-    }
-
-    public Craft processCapacity(BigDecimal processCapacity) {
-        this.processCapacity = processCapacity;
-        return this;
-    }
-
-    public void setProcessCapacity(BigDecimal processCapacity) {
-        this.processCapacity = processCapacity;
-    }
-
-    public BigDecimal getInRefluxRatio() {
-        return inRefluxRatio;
-    }
-
-    public Craft inRefluxRatio(BigDecimal inRefluxRatio) {
-        this.inRefluxRatio = inRefluxRatio;
-        return this;
-    }
-
-    public void setInRefluxRatio(BigDecimal inRefluxRatio) {
-        this.inRefluxRatio = inRefluxRatio;
-    }
-
-    public BigDecimal getOutRefluxRatio() {
-        return outRefluxRatio;
-    }
-
-    public Craft outRefluxRatio(BigDecimal outRefluxRatio) {
-        this.outRefluxRatio = outRefluxRatio;
-        return this;
-    }
-
-    public void setOutRefluxRatio(BigDecimal outRefluxRatio) {
-        this.outRefluxRatio = outRefluxRatio;
     }
 
     public BigDecimal getAerobioticNitrateConcentration() {
@@ -471,6 +448,90 @@ public class Craft {
         this.entName = entName;
     }
 
+    public BigDecimal getAnaerobicPoolVolume() {
+        return anaerobicPoolVolume;
+    }
+    public Craft anaerobicPoolVolume(BigDecimal anaerobicPoolVolume) {
+        this.anaerobicPoolVolume = anaerobicPoolVolume;
+        return this;
+    }
+    public void setAnaerobicPoolVolume(BigDecimal anaerobicPoolVolume) {
+        this.anaerobicPoolVolume = anaerobicPoolVolume;
+    }
+
+    public BigDecimal getAnoxicPoolVolume() {
+        return anoxicPoolVolume;
+    }
+    public Craft anoxicPoolVolume(BigDecimal anoxicPoolVolume) {
+        this.anoxicPoolVolume = anoxicPoolVolume;
+        return this;
+    }
+    public void setAnoxicPoolVolume(BigDecimal anoxicPoolVolume) {
+        this.anoxicPoolVolume = anoxicPoolVolume;
+    }
+
+    public BigDecimal getAerobicPoolVolume() {
+        return aerobicPoolVolume;
+    }
+    public Craft aerobicPoolVolume(BigDecimal aerobicPoolVolume) {
+        this.aerobicPoolVolume = aerobicPoolVolume;
+        return this;
+    }
+    public void setAerobicPoolVolume(BigDecimal aerobicPoolVolume) {
+        this.aerobicPoolVolume = aerobicPoolVolume;
+    }
+
+    public BigDecimal getInRefluxFlow() {
+        return inRefluxFlow;
+    }
+    public Craft inRefluxFlow(BigDecimal inRefluxFlow) {
+        this.inRefluxFlow = inRefluxFlow;
+        return this;
+    }
+    public void setInRefluxFlow(BigDecimal inRefluxFlow) {
+        this.inRefluxFlow = inRefluxFlow;
+    }
+
+    public BigDecimal getInRefluxNum() {
+        return inRefluxNum;
+    }
+    public Craft inRefluxNum(BigDecimal inRefluxNum) {
+        this.inRefluxNum = inRefluxNum;
+        return this;
+    }
+    public void setInRefluxNum(BigDecimal inRefluxNum) {
+        this.inRefluxNum = inRefluxNum;
+    }
+
+    public BigDecimal getOutRefluxFlow() {
+        return outRefluxFlow;
+    }
+    public Craft outRefluxFlow(BigDecimal outRefluxFlow) {
+        this.outRefluxFlow = outRefluxFlow;
+        return this;
+    }
+    public void setOutRefluxFlow(BigDecimal outRefluxFlow) {
+        this.outRefluxFlow = outRefluxFlow;
+    }
+
+    public BigDecimal getOutRefluxNum() {
+        return outRefluxNum;
+    }
+    public Craft outRefluxNum(BigDecimal outRefluxNum) {
+        this.outRefluxNum = outRefluxNum;
+        return this;
+    }
+    public void setOutRefluxNum(BigDecimal outRefluxNum) {
+        this.outRefluxNum = outRefluxNum;
+    }
+    public Craft entName(BigDecimal nitrateRefluxRatio) {
+        this.nitrateRefluxRatio = nitrateRefluxRatio;
+        return this;
+    }
+    public BigDecimal getNitrateRefluxRatio() {
+        return nitrateRefluxRatio;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -493,10 +554,14 @@ public class Craft {
         return "Craft{" +
             "id=" + id +
             ", craftName='" + craftName + '\'' +
-            ", processName='" + processName + '\'' +
-            ", processCapacity=" + processCapacity +
-            ", inRefluxRatio=" + inRefluxRatio +
-            ", outRefluxRatio=" + outRefluxRatio +
+            ", craftCode='" + craftCode + '\'' +
+            ", anaerobicPoolVolume='" + anaerobicPoolVolume + '\'' +
+            ", anoxicPoolVolume=" + anoxicPoolVolume +
+            ", aerobicPoolVolume=" + aerobicPoolVolume +
+            ", inRefluxFlow=" + inRefluxFlow +
+            ", inRefluxNum=" + inRefluxNum +
+            ", outRefluxFlow=" + outRefluxFlow +
+            ", outRefluxNum=" + outRefluxNum +
             ", aerobioticNitrateConcentration=" + aerobioticNitrateConcentration +
             ", anoxiaNitrateConcentration=" + anoxiaNitrateConcentration +
             ", bodCodRatio=" + bodCodRatio +

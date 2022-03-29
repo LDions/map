@@ -38,11 +38,18 @@ public class Enterprise implements Serializable {
     private String code;
 
     /**
-     * 数据类型
+     * 水厂地址经度
      */
     @ApiModelProperty(value = "经营详细地址")
-    @Column(name = "enterprise_address")
-    private String enterpriseAddress;
+    @Column(name = "enterprise_longitude")
+    private String enterpriseLongitude;
+
+    /**
+     * 水厂地址纬度
+     */
+    @ApiModelProperty(value = "经营详细地址")
+    @Column(name = "enterprise_latitude")
+    private String enterpriseLatitude;
 
     /**
      * 备注
@@ -120,15 +127,27 @@ public class Enterprise implements Serializable {
         return this;
     }
 
-    public String getEnterpriseAddress() {
-        return enterpriseAddress;
+    public String getEnterpriseLongitude() {
+        return enterpriseLongitude;
     }
 
-    public void setEnterpriseAddress(String enterpriseAddress) {
-        this.enterpriseAddress = enterpriseAddress;
+    public void setEnterpriseLongitude(String enterpriseLongitude) {
+        this.enterpriseLongitude = enterpriseLongitude;
     }
-    public Enterprise enterpriseAddress(String enterpriseAddress) {
-        this.enterpriseAddress = enterpriseAddress;
+    public Enterprise enterpriseLongitude(String enterpriseLongitude) {
+        this.enterpriseLongitude = enterpriseLongitude;
+        return this;
+    }
+
+    public String getEnterpriseLatitude() {
+        return enterpriseLatitude;
+    }
+
+    public void setEnterpriseLatitude(String enterpriseLongitude) {
+        this.enterpriseLatitude = enterpriseLatitude;
+    }
+    public Enterprise enterpriseLatitude(String enterpriseLatitude) {
+        this.enterpriseLatitude = enterpriseLatitude;
         return this;
     }
 
@@ -212,7 +231,8 @@ public class Enterprise implements Serializable {
         return "Enterprise{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", enterpriseAddress='" + getEnterpriseAddress() + "'" +
+            ", enterpriseLongitude='" + getEnterpriseLongitude() + "'" +
+            ", enterpriseLatitude='" + getEnterpriseLatitude() + "'" +
             ", remark='" + getRemark() + "'" +
             ", isTry='" + getIsTry() + "'" +
             ", groupCode='" + getGroupCode() + "'" +

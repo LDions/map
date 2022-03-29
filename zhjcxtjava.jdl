@@ -90,8 +90,10 @@ entity Craft(craft){
     AnaerobicPoolVolume BigDecimal /** 厌氧池池容 */
     AnoxicPoolVolume BigDecimal /** 缺氧池池容 */
     AerobicPoolVolume BigDecimal /** 好氧池池容 */
-    inRefluxRatio BigDecimal /** 内回流比 */
-    outRefluxRatio BigDecimal /** 外回流比 */
+    inRefluxFlow BigDecimal /** 内回流泵流量 (m3/h) */
+    inRefluxNum BigDecimal /** 内回流泵台数 */
+    outRefluxFlow BigDecimal /** 外回流泵流量 (m3/h) */
+    outRefluxNum BigDecimal /** 外回流泵台数 */
     aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
     anoxiaNitrateConcentration BigDecimal /** 传统公式：缺氧区硝酸盐浓度 */
     nitrateRefluxRatio BigDecimal /** 传统公式：硝化液回流比 */
