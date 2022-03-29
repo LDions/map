@@ -67,6 +67,9 @@ public class PlatformResource {
             locationDTO.setLat(enterprise.getEnterpriseLatitude());
             locationDTO.setLng(enterprise.getEnterpriseLongitude());
             locationDTO.setCraftNumber(craftRepository.countByEntCode(enterprise.getCode()));
+            if (groupRepository.findByGroupCode(enterprise.getGroupCode()).isPresent()) {
+            locationDTO.setGroupName(groupRepository.findByGroupCode(enterprise.getGroupCode()).get().getGroupName());
+            }
             result.add(locationDTO);
         }
         return ResponseEntity.ok().body(result);

@@ -43,5 +43,12 @@ public class EnterpriseLocationDTO {
     @ApiModelProperty(value = "工艺数量")
     private Long craftNumber;
 
+    /**
+     * 上属集团
+     */
+    @ApiModelProperty(value = "上属集团")
+    private String groupName;
+
+
 
 }
