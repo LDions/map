@@ -1,28 +1,33 @@
 package com.ruowei.util;
 
-import com.querydsl.core.Tuple;
 import com.ruowei.repository.SewMeterRepository;
 import com.ruowei.repository.SewProcessRepository;
 import com.ruowei.repository.SewSluRepository;
+import com.ruowei.service.SewEmiService;
 import com.ruowei.web.rest.vm.SituationAnalysisVM;
 import com.ruowei.web.rest.vm.SituationVM;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Component
 public class SituationAnalysisUtil {
 
     private final SelectUtil selectUtil;
+    private final SewEmiService sewEmiService;
     private final SewProcessRepository sewProcessRepository;
     private final SewSluRepository sewSluRepository;
     private final SewMeterRepository sewMeterRepository;
 
-    public SituationAnalysisUtil(SelectUtil selectUtil, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewMeterRepository sewMeterRepository) {
+    public SituationAnalysisUtil(SelectUtil selectUtil, SewEmiService sewEmiService, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewMeterRepository sewMeterRepository) {
         this.selectUtil = selectUtil;
+        this.sewEmiService = sewEmiService;
         this.sewProcessRepository = sewProcessRepository;
         this.sewSluRepository = sewSluRepository;
         this.sewMeterRepository = sewMeterRepository;
@@ -37,13 +42,10 @@ public class SituationAnalysisUtil {
         List<SituationAnalysisVM> situationAnalysisVMList = new ArrayList<>();
         situationAnalysisVMS = selectUtil.getSome(target, beginTime, endTime, craftCode);
 
-        Double avg = Double.valueOf(0);
+        Double avg;
         Double sum = Double.valueOf(0);
         Double sumValue = Double.valueOf(0);
         Calendar calendar = situationAnalysisVMS.get(0).getTime();
-
-        calendar.add(Calendar.HOUR, 1);
-        int time = -1;
         switch (subsection) {
             case "date":
                 situationVM.setTarget(target);
@@ -52,12 +54,10 @@ public class SituationAnalysisUtil {
             case "week":
                 situationVM.setTarget(target);
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    if (s.getTime().before(calendar)) {
+                    if (calendar.after(s.getTime())) {
                         sum = sum + 1;
                         sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        calendar.add(Calendar.HOUR, 1);
-                        time=time-1;
                         sum = sum + 1;
                         sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
@@ -70,7 +70,8 @@ public class SituationAnalysisUtil {
                         calendar.add(Calendar.HOUR, 1);
                     }
                 }
-                calendar.add(Calendar.HOUR, time);
+                //calendar是单例模式，降低一个数据的时间还原
+                calendar = GregorianCalendar.from(ZonedDateTime.ofInstant(sewEmiService.getInstant(beginTime), ZoneId.systemDefault()));
                 situationVM.setValues(situationAnalysisVMList);
                 break;
            /* case "month":

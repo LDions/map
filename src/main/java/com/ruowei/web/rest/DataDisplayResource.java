@@ -5,7 +5,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.*;
+import com.ruowei.domain.enumeration.SendStatusType;
 import com.ruowei.repository.*;
+import com.ruowei.security.UserModel;
 import com.ruowei.service.SewEmiService;
 import com.ruowei.util.*;
 import com.ruowei.web.rest.dto.*;
@@ -14,6 +16,7 @@ import com.ruowei.web.rest.vm.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -22,9 +25,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 
 import java.math.BigDecimal;
@@ -75,24 +80,40 @@ public class DataDisplayResource {
 
     @GetMapping("/entenrprise")
     @ApiOperation(value = "获取水厂", notes = "作者：董玉祥")
-    public ResponseEntity<List<DataDTO>> getEnt() {
+    public ResponseEntity<List<DataDTO>> getEnt(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
         List<DataDTO> dataDTOS = new ArrayList<>();
-        List<Group> Groups = groupRepository.findAll();
-        for (Group group : Groups) {
-            DataDTO.GroupDTO dto = new DataDTO.GroupDTO();
-            BeanUtils.copyProperties(group, dto, BeanUtil.getNullPropertyNames(group));
+        //水厂账户
+        if (StringUtils.isNotBlank(userModel.getcode())) {
+            Enterprise enterprise = enterpriseRepository.findByCode(userModel.getcode()).get();
+            DataDTO.EntDTO dto = new DataDTO.EntDTO();
+            BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
             dataDTOS.add(dto);
         }
-        for (Group g : Groups) {
-            List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
+        //集团账户
+        else if (StringUtils.isNotBlank(userModel.getgroupCode())) {
+            List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(userModel.getgroupCode());
             for (Enterprise enterprise : enterprises) {
                 DataDTO.EntDTO dto = new DataDTO.EntDTO();
                 BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
-                dto.setCode(enterprise.getCode());
-                dto.setName(enterprise.getName());
-                dto.setGroupCode(g.getGroupCode());
                 dataDTOS.add(dto);
+            }
+        }
+        //平台账户
+        else {
+            List<Group> Groups = groupRepository.findAll();
+            for (Group group : Groups) {
+                DataDTO.GroupDTO dto = new DataDTO.GroupDTO();
+                BeanUtils.copyProperties(group, dto, BeanUtil.getNullPropertyNames(group));
+                dataDTOS.add(dto);
+            }
+            for (Group g : Groups) {
+                List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
+                for (Enterprise enterprise : enterprises) {
+                    DataDTO.EntDTO dto = new DataDTO.EntDTO();
+                    BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
+                    dataDTOS.add(dto);
+                }
             }
         }
         return ResponseEntity.ok().body(dataDTOS);
@@ -184,6 +205,20 @@ public class DataDisplayResource {
                 jpaQuery = jpaQuery.offset(pageable.getOffset())
                     .limit(pageable.getPageSize());
                 break;
+            /*case "verify":
+                predicate.notEmptyAnd(qSewMeter.dayTime::eq, sewEmiService.getInstant(time))
+                    .notEmptyAnd(qSewMeter.craftCode::eq, craftCode);
+                jpaQuery = jpaQueryFactory
+                    .select(Projections.bean(DataDisplayVM.class, qSewMeter.id, qGroup.groupName, qEnterprise.name, qCraft.craftName, qSewMeter.dayTime))
+                    .from(qSewMeter)
+                    .leftJoin(qCraft).on(qCraft.craftCode.eq(qSewMeter.craftCode))
+                    .leftJoin(qEnterprise).on(qEnterprise.code.eq(qCraft.entCode))
+                    .leftJoin(qGroup).on(qGroup.groupCode.eq(qEnterprise.groupCode))
+                    .where(predicate.build());
+                count = jpaQuery.fetch().stream().count();
+                jpaQuery = jpaQuery.offset(pageable.getOffset())
+                    .limit(pageable.getPageSize());
+                break;*/
             default:
                 throw new BadRequestProblem("发生异常错误，获取列表失败", "请检查选择的条件是否正确，如有问题请联系管理员！");
         }
@@ -195,7 +230,7 @@ public class DataDisplayResource {
     @GetMapping("/detail")
     @ApiOperation(value = "详情数据", notes = "作者：董玉祥")
     public ResponseEntity<SewEmiVM> getTargetParticulars(@ApiParam(value = "来源") @RequestParam(required = false) String source,
-                                        @RequestParam Long id) {
+                                                         @RequestParam Long id) {
 
         SewEmiVM sewEmiVM = sewEmiService.getTarget(id, source);
         return ResponseEntity.ok().body(sewEmiVM);
@@ -213,4 +248,13 @@ public class DataDisplayResource {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/daily_collection")
+    @ApiOperation(value = "日报补录", notes = "作者：董玉祥")
+    public ResponseEntity<Void> getTargetParticulars(@RequestBody SewPot sewPot) {
+
+        sewPot.setPlateStatus(SendStatusType.FAILED);
+        sewPot.setStatus(SendStatusType.FAILED);
+        sewPotRepository.save(sewPot);
+        return ResponseEntity.ok().build();
+    }
 }

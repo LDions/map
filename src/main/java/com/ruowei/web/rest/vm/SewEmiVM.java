@@ -48,17 +48,14 @@ public class SewEmiVM {
         @ApiModelProperty(value = "出水TN（mg/L）")
         private BigDecimal outTn;
 
-        @ApiModelProperty(value = "出水PH（mg/L）")
-        private BigDecimal outPh;
-
         @ApiModelProperty(value = "出水SS（mg/L）")
         private BigDecimal outSs;
 
-        @ApiModelProperty(value = "请输入缺氧池DO（mg/L）")
-        private BigDecimal anoxicPoolDo;
-
-        @ApiModelProperty(value = "请输入好氧池DO（mg/L）")
+        @ApiModelProperty(value = "好氧池1 DO（mg/L）")
         private BigDecimal aerobicPoolDo;
+
+        @ApiModelProperty(value = "好氧池2 DO（mg/L）")
+        private BigDecimal aerobicPoolDoSecond;
 
         @ApiModelProperty(value = "缺氧池出口硝酸盐（mg/L）")
         private BigDecimal anoxicPoolDoOutNit;
@@ -144,77 +141,145 @@ public class SewEmiVM {
     @EqualsAndHashCode(callSuper = true)
     public static class SewPotVM extends SewEmiVM {
 
-
         @ApiModelProperty(value = "碳源投加量（mg/L）")
         private BigDecimal dayCarAdd;
 
         @ApiModelProperty(value = "生化池-厌氧池PH（mg/L）")
         private BigDecimal dayAnaerobicPoolPh;
 
-        @ApiModelProperty(value = "生化池-厌氧池ORP （mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池PH2（mg/L）")
+        private BigDecimal dayAnaerobicPoolPhSecond;
+
+        @ApiModelProperty(value = "生化池-厌氧池ORP指标1 （mg/L）")
         private BigDecimal dayAnaerobicPoolOrp;
 
-        @ApiModelProperty(value = "生化池-厌氧池DO（mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池ORP指标2 （mg/L）")
+        private BigDecimal dayAnaerobicPoolOrpSecond;
+
+        @ApiModelProperty(value = "生化池-厌氧池DO指标1（mg/L）")
         private BigDecimal dayAnaerobicPoolDo;
 
-        @ApiModelProperty(value = "生化池-厌氧池SOUR（mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池DO指标2（mg/L）")
+        private BigDecimal dayAnaerobicPoolDoSecond;
+
+        @ApiModelProperty(value = "生化池-厌氧池SOUR指标1（mg/L）")
         private BigDecimal dayAnaerobicPoolSour;
 
-        @ApiModelProperty(value = "生化池-厌氧池SV（mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池SOUR指标2（mg/L）")
+        private BigDecimal dayAnaerobicPoolSourSecond;
+
+        @ApiModelProperty(value = "生化池-厌氧池SV指标1（mg/L）")
         private BigDecimal dayAnaerobicPoolSv;
 
-        @ApiModelProperty(value = "生化池-厌氧池MLSS（mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池SV指标2（mg/L）")
+        private BigDecimal dayAnaerobicPoolSvSecond;
+
+        @ApiModelProperty(value = "生化池-厌氧池MLSS指标1（mg/L）")
         private BigDecimal dayAnaerobicPoolMlss;
 
-        @ApiModelProperty(value = "生化池-厌氧池温度（mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池MLSS指标2（mg/L）")
+        private BigDecimal dayAnaerobicPoolMlssSecond;
+
+        @ApiModelProperty(value = "生化池-厌氧池温度指标1（mg/L）")
         private BigDecimal dayAnaerobicPoolTemper;
 
-        @ApiModelProperty(value = "生化池-缺氧池PH（mg/L）")
+        @ApiModelProperty(value = "生化池-厌氧池温度指标2（mg/L）")
+        private BigDecimal dayAnaerobicPoolTemperSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池PH指标1（mg/L）")
         private BigDecimal dayAnoxicPoolPh;
 
-        @ApiModelProperty(value = "生化池-缺氧池ORP （mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池PH指标2（mg/L）")
+        private BigDecimal dayAnoxicPoolPhSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池ORP指标1 （mg/L）")
         private BigDecimal dayAnoxicPoolOrp;
 
-        @ApiModelProperty(value = "生化池-缺氧池DO（mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池ORP指标2 （mg/L）")
+        private BigDecimal dayAnoxicPoolOrpSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池DO指标1（mg/L）")
         private BigDecimal dayAnoxicPoolDo;
 
-        @ApiModelProperty(value = "生化池-缺氧池SOUR（mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池DO指标2（mg/L）")
+        private BigDecimal dayAnoxicPoolDoSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池SOUR指标1（mg/L）")
         private BigDecimal dayAnoxicPoolSour;
 
-        @ApiModelProperty(value = "生化池-缺氧池SV（mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池SOUR指标2（mg/L）")
+        private BigDecimal dayAnoxicPoolSourSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池SV指标1（mg/L）")
         private BigDecimal dayAnoxicPoolSv;
 
-        @ApiModelProperty(value = "生化池-缺氧池MLSS（mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池SV指标2（mg/L）")
+        private BigDecimal dayAnoxicPoolSvSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池MLSS指标1（mg/L）")
         private BigDecimal dayAnoxicPoolMlss;
 
-        @ApiModelProperty(value = "生化池-缺氧池温度（mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池MLSS指标2（mg/L）")
+        private BigDecimal dayAnoxicPoolMlssSecond;
+
+        @ApiModelProperty(value = "生化池-缺氧池温度指标1（mg/L）")
         private BigDecimal dayAnoxicPoolTemper;
 
-        @ApiModelProperty(value = "生化池-好氧池PH（mg/L）")
+        @ApiModelProperty(value = "生化池-缺氧池温度指标2（mg/L）")
+        private BigDecimal dayAnoxicPoolTemperSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池PH指标1（mg/L）")
         private BigDecimal dayAerobicPoolPh;
 
-        @ApiModelProperty(value = "生化池-好氧池ORP （mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池PH指标2（mg/L）")
+        private BigDecimal dayAerobicPoolPhSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池ORP指标1 （mg/L）")
         private BigDecimal dayAerobicPoolOrp;
 
-        @ApiModelProperty(value = "生化池-好氧池DO（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池ORP指标2 （mg/L）")
+        private BigDecimal dayAerobicPoolOrpSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池DO指标1（mg/L）")
         private BigDecimal dayAerobicPoolDo;
 
-        @ApiModelProperty(value = "生化池-好氧池SOUR（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池DO指标2（mg/L）")
+        private BigDecimal dayAerobicPoolDoSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池SOUR指标1（mg/L）")
         private BigDecimal dayAerobicPoolSour;
 
-        @ApiModelProperty(value = "生化池-好氧池SV（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池SOUR指标2（mg/L）")
+        private BigDecimal dayAerobicPoolSourSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池SV指标1（mg/L）")
         private BigDecimal dayAerobicPoolSv;
 
-        @ApiModelProperty(value = "生化池-好氧池MLSS（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池SV指标2（mg/L）")
+        private BigDecimal dayAerobicPoolSvSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池MLSS指标1（mg/L）")
         private BigDecimal dayAerobicPoolMlss;
 
-        @ApiModelProperty(value = "生化池-好氧池MLVSS（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池MLSS指标2（mg/L）")
+        private BigDecimal dayAerobicPoolMlssSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池MLVSS指标1（mg/L）")
         private BigDecimal dayAerobicPoolMlvss;
 
-        @ApiModelProperty(value = "生化池-好氧池SVI（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池MLVSS指标2（mg/L）")
+        private BigDecimal dayAerobicPoolMlvssSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池SVI指标1（mg/L）")
         private BigDecimal dayAerobicPoolSvi;
 
-        @ApiModelProperty(value = "生化池-好氧池温度（mg/L）")
+        @ApiModelProperty(value = "生化池-好氧池SVI指标2（mg/L）")
+        private BigDecimal dayAerobicPoolSviSecond;
+
+        @ApiModelProperty(value = "生化池-好氧池温度指标1（mg/L）")
         private BigDecimal dayAerobicPoolTemper;
+
+        @ApiModelProperty(value = "生化池-好氧池温度指标2（mg/L）")
+        private BigDecimal dayAerobicPoolTemperSecond;
     }
 }

@@ -7,6 +7,7 @@ import com.ruowei.repository.*;
 import com.ruowei.service.SewEmiService;
 import com.ruowei.util.SelectUtil;
 import com.ruowei.util.SituationAnalysisUtil;
+import com.ruowei.web.rest.dto.SituationAnalysisDTO;
 import com.ruowei.web.rest.vm.DateTimeRangeVM;
 import com.ruowei.web.rest.vm.SituationAnalysisVM;
 import com.ruowei.web.rest.vm.SituationVM;
@@ -50,15 +51,11 @@ public class SituationAnalysisResource {
 
     @PostMapping("/situation_analysis_first")
     @ApiOperation(value = "态势分析图一", notes = "作者：董玉祥")
-    public ResponseEntity<List<SituationVM>> situationAnalysisFirst(@RequestBody List<String> targets,
-                                                                    @ApiParam(value = "数据所在工艺Id") @RequestParam String craftCode,
-                                                                    @ApiParam(value = "日期分段") @RequestParam String subsection,
-                                                                    @ApiParam(value = "开始时间") @RequestParam String beginTime,
-                                                                    @ApiParam(value = "结束时间") @RequestParam String endTime) {
+    public ResponseEntity<List<SituationVM>> situationAnalysisFirst(@RequestBody SituationAnalysisDTO situationAnalysisDTO) {
 
         List<SituationVM> situationVMS = new ArrayList<>();
-        for (String s : targets) {
-            situationVMS.add(situationAnalysisUtil.getSituationVM(beginTime, endTime, subsection, s, craftCode));
+        for (String s : situationAnalysisDTO.getTargets()) {
+            situationVMS.add(situationAnalysisUtil.getSituationVM(situationAnalysisDTO.getBeginTime(), situationAnalysisDTO.getEndTime(),situationAnalysisDTO.getSubsection(), s, situationAnalysisDTO.getCraftCode()));
         }
         return ResponseEntity.ok().body(situationVMS);
     }
@@ -79,17 +76,13 @@ public class SituationAnalysisResource {
 
     @PostMapping("/situation_analysis_thirdly")
     @ApiOperation(value = "态势分析图三", notes = "作者：董玉祥")
-    public ResponseEntity<List<SituationVM>> situationAnalysisThirdly(@RequestBody List<String> targets,
-                                                                      @ApiParam(value = "数据所在工艺Id") @RequestParam String craftCode,
-                                                                      @ApiParam(value = "日期分段") @RequestParam String subsection,
-                                                                      @ApiParam(value = "开始时间") @RequestParam String beginTime,
-                                                                      @ApiParam(value = "结束时间") @RequestParam String endTime) {
+    public ResponseEntity<List<SituationVM>> situationAnalysisThirdly(@RequestBody SituationAnalysisDTO situationAnalysisDTO) {
 
 
 
         List<SituationVM> situationVMS = new ArrayList<>();
-        for (String s : targets) {
-            situationVMS.add(situationAnalysisUtil.getSituationVM(beginTime, endTime, subsection, s, craftCode));
+        for (String s : situationAnalysisDTO.getTargets()) {
+            situationVMS.add(situationAnalysisUtil.getSituationVM(situationAnalysisDTO.getBeginTime(), situationAnalysisDTO.getEndTime(),situationAnalysisDTO.getSubsection(), s, situationAnalysisDTO.getCraftCode()));
         }
         return ResponseEntity.ok().body(situationVMS);
 
