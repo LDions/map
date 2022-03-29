@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -128,6 +129,20 @@ public class EmiData implements Serializable {
     @ApiModelProperty(value = "除磷药剂）", required = true)
     @Column(name = "phosphorusremover", precision = 21, scale = 2, nullable = false)
     private BigDecimal phosphorusremover;
+
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态")
+    @Column(name = "status")
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态")
+    @Column(name = "plate_status")
+    private SendStatusType plateStatus;
 
     public Long getId() {
         return id;
@@ -280,8 +295,23 @@ public class EmiData implements Serializable {
         this.phosphorusremover = phosphorusremover;
     }
 
+    public SendStatusType getStatus() {
+        return status;
+    }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
+
+// jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

@@ -1,6 +1,7 @@
 package com.ruowei.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
@@ -58,6 +59,20 @@ public class User implements Serializable {
     @ApiModelProperty(value = "用户编码")
     @Column(name = "user_code")
     private String userCode;
+
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态")
+    @Column(name = "status")
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态")
+    @Column(name = "plate_status")
+    private SendStatusType plateStatus;
 
     public Long getId() {
         return id;
@@ -151,6 +166,22 @@ public class User implements Serializable {
 
     public void setUserCode(String userCode) {
         this.userCode = userCode;
+    }
+
+    public SendStatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
     }
 
     @Override

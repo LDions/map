@@ -37,6 +37,8 @@ public final class Constants {
 
     public static final String SYS_ADMIN = "SYS_ADMIN";
 
+    public static final String PUSH_RESULT = "推送成功";
+
     private Constants() {
         IdGeneratorOptions options = new IdGeneratorOptions();
         options.BaseTime = 1609459200000L;
