@@ -26,4 +26,6 @@ public interface CraftRepository extends JpaRepository<Craft, Long>, QuerydslPre
     Optional<Craft> getFirstByCraftName(String name);
 
     Optional<Craft> findByCraftCode(String craftCode);
+
+    List<Craft> findAllByEntCode(String entCode);
 }

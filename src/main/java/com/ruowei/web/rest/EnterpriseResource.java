@@ -1,10 +1,7 @@
 package com.ruowei.web.rest;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ruowei.domain.Enterprise;
-import com.ruowei.domain.QEnterprise;
-import com.ruowei.domain.QUser;
-import com.ruowei.domain.User;
+import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
@@ -58,8 +55,9 @@ public class EnterpriseResource {
     private final RoleRepository roleRepository;
     private QEnterprise qEnterprise = QEnterprise.enterprise;
     private QUser qUser = QUser.user;
+    private final CraftRepository craftRepository;
 
-    public EnterpriseResource(EnterpriseRepository enterpriseRepository, DistrictRepository districtRepository, EnterpriseVMMapper enterpriseVMMapper, JPAQueryFactory jpaQueryFactory, UserRepository userRepository, UserVMMapper userVMMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, RoleRepository roleRepository) {
+    public EnterpriseResource(EnterpriseRepository enterpriseRepository, DistrictRepository districtRepository, EnterpriseVMMapper enterpriseVMMapper, JPAQueryFactory jpaQueryFactory, UserRepository userRepository, UserVMMapper userVMMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, RoleRepository roleRepository, CraftRepository craftRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.districtRepository = districtRepository;
         this.enterpriseVMMapper = enterpriseVMMapper;
@@ -69,6 +67,7 @@ public class EnterpriseResource {
         this.passwordEncoder = passwordEncoder;
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
+        this.craftRepository = craftRepository;
     }
 
     @PostMapping("/enterprise")
@@ -166,5 +165,20 @@ public class EnterpriseResource {
         userRepository.save(user);
         return ResponseEntity.ok().body("重置成功");
     }
+
+    @PostMapping("/enterprise/craft-dropdown")
+    @ApiOperation(value = "查询水厂下属工艺", notes = "作者：郑昊天")
+    public ResponseEntity<List<DropDownDTO>> getCraftDropdown(String enterpriseCode) {
+        List<Craft> crafts = craftRepository.findAllByEntCode(enterpriseCode);
+        List<DropDownDTO> dropDownList = new ArrayList<>();
+        for (Craft craft : crafts) {
+            DropDownDTO dropDownDTO = new DropDownDTO();
+            dropDownDTO.setId(craft.getId());
+            dropDownDTO.setName(craft.getCraftName());
+            dropDownList.add(dropDownDTO);
+        }
+        return ResponseEntity.ok().body(dropDownList);
+    }
+
 }
 
