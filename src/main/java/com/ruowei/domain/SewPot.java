@@ -175,6 +175,20 @@ public class SewPot implements Serializable {
     private BigDecimal dayAnaerobicPoolMlssSecond;
 
     /**
+     * 生化池-厌氧池MLVSS1
+     */
+    @ApiModelProperty(value = "生化池-厌氧池MLVSS1", required = true)
+    @Column(name = "day_anaerobic_pool_mlvss", nullable = false)
+    private BigDecimal dayAnaerobicPoolMlvss;
+
+    /**
+     * 生化池-厌氧池MLVSS2
+     */
+    @ApiModelProperty(value = "生化池-厌氧池MLVSS2", required = true)
+    @Column(name = "day_anaerobic_pool_mlvss_second", nullable = false)
+    private BigDecimal dayAnaerobicPoolMlvssSecond;
+
+    /**
      * 生化池-厌氧池温度1
      */
     @ApiModelProperty(value = "生化池-厌氧池温度1", required = true)
@@ -271,6 +285,20 @@ public class SewPot implements Serializable {
     @ApiModelProperty(value = "生化池-缺氧池MLSS2", required = true)
     @Column(name = "day_anoxic_pool_mlss_second", nullable = false)
     private BigDecimal dayAnoxicPoolMlssSecond;
+
+    /**
+     * 生化池-缺氧池MLVSS1
+     */
+    @ApiModelProperty(value = "生化池-缺氧池MLVSS1", required = true)
+    @Column(name = "day_anoxic_pool_mlvss", nullable = false)
+    private BigDecimal dayAnoxicPoolMlvss;
+
+    /**
+     * 生化池-缺氧池MLVSS2
+     */
+    @ApiModelProperty(value = "生化池-缺氧池MLVSS2", required = true)
+    @Column(name = "day_anoxic_pool_mlvss_second", nullable = false)
+    private BigDecimal dayAnoxicPoolMlvssSecond;
 
     /**
      * 生化池-缺氧池温度1
@@ -1085,6 +1113,50 @@ public class SewPot implements Serializable {
         this.dayAerobicPoolTemperSecond = dayAerobicPoolTemperSecond;
     }
 
+    public BigDecimal getDayAnaerobicPoolMlvss() {
+        return dayAnaerobicPoolMlvss;
+    }
+    public SewPot dayAnaerobicPoolMlvss(BigDecimal dayAnaerobicPoolMlvss) {
+        this.dayAnaerobicPoolMlvss = dayAnaerobicPoolMlvss;
+        return this;
+    }
+    public void setDayAnaerobicPoolMlvss(BigDecimal dayAnaerobicPoolMlvss) {
+        this.dayAnaerobicPoolMlvss = dayAnaerobicPoolMlvss;
+    }
+
+    public BigDecimal getDayAnaerobicPoolMlvssSecond() {
+        return dayAnaerobicPoolMlvssSecond;
+    }
+    public SewPot dayAnaerobicPoolMlvssSecond(BigDecimal dayAnaerobicPoolMlvssSecond) {
+        this.dayAnaerobicPoolMlvssSecond = dayAnaerobicPoolMlvssSecond;
+        return this;
+    }
+    public void setDayAnaerobicPoolMlvssSecond(BigDecimal dayAnaerobicPoolMlvssSecond) {
+        this.dayAnaerobicPoolMlvssSecond = dayAnaerobicPoolMlvssSecond;
+    }
+
+    public BigDecimal getDayAnoxicPoolMlvss() {
+        return dayAnoxicPoolMlvss;
+    }
+    public SewPot dayAnoxicPoolMlvss(BigDecimal dayAnoxicPoolMlvss) {
+        this.dayAnoxicPoolMlvss = dayAnoxicPoolMlvss;
+        return this;
+    }
+    public void setDayAnoxicPoolMlvss(BigDecimal dayAnoxicPoolMlvss) {
+        this.dayAnoxicPoolMlvss = dayAnoxicPoolMlvss;
+    }
+
+    public BigDecimal getDayAnoxicPoolMlvssSecond() {
+        return dayAnoxicPoolMlvssSecond;
+    }
+    public SewPot dayAnoxicPoolMlvssSecond(BigDecimal dayAnoxicPoolMlvssSecond) {
+        this.dayAnoxicPoolMlvssSecond = dayAnoxicPoolMlvssSecond;
+        return this;
+    }
+    public void setDayAnoxicPoolMlvssSecond(BigDecimal dayAnoxicPoolMlvssSecond) {
+        this.dayAnoxicPoolMlvssSecond = dayAnoxicPoolMlvssSecond;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -1127,6 +1199,8 @@ public class SewPot implements Serializable {
             ", dayAnaerobicPoolSvSecond=" + dayAnaerobicPoolSvSecond +
             ", dayAnaerobicPoolMlss=" + dayAnaerobicPoolMlss +
             ", dayAnaerobicPoolMlssSecond=" + dayAnaerobicPoolMlssSecond +
+            ", dayAnaerobicPoolMlvss=" + dayAnaerobicPoolMlvss +
+            ", dayAnaerobicPoolMlvssSecond=" + dayAnaerobicPoolMlvssSecond +
             ", dayAnaerobicPoolTemper=" + dayAnaerobicPoolTemper +
             ", dayAnaerobicPoolTemperSecond=" + dayAnaerobicPoolTemperSecond +
             ", dayAnoxicPoolPh=" + dayAnoxicPoolPh +
@@ -1141,6 +1215,8 @@ public class SewPot implements Serializable {
             ", dayAnoxicPoolSvSecond=" + dayAnoxicPoolSvSecond +
             ", dayAnoxicPoolMlss=" + dayAnoxicPoolMlss +
             ", dayAnoxicPoolMlssSecond=" + dayAnoxicPoolMlssSecond +
+            ", dayAnoxicPoolMlvss=" + dayAnoxicPoolMlvss +
+            ", dayAnoxicPoolMlvssSecond=" + dayAnoxicPoolMlvssSecond +
             ", dayAnoxicPoolTemper=" + dayAnoxicPoolTemper +
             ", dayAnoxicPoolTemperSecond=" + dayAnoxicPoolTemperSecond +
             ", dayAerobicPoolPh=" + dayAerobicPoolPh +

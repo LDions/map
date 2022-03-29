@@ -3,20 +3,31 @@ package com.ruowei.web.rest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.Craft;
 import com.ruowei.domain.QCraft;
+import com.ruowei.domain.SewProcess;
 import com.ruowei.repository.CraftRepository;
+import com.ruowei.security.UserModel;
+import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.SituationAnalysisVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -90,7 +101,23 @@ public class CraftResource {
     public ResponseEntity<Craft> getCraft(@PathVariable Long id) {
         log.debug("REST request to get Craft : {}", id);
         Optional<Craft> optional = craftRepository.findById(id);
-
         return ResponseUtil.wrapOrNotFound(optional);
     }
+
+    @GetMapping("/craft/drop-down{code}")
+    @ApiOperation(value = "获取水厂工艺下拉列表接口", notes = "作者：张锴")
+    public ResponseEntity<List<DropDownDTO>> getEnterpriseDropDown(@PathVariable String code) {
+        List<DropDownDTO> result = new ArrayList<>();
+        List<Craft> crafts = craftRepository.findCraftNameAndCraftIdByEntCode(code);
+
+        for (Craft craft : crafts) {
+            DropDownDTO dto = new DropDownDTO();
+            dto.setId(craft.getId());
+            dto.setCode(craft.getCraftCode());
+            dto.setName(craft.getCraftName());
+            result.add(dto);
+        }
+        return ResponseEntity.ok(result);
+    }
+
 }

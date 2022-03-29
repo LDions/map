@@ -9,35 +9,25 @@ import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
 import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.web.rest.dto.DropDownDTO;
-import com.ruowei.web.rest.dto.EnterpriseDTO;
 import com.ruowei.web.rest.dto.UserEnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
-import com.ruowei.web.rest.vm.EnterpriseQM;
 import com.ruowei.web.rest.vm.EnterpriseVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import springfox.documentation.annotations.ApiIgnore;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.ruowei.config.Constants.DEFAULT_PASSWORD;
 
@@ -78,8 +68,7 @@ public class EnterpriseResource {
     @ApiOperation(value = "新增企业接口", notes = "作者：孙小楠")
     public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) {
         log.debug("REST request to save Enterprise : {}", vm);
-
-        Enterprise enterprise = new Enterprise();
+        Enterprise enterprise = enterpriseRepository.save(enterpriseVMMapper.toEntity(vm));
         BeanUtils.copyProperties(vm, enterprise);
         Enterprise save = enterpriseRepository.save(enterprise);
         return ResponseEntity.ok(save);
@@ -92,7 +81,11 @@ public class EnterpriseResource {
         if (enterprise.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-
+        enterpriseRepository
+            .getFirstByCodeAndId(enterprise.getCode(), enterprise.getId())
+            .ifPresent(so -> {
+                throw new BadRequestProblem("编辑失败", "企业编码已存在");
+            });
         Enterprise result = enterpriseRepository.save(enterprise);
         return ResponseEntity.ok().body(result);
     }

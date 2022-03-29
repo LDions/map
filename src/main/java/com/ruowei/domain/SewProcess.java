@@ -69,6 +69,13 @@ public class SewProcess implements Serializable {
     private BigDecimal inTp;
 
     /**
+     * 进水Ph（mg/L）
+     */
+    @ApiModelProperty(value = "进水Tp（mg/L）")
+    @Column(name = "in_ph", precision = 21, scale = 2)
+    private BigDecimal inPh;
+
+    /**
      * 进水SS（mg/L）
      */
     @ApiModelProperty(value = "进水Ss（mg/L）")
@@ -257,6 +264,17 @@ public class SewProcess implements Serializable {
 
     public void setInTp(BigDecimal inTp) {
         this.inTp = inTp;
+    }
+
+    public BigDecimal getInPh() {
+        return inPh;
+    }
+    public SewProcess inPh(BigDecimal inPh) {
+        this.inPh = inPh;
+        return this;
+    }
+    public void setInPh(BigDecimal inPh) {
+        this.inPh = inPh;
     }
 
     public BigDecimal getOutFlow() {
@@ -466,6 +484,7 @@ public class SewProcess implements Serializable {
         return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "SewProcess{" +
@@ -476,6 +495,7 @@ public class SewProcess implements Serializable {
             ", inCod=" + inCod +
             ", inTn=" + inTn +
             ", inTp=" + inTp +
+            ", inPh=" + inPh+
             ", inSs=" + inSs +
             ", outFlow=" + outFlow +
             ", outAmmonia=" + outAmmonia +

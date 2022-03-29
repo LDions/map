@@ -21,8 +21,6 @@ public class EnterpriseVM {
     @Column(name = "enterprise_address")
     private String enterpriseLongitude;
 
-
-
     /**
      * 数据类型
      */
