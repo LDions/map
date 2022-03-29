@@ -5,6 +5,7 @@ import com.ruowei.config.ApplicationProperties;
 import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
@@ -92,6 +93,8 @@ public class UserResource {
         user.setGroupCode(vm.getGroupCode());
         user.setUserCode(IDUtils.codeGenerator());
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        user.setStatus(SendStatusType.FAILED);
+        user.setPlateStatus(SendStatusType.FAILED);
         User result = userRepository.save(user);
         vm.getRoleIds().forEach(roleId ->
             userRoleRepository.save(new UserRole().userId(result.getId()).roleId(Long.valueOf(roleId)))
@@ -103,14 +106,37 @@ public class UserResource {
         //只传水厂编码是水厂用户新增，只传集团编码是集团用户新增，两者都不传是平台用户新增
         if (StringUtils.isNotEmpty(vm.getEnterpriseCode())) {
             //水厂新增用户给集团和平台推送一下数据
-            pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+            try {
+                String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+                if (groupResult.equals(Constants.PUSH_RESULT)) {
+                    result.setStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setStatus(SendStatusType.FAILED);
+            }
             //给平台推送水厂用户数据需要提供集团编码以便确定是哪个集团下的水厂新增用户
             userVM.setGroupCode(enterpriseRepository.findByCode(vm.getEnterpriseCode()).map(Enterprise::getGroupCode).orElse(""));
-            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+            try {
+                String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+                if (plateResult.equals(Constants.PUSH_RESULT)) {
+                    result.setPlateStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setPlateStatus(SendStatusType.FAILED);
+            }
         } else if (StringUtils.isNotEmpty(vm.getGroupCode()) && vm.getEnterpriseCode().isEmpty()) {
             //集团新增用户给平台推送一下数据
-            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
+            try {
+                String groupPlateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
+                if (groupPlateResult.equals(Constants.PUSH_RESULT)) {
+                    result.setPlateStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setPlateStatus(SendStatusType.FAILED);
+            }
         }
+        //更改推送状态重新保存一下
+        userRepository.save(result);
         return ResponseEntity.created(new URI("/api/user/" + result.getId()))
             .body(result);
     }
@@ -138,6 +164,9 @@ public class UserResource {
         if (vm.getRemark() != null) {
             user.setRemark(vm.getRemark());
         }
+        //编辑用户信息把推送状态重置为false
+        user.setStatus(SendStatusType.FAILED);
+        user.setPlateStatus(SendStatusType.FAILED);
         User result = userRepository.save(user);
         if (vm.getRoleIds() != null) {
             userRoleRepository.deleteAllByUserId(vm.getId());
@@ -152,13 +181,34 @@ public class UserResource {
         //只传水厂编码是水厂用户新增，只传集团编码是集团用户新增，两者都不传是平台用户新增
         if (StringUtils.isNotEmpty(result.getEnterpriseCode())) {
             //水厂新增用户给集团和平台推送一下数据
-            pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+            try {
+                String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+                if (groupResult.equals(Constants.PUSH_RESULT)) {
+                    result.setStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setStatus(SendStatusType.FAILED);
+            }
             //给平台推送水厂用户数据需要提供集团编码以便确定是哪个集团下的水厂新增用户
             userVM.setGroupCode(enterpriseRepository.findByCode(vm.getEnterpriseCode()).map(Enterprise::getGroupCode).orElse(""));
-            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+            try {
+                String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ENTERPRISEUSER.getUrl(), userVM);
+                if (plateResult.equals(Constants.PUSH_RESULT)) {
+                    result.setPlateStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setPlateStatus(SendStatusType.FAILED);
+            }
         } else if (StringUtils.isNotEmpty(result.getGroupCode()) && result.getEnterpriseCode().isEmpty()) {
             //集团新增用户给平台推送一下数据
-            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
+            try {
+                String groupPlateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
+                if (groupPlateResult.equals(Constants.PUSH_RESULT)) {
+                    result.setPlateStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setPlateStatus(SendStatusType.FAILED);
+            }
         }
         return ResponseEntity.ok().body(result);
     }

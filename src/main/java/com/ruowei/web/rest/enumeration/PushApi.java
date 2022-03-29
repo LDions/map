@@ -27,7 +27,16 @@ public enum PushApi {
     UPDATE_SEWSLU("集团接收水厂更新化验数据", "/api/push/alter_sewSlu"),
     PLATE_UPDATE_SEWSLU("平台接收水厂(或集团)更新化验数据", "/api/push/plate/alter_sewSlu"),
     UPDATE_SEWPROCESS("集团接收水厂更新仪表数据", "/api/push/alter_sewProcess"),
-    PLATE_UPDATE_SEWPROCESS("平台接收水厂（或集团）更新仪表数据", "/api/push/plate/alter_sewProcess");
+    PLATE_UPDATE_SEWPROCESS("平台接收水厂（或集团）更新仪表数据", "/api/push/plate/alter_sewProcess"),
+
+    //决策预测相关
+    ADDANDALTER_EMIDATA("集团接收试点水厂决策预测计算结果数据", "/api/push/decision_resultData"),
+    PLATE_ADDANDALTER_GROUPEMIDATA("平台接收集团（非试点）手动决策预测计算结果数据", "/api/push/plate/group_decision_resultData"),
+    PLATE_ADDANDALTER_EMIDATA("平台接收试点水厂决策预测计算结果数据", "/api/push/plate/decision_resultData"),
+
+    //数据源关联数据相关
+    ADDANDALTER_ASSOCIATE("集团接收试点水厂新增编辑数据源关联数据", "/api/push/associate"),
+    PLATE_ADDANDALTER_ASSOCIATE("平台接收试点水厂新增编辑数据源关联数据", "/api/push/plate/associate");
 
 
     private String name;
