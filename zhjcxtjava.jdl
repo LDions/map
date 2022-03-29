@@ -125,6 +125,8 @@ entity EmiData(emi_data) {
     outAN BigDecimal required /** 出水氨氮 */
     carbonAdd BigDecimal required /** 碳源投加量 */
     phosphorusremover BigDecimal required /** 除磷药剂  */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
 }
 
 /** 仪表数据 */
