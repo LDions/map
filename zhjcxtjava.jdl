@@ -114,6 +114,7 @@ entity Craft(craft){
 /**计算数据 */
 entity EmiData(emi_data) {
 	documentCode String required /** 单据号 */
+	dataCode String required /** 碳排放数据编码 */
 	enterpriseCode String required /** 水厂ID */
 	craftCode String required /** 工艺id */
     acctype String required /** 核算方式（自动、手动） */
