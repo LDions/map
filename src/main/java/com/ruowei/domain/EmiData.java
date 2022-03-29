@@ -35,10 +35,17 @@ public class EmiData implements Serializable {
     private String documentCode;
 
     /**
+     * 碳排放数据编码
+     */
+    @ApiModelProperty(value = "碳排放数据编码")
+    @Column(name = "data_code")
+    private String dataCode;
+
+    /**
      * 水厂ID
      */
     @NotNull
-    @ApiModelProperty(value = "水厂ID", required = true)
+    @ApiModelProperty(value = "水厂编码", required = true)
     @Column(name = "enterprise_code", nullable = false)
     private String enterpriseCode;
 
@@ -94,7 +101,7 @@ public class EmiData implements Serializable {
      * 工艺id
      */
     @NotNull
-    @ApiModelProperty(value = "工艺id", required = true)
+    @ApiModelProperty(value = "工艺编码", required = true)
     @Column(name = "craft_code", nullable = false)
     private String craftCode;
 
@@ -161,6 +168,14 @@ public class EmiData implements Serializable {
     }
     public void setDocumentCode(String documentCode) {
         this.documentCode = documentCode;
+    }
+
+    public String getDataCode() {
+        return dataCode;
+    }
+
+    public void setDataCode(String dataCode) {
+        this.dataCode = dataCode;
     }
 
     public String getEnterpriseCode() {
