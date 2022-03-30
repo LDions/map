@@ -12,6 +12,7 @@ import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.EnterpriseVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -77,10 +78,26 @@ public class EnterpriseResource {
         if (enterprise.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        if (enterpriseRepository.getFirstByCodeAndId(enterprise.getCode(), enterprise.getId()).isEmpty()) {
-            throw new BadRequestProblem("编辑失败", "企业编码已存在");
+        Enterprise enterprise1 = enterpriseRepository.findById(enterprise.getId()).orElseThrow(() -> new BadRequestProblem("编辑失败", "该用户不存在"));
+        if (StringUtils.isNotEmpty(enterprise.getEnterpriseLatitude())) {
+            enterprise1.setEnterpriseLatitude(enterprise.getEnterpriseLatitude());
         }
-        Enterprise result = enterpriseRepository.save(enterprise);
+        if (StringUtils.isNotEmpty(enterprise.getEnterpriseLongitude())) {
+            enterprise1.setEnterpriseLongitude(enterprise.getEnterpriseLongitude());
+        }
+        if (enterprise.getRemark() != null) {
+            enterprise1.setRemark(enterprise.getRemark());
+        }
+        if (StringUtils.isNotEmpty(enterprise.getName())) {
+            enterprise1.setName(enterprise.getName());
+        }
+        if (StringUtils.isNotEmpty(enterprise.getContactName())) {
+            enterprise1.setContactName(enterprise.getContactName());
+        }
+        if (StringUtils.isNotEmpty(enterprise.getContactPhone())) {
+            enterprise1.setContactPhone(enterprise.getContactPhone());
+        }
+        Enterprise result = enterpriseRepository.save(enterprise1);
         return ResponseEntity.ok().body(result);
     }
 

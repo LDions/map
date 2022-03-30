@@ -143,7 +143,7 @@ public class Enterprise implements Serializable {
         return enterpriseLatitude;
     }
 
-    public void setEnterpriseLatitude(String enterpriseLongitude) {
+    public void setEnterpriseLatitude(String enterpriseLatitude) {
         this.enterpriseLatitude = enterpriseLatitude;
     }
     public Enterprise enterpriseLatitude(String enterpriseLatitude) {
