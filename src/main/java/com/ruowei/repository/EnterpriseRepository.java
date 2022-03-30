@@ -21,7 +21,9 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, Q
 
     Optional<Enterprise> getFirstByCodeAndId(String code, Long id);
 
-    Optional<Enterprise> findByCodeAndGroupCode(String code,String groupCode);
+    Optional<Enterprise> findByCodeAndGroupCode(String code, String groupCode);
+
+    Optional<Enterprise> getFirstByCodeAndGroupCode(String code, String groupCode);
 
     Optional<Enterprise> findByCodeAndIsTryIsTrue(String code);
 

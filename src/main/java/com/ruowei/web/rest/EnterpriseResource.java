@@ -6,6 +6,7 @@ import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
+import com.ruowei.util.ObjectUtils;
 import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.web.rest.dto.UserEnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
@@ -77,10 +78,13 @@ public class EnterpriseResource {
         if (enterprise.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        if (enterpriseRepository.getFirstByCodeAndId(enterprise.getCode(), enterprise.getId()).isEmpty()) {
-            throw new BadRequestProblem("编辑失败", "企业编码已存在");
-        }
-        Enterprise result = enterpriseRepository.save(enterprise);
+//        enterpriseRepository.getFirstByCodeAndId(enterprise.getCode(), enterprise.getId())
+//            .ifPresent(so -> {
+//                throw new BadRequestProblem("编辑失败", "企业编码已存在");
+//            });
+        Enterprise temp = enterpriseRepository.findById(enterprise.getId()).get();
+        ObjectUtils.copyPropertiesIgnoreNull(enterprise, temp);
+        Enterprise result = enterpriseRepository.save(temp);
         return ResponseEntity.ok().body(result);
     }
 
