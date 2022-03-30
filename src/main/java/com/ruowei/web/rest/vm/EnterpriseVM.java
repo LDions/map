@@ -8,6 +8,13 @@ public class EnterpriseVM {
 
 
     /**
+     * 水厂名id
+     */
+    @ApiModelProperty(value = "水厂id")
+    @Column(name = "id")
+    private Long id;
+
+    /**
      * 水厂名称
      */
     @ApiModelProperty(value = "水厂名称")
@@ -36,23 +43,16 @@ public class EnterpriseVM {
     private String remark;
 
     /**
-     * 点数据名称
+     * 是否为试点水厂
      */
     @ApiModelProperty(value = "是否为试点水厂", required = true)
     @Column(name = "is_try")
     private String isTry;
 
     /**
-     * 水厂所属集团编码
-     */
-    @ApiModelProperty(value = "水厂所属集团code")
-    @Column(name = "group_code")
-    private String groupCode;
-
-    /**
      * 联系人
      */
-    @ApiModelProperty(value = "集团联系人")
+    @ApiModelProperty(value = "水厂联系人")
     @Column(name = "contact_name")
     private String contactName;
 
@@ -62,6 +62,14 @@ public class EnterpriseVM {
     @ApiModelProperty(value = "联系人电话")
     @Column(name = "contact_phone")
     private String contactPhone;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -100,14 +108,6 @@ public class EnterpriseVM {
 
     public void setIsTry(String isTry) {
         this.isTry = isTry;
-    }
-
-    public String getGroupCode() {
-        return groupCode;
-    }
-
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
     }
 
     public String getContactName() {

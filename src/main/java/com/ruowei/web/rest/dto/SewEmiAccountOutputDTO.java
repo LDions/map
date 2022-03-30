@@ -1,12 +1,9 @@
 package com.ruowei.web.rest.dto;
 
 import com.ruowei.domain.enumeration.SendStatusType;
-import com.ruowei.service.dto.WaterCarbonEmissionOutputDTO;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Instant;
 
