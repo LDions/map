@@ -103,7 +103,7 @@ public class GroupResource {
         Optional<Group> optional = groupRepository.findById(id);
         GroupDTO groupDTO = new GroupDTO();
         if (optional.isPresent()){
-            BeanUtils.copyProperties(optional,groupDTO);
+            BeanUtils.copyProperties(optional.get(), groupDTO);
             List<Enterprise> enterpriseList = enterpriseRepository.findByGroupCode(optional.get().getGroupCode());
             groupDTO.setEnterprises(enterpriseList);
         }
