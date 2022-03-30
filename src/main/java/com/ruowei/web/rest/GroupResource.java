@@ -124,7 +124,7 @@ public class GroupResource {
         return ResponseEntity.ok().body(dropDownList);
     }
 
-    @ApiIgnore
+/*    @ApiIgnore
     @PostMapping("/group/enterprise/result-save")
     @ApiOperation(value = "保存本次对多个工艺计算的结果", notes = "作者：郑昊天")
     public ResponseEntity<String> saveAccountResult(@Valid @RequestBody List<AccountVM> vms, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
@@ -135,7 +135,7 @@ public class GroupResource {
 //                .documentCode()
 //                .dataCode()
                 .enterpriseCode(userModel.getcode())
-                .acctype(vm.getAcctype())
+//                .acctype(vm.getAcctype())
                 .accYear(vm.getAccYear())
                 .accMonth(vm.getAccMonth())
 //                .accTimeStart(vm.getAccTime())
@@ -151,7 +151,7 @@ public class GroupResource {
         }
 
         return ResponseEntity.ok().body(result);
-    }
+    }*/
 
     @ApiIgnore
     @PostMapping("/group/excel-export")
