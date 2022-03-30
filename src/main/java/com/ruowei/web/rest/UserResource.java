@@ -226,15 +226,13 @@ public class UserResource {
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
             .notEmptyAnd(qUser.login::ne, Constants.ADMIN)
             .notEmptyAnd(qUser.login::contains, qm.getLogin())
+            .notEmptyAnd(qUser.enterpriseCode::contains, qm.getEnterpriseCode())
+            .notEmptyAnd(qUser.groupCode::contains, qm.getGroupCode())
             .notEmptyAnd(qUser.nickName::contains, qm.getNickname());
 
         List<User> list = jpaQueryFactory
             .select(Projections.bean(User.class, qUser.id, qUser.login, qUser.nickName, qUser.remark, qUser.status,qUser.enterpriseCode,qUser.groupCode))
             .from(qUser)
-            .leftJoin(qUserRole)
-            .on(qUser.id.eq(qUserRole.userId))
-            .leftJoin(qRole)
-            .on(qUserRole.roleId.eq(qRole.id))
             .where(predicate.build())
             .orderBy(qUser.id.desc())
             .offset(pageable.getOffset())
@@ -243,10 +241,6 @@ public class UserResource {
         long count = jpaQueryFactory
             .select(qUser)
             .from(qUser)
-            .leftJoin(qUserRole)
-            .on(qUser.id.eq(qUserRole.userId))
-            .leftJoin(qRole)
-            .on(qUserRole.roleId.eq(qRole.id))
             .where(predicate.build())
             .fetch()
             .size();
