@@ -132,6 +132,9 @@ public class RelevanceResource {
                 throw new BadRequestProblem("修改失败", "该数据无关联信息，请先创建再进行修改");
             });
         beAssociated.setBeAssociatedName(qm.getBeAssociated());
+        //重置为false，标记是否该条编辑数据推送
+        beAssociated.setStatus(SendStatusType.FAILED);
+        beAssociated.setPlateStatus(SendStatusType.FAILED);
         beAssociated.setRelationTarget(qm.getRelation().stream()
             .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
         beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
