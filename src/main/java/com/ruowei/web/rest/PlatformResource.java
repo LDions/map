@@ -68,10 +68,22 @@ public class PlatformResource {
             locationDTO.setLng(enterprise.getEnterpriseLongitude());
             locationDTO.setCraftNumber(craftRepository.countByEntCode(enterprise.getCode()));
             if (groupRepository.findByGroupCode(enterprise.getGroupCode()).isPresent()) {
-            locationDTO.setGroupName(groupRepository.findByGroupCode(enterprise.getGroupCode()).get().getGroupName());
+                locationDTO.setGroupName(groupRepository.findByGroupCode(enterprise.getGroupCode()).get().getGroupName());
             }
             result.add(locationDTO);
         }
         return ResponseEntity.ok().body(result);
     }
+
+    @PostMapping("/group/model-number")
+    @ApiOperation(value = "查询集团下属水厂", notes = "作者：郑昊天")
+    public ResponseEntity<Map<String, Long>> getModelNumber(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+        Map<String, Long> numMap = new HashMap<>();
+        // 集团 试点水厂 非试点水厂 数量
+        numMap.put("集团数量", groupRepository.count());
+        numMap.put("试点水厂数量", enterpriseRepository.count());
+        numMap.put("非试点水厂数量", enterpriseRepository.count());
+        return ResponseEntity.ok().body(numMap);
+    }
+
 }

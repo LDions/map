@@ -42,7 +42,7 @@ public class EmiData implements Serializable {
     private String dataCode;
 
     /**
-     * 水厂ID
+     * 水厂Code
      */
     @NotNull
     @ApiModelProperty(value = "水厂编码", required = true)
@@ -50,44 +50,28 @@ public class EmiData implements Serializable {
     private String enterpriseCode;
 
     /**
+     * 工艺Code
+     */
+    @NotNull
+    @ApiModelProperty(value = "工艺编码", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
+
+    /**
      * 核算方式（自动、手动）
      */
     @NotNull
     @ApiModelProperty(value = "核算方式（自动、手动）", required = true)
     @Column(name = "acctype", nullable = false)
-    private String acctype;
-
-    /**
-     * 核算年份
-     */
-    @NotNull
-    @ApiModelProperty(value = "核算年份", required = true)
-    @Column(name = "acc_year", nullable = false)
-    private String accYear;
-
-    /**
-     * 核算月份
-     */
-    @NotNull
-    @ApiModelProperty(value = "核算月份", required = true)
-    @Column(name = "acc_month", nullable = false)
-    private String accMonth;
+    private Boolean acctype;
 
     /**
      * 核算时间范围起
      */
     @NotNull
-    @ApiModelProperty(value = "核算时间范围起", required = true)
-    @Column(name = "acc_time_start", nullable = false)
-    private String accTimeStart;
-
-    /**
-     * 核算时间范围止
-     */
-    @NotNull
-    @ApiModelProperty(value = "核算时间范围止", required = true)
-    @Column(name = "acc_time_stop", nullable = false)
-    private String accTimeStop;
+    @ApiModelProperty(value = "核算时间", required = true)
+    @Column(name = "acc_time", nullable = false)
+    private Instant accTime;
 
     /**
      * 预测未来时间
@@ -96,14 +80,6 @@ public class EmiData implements Serializable {
     @ApiModelProperty(value = "预测未来时间", required = true)
     @Column(name = "predict_time", nullable = false)
     private Instant predictTime;
-
-    /**
-     * 工艺id
-     */
-    @NotNull
-    @ApiModelProperty(value = "工艺编码", required = true)
-    @Column(name = "craft_code", nullable = false)
-    private String craftCode;
 
     /**
      * 出水总氮
@@ -189,60 +165,17 @@ public class EmiData implements Serializable {
         this.enterpriseCode = enterpriseCode;
     }
 
-    public String getAcctype() {
+    public Boolean getAcctype() {
         return acctype;
     }
-    public EmiData acctype(String acctype) {
+    public EmiData acctype(Boolean acctype) {
         this.acctype = acctype;
         return this;
     }
-    public void setAcctype(String acctype) {
+    public void setAcctype(Boolean acctype) {
         this.acctype = acctype;
     }
 
-    public String getAccYear() {
-        return accYear;
-    }
-    public EmiData accYear(String accYear) {
-        this.accYear = accYear;
-        return this;
-    }
-    public void setAccYear(String accYear) {
-        this.accYear = accYear;
-    }
-
-    public String getAccMonth() {
-        return accMonth;
-    }
-    public EmiData accMonth(String accMonth) {
-        this.accMonth = accMonth;
-        return this;
-    }
-    public void setAccMonth(String accMonth) {
-        this.accMonth = accMonth;
-    }
-
-    public String getAccTimeStart() {
-        return accTimeStart;
-    }
-    public EmiData accTimeStart(String accTimeStart) {
-        this.accTimeStart = accTimeStart;
-        return this;
-    }
-    public void setAccTimeStart(String accTimeStart) {
-        this.accTimeStart = accTimeStart;
-    }
-
-    public String getAccTimeStop() {
-        return accTimeStop;
-    }
-    public EmiData accTimeStop(String accTimeStop) {
-        this.accTimeStop = accTimeStop;
-        return this;
-    }
-    public void setAccTimeStop(String accTimeStop) {
-        this.accTimeStop = accTimeStop;
-    }
 
     public Instant getPredictTime() {
         return predictTime;
@@ -313,7 +246,10 @@ public class EmiData implements Serializable {
     public SendStatusType getStatus() {
         return status;
     }
-
+    public EmiData status(SendStatusType status) {
+        this.status = status;
+        return this;
+    }
     public void setStatus(SendStatusType status) {
         this.status = status;
     }
@@ -321,12 +257,26 @@ public class EmiData implements Serializable {
     public SendStatusType getPlateStatus() {
         return plateStatus;
     }
-
+    public EmiData plateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+        return this;
+    }
     public void setPlateStatus(SendStatusType plateStatus) {
         this.plateStatus = plateStatus;
     }
 
-// jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public Instant getAccTime() {
+        return accTime;
+    }
+    public EmiData accTime(Instant accTime) {
+        this.accTime = accTime;
+        return this;
+    }
+    public void setAccTime(Instant accTime) {
+        this.accTime = accTime;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -349,19 +299,19 @@ public class EmiData implements Serializable {
     public String toString() {
         return "EmiData{" +
             "id=" + id +
-            ", documentCode='" + documentCode + '\'' +
-            ", enterpriseCode='" + enterpriseCode + '\'' +
-            ", acctype='" + acctype + '\'' +
-            ", accYear='" + accYear + '\'' +
-            ", accMonth='" + accMonth + '\'' +
-            ", accTimeStart='" + accTimeStart + '\'' +
-            ", accTimeStop='" + accTimeStop + '\'' +
-            ", predictTime='" + predictTime + '\'' +
-            ", craftCode='" + craftCode + '\'' +
+            ", documentCode='" + documentCode +
+            ", dataCode='" + dataCode +
+            ", enterpriseCode='" + enterpriseCode +
+            ", craftCode='" + craftCode +
+            ", acctype=" + acctype +
+            ", accTime=" + accTime +
+            ", predictTime=" + predictTime +
             ", totalOutN=" + totalOutN +
             ", outAN=" + outAN +
             ", carbonAdd=" + carbonAdd +
             ", phosphorusremover=" + phosphorusremover +
+            ", status=" + status +
+            ", plateStatus=" + plateStatus +
             '}';
     }
 }

@@ -3,16 +3,23 @@ package com.ruowei.web.rest;
 import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
+import com.ruowei.util.excel.GroupExcelExport;
 import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.dto.GroupDTO;
 import com.ruowei.web.rest.dto.ThresholdDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.AccountVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -33,13 +40,15 @@ public class GroupResource {
     private final EnterpriseRepository enterpriseRepository;
     private final CraftRepository craftRepository;
     private final SewEmiThresholdRepository sewEmiThresholdRepository;
+    private final EmiDataRepository emiDataRepository;
 
-    public GroupResource(GroupRepository groupRepository, UserRepository userRepository, EnterpriseRepository enterpriseRepository, CraftRepository craftRepository, SewEmiThresholdRepository sewEmiThresholdRepository) {
+    public GroupResource(GroupRepository groupRepository, UserRepository userRepository, EnterpriseRepository enterpriseRepository, CraftRepository craftRepository, SewEmiThresholdRepository sewEmiThresholdRepository, EmiDataRepository emiDataRepository) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.enterpriseRepository = enterpriseRepository;
         this.craftRepository = craftRepository;
         this.sewEmiThresholdRepository = sewEmiThresholdRepository;
+        this.emiDataRepository = emiDataRepository;
     }
 
     @PostMapping("/group")
@@ -94,7 +103,7 @@ public class GroupResource {
         Optional<Group> optional = groupRepository.findById(id);
         GroupDTO groupDTO = new GroupDTO();
         if (optional.isPresent()){
-            BeanUtils.copyProperties(optional,groupDTO);
+            BeanUtils.copyProperties(optional.get(), groupDTO);
             List<Enterprise> enterpriseList = enterpriseRepository.findByGroupCode(optional.get().getGroupCode());
             groupDTO.setEnterprises(enterpriseList);
         }
@@ -103,7 +112,7 @@ public class GroupResource {
 
     @PostMapping("/group/enterprise/dropdown")
     @ApiOperation(value = "查询集团下属水厂", notes = "作者：郑昊天")
-    public ResponseEntity<List<DropDownDTO>> getEnterpriseDropdown(@ApiIgnore UserModel userModel) {
+    public ResponseEntity<List<DropDownDTO>> getEnterpriseDropdown(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         List<Enterprise> enterpriseList = enterpriseRepository.findAllByGroupCode(userModel.getgroupCode());
         List<DropDownDTO> dropDownList = new ArrayList<>();
         for (Enterprise enterprise : enterpriseList) {
@@ -115,15 +124,53 @@ public class GroupResource {
         return ResponseEntity.ok().body(dropDownList);
     }
 
-//    @PostMapping("/group/enterprise/craft-dropdown")
-//    @ApiOperation(value = "保存本次对多个工艺计算的结果", notes = "作者：郑昊天")
-//    public ResponseEntity<EmiData> saveAccountResult(EmiData emiData) {
-//        return ResponseEntity.ok();
-//    }
+/*    @ApiIgnore
+    @PostMapping("/group/enterprise/result-save")
+    @ApiOperation(value = "保存本次对多个工艺计算的结果", notes = "作者：郑昊天")
+    public ResponseEntity<String> saveAccountResult(@Valid @RequestBody List<AccountVM> vms, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+        String result = "";
+        for (AccountVM vm : vms) {
+            int i = 1;
+            EmiData emiData = new EmiData()
+//                .documentCode()
+//                .dataCode()
+                .enterpriseCode(userModel.getcode())
+//                .acctype(vm.getAcctype())
+                .accYear(vm.getAccYear())
+                .accMonth(vm.getAccMonth())
+//                .accTimeStart(vm.getAccTime())
+//                .accTimeStop(vm.getAccTime())
+//                .predictTime()
+//                .craftCode(vm.getCraftId())
+                .totalOutN(vm.getTotalOutN())
+                .outAN(vm.getOutAN())
+                .carbonAdd(vm.getCarbonAdd())
+                .phosphorusremover(vm.getPhosphorusremover());
+            emiDataRepository.save(emiData);
+            i++;
+        }
+
+        return ResponseEntity.ok().body(result);
+    }*/
+
+    @ApiIgnore
+    @PostMapping("/group/excel-export")
+    @ApiOperation(value = "结果导出", notes = "作者：郑昊天")
+    public ResponseEntity<Resource> exportResult(@RequestBody @ApiParam(value = "计算历史记录编码列表") List<String> codes) {
+
+        // TODO 组装参数
+        byte[] buffer = GroupExcelExport.export(new ArrayList<>());
+        if (buffer == null) {
+            throw new BadRequestProblem("生成Excel失败", "Excel字节数组为空");
+        }
+        Resource resource = new ByteArrayResource(buffer);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;").body(resource);
+    }
+
 
     @PostMapping("/group/enterprise/threshold")
     @ApiOperation(value = "查询阈值报警", notes = "作者：郑昊天")
-    public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore UserModel userModel) {
+    public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         Optional<SewEmiThreshold> threshold = sewEmiThresholdRepository.findByEnterpriseCode(userModel.getcode());
         if (threshold.isPresent()) {
             ThresholdDTO thresholdDTO = new ThresholdDTO();

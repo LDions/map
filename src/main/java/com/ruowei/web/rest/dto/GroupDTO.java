@@ -13,6 +13,9 @@ import java.util.List;
 @Data
 public class GroupDTO {
 
+    /**
+     * 集团id
+     */
     @ApiModelProperty(value = "集团id")
     private Long id;
 
@@ -34,19 +37,21 @@ public class GroupDTO {
     @ApiModelProperty(value = "集团位置")
     private String groupAddress;
 
-
     /**
-     * 联系人
+     * 集团联系人
      */
     @ApiModelProperty(value = "集团联系人")
     private String groupContactName;
 
     /**
-     * 电话
+     * 联系人电话
      */
     @ApiModelProperty(value = "联系人电话")
     private String groupContactPhone;
 
+    /**
+     * 下属水厂
+     */
     @ApiModelProperty(value = "下属水厂")
     private List<Enterprise> enterprises;
 }
