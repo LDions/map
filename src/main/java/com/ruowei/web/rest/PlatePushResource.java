@@ -397,7 +397,7 @@ public class PlatePushResource {
                     //新增关联数据
                     BeAssociated beAssociated = new BeAssociated();
                     ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
-                    BeAssociated associate = beAssociatedRepository.save(beAssociated);
+                    beAssociatedRepository.save(beAssociated);
                 } else {
                     //编辑关联数据
                     beAssociatedRepository.findFirstByAssociatedCodeAndBeAssociatedEnterpriseCode(vm.getAssociatedCode(), vm.getBeAssociatedEnterpriseCode())

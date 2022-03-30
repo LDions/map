@@ -2,14 +2,24 @@ package com.ruowei.web.rest;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ruowei.config.ApplicationProperties;
+import com.ruowei.config.Constants;
 import com.ruowei.domain.BeAssociated;
-
+import com.ruowei.domain.Enterprise;
 import com.ruowei.domain.QBeAssociated;
+import com.ruowei.domain.enumeration.SendStatusType;
 import com.ruowei.repository.BeAssociatedRepository;
 import com.ruowei.security.UserModel;
+import com.ruowei.repository.EnterpriseRepository;
+import com.ruowei.service.PushService;
+import com.ruowei.util.IDUtils;
+import com.ruowei.util.ObjectUtils;
 import com.ruowei.util.PageUtil;
+import com.ruowei.web.rest.enumeration.PushApi;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.AssociateVM;
 import com.ruowei.web.rest.vm.CollectQM;
+import com.ruowei.web.rest.vm.PlateAssociateVM;
 import com.ruowei.web.rest.vm.RelevanceBeVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,12 +48,18 @@ public class RelevanceResource {
 
     private final BeAssociatedRepository beAssociatedRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private final EnterpriseRepository enterpriseRepository;
+    private final ApplicationProperties applicationProperties;
+    private final PushService pushService;
     private final QBeAssociated qBeAssociated = QBeAssociated.beAssociated;
 
-    public RelevanceResource(BeAssociatedRepository beAssociatedRepository, JPAQueryFactory jpaQueryFactory) {
+    public RelevanceResource(BeAssociatedRepository beAssociatedRepository, JPAQueryFactory jpaQueryFactory, EnterpriseRepository enterpriseRepository, ApplicationProperties applicationProperties, PushService pushService) {
 
         this.beAssociatedRepository = beAssociatedRepository;
         this.jpaQueryFactory = jpaQueryFactory;
+        this.enterpriseRepository = enterpriseRepository;
+        this.applicationProperties = applicationProperties;
+        this.pushService = pushService;
     }
 
     @PostMapping("/relevance")
@@ -60,10 +76,42 @@ public class RelevanceResource {
             });
         BeAssociated beAssociated = new BeAssociated();
         beAssociated.setBeAssociatedName(qm.getBeAssociated());
+        //关联编码唯一
+        beAssociated.setAssociatedCode(IDUtils.codeGenerator());
+        beAssociated.setStatus(SendStatusType.FAILED);
+        beAssociated.setPlateStatus(SendStatusType.FAILED);
         beAssociated.setRelationTarget(qm.getRelation().stream()
             .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
         beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
-        beAssociatedRepository.save(beAssociated);
+        BeAssociated associated = beAssociatedRepository.save(beAssociated);
+        //试点水厂推给集团
+        try {
+            AssociateVM associateVM = new AssociateVM();
+            ObjectUtils.copyPropertiesIgnoreNull(associated, associateVM);
+            associateVM.setOperate(0);
+            String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ASSOCIATE.getUrl(), associateVM);
+            if (groupResult.equals(Constants.PUSH_RESULT)) {
+                associated.setStatus(SendStatusType.SUCCESS);
+            }
+        } catch (Exception e) {
+            associated.setStatus(SendStatusType.FAILED);
+        }
+        //试点水厂推给平台
+        try {
+            PlateAssociateVM plateAssociateVM = new PlateAssociateVM();
+            ObjectUtils.copyPropertiesIgnoreNull(associated, plateAssociateVM);
+            plateAssociateVM.setOperate(0);
+            plateAssociateVM.setIsTry(true);
+            plateAssociateVM.setGroupCode(enterpriseRepository.findByCode(associated.getBeAssociatedEnterpriseCode()).map(Enterprise::getGroupCode).orElse(null));
+            String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ASSOCIATE.getUrl(), plateAssociateVM);
+            if (plateResult.equals(Constants.PUSH_RESULT)) {
+                associated.setPlateStatus(SendStatusType.SUCCESS);
+            }
+        } catch (Exception e) {
+            associated.setPlateStatus(SendStatusType.FAILED);
+        }
+        //重新保存下推送后的关联数据
+        beAssociatedRepository.save(associated);
         return ResponseEntity.ok().body("新增成功");
     }
 
@@ -82,8 +130,35 @@ public class RelevanceResource {
         beAssociated.setRelationTarget(qm.getRelation().stream()
             .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
         beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
-        beAssociatedRepository.save(beAssociated);
-
+        BeAssociated associated = beAssociatedRepository.save(beAssociated);
+        //试点水厂推给集团
+        try {
+            AssociateVM associateVM = new AssociateVM();
+            ObjectUtils.copyPropertiesIgnoreNull(associated, associateVM);
+            associateVM.setOperate(1);
+            String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ASSOCIATE.getUrl(), associateVM);
+            if (groupResult.equals(Constants.PUSH_RESULT)) {
+                associated.setStatus(SendStatusType.SUCCESS);
+            }
+        } catch (Exception e) {
+            associated.setStatus(SendStatusType.FAILED);
+        }
+        //试点水厂推给平台
+        try {
+            PlateAssociateVM plateAssociateVM = new PlateAssociateVM();
+            ObjectUtils.copyPropertiesIgnoreNull(associated, plateAssociateVM);
+            plateAssociateVM.setOperate(1);
+            plateAssociateVM.setIsTry(true);
+            plateAssociateVM.setGroupCode(enterpriseRepository.findByCode(associated.getBeAssociatedEnterpriseCode()).map(Enterprise::getGroupCode).orElse(null));
+            String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ASSOCIATE.getUrl(), plateAssociateVM);
+            if (plateResult.equals(Constants.PUSH_RESULT)) {
+                associated.setPlateStatus(SendStatusType.SUCCESS);
+            }
+        } catch (Exception e) {
+            associated.setPlateStatus(SendStatusType.FAILED);
+        }
+        //重新保存下推送后的关联数据
+        beAssociatedRepository.save(associated);
         return ResponseEntity.ok().body("修改成功");
     }
 
