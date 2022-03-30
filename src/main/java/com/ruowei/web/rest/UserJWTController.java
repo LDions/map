@@ -84,7 +84,9 @@ public class UserJWTController {
 
         JWTToken jwtToken = new JWTToken(jwt);
         jwtToken.setCode(user.getEnterpriseCode());
+        jwtToken.setEnterpriseName(user.getEnterpriseName());
         jwtToken.setGroupCode(user.getGroupCode());
+        jwtToken.setGroupName(user.getGroupName());
 
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
         List<String> roleCodes = roleRepository.findAllByIdIn(roleIds).stream().map(Role::getCode).collect(Collectors.toList());
@@ -133,6 +135,8 @@ public class UserJWTController {
 
         private String groupCode;
 
+        private String groupName;
+
         private List<String> roleCodes;
 
         private List<String> permissions;
@@ -177,6 +181,15 @@ public class UserJWTController {
 
         void setEnterpriseName(String enterpriseName) {
             this.enterpriseName = enterpriseName;
+        }
+
+        @JsonProperty("group_name")
+        String getGroupName() {
+            return groupName;
+        }
+
+        void setGroupName(String groupName) {
+            this.groupName = groupName;
         }
 
         @JsonProperty("role_codes")

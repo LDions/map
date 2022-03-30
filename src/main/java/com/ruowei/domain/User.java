@@ -52,9 +52,17 @@ public class User implements Serializable {
     @Column(name = "enterprise_code")
     private String enterpriseCode;
 
+    @ApiModelProperty(value = "水厂名称")
+    @Column(name = "enterprise_name")
+    private String enterpriseName;
+
     @ApiModelProperty(value = "集团编码")
     @Column(name = "group_code")
     private String groupCode;
+
+    @ApiModelProperty(value = "集团名称")
+    @Column(name = "group_name")
+    private String groupName;
 
     @ApiModelProperty(value = "用户编码")
     @Column(name = "user_code")
@@ -164,6 +172,11 @@ public class User implements Serializable {
         return userCode;
     }
 
+    public User userCode(String userCode) {
+        this.userCode = userCode;
+        return this;
+    }
+
     public void setUserCode(String userCode) {
         this.userCode = userCode;
     }
@@ -184,6 +197,30 @@ public class User implements Serializable {
         this.plateStatus = plateStatus;
     }
 
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public User enterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+        return this;
+    }
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public User groupName(String groupName) {
+        this.groupName = groupName;
+        return this;
+    }
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -201,7 +238,6 @@ public class User implements Serializable {
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "User{" +
@@ -211,7 +247,12 @@ public class User implements Serializable {
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
             ", enterpriseCode='" + enterpriseCode + '\'' +
+            ", enterpriseName='" + enterpriseName + '\'' +
             ", groupCode='" + groupCode + '\'' +
+            ", groupName='" + groupName + '\'' +
+            ", userCode='" + userCode + '\'' +
+            ", status=" + status +
+            ", plateStatus=" + plateStatus +
             '}';
     }
 }

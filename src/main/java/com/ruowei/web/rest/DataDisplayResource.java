@@ -107,13 +107,11 @@ public class DataDisplayResource {
                 BeanUtils.copyProperties(group, dto, BeanUtil.getNullPropertyNames(group));
                 dataDTOS.add(dto);
             }
-            for (Group g : Groups) {
-                List<Enterprise> enterprises = enterpriseRepository.findByGroupCode(g.getGroupCode());
-                for (Enterprise enterprise : enterprises) {
-                    DataDTO.EntDTO dto = new DataDTO.EntDTO();
-                    BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
-                    dataDTOS.add(dto);
-                }
+            List<Enterprise> enterprises = enterpriseRepository.findAll();
+            for (Enterprise enterprise : enterprises) {
+                DataDTO.EntDTO dto = new DataDTO.EntDTO();
+                BeanUtils.copyProperties(enterprise, dto, BeanUtil.getNullPropertyNames(enterprise));
+                dataDTOS.add(dto);
             }
         }
         return ResponseEntity.ok().body(dataDTOS);

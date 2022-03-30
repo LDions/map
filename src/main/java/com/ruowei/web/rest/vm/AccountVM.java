@@ -18,7 +18,7 @@ public class AccountVM {
     private Long craftId;
 
     @ApiModelProperty(value = "核算方式（自动、手动）", required = true)
-    private String acctype;
+    private Boolean acctype;
 
     @ApiModelProperty(value = "核算年份", required = true)
     private String accYear;

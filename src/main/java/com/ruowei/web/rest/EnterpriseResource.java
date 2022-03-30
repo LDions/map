@@ -4,11 +4,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.*;
 import com.ruowei.repository.*;
-import com.ruowei.security.UserModel;
 import com.ruowei.service.mapper.EnterpriseVMMapper;
 import com.ruowei.service.mapper.UserVMMapper;
 import com.ruowei.util.OptionalBooleanBuilder;
-import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.dto.UserEnterpriseDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.EnterpriseVM;
@@ -23,13 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.ResponseUtil;
-
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.ruowei.config.Constants.DEFAULT_PASSWORD;
 
 @RestController
 @RequestMapping("/api")
@@ -90,12 +84,16 @@ public class EnterpriseResource {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/enterprise/{id}")
+    @GetMapping("/enterprise/{code}")
     @ApiOperation(value = "查询企业详情接口", notes = "作者:孙小楠")
-    public ResponseEntity<Enterprise> getEnterprise(@PathVariable Long id) {
-        log.debug("REST request to get enterprise : {}", id);
-
-        Optional<Enterprise> optional = enterpriseRepository.findById(id);
+    public ResponseEntity<Enterprise> getEnterprise(@PathVariable String code) {
+        log.debug("REST request to get enterprise : {}", code);
+        enterpriseRepository
+            .findByCode(code)
+            .ifPresent(so -> {
+                throw new BadRequestProblem("查询失败", "不存在该企业");
+            });
+        Optional<Enterprise> optional = enterpriseRepository.findByCode(code);
         return ResponseUtil.wrapOrNotFound(optional);
     }
 
