@@ -36,8 +36,7 @@ public enum PushApi {
 
     //数据源关联数据相关
     ADDANDALTER_ASSOCIATE("集团接收试点水厂新增编辑数据源关联数据", "/api/push/associate"),
-    ADDANDALTER_DROUPASSOCIATE("平台接收集团（非试点水厂）新增编辑数据源关联数据", "/api/push/group_associate"),
-    PLATE_ADDANDALTER_ASSOCIATE("平台接收试点水厂新增编辑数据源关联数据", "/api/push/plate/associate");
+    PLATE_ADDANDALTER_ASSOCIATE("平台接收试点水厂（或集团非试点水厂）新增编辑数据源关联数据", "/api/push/plate/associate");
 
 
     private String name;

@@ -23,6 +23,9 @@ public class PlateAssociateVM {
     @ApiModelProperty(value = "水厂编码")
     private String enterpriseCode;
 
+    @ApiModelProperty(value = "是否是试点水厂")
+    private Boolean isTry;
+
     @ApiModelProperty(value = "关联到的数据")
     private List<String> relation;
 }
