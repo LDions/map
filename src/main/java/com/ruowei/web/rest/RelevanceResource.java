@@ -84,34 +84,39 @@ public class RelevanceResource {
             .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
         beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
         BeAssociated associated = beAssociatedRepository.save(beAssociated);
-        //试点水厂推给集团
-        try {
-            AssociateVM associateVM = new AssociateVM();
-            ObjectUtils.copyPropertiesIgnoreNull(associated, associateVM);
-            associateVM.setOperate(0);
-            String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ASSOCIATE.getUrl(), associateVM);
-            if (groupResult.equals(Constants.PUSH_RESULT)) {
-                associated.setStatus(SendStatusType.SUCCESS);
-            }
-        } catch (Exception e) {
-            associated.setStatus(SendStatusType.FAILED);
-        }
-        //试点水厂推给平台
-        try {
-            PlateAssociateVM plateAssociateVM = new PlateAssociateVM();
-            ObjectUtils.copyPropertiesIgnoreNull(associated, plateAssociateVM);
-            plateAssociateVM.setOperate(0);
-            plateAssociateVM.setIsTry(true);
-            plateAssociateVM.setGroupCode(enterpriseRepository.findByCode(associated.getBeAssociatedEnterpriseCode()).map(Enterprise::getGroupCode).orElse(null));
-            String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ASSOCIATE.getUrl(), plateAssociateVM);
-            if (plateResult.equals(Constants.PUSH_RESULT)) {
-                associated.setPlateStatus(SendStatusType.SUCCESS);
-            }
-        } catch (Exception e) {
-            associated.setPlateStatus(SendStatusType.FAILED);
-        }
-        //重新保存下推送后的关联数据
-        beAssociatedRepository.save(associated);
+        enterpriseRepository.findByCode(associated.getBeAssociatedEnterpriseCode())
+            .ifPresent(enterprise -> {
+                if (enterprise.getIsTry()) {
+                    //试点水厂推给集团
+                    try {
+                        AssociateVM associateVM = new AssociateVM();
+                        ObjectUtils.copyPropertiesIgnoreNull(associated, associateVM);
+                        associateVM.setOperate(0);
+                        String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ASSOCIATE.getUrl(), associateVM);
+                        if (groupResult.equals(Constants.PUSH_RESULT)) {
+                            associated.setStatus(SendStatusType.SUCCESS);
+                        }
+                    } catch (Exception e) {
+                        associated.setStatus(SendStatusType.FAILED);
+                    }
+                }
+                //试点水厂推给平台    集团（非试点水厂）推给平台
+                try {
+                    PlateAssociateVM plateAssociateVM = new PlateAssociateVM();
+                    ObjectUtils.copyPropertiesIgnoreNull(associated, plateAssociateVM);
+                    plateAssociateVM.setOperate(0);
+                    plateAssociateVM.setIsTry(enterprise.getIsTry());
+                    plateAssociateVM.setGroupCode(enterprise.getGroupCode());
+                    String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ASSOCIATE.getUrl(), plateAssociateVM);
+                    if (plateResult.equals(Constants.PUSH_RESULT)) {
+                        associated.setPlateStatus(SendStatusType.SUCCESS);
+                    }
+                } catch (Exception e) {
+                    associated.setPlateStatus(SendStatusType.FAILED);
+                }
+                //重新保存下推送后的关联数据
+                beAssociatedRepository.save(associated);
+            });
         return ResponseEntity.ok().body("新增成功");
     }
 
@@ -131,34 +136,39 @@ public class RelevanceResource {
             .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
         beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
         BeAssociated associated = beAssociatedRepository.save(beAssociated);
-        //试点水厂推给集团
-        try {
-            AssociateVM associateVM = new AssociateVM();
-            ObjectUtils.copyPropertiesIgnoreNull(associated, associateVM);
-            associateVM.setOperate(1);
-            String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ASSOCIATE.getUrl(), associateVM);
-            if (groupResult.equals(Constants.PUSH_RESULT)) {
-                associated.setStatus(SendStatusType.SUCCESS);
-            }
-        } catch (Exception e) {
-            associated.setStatus(SendStatusType.FAILED);
-        }
-        //试点水厂推给平台
-        try {
-            PlateAssociateVM plateAssociateVM = new PlateAssociateVM();
-            ObjectUtils.copyPropertiesIgnoreNull(associated, plateAssociateVM);
-            plateAssociateVM.setOperate(1);
-            plateAssociateVM.setIsTry(true);
-            plateAssociateVM.setGroupCode(enterpriseRepository.findByCode(associated.getBeAssociatedEnterpriseCode()).map(Enterprise::getGroupCode).orElse(null));
-            String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ASSOCIATE.getUrl(), plateAssociateVM);
-            if (plateResult.equals(Constants.PUSH_RESULT)) {
-                associated.setPlateStatus(SendStatusType.SUCCESS);
-            }
-        } catch (Exception e) {
-            associated.setPlateStatus(SendStatusType.FAILED);
-        }
-        //重新保存下推送后的关联数据
-        beAssociatedRepository.save(associated);
+        enterpriseRepository.findByCode(associated.getBeAssociatedEnterpriseCode())
+            .ifPresent(enterprise -> {
+                if (enterprise.getIsTry()) {
+                    //试点水厂推给集团
+                    try {
+                        AssociateVM associateVM = new AssociateVM();
+                        ObjectUtils.copyPropertiesIgnoreNull(associated, associateVM);
+                        associateVM.setOperate(1);
+                        String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.ADDANDALTER_ASSOCIATE.getUrl(), associateVM);
+                        if (groupResult.equals(Constants.PUSH_RESULT)) {
+                            associated.setStatus(SendStatusType.SUCCESS);
+                        }
+                    } catch (Exception e) {
+                        associated.setStatus(SendStatusType.FAILED);
+                    }
+                }
+                //试点水厂推给平台   集团（非试点水厂）推给平台
+                try {
+                    PlateAssociateVM plateAssociateVM = new PlateAssociateVM();
+                    ObjectUtils.copyPropertiesIgnoreNull(associated, plateAssociateVM);
+                    plateAssociateVM.setOperate(1);
+                    plateAssociateVM.setIsTry(enterprise.getIsTry());
+                    plateAssociateVM.setGroupCode(enterprise.getGroupCode());
+                    String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_ASSOCIATE.getUrl(), plateAssociateVM);
+                    if (plateResult.equals(Constants.PUSH_RESULT)) {
+                        associated.setPlateStatus(SendStatusType.SUCCESS);
+                    }
+                } catch (Exception e) {
+                    associated.setPlateStatus(SendStatusType.FAILED);
+                }
+                //重新保存下推送后的关联数据
+                beAssociatedRepository.save(associated);
+            });
         return ResponseEntity.ok().body("修改成功");
     }
 
