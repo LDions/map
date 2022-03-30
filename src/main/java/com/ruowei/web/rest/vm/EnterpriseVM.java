@@ -45,9 +45,9 @@ public class EnterpriseVM {
     /**
      * 水厂所属集团编码
      */
-    @ApiModelProperty(value = "水厂所属集团id")
-    @Column(name = "group_Id")
-    private Long groupId;
+    @ApiModelProperty(value = "水厂所属集团code")
+    @Column(name = "group_code")
+    private String groupCode;
 
     /**
      * 联系人
@@ -102,12 +102,12 @@ public class EnterpriseVM {
         this.isTry = isTry;
     }
 
-    public Long groupId() {
-        return groupId;
+    public String getGroupCode() {
+        return groupCode;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
 
     public String getContactName() {

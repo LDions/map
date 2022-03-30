@@ -1,6 +1,7 @@
 package com.ruowei.web.rest.vm;
 
 import io.swagger.annotations.ApiModelProperty;
+import liquibase.pro.packaged.S;
 import lombok.Data;
 
 @Data
@@ -11,9 +12,9 @@ public class UserQM {
     @ApiModelProperty(value = "用户昵称")
     private String nickname;
 
-    @ApiModelProperty(value = "水厂ID")
-    private Long enterpriseId;
+    @ApiModelProperty(value = "水厂Code")
+    private String enterpriseCode;
 
-    @ApiModelProperty(value = "水厂ID")
-    private Long groupId;
+    @ApiModelProperty(value = "集团Code")
+    private String groupCode;
 }

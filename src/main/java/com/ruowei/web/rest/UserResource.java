@@ -1,10 +1,13 @@
 package com.ruowei.web.rest;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.config.ApplicationProperties;
 import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
 
+import com.ruowei.domain.enumeration.RoleStatusType;
+import com.ruowei.domain.enumeration.RoleType;
 import com.ruowei.domain.enumeration.SendStatusType;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.UserRepository;
@@ -27,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +47,7 @@ import tech.jhipster.web.util.ResponseUtil;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,7 +69,8 @@ public class UserResource {
     private final PushService pushService;
     private final EnterpriseRepository enterpriseRepository;
     private QUser qUser = QUser.user;
-
+    private QRole qRole = QRole.role;
+    private QUserRole qUserRole = QUserRole.userRole;
     public UserResource(ApplicationProperties applicationProperties, UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper, PushService pushService, EnterpriseRepository enterpriseRepository) {
         this.applicationProperties = applicationProperties;
         this.userRepository = userRepository;
@@ -220,10 +226,28 @@ public class UserResource {
         OptionalBooleanBuilder predicate = new OptionalBooleanBuilder()
             .notEmptyAnd(qUser.login::ne, Constants.ADMIN)
             .notEmptyAnd(qUser.login::contains, qm.getLogin())
+            .notEmptyAnd(qUser.enterpriseCode::contains, qm.getEnterpriseCode())
+            .notEmptyAnd(qUser.groupCode::contains, qm.getGroupCode())
             .notEmptyAnd(qUser.nickName::contains, qm.getNickname());
-        Page<User> page = userRepository.findAll(predicate.build(), pageable);
+
+        List<User> list = jpaQueryFactory
+            .select(Projections.bean(User.class, qUser.id, qUser.login, qUser.nickName, qUser.remark, qUser.status,qUser.enterpriseCode,qUser.groupCode))
+            .from(qUser)
+            .where(predicate.build())
+            .orderBy(qUser.id.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+        long count = jpaQueryFactory
+            .select(qUser)
+            .from(qUser)
+            .where(predicate.build())
+            .fetch()
+            .size();
+        Page<User> page = new PageImpl<>(list, pageable, count);
+        List<User> result = page.getContent();
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(result);
     }
 
     @GetMapping("/user/{id}")

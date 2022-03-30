@@ -118,6 +118,7 @@ public class GroupResource {
         for (Enterprise enterprise : enterpriseList) {
             DropDownDTO dropDownDTO = new DropDownDTO();
             dropDownDTO.setId(enterprise.getId());
+            dropDownDTO.setCode(enterprise.getCode());
             dropDownDTO.setName(enterprise.getName());
             dropDownList.add(dropDownDTO);
         }
@@ -136,8 +137,8 @@ public class GroupResource {
 //                .dataCode()
                 .enterpriseCode(userModel.getcode())
 //                .acctype(vm.getAcctype())
-                .accYear(vm.getAccYear())
-                .accMonth(vm.getAccMonth())
+//                .accYear(vm.getAccYear())
+//                .accMonth(vm.getAccMonth())
 //                .accTimeStart(vm.getAccTime())
 //                .accTimeStop(vm.getAccTime())
 //                .predictTime()

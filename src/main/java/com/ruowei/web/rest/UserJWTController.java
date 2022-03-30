@@ -83,6 +83,7 @@ public class UserJWTController {
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         JWTToken jwtToken = new JWTToken(jwt);
+        jwtToken.setNickName(user.getNickName());
         jwtToken.setCode(user.getEnterpriseCode());
         jwtToken.setGroupCode(user.getGroupCode());
 
@@ -129,9 +130,13 @@ public class UserJWTController {
 
         private String code;
 
+        private String nickName;
+
         private String enterpriseName;
 
         private String groupCode;
+
+        private String groupName;
 
         private List<String> roleCodes;
 
@@ -150,6 +155,15 @@ public class UserJWTController {
 
         void setIdToken(String idToken) {
             this.idToken = idToken;
+        }
+
+        @JsonProperty("nick_name")
+        public String getNickName() {
+            return nickName;
+        }
+
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
         }
 
         @JsonProperty("enterprise_code")
@@ -177,6 +191,15 @@ public class UserJWTController {
 
         void setEnterpriseName(String enterpriseName) {
             this.enterpriseName = enterpriseName;
+        }
+
+        @JsonProperty("group_name")
+        String getGroupName() {
+            return groupName;
+        }
+
+        void setGroupName(String groupName) {
+            this.groupName = groupName;
         }
 
         @JsonProperty("role_codes")
