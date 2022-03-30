@@ -382,46 +382,35 @@ public class PlatePushResource {
         return ResponseEntity.ok().body(result.get());
     }
 
-//    @PostMapping("/plate/associate")
-//    @Transactional
-//    @ApiOperation(value = "平台接收试点水厂（或集团非试点水厂）新增编辑数据源关联数据", notes = "作者：韩宗晏")
-//    public ResponseEntity<String> associate(@RequestBody PlateAssociateVM vm) {
-//        AtomicReference<String> result = new AtomicReference<>("");
-//        groupRepository.findByGroupCode(vm.getGroupCode())
-//            .map(group -> {
-//                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getEnterpriseCode(), group.getGroupCode(),vm.getIsTry());
-//                if (!enterprise.isPresent()) {
-//                    throw new BadRequestAlertException("水厂不存在", "", "");
-//                }
-//                if (vm.getOperate().equals(0)) {
-//                    //新增关联数据
-//                    BeAssociated beAssociated = new BeAssociated();
-//                    ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
-//                    BeAssociated associate = beAssociatedRepository.save(beAssociated);
-//                    vm.getRelation().forEach(s -> {
-//                        Correlation correlation = new Correlation();
-//                        correlation.setRelationTarget(s);
-//                        correlation.setRelevanceId(associate.getId());
-//                    });
-//                } else {
-//                    //编辑关联数据  TODO  根据水厂编码和关联编码查询确定一条关联信息
-//                    beAssociatedRepository.findFirstByAssociatedCode(vm.getAssociatedCode())
-//                        .map(beAssociated -> {
-//                            ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
-//                            correlationRepository.deleteAllByRelevanceId(beAssociated.getId());
-//                            vm.getRelation().forEach(s -> {
-//                                Correlation correlation = new Correlation();
-//                                correlation.setRelationTarget(s);
-//                                correlation.setRelevanceId(beAssociated.getId());
-//                                correlationRepository.save(correlation);
-//                            });
-//                            return beAssociated;
-//                        }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
-//                }
-//                return group;
-//            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", ""));
-//        return ResponseEntity.ok().body(result.get());
-//    }
+    @PostMapping("/plate/associate")
+    @Transactional
+    @ApiOperation(value = "平台接收试点水厂（或集团非试点水厂）新增编辑数据源关联数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> associate(@RequestBody PlateAssociateVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        groupRepository.findByGroupCode(vm.getGroupCode())
+            .map(group -> {
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getBeAssociatedEnterpriseCode(), group.getGroupCode(), vm.getIsTry());
+                if (!enterprise.isPresent()) {
+                    throw new BadRequestAlertException("水厂不存在", "", "");
+                }
+                if (vm.getOperate().equals(0)) {
+                    //新增关联数据
+                    BeAssociated beAssociated = new BeAssociated();
+                    ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+                    BeAssociated associate = beAssociatedRepository.save(beAssociated);
+                } else {
+                    //编辑关联数据
+                    beAssociatedRepository.findFirstByAssociatedCodeAndBeAssociatedEnterpriseCode(vm.getAssociatedCode(), vm.getBeAssociatedEnterpriseCode())
+                        .map(beAssociated -> {
+                            ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+                            beAssociatedRepository.save(beAssociated);
+                            return beAssociated;
+                        }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
+                }
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", ""));
+        return ResponseEntity.ok().body(result.get());
+    }
 
 //    @PostMapping("/plate/group_associate")
 //    @Transactional

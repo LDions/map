@@ -21,11 +21,11 @@ public class PlateAssociateVM {
     private String associatedCode;
 
     @ApiModelProperty(value = "水厂编码")
-    private String enterpriseCode;
+    private String beAssociatedEnterpriseCode;
 
     @ApiModelProperty(value = "是否是试点水厂")
     private Boolean isTry;
 
-    @ApiModelProperty(value = "关联到的数据")
-    private List<String> relation;
+    @ApiModelProperty(value = "关联数据名称")
+    private String relationTarget;
 }

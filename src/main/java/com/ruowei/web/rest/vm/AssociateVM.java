@@ -3,6 +3,7 @@ package com.ruowei.web.rest.vm;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.util.List;
 
 @Data
@@ -18,8 +19,8 @@ public class AssociateVM {
     private String associatedCode;
 
     @ApiModelProperty(value = "水厂编码")
-    private String enterpriseCode;
+    private String beAssociatedEnterpriseCode;
 
-    @ApiModelProperty(value = "关联到的数据")
-    private List<String> relation;
+    @ApiModelProperty(value = "关联数据名称")
+    private String relationTarget;
 }

@@ -11,5 +11,6 @@ public interface BeAssociatedRepository extends JpaRepository<BeAssociated, Long
 
     Optional<BeAssociated> findByBeAssociatedName(String name);
 
-    Optional<BeAssociated> findFirstByAssociatedCode(String associatedCode);
+    Optional<BeAssociated> findFirstByAssociatedCodeAndBeAssociatedEnterpriseCode(String associatedCode, String beAssociatedEnterpriseCode);
+
 }
