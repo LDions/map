@@ -12,6 +12,7 @@ import com.ruowei.web.rest.vm.AccountVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -75,7 +76,22 @@ public class GroupResource {
         if (group.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-
+        Group group1 = groupRepository.findById(group.getId()).orElseThrow(() -> new BadRequestProblem("编辑失败", "该用户不存在"));
+        if (StringUtils.isNotEmpty(group.getGroupName())) {
+            group1.setGroupName(group.getGroupName());
+        }
+        if (StringUtils.isNotEmpty(group.getGroupContactName())) {
+            group1.setGroupContactName(group.getGroupContactName());
+        }
+        if (group.getGroupLatitude() != null) {
+            group1.setGroupLatitude(group.getGroupLatitude());
+        }
+        if (group.getGroupLongitude() != null) {
+            group1.setGroupLongitude(group.getGroupLongitude());
+        }
+        if (StringUtils.isNotEmpty(group.getGroupContactPhone())) {
+            group1.setGroupContactPhone(group.getGroupContactPhone());
+        }
         Group result = groupRepository.save(group);
         return ResponseEntity.ok().body(result);
     }
