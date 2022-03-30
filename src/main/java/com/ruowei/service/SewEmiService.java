@@ -9,8 +9,7 @@ import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.security.jwt.JWTFilter;
 import com.ruowei.service.dto.*;
-import com.ruowei.service.enumeration.FunctionEnum;
-import com.ruowei.service.enumeration.OperationTypeEnum;
+
 import com.ruowei.util.BeanUtil;
 import com.ruowei.web.rest.dto.SewDetailsDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
@@ -39,10 +38,7 @@ import static com.ruowei.domain.enumeration.SendStatusType.FAILED;
 @Slf4j
 public class SewEmiService {
 
-    private final EmiFactorRepository emiFactorRepository;
-    private final ObjectMapper objectMapper;
-    private final ApplicationProperties applicationProperties;
-    private final EmiDataRepository emiDataRepository;
+
     private final SewProcessRepository sewProcessRepository;
     private final SewSluRepository sewSluRepository;
     private final OtherIndexRepository otherIndexRepository;
@@ -51,186 +47,14 @@ public class SewEmiService {
     private final JPAQueryFactory jpaQueryFactory;
 
 
-    public SewEmiService(EmiFactorRepository emiFactorRepository, ObjectMapper objectMapper, ApplicationProperties applicationProperties, EmiDataRepository emiDataRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, JPAQueryFactory jpaQueryFactory) {
-        this.emiFactorRepository = emiFactorRepository;
-        this.objectMapper = objectMapper;
-        this.applicationProperties = applicationProperties;
-        this.emiDataRepository = emiDataRepository;
+    public SewEmiService(SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, OtherIndexRepository otherIndexRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, JPAQueryFactory jpaQueryFactory) {
+
         this.sewProcessRepository = sewProcessRepository;
         this.sewSluRepository = sewSluRepository;
         this.otherIndexRepository = otherIndexRepository;
         this.sewPotRepository = sewPotRepository;
         this.sewMeterRepository = sewMeterRepository;
         this.jpaQueryFactory = jpaQueryFactory;
-    }
-
-
-    /**
-     * 计算某种药剂各投加量之和
-     *
-     * @param vm
-     * @return
-     */
-    public BigDecimal calculateSumOfEachDosage(SewEmiAccountVM.SewPotVM vm) {
-        BigDecimal sum = new BigDecimal(0);
-
-        return sum;
-    }
-
-    /**
-     * 污水碳排放输入数据和排放因子参数封装
-     *
-     * @param vm
-     * @return
-     */
-    public WaterCarbonEmissionEnterDTO packageParametersOfAccounting(SewEmiAccountVM vm) {
-        EmiFactor emiFactor = emiFactorRepository.findFirstByProjectCodeOrderByModifyDateDesc(SEW_TREAT).orElseThrow(() -> new BadRequestProblem("核算失败", "未找到碳排放因子"));
-        if (StringUtils.isBlank(emiFactor.getContent())) {
-            throw new BadRequestProblem("核算失败", "未找到碳排放因子");
-        }
-        try {
-            // 解析碳排放因子数据信息
-            SewEmiFactorDTO sewEmiFactorDTO = objectMapper.readValue(emiFactor.getContent(), SewEmiFactorDTO.class);
-            // 创建碳排放核算输入对象
-            WaterCarbonEmissionEnterDTO enterDTO = new WaterCarbonEmissionEnterDTO();
-
-            // 封装工艺水质信息
-            List<WaterCarbonEmissionEnterDTO.WaterQualityDTO> waterQualityDTOList = new ArrayList<>();
-
-            // 封装因子项
-
-            enterDTO.setCfHp(sewEmiFactorDTO.getGasEmiFactor().getCfhp().getValue());
-            enterDTO.setCfCo2(sewEmiFactorDTO.getGasEmiFactor().getCfco2().getValue());
-            enterDTO.setCfCh4(sewEmiFactorDTO.getGasEmiFactor().getCfch4().getValue());
-            enterDTO.setCfN2o(sewEmiFactorDTO.getGasEmiFactor().getCfn2o().getValue());
-            enterDTO.setB0Bod(sewEmiFactorDTO.getSewTreatFactor().getB0bod().getValue());
-            enterDTO.setB0Cod(sewEmiFactorDTO.getSewTreatFactor().getB0cod().getValue());
-            enterDTO.setMcf(sewEmiFactorDTO.getSewTreatFactor().getMcf().getValue());
-            enterDTO.setGama(sewEmiFactorDTO.getHeatPumpFactor().getY().getValue());
-            enterDTO.setWc(sewEmiFactorDTO.getSluTreatFactor().getWc().getValue());
-            enterDTO.setEfs1(sewEmiFactorDTO.getSluTreatFactor().getEfs1().getValue());
-            enterDTO.setEfs2(sewEmiFactorDTO.getSluTreatFactor().getEfs2().getValue());
-            enterDTO.setSTech3Doc(sewEmiFactorDTO.getSluTreatFactor().getDoc().getValue());
-            enterDTO.setSTech3Docf(sewEmiFactorDTO.getSluTreatFactor().getDocf().getValue());
-            enterDTO.setSTech3Mcf(sewEmiFactorDTO.getSluTreatFactor().getMcf().getValue());
-            enterDTO.setSTech3F(sewEmiFactorDTO.getSluTreatFactor().getF().getValue());
-            enterDTO.setSTech3Ox(sewEmiFactorDTO.getSluTreatFactor().getOx().getValue());
-            enterDTO.setEfs3(sewEmiFactorDTO.getSluTreatFactor().getEfs3().getValue());
-            enterDTO.setEfs4(sewEmiFactorDTO.getSluTreatFactor().getEfs4().getValue());
-            return enterDTO;
-        } catch (JsonProcessingException e) {
-            throw new BadRequestProblem("核算失败", "获取碳排放因子失败");
-        }
-    }
-
-    /**
-     * 调用智能合约接口（现将数据保存在MySQL数据库中，此方法暂未用到）
-     *
-     * @param request
-     * @param operationTypeEnum 操作类型
-     * @param functionEnum      方法
-     * @param requestArgs       请求体（json格式）
-     * @return
-     */
-    public ChainCodeResponseDTO callTheSmartContractInterface(HttpServletRequest request,
-                                                              OperationTypeEnum operationTypeEnum,
-                                                              FunctionEnum functionEnum,
-                                                              String requestArgs) {
-        ChainCodeRequestDTO chainCodeRequestDTO = new ChainCodeRequestDTO();
-        ChainCodeRequestDTO.Operation operation = new ChainCodeRequestDTO.Operation(
-            applicationProperties.getBlockChain().getChaincodeId(),
-            operationTypeEnum.getName(),
-            "Cnsp:" + functionEnum.getName(),
-            requestArgs
-        );
-        chainCodeRequestDTO.setChaincode_operation(operation);
-        // 创建WebClient对象
-        WebClient webClient = WebClient.builder()
-            .baseUrl(applicationProperties.getBlockChain().getBaseUrl())
-            .build();
-        // 发起请求，获取响应体
-        Mono<ChainCodeResponseDTO> mono = webClient
-            .post()
-            .uri("/v2/channels/{1}/appOperation", applicationProperties.getBlockChain().getChannelId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .header(JWTFilter.AUTHORIZATION_HEADER, request.getHeader(JWTFilter.AUTHORIZATION_HEADER))
-            .bodyValue(chainCodeRequestDTO)
-            .retrieve()
-            .bodyToMono(ChainCodeResponseDTO.class);
-        return mono.block();
-    }
-
-    /**
-     * 封装数据
-     *
-     * @param craftId
-     * @param userModel
-     * @param vm
-     * @param outputDTO
-     * @param nowInstant
-     * @return
-     */
-    public EmiDataDTO convertToEmiDataDTO(String craftId,
-                                          UserModel userModel,
-                                          SewEmiAccountVM vm,
-                                          WaterCarbonEmissionOutputDTO outputDTO,
-                                          Instant nowInstant) {
-        return new EmiDataDTO(
-            craftId,
-            userModel.getcode(),
-            userModel.getEnterpriseName(),
-            userModel.getUserId(),
-            userModel.getNickName(),
-            nowInstant,
-            vm,
-            outputDTO
-        );
-    }
-
-
-    /**
-     * 调用智能合约接口保存污水厂碳排放核算数据（现将数据保存在MySQL数据库中，此方法暂未用到）
-     *
-     * @param request
-     * @param craftId
-     * @param userModel
-     * @param vm
-     * @param outputDTO
-     */
-    public void saveAccountingResult(HttpServletRequest request,
-                                     String craftId,
-                                     UserModel userModel,
-                                     SewEmiAccountVM vm,
-                                     WaterCarbonEmissionEnterDTO enterDTO,
-                                     WaterCarbonEmissionOutputDTO outputDTO,
-                                     Instant nowInstant) {
-
-        // 封装请求体
-        List<Object> list = new ArrayList<>();
-        EmiDataDTO emiDataDTO = convertToEmiDataDTO(craftId, userModel, vm, outputDTO, nowInstant);
-        list.add(emiDataDTO);
-        String requestArgs = "";
-        try {
-            requestArgs = objectMapper.writeValueAsString(list);
-        } catch (JsonProcessingException e) {
-            throw new BadRequestProblem("保存核算数据失败", "未能正确封装请求体");
-        }
-        if (StringUtils.isBlank(requestArgs)) {
-            throw new BadRequestProblem("保存核算数据失败", "未能正确封装请求体");
-        }
-        // 调用智能合约接口
-        ChainCodeResponseDTO responseDTO = callTheSmartContractInterface(
-            request,
-            OperationTypeEnum.INVOKE,
-            FunctionEnum.UPSERT,
-            Base64.getEncoder().encodeToString(requestArgs.getBytes(StandardCharsets.UTF_8))
-        );
-        if (responseDTO == null) {
-            throw new BadRequestProblem("保存核算数据失败", "获取响应体失败");
-        }
-        if (responseDTO.getSuccess() == null || !responseDTO.getSuccess()) {
-            throw new BadRequestProblem("保存核算数据失败", responseDTO.getMessage());
-        }
     }
 
     /**
