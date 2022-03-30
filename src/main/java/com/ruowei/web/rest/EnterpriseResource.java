@@ -77,11 +77,9 @@ public class EnterpriseResource {
         if (enterprise.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        enterpriseRepository
-            .getFirstByCodeAndId(enterprise.getCode(), enterprise.getId())
-            .ifPresent(so -> {
-                throw new BadRequestProblem("编辑失败", "企业编码已存在");
-            });
+        if (enterpriseRepository.getFirstByCodeAndId(enterprise.getCode(), enterprise.getId()).isEmpty()) {
+            throw new BadRequestProblem("编辑失败", "企业编码已存在");
+        }
         Enterprise result = enterpriseRepository.save(enterprise);
         return ResponseEntity.ok().body(result);
     }
