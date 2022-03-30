@@ -143,19 +143,6 @@ public class EnterpriseResource {
         return ResponseEntity.ok().body("重置成功");
     }
 
-    @PostMapping("/enterprise/craft-dropdown")
-    @ApiOperation(value = "查询水厂下属工艺", notes = "作者：郑昊天")
-    public ResponseEntity<List<DropDownDTO>> getCraftDropdown(String enterpriseCode) {
-        List<Craft> crafts = craftRepository.findAllByEntCode(enterpriseCode);
-        List<DropDownDTO> dropDownList = new ArrayList<>();
-        for (Craft craft : crafts) {
-            DropDownDTO dropDownDTO = new DropDownDTO();
-            dropDownDTO.setId(craft.getId());
-            dropDownDTO.setName(craft.getCraftName());
-            dropDownList.add(dropDownDTO);
-        }
-        return ResponseEntity.ok().body(dropDownList);
-    }
 
 }
 
