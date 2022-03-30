@@ -161,7 +161,7 @@ public class UserJWTController {
             this.code = code;
         }
 
-        @JsonProperty("group_id")
+        @JsonProperty("group_code")
         String getGroupCode() {
             return groupCode;
         }
