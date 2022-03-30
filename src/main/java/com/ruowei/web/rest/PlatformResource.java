@@ -97,29 +97,32 @@ public class PlatformResource {
 
 
     @GetMapping("/platform/list")
-    @ApiOperation(value = "获取当前用户对应的企业列表接口", notes = "作者：张锴")
+    @ApiOperation(value = "获取当前用户对应的集团企业列表接口", notes = "作者：张锴")
     public ResponseEntity<PlatformDTO> getEnterpriseDropDown(UserEnterpriseDTO userEnterpriseDTO, Pageable pageable) {
         PlatformDTO platformDTO = new PlatformDTO();
-        OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
+        List<Group> groupResult = new ArrayList<>();
+        if (!(userEnterpriseDTO.getGroupCode() == null && userEnterpriseDTO.getCode() != null)) {
+            OptionalBooleanBuilder groupBuilder = new OptionalBooleanBuilder()
+                .notEmptyAnd(qGroup.groupCode::contains, userEnterpriseDTO.getGroupCode());
+            JPAQuery<Group> groupJPAQuery = jpaQueryFactory
+                .select(qGroup)
+                .from(qGroup)
+                .where(groupBuilder.build())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+            groupResult = groupJPAQuery.fetch();
+        }
+        OptionalBooleanBuilder enterpriseBuilder = new OptionalBooleanBuilder()
             .notEmptyAnd(qEnterprise.code::contains, userEnterpriseDTO.getCode())
             .notEmptyAnd(qEnterprise.groupCode::contains, userEnterpriseDTO.getGroupCode());
-        OptionalBooleanBuilder builder1 = new OptionalBooleanBuilder()
-            .notEmptyAnd(qGroup.groupCode::contains, userEnterpriseDTO.getGroupCode());
-        JPAQuery<Group> jpaQuery1 = jpaQueryFactory
-            .select(qGroup)
-            .from(qGroup)
-            .where(builder1.build())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize());
-        List<Group> groupResult = jpaQuery1.fetch();
-        JPAQuery<Enterprise> jpaQuery = jpaQueryFactory
+        JPAQuery<Enterprise> enterpriseJPAQuery = jpaQueryFactory
             .select(qEnterprise)
             .from(qEnterprise)
-            .where(builder.build())
+            .where(enterpriseBuilder.build())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize());
-        List<Enterprise> result = jpaQuery.fetch();
-        platformDTO.setEnterprises(result);
+        List<Enterprise> enterpriseResult = enterpriseJPAQuery.fetch();
+        platformDTO.setEnterprises(enterpriseResult);
         platformDTO.setGroups(groupResult);
         return ResponseEntity.ok(platformDTO);
     }
