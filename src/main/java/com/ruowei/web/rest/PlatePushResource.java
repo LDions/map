@@ -7,7 +7,6 @@ import com.ruowei.web.rest.errors.BadRequestAlertException;
 import com.ruowei.web.rest.vm.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liquibase.pro.packaged.S;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +28,12 @@ public class PlatePushResource {
     private final SewMeterRepository sewMeterRepository;
     private final SewEmiThresholdRepository sewEmiThresholdRepository;
     private final UserRepository userRepository;
+    private final EmiDataRepository emiDataRepository;
+    private final BeAssociatedRepository beAssociatedRepository;
+    private final CorrelationRepository correlationRepository;
 
 
-    public PlatePushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository) {
+    public PlatePushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository, EmiDataRepository emiDataRepository, BeAssociatedRepository beAssociatedRepository, CorrelationRepository correlationRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.groupRepository = groupRepository;
         this.craftRepository = craftRepository;
@@ -41,6 +43,9 @@ public class PlatePushResource {
         this.sewMeterRepository = sewMeterRepository;
         this.sewEmiThresholdRepository = sewEmiThresholdRepository;
         this.userRepository = userRepository;
+        this.emiDataRepository = emiDataRepository;
+        this.beAssociatedRepository = beAssociatedRepository;
+        this.correlationRepository = correlationRepository;
     }
 
     @PostMapping("/plate/comprehensive")
@@ -68,7 +73,10 @@ public class PlatePushResource {
                 ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
                 sewPotRepository.save(sewPot);
                 result.set("推送成功");
-                //TODO 新增校表数据
+                //校表数据
+                SewMeter sewMeter = new SewMeter();
+                ObjectUtils.copyPropertiesIgnoreNull(vm, sewMeter);
+                sewMeterRepository.save(sewMeter);
                 return group;
             }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", ""));
         return ResponseEntity.ok().body(result.get());
@@ -329,9 +337,99 @@ public class PlatePushResource {
     @PostMapping("/plate/decision_resultData")
     @Transactional
     @ApiOperation(value = "平台接收试点水厂决策预测计算结果数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> decisionData() {
+    public ResponseEntity<String> decisionData(@RequestBody PlateEmiDataVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
-
+        groupRepository.findByGroupCode(vm.getGroupCode())
+            .map(group -> {
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCode(vm.getEnterpriseCode(), group.getGroupCode());
+                if (!enterprise.isPresent()) {
+                    throw new BadRequestAlertException("水厂不存在", "", "");
+                }
+                EmiData emiData = new EmiData();
+                ObjectUtils.copyPropertiesIgnoreNull(vm, emiData);
+                emiDataRepository.save(emiData);
+                result.set("推送成功");
+//                emiDataRepository.findFirstByDataCodeAndEnterpriseCodeAndAcctype(vm.getDataCode(), vm.getEnterpriseCode(), vm.getAcctype())
+//                    .map(emiData -> {
+//                        ObjectUtils.copyPropertiesIgnoreNull(vm, emiData);
+//                        emiDataRepository.save(emiData);
+//                        return emiData;
+//                    }).orElseThrow(() -> new BadRequestAlertException("决策预测数据不存在", "", ""));
+//                result.set("推送成功");
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", ""));
         return ResponseEntity.ok().body(result.get());
     }
+
+    @PostMapping("/plate/group_decision_resultData")
+    @Transactional
+    @ApiOperation(value = "平台接收集团（非试点）手动决策预测计算结果数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> groupDecisionData(@RequestBody PlateEmiDataVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        groupRepository.findByGroupCode(vm.getGroupCode())
+            .map(group -> {
+                //非试点水厂
+                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCodeAndIsTry(vm.getEnterpriseCode(), group.getGroupCode(), false);
+                if (!enterprise.isPresent()) {
+                    throw new BadRequestAlertException("非试点水厂不存在", "", "");
+                }
+                EmiData emiData = new EmiData();
+                ObjectUtils.copyPropertiesIgnoreNull(vm, emiData);
+                emiDataRepository.save(emiData);
+                result.set("推送成功");
+                return group;
+            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", ""));
+        return ResponseEntity.ok().body(result.get());
+    }
+
+//    @PostMapping("/plate/associate")
+//    @Transactional
+//    @ApiOperation(value = "平台接收试点水厂新增编辑数据源关联数据", notes = "作者：韩宗晏")
+//    public ResponseEntity<String> associate(@RequestBody PlateAssociateVM vm) {
+//        AtomicReference<String> result = new AtomicReference<>("");
+//        groupRepository.findByGroupCode(vm.getGroupCode())
+//            .map(group -> {
+//                Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndGroupCode(vm.getEnterpriseCode(), group.getGroupCode());
+//                if (!enterprise.isPresent()) {
+//                    throw new BadRequestAlertException("水厂不存在", "", "");
+//                }
+//                if (vm.getOperate().equals(0)) {
+//                    //新增关联数据
+//                    BeAssociated beAssociated = new BeAssociated();
+//                    ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+//                    BeAssociated associate = beAssociatedRepository.save(beAssociated);
+//                    vm.getRelation().forEach(s -> {
+//                        Correlation correlation = new Correlation();
+//                        correlation.setRelationTarget(s);
+//                        correlation.setRelevanceId(associate.getId());
+//                    });
+//                } else {
+//                    //编辑关联数据  TODO  根据水厂编码和关联编码查询确定一条关联信息
+//                    beAssociatedRepository.findFirstByAssociatedCode(vm.getAssociatedCode())
+//                        .map(beAssociated -> {
+//                            ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+//                            correlationRepository.deleteAllByRelevanceId(beAssociated.getId());
+//                            vm.getRelation().forEach(s -> {
+//                                Correlation correlation = new Correlation();
+//                                correlation.setRelationTarget(s);
+//                                correlation.setRelevanceId(beAssociated.getId());
+//                                correlationRepository.save(correlation);
+//                            });
+//                            return beAssociated;
+//                        }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
+//                }
+//                return group;
+//            }).orElseThrow(() -> new BadRequestAlertException("集团不存在", "", ""));
+//        return ResponseEntity.ok().body(result.get());
+//    }
+//
+//    @PostMapping("/plate/group_associate")
+//    @Transactional
+//    @ApiOperation(value = "平台接收集团（非试点水厂）新增编辑数据源关联数据", notes = "作者：韩宗晏")
+//    public ResponseEntity<String> associateGroup(@RequestBody PlateAssociateVM vm) {
+//        AtomicReference<String> result = new AtomicReference<>("");
+//
+//
+//        return ResponseEntity.ok().body(result.get());
+//    }
 }

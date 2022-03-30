@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface BeAssociatedRepository extends JpaRepository<BeAssociated, Long>, QuerydslPredicateExecutor<BeAssociated> {
 
     Optional<BeAssociated> findByBeAssociatedName(String name);
+
+    Optional<BeAssociated> findFirstByAssociatedCode(String associatedCode);
 }

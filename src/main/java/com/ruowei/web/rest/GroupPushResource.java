@@ -29,8 +29,11 @@ public class GroupPushResource {
     private final SewMeterRepository sewMeterRepository;
     private final SewEmiThresholdRepository sewEmiThresholdRepository;
     private final UserRepository userRepository;
+    private final EmiDataRepository emiDataRepository;
+    private final BeAssociatedRepository beAssociatedRepository;
+    private final CorrelationRepository correlationRepository;
 
-    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository) {
+    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository, EmiDataRepository emiDataRepository, BeAssociatedRepository beAssociatedRepository, CorrelationRepository correlationRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.groupRepository = groupRepository;
         this.craftRepository = craftRepository;
@@ -40,6 +43,9 @@ public class GroupPushResource {
         this.sewMeterRepository = sewMeterRepository;
         this.sewEmiThresholdRepository = sewEmiThresholdRepository;
         this.userRepository = userRepository;
+        this.emiDataRepository = emiDataRepository;
+        this.beAssociatedRepository = beAssociatedRepository;
+        this.correlationRepository = correlationRepository;
     }
 
     @PostMapping("/comprehensive")
@@ -63,7 +69,10 @@ public class GroupPushResource {
         SewPot sewPot = new SewPot();
         ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
         sewPotRepository.save(sewPot);
-        //TODO 新增校表数据
+        //校表数据
+        SewMeter sewMeter = new SewMeter();
+        ObjectUtils.copyPropertiesIgnoreNull(vm, sewMeter);
+        sewMeterRepository.save(sewMeter);
         result = "推送成功";
         return ResponseEntity.ok().body(result);
     }
@@ -242,9 +251,62 @@ public class GroupPushResource {
     @PostMapping("/decision_resultData")
     @Transactional
     @ApiOperation(value = "集团接收试点水厂决策预测计算结果数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> decisionData() {
+    public ResponseEntity<String> decisionData(@RequestBody EmiDataVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCode(vm.getEnterpriseCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("该水厂不存在", "", "");
+        }
+        EmiData emiData = new EmiData();
+        ObjectUtils.copyPropertiesIgnoreNull(vm, emiData);
+        emiDataRepository.save(emiData);
+//        //根据编码 水厂编码 核算方式确定是集团中哪个水厂的哪条决策数据
+//        emiDataRepository.findFirstByDataCodeAndEnterpriseCodeAndAcctype(vm.getDataCode(), vm.getEnterpriseCode(), vm.getAcctype())
+//            .map(emiData -> {
+//                ObjectUtils.copyPropertiesIgnoreNull(vm, emiData);
+//                emiDataRepository.save(emiData);
+//                return emiData;
+//            }).orElseThrow(() -> new BadRequestAlertException("决策预测数据不存在", "", ""));
+        result.set("推送成功");
+        return ResponseEntity.ok().body(result.get());
+    }
 
+    @PostMapping("/associate")
+    @Transactional
+    @ApiOperation(value = "集团接收试点水厂新增编辑数据源关联数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> associate(@RequestBody AssociateVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCode(vm.getEnterpriseCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("该水厂不存在", "", "");
+        }
+        if (vm.getOperate().equals(0)) {
+            //新增关联数据
+            BeAssociated beAssociated = new BeAssociated();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+            BeAssociated associate = beAssociatedRepository.save(beAssociated);
+            vm.getRelation().forEach(s -> {
+                Correlation correlation = new Correlation();
+                correlation.setRelationTarget(s);
+                correlation.setRelevanceId(associate.getId());
+            });
+            result.set("推送成功");
+        } else {
+            //编辑关联数据 TODO  根据水厂编码和关联编码查询确定一条关联信息
+            beAssociatedRepository.findFirstByAssociatedCode(vm.getAssociatedCode())
+                .map(beAssociated -> {
+                    ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+                    correlationRepository.deleteAllByRelevanceId(beAssociated.getId());
+                    vm.getRelation().forEach(s -> {
+                        Correlation correlation = new Correlation();
+                        correlation.setRelationTarget(s);
+                        correlation.setRelevanceId(beAssociated.getId());
+                        correlationRepository.save(correlation);
+                    });
+                    return beAssociated;
+                }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
+            result.set("推送成功");
+        }
         return ResponseEntity.ok().body(result.get());
     }
 }
