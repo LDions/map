@@ -25,7 +25,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/api")
-@Api(tags = "污水核算")
+@Api(tags = "核算展示")
 @Transactional
 public class SewEmiResource {
 
@@ -39,21 +39,19 @@ public class SewEmiResource {
         this.sewEmiService = sewEmiService;
         this.applicationProperties = applicationProperties;
     }
-
-    @PostMapping("/carbon-emission/water/accounting")
-    @ApiOperation(value = "污水数据核算接口", notes = "作者：")
     //TODO 核算
-    public ResponseEntity<SewEmiAccountOutputDTO> accounting(@Valid @RequestBody SewEmiAccountVM vm,
-                                                             @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+//    @PostMapping("/carbon-emission/water/accounting")
+//    @ApiOperation(value = "数据核算接口", notes = "作者：")
+//    public ResponseEntity<SewEmiAccountOutputDTO> accounting(@Valid @RequestBody SewEmiAccountVM vm,
+//                                                             @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
-        String documentCode = "HS".concat(new SimpleDateFormat("yyyyMMdd").format(new Date())).concat(String.valueOf(YitIdHelper.nextId()));
-        SewEmiAccountOutputDTO sewEmiAccountOutputDTO = new SewEmiAccountOutputDTO(
-            vm.getAccYear(),
-            vm.getAccMonth(),
-            documentCode,
-            userModel.getEnterpriseName()
-        );
-        return ResponseEntity.ok().body(sewEmiAccountOutputDTO);
-    }
+//        String documentCode = "HS".concat(new SimpleDateFormat("yyyyMMdd").format(new Date())).concat(String.valueOf(YitIdHelper.nextId()));
+//        SewEmiAccountOutputDTO sewEmiAccountOutputDTO = new SewEmiAccountOutputDTO(
+//            vm.getAccYear(),
+//            vm.getAccMonth(),
+//            documentCode
+//        );
+//        return ResponseEntity.ok().body(sewEmiAccountOutputDTO);
+//    }
 
 }

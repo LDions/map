@@ -129,19 +129,19 @@ public class EnterpriseResource {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/enterprise/reset/{code}")
-    @ApiOperation(value = "重置企业密码接口", notes = "作者：张锴")
-    public ResponseEntity<String> resetEnterprisePassword(@PathVariable String code) {
-        enterpriseRepository
-            .findByCode(code)
-            .orElseThrow(() -> {
-                throw new BadRequestProblem("重置失败", "该企业不存在");
-            });
-        User user = userRepository.findByEnterpriseCode(code).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到业主用户"));
-        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
-        userRepository.save(user);
-        return ResponseEntity.ok().body("重置成功");
-    }
+//    @PostMapping("/enterprise/reset/{code}")
+//    @ApiOperation(value = "重置企业密码接口", notes = "作者：张锴")
+//    public ResponseEntity<String> resetEnterprisePassword(@PathVariable String code) {
+//        enterpriseRepository
+//            .findByCode(code)
+//            .orElseThrow(() -> {
+//                throw new BadRequestProblem("重置失败", "该企业不存在");
+//            });
+//        User user = userRepository.findByEnterpriseCode(code).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到业主用户"));
+//        user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+//        userRepository.save(user);
+//        return ResponseEntity.ok().body("重置成功");
+//    }
 
 
 }
