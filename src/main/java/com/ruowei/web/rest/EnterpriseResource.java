@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.ResponseUtil;
+
+import javax.management.BadAttributeValueExpException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -88,11 +90,9 @@ public class EnterpriseResource {
     @ApiOperation(value = "查询企业详情接口", notes = "作者:孙小楠")
     public ResponseEntity<Enterprise> getEnterprise(@PathVariable String code) {
         log.debug("REST request to get enterprise : {}", code);
-        enterpriseRepository
-            .findByCode(code)
-            .ifPresent(so -> {
-                throw new BadRequestProblem("查询失败", "不存在该企业");
-            });
+        if (enterpriseRepository.findByCode(code).isEmpty()) {
+            throw new BadRequestProblem("查询失败", "不存在该企业");
+        }
         Optional<Enterprise> optional = enterpriseRepository.findByCode(code);
         return ResponseUtil.wrapOrNotFound(optional);
     }
