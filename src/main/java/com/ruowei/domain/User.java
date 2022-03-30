@@ -68,6 +68,10 @@ public class User implements Serializable {
     @Column(name = "user_code")
     private String userCode;
 
+    @ApiModelProperty(value = "是否删除")
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
+
     /**
      * 集团数据推送状态
      */
@@ -219,6 +223,14 @@ public class User implements Serializable {
     }
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
