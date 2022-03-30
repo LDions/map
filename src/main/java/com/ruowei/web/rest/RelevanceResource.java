@@ -3,25 +3,29 @@ package com.ruowei.web.rest;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.BeAssociated;
-import com.ruowei.domain.Correlation;
 
 import com.ruowei.domain.QBeAssociated;
 import com.ruowei.repository.BeAssociatedRepository;
-import com.ruowei.repository.CorrelationRepository;
+import com.ruowei.security.UserModel;
 import com.ruowei.util.PageUtil;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.CollectQM;
 import com.ruowei.web.rest.vm.RelevanceBeVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -33,20 +37,22 @@ public class RelevanceResource {
 
 
     private final BeAssociatedRepository beAssociatedRepository;
-    private final CorrelationRepository correlationRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final QBeAssociated qBeAssociated = QBeAssociated.beAssociated;
 
-    public RelevanceResource(BeAssociatedRepository beAssociatedRepository, CorrelationRepository correlationRepository, JPAQueryFactory jpaQueryFactory) {
+    public RelevanceResource(BeAssociatedRepository beAssociatedRepository, JPAQueryFactory jpaQueryFactory) {
 
         this.beAssociatedRepository = beAssociatedRepository;
-        this.correlationRepository = correlationRepository;
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @PostMapping("/relevance")
     @ApiOperation(value = "关联信息新增", notes = "作者：董玉祥")
-    public ResponseEntity<String> relevance(@RequestBody CollectQM qm) {
+    public ResponseEntity<String> relevance(@RequestBody CollectQM qm, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+
+        if (userModel.getcode() == null) {
+            throw new BadRequestProblem("新增失败", "您不能进行关联数据的的新增操作");
+        }
 
         beAssociatedRepository.findByBeAssociatedName(qm.getBeAssociated())
             .ifPresent(x -> {
@@ -54,34 +60,30 @@ public class RelevanceResource {
             });
         BeAssociated beAssociated = new BeAssociated();
         beAssociated.setBeAssociatedName(qm.getBeAssociated());
-        long id = beAssociatedRepository.save(beAssociated).getId();
-        for (String string : qm.getRelation()) {
-            Correlation correlation = new Correlation();
-            correlation.setRelationTarget(string);
-            correlation.setRelevanceId(id);
-            correlationRepository.save(correlation);
-        }
-
+        beAssociated.setRelationTarget(qm.getRelation().stream()
+            .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
+        beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
+        beAssociatedRepository.save(beAssociated);
         return ResponseEntity.ok().body("新增成功");
     }
 
     @PostMapping("/relevance_modify")
     @ApiOperation(value = "编辑关联信息", notes = "作者：董玉祥")
-    public ResponseEntity<String> relevanceModify(@RequestBody CollectQM qm) {
+    public ResponseEntity<String> relevanceModify(@RequestBody CollectQM qm, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
+        if (StringUtils.isBlank(userModel.getcode())) {
+            throw new BadRequestProblem("编辑失败", "您不能进行关联数据的的编辑操作");
+        }
         BeAssociated beAssociated = beAssociatedRepository.findById(qm.getId())
             .orElseThrow(() -> {
                 throw new BadRequestProblem("修改失败", "该数据无关联信息，请先创建再进行修改");
             });
         beAssociated.setBeAssociatedName(qm.getBeAssociated());
+        beAssociated.setRelationTarget(qm.getRelation().stream()
+            .filter(string -> !string.isEmpty()).collect(Collectors.joining(",")));
+        beAssociated.setBeAssociatedEnterpriseCode(userModel.getcode());
         beAssociatedRepository.save(beAssociated);
-        correlationRepository.deleteAllByRelevanceId(qm.getId());
-        for (String string : qm.getRelation()) {
-            Correlation correlation = new Correlation();
-            correlation.setRelationTarget(string);
-            correlation.setRelevanceId(qm.getId());
-            correlationRepository.save(correlation);
-        }
+
         return ResponseEntity.ok().body("修改成功");
     }
 
@@ -90,17 +92,11 @@ public class RelevanceResource {
     public ResponseEntity<CollectQM> relevanceModify(@RequestParam Long id) {
 
         BeAssociated beAssociated = beAssociatedRepository.findById(id).orElseThrow(() -> {
-            throw new BadRequestProblem("删除失败", "该数据无关联信息，请先创建再进行删除");
+            throw new BadRequestProblem("编辑失败", "该数据无关联信息，请先创建再进行编辑");
         });
         CollectQM collectQM = new CollectQM();
         collectQM.setBeAssociated(beAssociated.getBeAssociatedName());
-        List<Correlation> correlations = correlationRepository.findByRelevanceId(beAssociated.getId());
-        List<String> list = new ArrayList<>();
-        for (Correlation correlation : correlations) {
-            list.add(correlation.getRelationTarget());
-        }
-        collectQM.setRelation(list);
-
+        collectQM.setRelation(Arrays.asList(beAssociated.getRelationTarget().split(",")));
         return ResponseEntity.ok().body(collectQM);
     }
 
@@ -121,19 +117,14 @@ public class RelevanceResource {
             collectQM.setTotal(total);
             //存储被关联数据信息
             collectQM.setBeAssociated(b.getBeAssociatedName());
-            //通过被关联数据id查关联数据
-            List<Correlation> correlations = correlationRepository.findByRelevanceId(b.getId());
-            List<String> list = new ArrayList<>();
-            for (Correlation correlation : correlations) {
-                list.add(correlation.getRelationTarget());
-            }
-            collectQM.setRelation(list);
+            //关联数据
+            collectQM.setRelation(Arrays.asList(b.getRelationTarget().split(",")));
             collectQMS.add(collectQM);
         }
 
-        if (collectQMS.size()==0){
+        if (collectQMS.size() == 0) {
             return ResponseEntity.ok().body(collectQMS);
-        }else {
+        } else {
             return ResponseEntity.ok().body(PageUtil.startPage(collectQMS, Integer.valueOf(page), Integer.valueOf(size)));
         }
 
@@ -141,13 +132,15 @@ public class RelevanceResource {
 
     @PostMapping("/relevance_delete")
     @ApiOperation(value = "关联信息删除", notes = "作者：董玉祥")
-    public ResponseEntity<String> relevanceDelete(Long id) {
+    public ResponseEntity<String> relevanceDelete(Long id, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
+        if (StringUtils.isBlank(userModel.getcode())) {
+            throw new BadRequestProblem("删除失败", "您不能进行关联数据的的删除操作");
+        }
         beAssociatedRepository.delete(beAssociatedRepository.findById(id)
             .orElseThrow(() -> {
                 throw new BadRequestProblem("删除失败", "该数据无关联信息，请先创建再进行删除");
             }));
-        correlationRepository.deleteAllByRelevanceId(id);
         return ResponseEntity.ok().body("删除成功");
     }
 
@@ -156,7 +149,7 @@ public class RelevanceResource {
     public ResponseEntity<List<RelevanceBeVM>> relevanceName() {
 
         List<RelevanceBeVM> relevanceBeVMS = new ArrayList<>();
-        for (BeAssociated beAssociated : beAssociatedRepository.findAll()){
+        for (BeAssociated beAssociated : beAssociatedRepository.findAll()) {
             RelevanceBeVM relevanceBeVM = new RelevanceBeVM();
             relevanceBeVM.setId(beAssociated.getId());
             relevanceBeVM.setTarget(beAssociated.getBeAssociatedName());

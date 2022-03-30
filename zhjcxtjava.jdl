@@ -285,18 +285,14 @@ enum SendStatusType {
     SUCCESS,
     FAILED
 }
-/** 被指标关联表 */
+/** 被关联指标表 */
 entity BeAssociated(sew_be_associated){
     beAssociatedName String /** 数据名称 */
     associateCode String /** 关联编码 */
     status SendStatusType required /** 集团数据推送状态 */
     plateStatus SendStatusType required /** 平台数据推送状态 */
-}
-
-/** 指标关联表 */
-entity Correlation(sew_correlation){
-    relationTarget String /** 数据名称 */
-    relevanceId Long /** 关联数据Id */
+    relationTarget String /** 关联数据名称 */
+    beAssociatedEnterpriseCode String /** 所属水厂Code */
 }
 
 /** 数据字典 */

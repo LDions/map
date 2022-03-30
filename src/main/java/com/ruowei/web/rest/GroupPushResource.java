@@ -31,9 +31,9 @@ public class GroupPushResource {
     private final UserRepository userRepository;
     private final EmiDataRepository emiDataRepository;
     private final BeAssociatedRepository beAssociatedRepository;
-    private final CorrelationRepository correlationRepository;
+//    private final CorrelationRepository correlationRepository;
 
-    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository, EmiDataRepository emiDataRepository, BeAssociatedRepository beAssociatedRepository, CorrelationRepository correlationRepository) {
+    public GroupPushResource(EnterpriseRepository enterpriseRepository, GroupRepository groupRepository, CraftRepository craftRepository, SewProcessRepository sewProcessRepository, SewSluRepository sewSluRepository, SewPotRepository sewPotRepository, SewMeterRepository sewMeterRepository, SewEmiThresholdRepository sewEmiThresholdRepository, UserRepository userRepository, EmiDataRepository emiDataRepository, BeAssociatedRepository beAssociatedRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.groupRepository = groupRepository;
         this.craftRepository = craftRepository;
@@ -45,7 +45,7 @@ public class GroupPushResource {
         this.userRepository = userRepository;
         this.emiDataRepository = emiDataRepository;
         this.beAssociatedRepository = beAssociatedRepository;
-        this.correlationRepository = correlationRepository;
+//        this.correlationRepository = correlationRepository;
     }
 
     @PostMapping("/comprehensive")
@@ -271,42 +271,42 @@ public class GroupPushResource {
         return ResponseEntity.ok().body(result.get());
     }
 
-    @PostMapping("/associate")
-    @Transactional
-    @ApiOperation(value = "集团接收试点水厂新增编辑数据源关联数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> associate(@RequestBody AssociateVM vm) {
-        AtomicReference<String> result = new AtomicReference<>("");
-        Optional<Enterprise> enterprise = enterpriseRepository.findByCode(vm.getEnterpriseCode());
-        if (!enterprise.isPresent()) {
-            throw new BadRequestAlertException("该水厂不存在", "", "");
-        }
-        if (vm.getOperate().equals(0)) {
-            //新增关联数据
-            BeAssociated beAssociated = new BeAssociated();
-            ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
-            BeAssociated associate = beAssociatedRepository.save(beAssociated);
-            vm.getRelation().forEach(s -> {
-                Correlation correlation = new Correlation();
-                correlation.setRelationTarget(s);
-                correlation.setRelevanceId(associate.getId());
-            });
-            result.set("推送成功");
-        } else {
-            //编辑关联数据 TODO  根据水厂编码和关联编码查询确定一条关联信息
-            beAssociatedRepository.findFirstByAssociatedCode(vm.getAssociatedCode())
-                .map(beAssociated -> {
-                    ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
-                    correlationRepository.deleteAllByRelevanceId(beAssociated.getId());
-                    vm.getRelation().forEach(s -> {
-                        Correlation correlation = new Correlation();
-                        correlation.setRelationTarget(s);
-                        correlation.setRelevanceId(beAssociated.getId());
-                        correlationRepository.save(correlation);
-                    });
-                    return beAssociated;
-                }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
-            result.set("推送成功");
-        }
-        return ResponseEntity.ok().body(result.get());
-    }
+//    @PostMapping("/associate")
+//    @Transactional
+//    @ApiOperation(value = "集团接收试点水厂新增编辑数据源关联数据", notes = "作者：韩宗晏")
+//    public ResponseEntity<String> associate(@RequestBody AssociateVM vm) {
+//        AtomicReference<String> result = new AtomicReference<>("");
+//        Optional<Enterprise> enterprise = enterpriseRepository.findByCode(vm.getEnterpriseCode());
+//        if (!enterprise.isPresent()) {
+//            throw new BadRequestAlertException("该水厂不存在", "", "");
+//        }
+//        if (vm.getOperate().equals(0)) {
+//            //新增关联数据
+//            BeAssociated beAssociated = new BeAssociated();
+//            ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+//            BeAssociated associate = beAssociatedRepository.save(beAssociated);
+//            vm.getRelation().forEach(s -> {
+//                Correlation correlation = new Correlation();
+//                correlation.setRelationTarget(s);
+//                correlation.setRelevanceId(associate.getId());
+//            });
+//            result.set("推送成功");
+//        } else {
+//            //编辑关联数据 TODO  根据水厂编码和关联编码查询确定一条关联信息
+//            beAssociatedRepository.findFirstByAssociatedCode(vm.getAssociatedCode())
+//                .map(beAssociated -> {
+//                    ObjectUtils.copyPropertiesIgnoreNull(vm, beAssociated);
+//                    correlationRepository.deleteAllByRelevanceId(beAssociated.getId());
+//                    vm.getRelation().forEach(s -> {
+//                        Correlation correlation = new Correlation();
+//                        correlation.setRelationTarget(s);
+//                        correlation.setRelevanceId(beAssociated.getId());
+//                        correlationRepository.save(correlation);
+//                    });
+//                    return beAssociated;
+//                }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
+//            result.set("推送成功");
+//        }
+//        return ResponseEntity.ok().body(result.get());
+//    }
 }

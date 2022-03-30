@@ -12,6 +12,9 @@ public class CollectQM {
 
     private Long id;
 
+    @ApiModelProperty(value = "被关联数据所属工艺code")
+    private String entper;
+
     @ApiModelProperty(value = "被关联的数据")
     private String beAssociated;
 

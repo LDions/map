@@ -63,7 +63,6 @@ public class CacheConfiguration {
             createCache(cm, com.ruowei.domain.SewMeter.class.getName());
             createCache(cm, com.ruowei.domain.Craft.class.getName());
             createCache(cm, com.ruowei.domain.SewEmiThreshold.class.getName());
-            createCache(cm, com.ruowei.domain.Correlation.class.getName());
             createCache(cm, com.ruowei.domain.BeAssociated.class.getName());
             // jhipster-needle-ehcache-add-entry
         };

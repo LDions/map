@@ -38,14 +38,14 @@ public class SituationAnalysisUtil {
     public SituationVM getSituationVM(String beginTime, String endTime, String subsection, String target, String craftCode) {
 
         SituationVM situationVM = new SituationVM();
-        List<SituationAnalysisVM> situationAnalysisVMS = new ArrayList<>();
         List<SituationAnalysisVM> situationAnalysisVMList = new ArrayList<>();
-        situationAnalysisVMS = selectUtil.getSome(target, beginTime, endTime, craftCode);
+        List<SituationAnalysisVM> situationAnalysisVMS = selectUtil.getSome(target, beginTime, endTime, craftCode);
 
         Double avg;
         Double sum = Double.valueOf(0);
         Double sumValue = Double.valueOf(0);
-        Calendar calendar = situationAnalysisVMS.get(0).getTime();
+        Calendar calendar = GregorianCalendar.from(ZonedDateTime.ofInstant(sewEmiService.getInstant(beginTime), ZoneId.systemDefault()));
+
         switch (subsection) {
             case "date":
                 situationVM.setTarget(target);
@@ -61,7 +61,7 @@ public class SituationAnalysisUtil {
                         sum = sum + 1;
                         sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sumValue/sum;
+                        avg = sumValue / sum;
                         situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
                         situationAnalysisVMList.add(situationAnalysisVM);
@@ -70,73 +70,71 @@ public class SituationAnalysisUtil {
                         calendar.add(Calendar.HOUR, 1);
                     }
                 }
-                //calendar是单例模式，降低一个数据的时间还原
-                calendar = GregorianCalendar.from(ZonedDateTime.ofInstant(sewEmiService.getInstant(beginTime), ZoneId.systemDefault()));
                 situationVM.setValues(situationAnalysisVMList);
                 break;
-           /* case "month":
+            case "month":
+                situationVM.setTarget(target);
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    calendar = situationAnalysisVMS.get(0).getTime();
-                    calendar.add(Calendar.DATE, 1);
-                    if (s.getTime().before(calendar)) {
-                        sum.add(BigDecimal.valueOf(1));
-                        sumValue.add(s.getValue());
+                    if (calendar.after(s.getTime())) {
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        situationVM.setSource(source);
-                        situationVM.setTarget(target);
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sum.divide(sumValue);
-                        situationAnalysisVM.setValue(avg);
+                        avg = sumValue / sum;
+                        situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
-                        situationVM.setValues(situationAnalysisVMS);
-                        sum = new BigDecimal("1");
-                        sumValue = new BigDecimal("0.000001");
+                        situationAnalysisVMList.add(situationAnalysisVM);
+                        sum = Double.valueOf(0);
+                        sumValue = Double.valueOf(0);
                         calendar.add(Calendar.DATE, 1);
                     }
                 }
+                situationVM.setValues(situationAnalysisVMList);
                 break;
             case "quarter":
+                situationVM.setTarget(target);
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    calendar = situationAnalysisVMS.get(0).getTime();
-                    calendar.add(Calendar.DATE, 7);
-                    if (s.getTime().before(calendar)) {
-                        sum.add(BigDecimal.valueOf(1));
-                        sumValue.add(s.getValue());
+                    if (calendar.after(s.getTime())) {
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        situationVM.setSource(source);
-                        situationVM.setTarget(target);
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sum.divide(sumValue);
-                        situationAnalysisVM.setValue(avg);
+                        avg = sumValue / sum;
+                        situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
-                        situationVM.setValues(situationAnalysisVMS);
-                        sum = new BigDecimal("1");
-                        sumValue = new BigDecimal("0.000001");
+                        situationAnalysisVMList.add(situationAnalysisVM);
+                        sum = Double.valueOf(0);
+                        sumValue = Double.valueOf(0);
                         calendar.add(Calendar.DATE, 7);
                     }
                 }
+                situationVM.setValues(situationAnalysisVMList);
                 break;
             case "year":
+                situationVM.setTarget(target);
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    calendar = situationAnalysisVMS.get(0).getTime();
-                    calendar.add(Calendar.DATE, 7);
-                    if (s.getTime().before(calendar)) {
-                        sum.add(BigDecimal.valueOf(1));
-                        sumValue.add(s.getValue());
+                    if (calendar.after(s.getTime())) {
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        situationVM.setSource(source);
-                        situationVM.setTarget(target);
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sum.divide(sumValue);
-                        situationAnalysisVM.setValue(avg);
+                        avg = sumValue / sum;
+                        situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
-                        situationVM.setValues(situationAnalysisVMS);
-                        sum = new BigDecimal("1");
-                        sumValue = new BigDecimal("0.000001");
+                        situationAnalysisVMList.add(situationAnalysisVM);
+                        sum = Double.valueOf(0);
+                        sumValue = Double.valueOf(0);
                         calendar.add(Calendar.DATE, 7);
                     }
                 }
-                break;*/
+                situationVM.setValues(situationAnalysisVMList);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + subsection);
         }
@@ -147,107 +145,101 @@ public class SituationAnalysisUtil {
     //根据传入的时间段的长度不同，算不同时间段的平均数,封装到SituationAnalysisVM
     public List<SituationAnalysisVM> getSituationAnalysisVM(String beginTime, String endTime, String subsection, String target, String craftCode) {
 
-        SituationVM situationVM = new SituationVM();
-        List<SituationAnalysisVM> situationAnalysisVMS = new ArrayList<>();
         List<SituationAnalysisVM> situationAnalysisVMList = new ArrayList<>();
-        situationAnalysisVMS = selectUtil.getSome(target, beginTime, endTime, craftCode);
+        List<SituationAnalysisVM> situationAnalysisVMS = selectUtil.getSome(target, beginTime, endTime, craftCode);
 
-        Double avg = Double.valueOf(0);
+        Double avg;
         Double sum = Double.valueOf(0);
         Double sumValue = Double.valueOf(0);
-        Calendar calendar = situationAnalysisVMS.get(0).getTime();
-        calendar.add(Calendar.HOUR, 1);
-        int time = -1;
+        Calendar calendar = GregorianCalendar.from(ZonedDateTime.ofInstant(sewEmiService.getInstant(beginTime), ZoneId.systemDefault()));
         switch (subsection) {
             case "date":
                 situationAnalysisVMList = situationAnalysisVMS;
                 break;
             case "week":
-                situationVM.setTarget(target);
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    if (s.getTime().before(calendar)) {
+                    if (calendar.after(s.getTime())) {
                         sum = sum + 1;
                         sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        calendar.add(Calendar.HOUR, 1);
-                        time=time-1;
                         sum = sum + 1;
                         sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sumValue/sum;
+                        avg = sumValue / sum;
                         situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
                         situationAnalysisVMList.add(situationAnalysisVM);
+
+                        //数据还原
                         sum = Double.valueOf(0);
                         sumValue = Double.valueOf(0);
                         calendar.add(Calendar.HOUR, 1);
                     }
                 }
-                calendar.add(Calendar.HOUR, time);
                 break;
-           /* case "month":
+            case "month":
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    calendar = situationAnalysisVMS.get(0).getTime();
-                    calendar.add(Calendar.DATE, 1);
-                    if (s.getTime().before(calendar)) {
-                        sum.add(BigDecimal.valueOf(1));
-                        sumValue.add(s.getValue());
+                    if (calendar.after(s.getTime())) {
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        situationVM.setSource(source);
-                        situationVM.setTarget(target);
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sum.divide(sumValue);
-                        situationAnalysisVM.setValue(avg);
+                        avg = sumValue / sum;
+                        situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
-                        situationVM.setValues(situationAnalysisVMS);
-                        sum = new BigDecimal("1");
-                        sumValue = new BigDecimal("0.000001");
+                        situationAnalysisVMList.add(situationAnalysisVM);
+
+                        //数据还原
+                        sum = Double.valueOf(0);
+                        sumValue = Double.valueOf(0);
                         calendar.add(Calendar.DATE, 1);
                     }
                 }
                 break;
             case "quarter":
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    calendar = situationAnalysisVMS.get(0).getTime();
-                    calendar.add(Calendar.DATE, 7);
-                    if (s.getTime().before(calendar)) {
-                        sum.add(BigDecimal.valueOf(1));
-                        sumValue.add(s.getValue());
+                    if (calendar.after(s.getTime())) {
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        situationVM.setSource(source);
-                        situationVM.setTarget(target);
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sum.divide(sumValue);
-                        situationAnalysisVM.setValue(avg);
+                        avg = sumValue / sum;
+                        situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
-                        situationVM.setValues(situationAnalysisVMS);
-                        sum = new BigDecimal("1");
-                        sumValue = new BigDecimal("0.000001");
+                        situationAnalysisVMList.add(situationAnalysisVM);
+
+                        //数据还原
+                        sum = Double.valueOf(0);
+                        sumValue = Double.valueOf(0);
                         calendar.add(Calendar.DATE, 7);
                     }
                 }
                 break;
             case "year":
                 for (SituationAnalysisVM s : situationAnalysisVMS) {
-                    calendar = situationAnalysisVMS.get(0).getTime();
-                    calendar.add(Calendar.DATE, 7);
-                    if (s.getTime().before(calendar)) {
-                        sum.add(BigDecimal.valueOf(1));
-                        sumValue.add(s.getValue());
+                    if (calendar.after(s.getTime())) {
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                     } else {
-                        situationVM.setSource(source);
-                        situationVM.setTarget(target);
+                        sum = sum + 1;
+                        sumValue = sumValue + s.getValue().toBigInteger().doubleValue();
                         SituationAnalysisVM situationAnalysisVM = new SituationAnalysisVM();
-                        avg = sum.divide(sumValue);
-                        situationAnalysisVM.setValue(avg);
+                        avg = sumValue / sum;
+                        situationAnalysisVM.setValue(BigDecimal.valueOf(avg));
                         situationAnalysisVM.setTime(s.getTime());
-                        situationVM.setValues(situationAnalysisVMS);
-                        sum = new BigDecimal("1");
-                        sumValue = new BigDecimal("0.000001");
+                        situationAnalysisVMList.add(situationAnalysisVM);
+
+                        //数据还原
+                        sum = Double.valueOf(0);
+                        sumValue = Double.valueOf(0);
                         calendar.add(Calendar.DATE, 7);
                     }
                 }
-                break;*/
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + subsection);
         }

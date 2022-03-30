@@ -4,7 +4,17 @@
     {
       "fieldName": "beAssociatedName",
       "fieldType": "String",
-      "javadoc": "数据名称"
+      "javadoc": "被关联数据名称"
+    },
+    {
+      "fieldName": "relationTarget",
+      "fieldType": "String",
+      "javadoc": "关联数据名称"
+    },
+    {
+      "fieldName": "beAssociatedCraftCode",
+      "fieldType": "String",
+      "javadoc": "被关联数据所属工艺Code"
     }
   ],
   "relationships": [],

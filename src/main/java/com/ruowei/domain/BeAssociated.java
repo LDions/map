@@ -23,11 +23,25 @@ public class BeAssociated {
     private Long id;
 
     /**
-     * 数据名称
+     * 被关联指标名称
      */
     @ApiModelProperty(value = "被关联数据名称")
     @Column(name = "be_associated_name")
     private String beAssociatedName;
+
+    /**
+     * 关联指标
+     */
+    @ApiModelProperty(value = "关联数据名称")
+    @Column(name = "relation_target")
+    private String relationTarget;
+
+    /**
+     * 被关联指标所属水厂Code
+     */
+    @ApiModelProperty(value = "所属水厂Code")
+    @Column(name = "be_associated_enterprise_code")
+    private String beAssociatedEnterpriseCode;
 
     /**
      * 关联编码
