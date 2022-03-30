@@ -2,7 +2,7 @@ package com.ruowei.util.excel;
 
 import com.ruowei.service.dto.SewEmiFactorDTO;
 import com.ruowei.web.rest.dto.CarbonEmiDataDTO;
-import com.ruowei.web.rest.dto.EmiFactorDTO;
+
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -164,133 +164,6 @@ public class ExcelExport {
             导出
 */
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            workbook.write(out);
-            return out.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 碳排放因子历史修改版本记录列表Excel生成
-     *
-     * @param list
-     * @return
-     */
-    public static byte[] createExcelSewageEmiFactor(List<EmiFactorDTO> list) {
-        try {
-            // 创建一个新的HSSFWorkbook对象
-            HSSFWorkbook workbook = new HSSFWorkbook();
-            // 创建一个Excel的工作表
-            HSSFSheet sheet = workbook.createSheet("碳排放因子历史修改版本记录列表");
-            workbook.setSheetName(0, "碳排放因子历史修改版本记录列表");//解决sheet名中文乱码问题
-            // 创建字体，红色、粗体
-            HSSFFont font = workbook.createFont();
-            font.setColor(HSSFFont.COLOR_NORMAL);
-            font.setBold(true);
-            font.setFontHeight((short) 5);
-            font.setFontName("宋体");
-            font.setFontHeightInPoints((short) 20);
-            // 创建单元格的格式
-            HSSFCellStyle style = workbook.createCellStyle(); // 样式对象
-            style.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直
-            style.setAlignment(HorizontalAlignment.CENTER);// 水平
-            style.setFont(font);
-            //表头字体
-            HSSFFont fontContent = workbook.createFont();
-            fontContent.setColor(HSSFFont.COLOR_NORMAL);
-            fontContent.setFontHeight((short) 5);
-            fontContent.setFontName("宋体");
-            fontContent.setFontHeightInPoints((short) 10);
-            //表格内容字体
-            HSSFFont fontSubstance = workbook.createFont();
-            fontSubstance.setColor(HSSFFont.COLOR_NORMAL);
-            fontSubstance.setBold(true);
-            fontSubstance.setFontHeight((short) 5);
-            fontSubstance.setFontName("宋体");
-            fontSubstance.setFontHeightInPoints((short) 10);
-            //表格外部样式
-            HSSFCellStyle styleContent = workbook.createCellStyle(); // 样式对象
-            styleContent.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直
-            styleContent.setAlignment(HorizontalAlignment.CENTER);// 水平
-            styleContent.setFont(fontContent);
-            HSSFCellStyle styleContent2 = workbook.createCellStyle(); // 样式对象
-            styleContent2.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直
-            styleContent2.setAlignment(HorizontalAlignment.CENTER);// 水平
-            styleContent2.setFont(fontContent);
-            //表格内容样式
-            HSSFCellStyle styleSubstance = workbook.createCellStyle(); // 样式对象
-            styleSubstance.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直
-            styleSubstance.setAlignment(HorizontalAlignment.CENTER);// 水平
-            styleSubstance.setFont(fontSubstance);
-            HSSFRow row = sheet.createRow((short) 0);
-            //合并单元格(前3行10列合并)
-            sheet.addMergedRegion(new CellRangeAddress(0, (short) 2, 0, (short) 4));
-            HSSFCell ce = row.createCell((short) 0);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-            String date = "_" + sdf.format(new Date());
-            ce.setCellValue("碳排放因子历史修改版本记录列表" + date); // 表格的第一行第一列显示的数据
-            ce.setCellStyle(style); // 样式，居中
-
-            styleContent2.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-            styleContent2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-/*
-            颜色选择
-*/
-            //橙色
-//            style.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
-//            styleSubstance.setFillForegroundColor(IndexedColors.LIGHT_ORANGE.getIndex());
-//            styleContent.setFillForegroundColor(IndexedColors.LEMON_CHIFFON.getIndex());
-            //蓝色
-//            style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-//            styleSubstance.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-//            styleContent.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
-            //绿色
-            style.setFillForegroundColor(IndexedColors.LIME.getIndex());
-            styleSubstance.setFillForegroundColor(IndexedColors.SEA_GREEN.getIndex());
-            styleContent.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
-            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            styleSubstance.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            styleContent.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
-            /*
-              表头
-             */
-            HSSFRow row2 = sheet.createRow((short) 3); //表格第4行
-            createExcelCell(row2, 0, styleSubstance, "序号");
-            createExcelCell(row2, 1, styleSubstance, "修改记录");
-            createExcelCell(row2, 2, styleSubstance, "操作员");
-            createExcelCell(row2, 3, styleSubstance, "修改时间");
-            createExcelCell(row2, 4, styleSubstance, "备注");
-            /*
-              添加内容
-             */
-            for (int i = 0; i < list.size(); i += 2) {
-                HSSFRow rows = sheet.createRow((short) i + 4);//表格内容是从第5行开始，每循环一次增加一行
-                createExcelCell(rows, 0, styleContent, String.valueOf(i + 1));
-                createExcelCell(rows, 1, styleContent, list.get(i).getVersionNum());
-                createExcelCell(rows, 2, styleContent, list.get(i).getOperatorName());
-                createExcelCell(rows, 4, styleContent, list.get(i).getModifyDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                createExcelCell(rows, 3, styleContent, list.get(i).getRemark());
-            }
-            for (int i = 1; i < list.size(); i += 2) {
-                HSSFRow rows = sheet.createRow((short) i + 4);//表格内容是从第5行开始，每循环一次增加一行
-                createExcelCell(rows, 0, styleContent2, String.valueOf(i + 1));
-                createExcelCell(rows, 1, styleContent2, list.get(i).getVersionNum());
-                createExcelCell(rows, 2, styleContent2, list.get(i).getOperatorName());
-                createExcelCell(rows, 4, styleContent2, list.get(i).getModifyDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                createExcelCell(rows, 3, styleContent2, list.get(i).getRemark());
-            }
-            sheet.autoSizeColumn((short) 0);
-            sheet.autoSizeColumn((short) 1);
-            sheet.autoSizeColumn((short) 2);
-            sheet.autoSizeColumn((short) 3);
-            sheet.autoSizeColumn((short) 4);
-            /*
-              导出
-             */
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             workbook.write(out);
             return out.toByteArray();

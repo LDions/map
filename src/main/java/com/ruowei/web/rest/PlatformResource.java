@@ -1,22 +1,28 @@
 package com.ruowei.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ruowei.domain.Enterprise;
+import com.ruowei.domain.*;
 import com.ruowei.repository.CraftRepository;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.GroupRepository;
 import com.ruowei.security.UserModel;
+import com.ruowei.util.OptionalBooleanBuilder;
 import com.ruowei.web.rest.dto.EnterpriseLocationDTO;
+import com.ruowei.web.rest.dto.GroupDTO;
+import com.ruowei.web.rest.dto.PlatformDTO;
+import com.ruowei.web.rest.dto.UserEnterpriseDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liquibase.pro.packaged.G;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -34,6 +40,9 @@ public class PlatformResource {
     private final GroupRepository groupRepository;
     private final EnterpriseRepository enterpriseRepository;
     private final CraftRepository craftRepository;
+    private QEnterprise qEnterprise = QEnterprise.enterprise;
+    private QGroup qGroup = QGroup.group;
+    private QUser qUser = QUser.user;
 
     public PlatformResource(ObjectMapper objectMapper, JPAQueryFactory jpaQueryFactory, GroupRepository groupRepository, EnterpriseRepository enterpriseRepository, CraftRepository craftRepository) {
         this.objectMapper = objectMapper;
@@ -86,4 +95,32 @@ public class PlatformResource {
         return ResponseEntity.ok().body(numMap);
     }
 
+
+    @GetMapping("/platform/list")
+    @ApiOperation(value = "获取当前用户对应的企业列表接口", notes = "作者：张锴")
+    public ResponseEntity<PlatformDTO> getEnterpriseDropDown(UserEnterpriseDTO userEnterpriseDTO, Pageable pageable) {
+        PlatformDTO platformDTO = new PlatformDTO();
+        OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
+            .notEmptyAnd(qEnterprise.code::contains, userEnterpriseDTO.getCode())
+            .notEmptyAnd(qEnterprise.groupCode::contains, userEnterpriseDTO.getGroupCode());
+        OptionalBooleanBuilder builder1 = new OptionalBooleanBuilder()
+            .notEmptyAnd(qGroup.groupCode::contains, userEnterpriseDTO.getGroupCode());
+        JPAQuery<Group> jpaQuery1 = jpaQueryFactory
+            .select(qGroup)
+            .from(qGroup)
+            .where(builder1.build())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize());
+        List<Group> groupResult = jpaQuery1.fetch();
+        JPAQuery<Enterprise> jpaQuery = jpaQueryFactory
+            .select(qEnterprise)
+            .from(qEnterprise)
+            .where(builder.build())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize());
+        List<Enterprise> result = jpaQuery.fetch();
+        platformDTO.setEnterprises(result);
+        platformDTO.setGroups(groupResult);
+        return ResponseEntity.ok(platformDTO);
+    }
 }
