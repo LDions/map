@@ -1,16 +1,20 @@
 package com.ruowei.web.rest;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ruowei.config.ApplicationProperties;
+import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
 import com.ruowei.domain.enumeration.SendStatusType;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
+import com.ruowei.service.PushService;
 import com.ruowei.service.SewEmiService;
 import com.ruowei.util.*;
 import com.ruowei.web.rest.dto.*;
+import com.ruowei.web.rest.enumeration.PushApi;
+import com.ruowei.web.rest.errors.BadRequestAlertException;
 import com.ruowei.web.rest.errors.BadRequestProblem;
 import com.ruowei.web.rest.vm.*;
 import io.swagger.annotations.Api;
@@ -32,7 +36,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.PaginationUtil;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -52,6 +55,8 @@ public class DataDisplayResource {
     private final SewPotRepository sewPotRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final EmiDataRepository emiDataRepository;
+    private final PushService pushService;
+    private final ApplicationProperties applicationProperties;
     private final SelectUtil selectUtil;
     private QEmiData qEmiData = QEmiData.emiData;
     private QGroup qGroup = QGroup.group;
@@ -64,7 +69,7 @@ public class DataDisplayResource {
     private final JPAQueryFactory queryFactory;
 
     public DataDisplayResource(SewEmiService sewEmiService, SewProcessRepository sewProcessRepository, GroupRepository groupRepository, CraftRepository craftRepository, EnterpriseRepository enterpriseRepository, SewSluRepository sewSluRepository,
-                               SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory, EmiDataRepository emiDataRepository, SelectUtil selectUtil, JPAQueryFactory queryFactory) {
+                               SewPotRepository sewPotRepository, JPAQueryFactory jpaQueryFactory, EmiDataRepository emiDataRepository, PushService pushService, ApplicationProperties applicationProperties, SelectUtil selectUtil, JPAQueryFactory queryFactory) {
         this.sewEmiService = sewEmiService;
         this.sewProcessRepository = sewProcessRepository;
         this.groupRepository = groupRepository;
@@ -74,6 +79,8 @@ public class DataDisplayResource {
         this.sewPotRepository = sewPotRepository;
         this.jpaQueryFactory = jpaQueryFactory;
         this.emiDataRepository = emiDataRepository;
+        this.pushService = pushService;
+        this.applicationProperties = applicationProperties;
         this.selectUtil = selectUtil;
         this.queryFactory = queryFactory;
     }
@@ -249,10 +256,45 @@ public class DataDisplayResource {
     @PostMapping("/daily_collection")
     @ApiOperation(value = "日报补录", notes = "作者：董玉祥")
     public ResponseEntity<Void> getTargetParticulars(@RequestBody SewPot sewPot) {
-
         sewPot.setPlateStatus(SendStatusType.FAILED);
         sewPot.setStatus(SendStatusType.FAILED);
-        sewPotRepository.save(sewPot);
+        SewPot pot = sewPotRepository.save(sewPot);
+        Optional<Craft> craft = craftRepository.findByCraftCode(pot.getCraftCode());
+        if (!craft.isPresent()) {
+            throw new BadRequestAlertException("日报所属的工艺不存在", "", "");
+        }
+        //只有试点水厂修改日报需推给集团和平台
+        enterpriseRepository.findByCode(craft.get().getCraftCode())
+            .ifPresent(enterprise -> {
+                if (enterprise.getIsTry()) {
+                    //试点水厂编辑日报推给集团
+                    try {
+                        EditSewPotVM editSewPotVM = new EditSewPotVM();
+                        ObjectUtils.copyPropertiesIgnoreNull(pot, editSewPotVM);
+                        editSewPotVM.setCode(enterprise.getCode());
+                        String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.UPDATE_SEWPOT.getUrl(), editSewPotVM);
+                        if (groupResult.equals(Constants.PUSH_RESULT)) {
+                            pot.setStatus(SendStatusType.SUCCESS);
+                        }
+                    } catch (Exception e) {
+                        pot.setStatus(SendStatusType.FAILED);
+                    }
+                    //试点水厂编辑日报推给平台
+                    try {
+                        PlateEditSewPotVM plateEditSewPotVM = new PlateEditSewPotVM();
+                        ObjectUtils.copyPropertiesIgnoreNull(pot, plateEditSewPotVM);
+                        plateEditSewPotVM.setCode(enterprise.getCode());
+                        plateEditSewPotVM.setIsTry(enterprise.getIsTry());
+                        plateEditSewPotVM.setGroupCode(enterprise.getGroupCode());
+                        String groupResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_UPDATE_SEWPOT.getUrl(), plateEditSewPotVM);
+                        if (groupResult.equals(Constants.PUSH_RESULT)) {
+                            pot.setPlateStatus(SendStatusType.SUCCESS);
+                        }
+                    } catch (Exception e) {
+                        pot.setPlateStatus(SendStatusType.FAILED);
+                    }
+                }
+            });
         return ResponseEntity.ok().build();
     }
 }
