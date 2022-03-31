@@ -138,18 +138,24 @@ public class GroupPushResource {
             throw new BadRequestAlertException("水厂不存在", "", "");
         }
         //根据工艺编码和编码确定唯一一条日报数据
-        sewPotRepository.findByCraftCodeAndPotCode(vm.getCraftCode(), vm.getPotCode())
-            .map(sewPot -> {
-                ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
-                //根据工艺编码查到工艺信息,确保与集团端的工艺信息能对应上
-                craftRepository.findByCraftCode(vm.getCraftCode())
-                    .ifPresent(craft -> {
-                        sewPot.setCraftId(craft.getId());
-                    });
-                sewPotRepository.save(sewPot);
-                result.set("推送成功");
-                return sewPot;
-            }).orElseThrow(() -> new BadRequestAlertException("日报数据不存在", "", "编辑失败"));
+        Optional<SewPot> sewPotOpt = sewPotRepository.findByCraftCodeAndPotCode(vm.getCraftCode(), vm.getPotCode());
+        if (sewPotOpt.isPresent()) {
+            SewPot sewPot = sewPotOpt.get();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
+            //根据工艺编码查到工艺信息,确保与集团端的工艺信息能对应上
+            craftRepository.findByCraftCode(vm.getCraftCode())
+                .ifPresent(craft -> {
+                    sewPot.setCraftId(craft.getId());
+                });
+            sewPotRepository.save(sewPot);
+            result.set("推送成功");
+        } else {
+            //日报表数据
+            SewPot sewPot = new SewPot();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, sewPot);
+            sewPotRepository.save(sewPot);
+            result.set("推送成功");
+        }
         return ResponseEntity.ok().body(result.get());
     }
 
@@ -163,13 +169,19 @@ public class GroupPushResource {
             throw new BadRequestAlertException("水厂不存在", "", "");
         }
         //根据工艺编码和编码确定唯一一条日报数据
-        sewMeterRepository.findByCraftCodeAndMeterCode(vm.getCraftCode(), vm.getMeterCode())
-            .map(sewMeter -> {
-                ObjectUtils.copyPropertiesIgnoreNull(vm, sewMeter);
-                sewMeterRepository.save(sewMeter);
-                result.set("推送成功");
-                return sewMeter;
-            }).orElseThrow(() -> new BadRequestAlertException("校表数据不存在", "", "编辑失败"));
+        Optional<SewMeter> sewMeterOpt = sewMeterRepository.findByCraftCodeAndMeterCode(vm.getCraftCode(), vm.getMeterCode());
+        if (sewMeterOpt.isPresent()) {
+            SewMeter sewMeter = sewMeterOpt.get();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, sewMeter);
+            sewMeterRepository.save(sewMeter);
+            result.set("推送成功");
+        } else {
+            //校表数据
+            SewMeter sewMeter = new SewMeter();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, sewMeter);
+            sewMeterRepository.save(sewMeter);
+            result.set("推送成功");
+        }
         return ResponseEntity.ok().body(result.get());
     }
 
@@ -298,32 +310,34 @@ public class GroupPushResource {
     @PostMapping("/repush_process")
     @Transactional
     @ApiOperation(value = "集团接收补推仪表数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> repushProcess(@RequestBody AssociateVM vm) {
+    public ResponseEntity<String> repushProcess(@RequestBody EditSewProcessVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("水厂不存在", "", "");
+        }
+        //仪表数据
+        SewProcess sewProcess = new SewProcess();
+        ObjectUtils.copyPropertiesIgnoreNull(vm, sewProcess);
+        sewProcessRepository.save(sewProcess);
+        result.set("推送成功");
         return ResponseEntity.ok().body(result.get());
     }
 
     @PostMapping("/repush_slu")
     @Transactional
     @ApiOperation(value = "集团接收补推化验数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> repushSlu(@RequestBody AssociateVM vm) {
+    public ResponseEntity<String> repushSlu(@RequestBody EditSewSluVM vm) {
         AtomicReference<String> result = new AtomicReference<>("");
-        return ResponseEntity.ok().body(result.get());
-    }
-
-    @PostMapping("/repush_pot")
-    @Transactional
-    @ApiOperation(value = "集团接收补推日报数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> repushPot(@RequestBody AssociateVM vm) {
-        AtomicReference<String> result = new AtomicReference<>("");
-        return ResponseEntity.ok().body(result.get());
-    }
-
-    @PostMapping("/repush_meter")
-    @Transactional
-    @ApiOperation(value = "集团接收补推校表数据", notes = "作者：韩宗晏")
-    public ResponseEntity<String> repushMeter(@RequestBody AssociateVM vm) {
-        AtomicReference<String> result = new AtomicReference<>("");
+        Optional<Enterprise> enterprise = enterpriseRepository.findByCodeAndIsTryIsTrue(vm.getCode());
+        if (!enterprise.isPresent()) {
+            throw new BadRequestAlertException("水厂不存在", "", "");
+        }
+        //化验数据
+        SewSlu sewSlu = new SewSlu();
+        ObjectUtils.copyPropertiesIgnoreNull(vm, sewSlu);
+        sewSluRepository.save(sewSlu);
+        result.set("推送成功");
         return ResponseEntity.ok().body(result.get());
     }
 }
