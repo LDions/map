@@ -211,20 +211,17 @@ public class GroupPushResource {
         if (!enterprise.isPresent()) {
             throw new BadRequestAlertException("水厂不存在", "", "");
         }
-        if (vm.getOperate().equals(0)) {
-            //集团新增水厂用户数据
-            User user = new User();
-            ObjectUtils.copyPropertiesIgnoreNull(vm, user);
-            userRepository.save(user);
+        //集团更新水厂用户信息 集团编码和水厂编码都不为空是水厂用户
+        Optional<User> user = userRepository.findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode());
+        if (user.isPresent()) {
+            ObjectUtils.copyPropertiesIgnoreNull(vm, user.get());
+            userRepository.save(user.get());
             result.set("推送成功");
         } else {
-            //集团更新水厂用户信息 集团编码和水厂编码都不为空是水厂用户
-            userRepository.findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
-                .map(user -> {
-                    ObjectUtils.copyPropertiesIgnoreNull(vm, user);
-                    userRepository.save(user);
-                    return user;
-                }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
+            //集团新增水厂用户数据
+            User newUser = new User();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, newUser);
+            userRepository.save(newUser);
             result.set("推送成功");
         }
         return ResponseEntity.ok().body(result.get());
