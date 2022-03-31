@@ -1,6 +1,5 @@
 package com.ruowei.web.rest;
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.*;
 import com.ruowei.repository.*;
@@ -50,8 +49,9 @@ public class EnterpriseResource {
     private QEnterprise qEnterprise = QEnterprise.enterprise;
     private QUser qUser = QUser.user;
     private final CraftRepository craftRepository;
+    private final GroupRepository groupRepository;
 
-    public EnterpriseResource(EnterpriseRepository enterpriseRepository, DistrictRepository districtRepository, EnterpriseVMMapper enterpriseVMMapper, JPAQueryFactory jpaQueryFactory, UserRepository userRepository, UserVMMapper userVMMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, RoleRepository roleRepository, CraftRepository craftRepository) {
+    public EnterpriseResource(EnterpriseRepository enterpriseRepository, DistrictRepository districtRepository, EnterpriseVMMapper enterpriseVMMapper, JPAQueryFactory jpaQueryFactory, UserRepository userRepository, UserVMMapper userVMMapper, PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository, RoleRepository roleRepository, CraftRepository craftRepository, GroupRepository groupRepository) {
         this.enterpriseRepository = enterpriseRepository;
         this.districtRepository = districtRepository;
         this.enterpriseVMMapper = enterpriseVMMapper;
@@ -62,6 +62,7 @@ public class EnterpriseResource {
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
         this.craftRepository = craftRepository;
+        this.groupRepository = groupRepository;
     }
 
     @PostMapping("/enterprise")
@@ -76,6 +77,10 @@ public class EnterpriseResource {
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "企业编码已存在");
             });
+        if(vm.getGroupCode() != null) {
+            groupRepository.getFirstByGroupCode(vm.getGroupCode()).orElseThrow(() -> {
+                    throw new BadRequestProblem("新增失败", "上属集团不存在");});
+        }
         Enterprise enterprise = enterpriseRepository.save(enterpriseVMMapper.toEntity(vm));
         BeanUtils.copyProperties(vm, enterprise);
         Enterprise save = enterpriseRepository.save(enterprise);

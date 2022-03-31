@@ -59,7 +59,7 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
         String code = null;
         String groupCode = null;
-        if (user.getEnterpriseCode() != null) {
+        if (user.getEnterpriseCode() != null ) {
             Enterprise enterprise = enterpriseRepository
                 .findByCode(user.getEnterpriseCode())
                 .orElseThrow(() -> new LockedException("未找到水厂信息"));
@@ -71,6 +71,6 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new LockedException("未找到集团信息"));
             groupCode = group.getGroupCode();
         }
-        return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), code, groupCode, null);
+        return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), code, groupCode, user.getEnterpriseName(), user.getGroupName());
     }
 }

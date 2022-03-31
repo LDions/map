@@ -15,6 +15,12 @@ public class UserQM {
     @ApiModelProperty(value = "水厂Code")
     private String enterpriseCode;
 
+    @ApiModelProperty(value = "水厂名称")
+    private String enterpriseName;
+
     @ApiModelProperty(value = "集团Code")
     private String groupCode;
+
+    @ApiModelProperty(value = "集团名称")
+    private String groupName;
 }

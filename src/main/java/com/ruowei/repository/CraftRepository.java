@@ -34,4 +34,6 @@ public interface CraftRepository extends JpaRepository<Craft, Long>, QuerydslPre
     List<Craft> findAllByEntCode(String entCode);
 
     Long countByEntCode(String entCode);
+
+    Craft findFirstByOrderByIdDesc();
 }

@@ -28,10 +28,8 @@ import java.util.stream.Collectors;
 public class ForecastResource {
     private final EnterpriseRepository enterpriseRepository;
     private final JPAQueryFactory queryFactory;
-    private final QSewSlu qSewSlu = QSewSlu.sewSlu;
     private final QSewMeter qSewMeter = QSewMeter.sewMeter;
     private final QSewProcess qSewProcess = QSewProcess.sewProcess;
-    private List<SewSlu> sewSlus;
     private List<SewMeter> sewMeters;
     private List<SewProcess> sewProcesses;
     private QSewPot qSewPot = QSewPot.sewPot;
@@ -45,13 +43,13 @@ public class ForecastResource {
     //    SewProcess 仪表
     @PostMapping("/forecast/ammonia_nitrogen")
     @ApiOperation(value = "氨氮预测传参", notes = "作者：孙小楠")
-    public JSONObject forecastAn(Long id, @RequestParam(value = "hours", required = false) List<Instant> hours, String craftCode) {
+    public List<String> forecastAn(Long id, @RequestParam(value = "hours", required = false) List<Instant> hours, String craftCode) {
         AmmoniaNitrogenVM ammoniaNitrogenVM = new AmmoniaNitrogenVM();
+        List<String> result = new ArrayList<>();
         for (Instant hour : hours) {
             Date date = Date.from(hour);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String formatDate = format.format(date);
-            sewSlus = null;
             sewMeters = null;
             sewProcesses = null;
             //          取日报
@@ -81,7 +79,7 @@ public class ForecastResource {
                         .where(builder1.build());
                     sewMeters = jpaQuery1.fetch();
                     time = hour;
-                    for(SewMeter s:sewMeters){
+                    for (SewMeter s : sewMeters) {
                         if (s.getDayTime().equals(time)) {
                             time = time.plus(2, ChronoUnit.HOURS);
                             AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
@@ -116,7 +114,7 @@ public class ForecastResource {
                 } else {
 //            非试点 用仪表
                     time = hour;
-                    for(SewProcess s : sewProcesses){
+                    for (SewProcess s : sewProcesses) {
                         if (s.getDayTime().equals(time)) {
                             time = time.plus(2, ChronoUnit.HOURS);
                             AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
@@ -139,19 +137,21 @@ public class ForecastResource {
             }
             ammoniaNitrogenVM.setData(data);
             JSONObject obj = JSON.parseObject(JSONObject.toJSONString(ammoniaNitrogenVM));
+            String a = "0.503472";
+            result.add(a);
         }
-        return null;
+        return result;
     }
 
     @PostMapping("/forecast/total_nitrogen")
     @ApiOperation(value = "总氮预测传参", notes = "作者：孙小楠")
-    public JSONObject forecastTn(Long id, @RequestParam(value = "hours", required = false) List<Instant> hours, String craftCode) {
+    public List<String> forecastTn(Long id, @RequestParam(value = "hours", required = false) List<Instant> hours, String craftCode) {
         TotalNitrogenVM totalNitrogenVM = new TotalNitrogenVM();
+        List<String> result = new ArrayList<>();
         for (Instant hour : hours) {
             Date date = Date.from(hour);
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String formatDate = format.format(date);
-            sewSlus = null;
             sewMeters = null;
             sewProcesses = null;
             //          取日报
@@ -182,7 +182,7 @@ public class ForecastResource {
                     sewMeters = jpaQuery1.fetch();
                     time = hour;
                     time = hour;
-                    for (SewMeter s:sewMeters){
+                    for (SewMeter s : sewMeters) {
                         if (s.getDayTime().equals(time)) {
                             time = time.plus(2, ChronoUnit.HOURS);
                             TnData tnData = new TnData();
@@ -240,13 +240,14 @@ public class ForecastResource {
             }
             totalNitrogenVM.setData(data);
             JSONObject obj = JSON.parseObject(JSONObject.toJSONString(totalNitrogenVM));
+            String a = "0.503472";
+            result.add(a);
         }
-        return null;
+        return result;
     }
 
     //   进水参数list
     public List<Inflow> getInflows(Instant hour, String craftCode) {
-
 //          30h仪表数据
         OptionalBooleanBuilder builder3 = new OptionalBooleanBuilder()
             .notEmptyAnd(qSewProcess.dayTime::goe, hour.minus(30, ChronoUnit.HOURS))

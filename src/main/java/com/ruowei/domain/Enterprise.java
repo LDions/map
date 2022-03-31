@@ -40,14 +40,14 @@ public class Enterprise implements Serializable {
     /**
      * 水厂地址经度
      */
-    @ApiModelProperty(value = "经营详细地址")
+    @ApiModelProperty(value = "水厂地址经度")
     @Column(name = "enterprise_longitude")
     private String enterpriseLongitude;
 
     /**
      * 水厂地址纬度
      */
-    @ApiModelProperty(value = "经营详细地址")
+    @ApiModelProperty(value = "水厂地址纬度")
     @Column(name = "enterprise_latitude")
     private String enterpriseLatitude;
 

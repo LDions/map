@@ -24,5 +24,5 @@ public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
 
     Optional<SewProcess> findByCraftCodeAndProcessCode(String craftCode, String processCode);
 
-
+    SewProcess findFirstByOrderByIdDesc();
 }

@@ -22,4 +22,6 @@ public interface SewMeterRepository extends JpaRepository<SewMeter,Long>{
     Optional<SewMeter> findByCraftCodeAndMeterCode(String craftCode, String meterCode);
 
     Optional<SewMeter> findFirstByOrderByDayTimeDesc();
+
+    SewMeter findFirstByOrderByIdDesc();
 }

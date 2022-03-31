@@ -26,10 +26,10 @@ public class UserVM {
     @ApiModelProperty("用户角色")
     private List<String> roleIds = new ArrayList<>();
 
-    @ApiModelProperty(value = "水厂ID")
+    @ApiModelProperty(value = "水厂Code")
     private String enterpriseCode;
 
-    @ApiModelProperty(value = "水厂ID")
+    @ApiModelProperty(value = "集团Code")
     private String groupCode;
 
 
