@@ -183,20 +183,17 @@ public class GroupPushResource {
             throw new BadRequestAlertException("水厂不存在", "", "");
         }
         //一个水厂对应一条设定数据
-        if (vm.getOperate().equals(0)) {
-            //新增设定数据
-            SewEmiThreshold sewEmiThreshold = new SewEmiThreshold();
-            ObjectUtils.copyPropertiesIgnoreNull(vm, sewEmiThreshold);
-            sewEmiThresholdRepository.save(sewEmiThreshold);
+        //编辑设定数据
+        Optional<SewEmiThreshold> sewEmiThreshold = sewEmiThresholdRepository.findByEnterpriseCode(vm.getEnterpriseCode());
+        if (sewEmiThreshold.isPresent()) {
+            ObjectUtils.copyPropertiesIgnoreNull(vm, sewEmiThreshold.get());
+            sewEmiThresholdRepository.save(sewEmiThreshold.get());
             result.set("推送成功");
         } else {
-            //编辑设定数据
-            sewEmiThresholdRepository.findByEnterpriseCode(vm.getEnterpriseCode())
-                .map(sewEmiThreshold -> {
-                    ObjectUtils.copyPropertiesIgnoreNull(vm, sewEmiThreshold);
-                    sewEmiThresholdRepository.save(sewEmiThreshold);
-                    return sewEmiThreshold;
-                }).orElseThrow(() -> new BadRequestAlertException("设定数据不存在", "", ""));
+            //新增设定数据
+            SewEmiThreshold shold = new SewEmiThreshold();
+            ObjectUtils.copyPropertiesIgnoreNull(vm, shold);
+            sewEmiThresholdRepository.save(shold);
             result.set("推送成功");
         }
         return ResponseEntity.ok().body(result.get());
@@ -295,6 +292,38 @@ public class GroupPushResource {
                 }).orElseThrow(() -> new BadRequestAlertException("数据源关联数据不存在", "", ""));
             result.set("推送成功");
         }
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/repush_process")
+    @Transactional
+    @ApiOperation(value = "集团接收补推仪表数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> repushProcess(@RequestBody AssociateVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/repush_slu")
+    @Transactional
+    @ApiOperation(value = "集团接收补推化验数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> repushSlu(@RequestBody AssociateVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/repush_pot")
+    @Transactional
+    @ApiOperation(value = "集团接收补推日报数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> repushPot(@RequestBody AssociateVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
+        return ResponseEntity.ok().body(result.get());
+    }
+
+    @PostMapping("/repush_meter")
+    @Transactional
+    @ApiOperation(value = "集团接收补推校表数据", notes = "作者：韩宗晏")
+    public ResponseEntity<String> repushMeter(@RequestBody AssociateVM vm) {
+        AtomicReference<String> result = new AtomicReference<>("");
         return ResponseEntity.ok().body(result.get());
     }
 }
