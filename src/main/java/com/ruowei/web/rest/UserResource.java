@@ -26,6 +26,7 @@ import com.ruowei.web.rest.vm.UserQM;
 import com.ruowei.web.rest.vm.UserVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import liquibase.pro.packaged.E;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,7 @@ public class UserResource {
     private QUser qUser = QUser.user;
     private QRole qRole = QRole.role;
     private QUserRole qUserRole = QUserRole.userRole;
+
     public UserResource(ApplicationProperties applicationProperties, UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper, PushService pushService, EnterpriseRepository enterpriseRepository) {
         this.applicationProperties = applicationProperties;
         this.userRepository = userRepository;
@@ -90,7 +92,8 @@ public class UserResource {
         if (vm.getId() != null) {
             throw new BadRequestProblem("新增失败", "新增时ID必须为空");
         }
-        userRepository.findOneByLogin(vm.getLogin())
+        //在未删除的用户中判断是否用户名重复
+        userRepository.findOneByLoginAndDeletedIsFalse(vm.getLogin())
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "用户名已存在");
             });
@@ -99,6 +102,7 @@ public class UserResource {
         user.setGroupCode(vm.getGroupCode());
         user.setUserCode(IDUtils.codeGenerator());
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
+        user.setDeleted(false);
         user.setStatus(SendStatusType.FAILED);
         user.setPlateStatus(SendStatusType.FAILED);
         User result = userRepository.save(user);
@@ -155,11 +159,11 @@ public class UserResource {
         if (vm.getId() == null) {
             throw new BadRequestProblem("编辑失败", "id不能为空");
         }
-        userRepository.findFirstByLoginAndIdNot(vm.getLogin(), vm.getId())
+        userRepository.findFirstByLoginAndIdNotAndDeletedIsFalse(vm.getLogin(), vm.getId())
             .ifPresent(so -> {
                 throw new BadRequestProblem("编辑失败", "用户已存在");
             });
-        User user = userRepository.findById(vm.getId())
+        User user = userRepository.findByIdAndDeletedIsFalse(vm.getId())
             .orElseThrow(() -> new BadRequestProblem("编辑失败", "该用户不存在"));
         if (StringUtils.isNotEmpty(vm.getLogin())) {
             user.setLogin(vm.getLogin());
@@ -231,9 +235,9 @@ public class UserResource {
             .notEmptyAnd(qUser.nickName::contains, qm.getNickname());
 
         List<User> list = jpaQueryFactory
-            .select(Projections.bean(User.class, qUser.id, qUser.login, qUser.nickName, qUser.remark, qUser.status,qUser.enterpriseCode,qUser.groupCode))
+            .select(Projections.bean(User.class, qUser.id, qUser.login, qUser.nickName, qUser.remark, qUser.status, qUser.enterpriseCode, qUser.groupCode))
             .from(qUser)
-            .where(predicate.build())
+            .where(predicate.build().and(qUser.deleted.eq(false)))
             .orderBy(qUser.id.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -241,7 +245,7 @@ public class UserResource {
         long count = jpaQueryFactory
             .select(qUser)
             .from(qUser)
-            .where(predicate.build())
+            .where(predicate.build().and(qUser.deleted.eq(false)))
             .fetch()
             .size();
         Page<User> page = new PageImpl<>(list, pageable, count);
@@ -254,7 +258,7 @@ public class UserResource {
     @ApiOperation(value = "查询用户详情接口", notes = "作者：孙小楠")
     public ResponseEntity<UserVM> getUser(@PathVariable Long id, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         log.debug("REST request to get SysUser : {}", id);
-        Optional<UserVM> optional = userRepository.findById(id)
+        Optional<UserVM> optional = userRepository.findByIdAndDeletedIsFalse(id)
             .map(sysUser -> {
                 List<String> roleIds = userRoleRepository.findAllByUserId(id)
                     .stream().map(userRole -> String.valueOf(userRole.getRoleId()))
@@ -272,28 +276,52 @@ public class UserResource {
     @ApiOperation(value = "删除用户接口", notes = "作者：孙小楠")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         log.debug("REST request to delete SysUser : {}", id);
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent()) {
+        Optional<User> userOpt = userRepository.findByIdAndDeletedIsFalse(id);
+        if (!userOpt.isPresent()) {
             throw new BadRequestAlertException("删除的用户不存在", "", "删除失败");
         }
         userRoleRepository.deleteAllByUserId(id);
-        jpaQueryFactory
-            .delete(qUser)
-            .where(qUser.id.eq(id))
-            .execute();
+        //软删除，将用户删除状态置为true
+        User user = userOpt.get();
+        user.setDeleted(true);
+        user.setStatus(SendStatusType.FAILED);
+        user.setPlateStatus(SendStatusType.FAILED);
+        User result = userRepository.save(user);
         //推送数据
         LinkedMultiValueMap<String, String> urlParams = new LinkedMultiValueMap<>();
-        urlParams.add("userCode", user.get().getUserCode());
-        if (StringUtils.isNotEmpty(user.get().getEnterpriseCode())) {
-            urlParams.add("enterpriseCode", user.get().getEnterpriseCode());
-            pushService.postForData(applicationProperties.getHost(), PushApi.DELETE_ENTERPRISEUSER.getUrl(), urlParams);
-            urlParams.add("groupCode", user.get().getGroupCode());
-            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_DELETE_ENTERPRISEUSER.getUrl(), urlParams);
-        } else if (StringUtils.isNotEmpty(user.get().getGroupCode()) && user.get().getEnterpriseCode().isEmpty()) {
+        urlParams.add("userCode", result.getUserCode());
+        if (StringUtils.isNotEmpty(result.getEnterpriseCode())) {
+            try {
+                urlParams.add("enterpriseCode", result.getEnterpriseCode());
+                String groupResult = pushService.postForData(applicationProperties.getHost(), PushApi.DELETE_ENTERPRISEUSER.getUrl(), urlParams);
+                if (groupResult.equals(Constants.PUSH_RESULT)) {
+                    result.setStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setStatus(SendStatusType.FAILED);
+            }
+            try {
+                urlParams.add("groupCode", result.getGroupCode());
+                String plateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_DELETE_ENTERPRISEUSER.getUrl(), urlParams);
+                if (plateResult.equals(Constants.PUSH_RESULT)) {
+                    result.setPlateStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setPlateStatus(SendStatusType.FAILED);
+            }
+        } else if (StringUtils.isNotEmpty(result.getGroupCode()) && result.getEnterpriseCode().isEmpty()) {
             //删除集团用户推给平台
-            urlParams.add("groupCode", user.get().getGroupCode());
-            pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_DELETE_GROUPUSER.getUrl(), urlParams);
+            try {
+                urlParams.add("groupCode", result.getGroupCode());
+                String plateGroupResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_DELETE_GROUPUSER.getUrl(), urlParams);
+                if (plateGroupResult.equals(Constants.PUSH_RESULT)) {
+                    result.setPlateStatus(SendStatusType.SUCCESS);
+                }
+            } catch (Exception e) {
+                result.setPlateStatus(SendStatusType.FAILED);
+            }
         }
+        userRepository.save(result);
         return ResponseEntity.noContent().build();
     }
 
@@ -302,7 +330,7 @@ public class UserResource {
     public ResponseEntity<String> resetUserPassword(
         @PathVariable Long id
     ) {
-        User user = userRepository.findById(id).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到该用户"));
+        User user = userRepository.findByIdAndDeletedIsFalse(id).orElseThrow(() -> new BadRequestProblem("重置失败", "未找到该用户"));
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         userRepository.save(user);
         return ResponseEntity.ok().body("重置成功");

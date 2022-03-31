@@ -219,7 +219,7 @@ public class GroupPushResource {
             result.set("推送成功");
         } else {
             //集团更新水厂用户信息 集团编码和水厂编码都不为空是水厂用户
-            userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
+            userRepository.findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
                 .map(user -> {
                     ObjectUtils.copyPropertiesIgnoreNull(vm, user);
                     userRepository.save(user);
@@ -240,9 +240,10 @@ public class GroupPushResource {
             throw new BadRequestAlertException("该水厂不存在", "", "无法删除用户");
         }
         //集团删除水厂用户信息
-        userRepository.findByEnterpriseCodeAndUserCode(enterpriseCode, userCode)
+        userRepository.findByEnterpriseCodeAndUserCodeAndDeletedIsFalse(enterpriseCode, userCode)
             .map(user -> {
-                userRepository.delete(user);
+                user.setDeleted(true);
+                userRepository.save(user);
                 result.set("推送成功");
                 return user;
             }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
