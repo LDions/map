@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ruowei.config.ApplicationProperties;
 import com.ruowei.domain.*;
 import com.ruowei.domain.enumeration.SysType;
-import com.ruowei.repository.EnterpriseRepository;
-import com.ruowei.repository.RoleRepository;
-import com.ruowei.repository.UserRepository;
-import com.ruowei.repository.UserRoleRepository;
+import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
 import com.ruowei.security.jwt.JWTFilter;
 import com.ruowei.security.jwt.TokenProvider;
@@ -52,8 +49,9 @@ public class UserJWTController {
     private final RoleRepository roleRepository;
     private final MenuService menuService;
     private final PasswordEncoder passwordEncoder;
+    private final GroupRepository groupRepository;
 
-    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, ApplicationProperties applicationProperties, UserRepository userRepository, EnterpriseRepository enterpriseRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, MenuService menuService, PasswordEncoder passwordEncoder) {
+    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, ApplicationProperties applicationProperties, UserRepository userRepository, EnterpriseRepository enterpriseRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, MenuService menuService, PasswordEncoder passwordEncoder, GroupRepository groupRepository) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.applicationProperties = applicationProperties;
@@ -63,6 +61,7 @@ public class UserJWTController {
         this.roleRepository = roleRepository;
         this.menuService = menuService;
         this.passwordEncoder = passwordEncoder;
+        this.groupRepository = groupRepository;
     }
 
     @PostMapping("/authenticate")
@@ -86,6 +85,15 @@ public class UserJWTController {
         jwtToken.setNickName(user.getNickName());
         jwtToken.setCode(user.getEnterpriseCode());
         jwtToken.setGroupCode(user.getGroupCode());
+        if(user.getEnterpriseCode() != null) {
+            Enterprise enterprise = enterpriseRepository.findOneByCode(user.getEnterpriseCode()).orElseThrow(() -> new BadRequestProblem("登录失败", "企业不存在"));
+            jwtToken.setEnterpriseName(enterprise.getName());
+        }
+        if(user.getGroupCode() != null) {
+            Group group = groupRepository.findByGroupCode(user.getGroupCode()).orElseThrow(() -> new BadRequestProblem("登录失败", "企业不存在"));
+            jwtToken.setEnterpriseName(group.getGroupName());
+        }
+        jwtToken.setGroupName(user.getGroupName());
 
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
         List<String> roleCodes = roleRepository.findAllByIdIn(roleIds).stream().map(Role::getCode).collect(Collectors.toList());

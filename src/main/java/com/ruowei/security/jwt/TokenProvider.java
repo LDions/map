@@ -31,6 +31,7 @@ public class TokenProvider {
     private static final String ENTERPRISEID_KEY = "eid";
     private static final String GROUPID_KEY = "gid";
     private static final String ENTERPRISENAME_KEY = "enm";
+    private static final String GROUPENAME_KEY = "gnm";
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
     private final Key key;
 
@@ -82,6 +83,7 @@ public class TokenProvider {
             .claim(ENTERPRISEID_KEY, userModel.getcode())
             .claim(GROUPID_KEY, userModel.getgroupCode())
             .claim(ENTERPRISENAME_KEY, userModel.getEnterpriseName())
+            .claim(GROUPENAME_KEY, userModel.getGroupName())
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact();
@@ -100,8 +102,9 @@ public class TokenProvider {
         String code = claims.get(ENTERPRISEID_KEY) != null ? claims.get(ENTERPRISEID_KEY).toString() : null;
         String groupCode = claims.get(GROUPID_KEY) != null ? claims.get(GROUPID_KEY).toString() : null;
         String enterpriseName = claims.get(ENTERPRISENAME_KEY) != null ? (String) claims.get(ENTERPRISENAME_KEY) : null;
+        String groupName = claims.get(GROUPENAME_KEY) != null ? (String) claims.get(GROUPENAME_KEY) : null;
 
-        User principal = new UserModel(claims.getSubject(), "", authorities, userId, nickName, code, groupCode, enterpriseName);
+        User principal = new UserModel(claims.getSubject(), "", authorities, userId, nickName, code, groupCode, enterpriseName, groupName);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

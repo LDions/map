@@ -17,14 +17,17 @@ public class UserModel extends User {
     private String groupCode;
     // 企业名称
     private String enterpriseName;
+    // 集团名称
+    private String groupName;
 
-    public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, String nickName, String code, String groupCode, String enterpriseName) {
+    public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, String nickName, String code, String groupCode, String enterpriseName, String groupName) {
         super(username, password, authorities);
         this.userId = userId;
         this.nickName = nickName;
         this.code = code;
         this.groupCode = groupCode;
         this.enterpriseName = enterpriseName;
+        this.groupName = groupName;
     }
 
     public Long getUserId() {
@@ -65,6 +68,14 @@ public class UserModel extends User {
 
     public void setEnterpriseName(String enterpriseName) {
         this.enterpriseName = enterpriseName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }
 
