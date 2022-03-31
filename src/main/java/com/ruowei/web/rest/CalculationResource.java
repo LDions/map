@@ -38,12 +38,12 @@ public class CalculationResource {
     BigDecimal A = null;
     BigDecimal B = null;
     BigDecimal Q = null;
-    //    缺氧区需去除硝酸盐量
-    BigDecimal N = null;
     BigDecimal D = null;
-    //    外投加碳源量
+    //    缺氧区需去除硝酸盐量(需计算)
+    BigDecimal N = null;
+    //    外投加碳源量(需计算)
     BigDecimal T = null;
-    //    加药泵流量
+    //    加药泵流量(需计算)
     BigDecimal I = null;
 
     public CalculationResource(EnterpriseRepository enterpriseRepository,
@@ -61,9 +61,13 @@ public class CalculationResource {
     @GetMapping("/calculation")
     @ApiOperation(value = "手动碳源计算", notes = "作者：孙小楠")
     public ResponseEntity<List> calculation(Long id, @RequestParam(value = "hours", required = false) List<Instant> hours, String craftCode) {
+        //        获取总氮
         List<String> list = forecastResource.forecastTn(id, hours, craftCode);
+        //        返回list
         List<Calculation> calculations = new ArrayList<>();
+        //        获取最新工艺段
         Craft craft = craftRepository.findFirstByOrderByIdDesc();
+        //        计算参数赋值(部分)
         BigDecimal A2 = craft.getAerobioticNitrateConcentration();
         BigDecimal B2 = craft.getAnoxiaNitrateConcentration();
         BigDecimal C = craft.getNitrateRefluxRatio();
@@ -84,11 +88,14 @@ public class CalculationResource {
                 if (isTry.equals(true)) {
                     //        试点（校表）
                     SewMeter sewMeter = sewMeterRepository.findFirstByOrderByIdDesc();
+                    //        校表没有进水流量需要从仪表中取(表优先级:校表>仪表>日报)
                     SewProcess sewProcess = sewProcessRepository.findFirstByOrderByIdDesc();
+                    //        计算参数赋值(部分)
                     A = big.multiply(new BigDecimal(0.8));
                     B = B2;
                     Q = sewProcess.getInFlow();
                     D = sewMeter.getCorInCod();
+                    //        计算N  T   I
                     N = ((((A.multiply(new BigDecimal(2)).subtract(A2))
                         .multiply(C.subtract(new BigDecimal(1))))
                         .add(((B.subtract(B2)).multiply(C.add(new BigDecimal(1)))))).multiply(Q))
