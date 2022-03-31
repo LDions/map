@@ -34,8 +34,14 @@ public class GroupDTO {
     /**
      * 集团位置
      */
-    @ApiModelProperty(value = "集团位置")
-    private String groupAddress;
+    @ApiModelProperty(value = "集团位置经度")
+    private String groupLongitude;
+
+    /**
+     * 集团位置
+     */
+    @ApiModelProperty(value = "集团位置纬度")
+    private String groupLatitude;
 
     /**
      * 集团联系人

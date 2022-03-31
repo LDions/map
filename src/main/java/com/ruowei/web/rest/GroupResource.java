@@ -63,7 +63,7 @@ public class GroupResource {
         }
         groupRepository.getFirstByGroupName(group.getGroupName())
             .ifPresent(so -> {
-                throw new BadRequestProblem("新增失败", "工艺名称已存在");
+                throw new BadRequestProblem("新增失败", "集团名称已存在");
             });
 
         Group result = groupRepository.save(group);
