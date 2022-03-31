@@ -19,12 +19,17 @@ import liquibase.pro.packaged.G;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
+import tech.jhipster.web.util.PaginationUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -101,29 +106,47 @@ public class PlatformResource {
     public ResponseEntity<PlatformDTO> getEnterpriseDropDown(UserEnterpriseDTO userEnterpriseDTO, Pageable pageable) {
         PlatformDTO platformDTO = new PlatformDTO();
         List<Group> groupResult = new ArrayList<>();
+        Page<Group> page;
+        long total1 = 0;
         if (!(userEnterpriseDTO.getGroupCode() == null && userEnterpriseDTO.getCode() != null)) {
             OptionalBooleanBuilder groupBuilder = new OptionalBooleanBuilder()
                 .notEmptyAnd(qGroup.groupCode::contains, userEnterpriseDTO.getGroupCode());
-            JPAQuery<Group> groupJPAQuery = jpaQueryFactory
+            List<Group> groupJPAQuery = jpaQueryFactory
                 .select(qGroup)
                 .from(qGroup)
                 .where(groupBuilder.build())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
-            groupResult = groupJPAQuery.fetch();
+                .limit(pageable.getPageSize())
+                .fetch();
+            groupResult = groupJPAQuery;
+            total1 = jpaQueryFactory
+                .select(qGroup)
+                .from(qGroup)
+                .where(groupBuilder.build())
+                .fetch()
+                .size();
+            page = new PageImpl<>(groupJPAQuery, pageable, total1);
         }
         OptionalBooleanBuilder enterpriseBuilder = new OptionalBooleanBuilder()
             .notEmptyAnd(qEnterprise.code::contains, userEnterpriseDTO.getCode())
             .notEmptyAnd(qEnterprise.groupCode::contains, userEnterpriseDTO.getGroupCode());
-        JPAQuery<Enterprise> enterpriseJPAQuery = jpaQueryFactory
+        List<Enterprise> enterpriseJPAQuery = jpaQueryFactory
             .select(qEnterprise)
             .from(qEnterprise)
             .where(enterpriseBuilder.build())
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize());
-        List<Enterprise> enterpriseResult = enterpriseJPAQuery.fetch();
-        platformDTO.setEnterprises(enterpriseResult);
+            .limit(pageable.getPageSize())
+            .fetch();
+        long total = jpaQueryFactory
+            .select(qEnterprise)
+            .from(qEnterprise)
+            .where(enterpriseBuilder.build())
+            .fetch()
+            .size();
+        Page<Enterprise> page1 = new PageImpl<>(enterpriseJPAQuery, pageable, total+total1);
+        platformDTO.setEnterprises(enterpriseJPAQuery);
         platformDTO.setGroups(groupResult);
-        return ResponseEntity.ok(platformDTO);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page1);
+        return ResponseEntity.ok().headers(headers).body(platformDTO);
     }
 }

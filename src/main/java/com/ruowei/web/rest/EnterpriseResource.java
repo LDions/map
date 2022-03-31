@@ -16,11 +16,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
@@ -64,6 +69,13 @@ public class EnterpriseResource {
     @ApiOperation(value = "新增企业接口", notes = "作者：孙小楠")
     public ResponseEntity<Enterprise> createEnterprise(@Valid @RequestBody EnterpriseVM vm) {
         log.debug("REST request to save Enterprise : {}", vm);
+        if (vm.getCode() == null) {
+            throw new BadRequestProblem("新增失败", "企业编码不能为空");
+        }
+        enterpriseRepository.getFirstByCode(vm.getCode())
+            .ifPresent(so -> {
+                throw new BadRequestProblem("新增失败", "企业编码已存在");
+            });
         Enterprise enterprise = enterpriseRepository.save(enterpriseVMMapper.toEntity(vm));
         BeanUtils.copyProperties(vm, enterprise);
         Enterprise save = enterpriseRepository.save(enterprise);
@@ -131,14 +143,23 @@ public class EnterpriseResource {
         OptionalBooleanBuilder builder = new OptionalBooleanBuilder()
             .notEmptyAnd(qEnterprise.code::eq, userEnterpriseDTO.getCode())
             .notEmptyAnd(qEnterprise.groupCode::eq,userEnterpriseDTO.getGroupCode());
-        JPAQuery<Enterprise> jpaQuery = jpaQueryFactory
+        List<Enterprise> jpaQuery = jpaQueryFactory
             .select(qEnterprise)
             .from(qEnterprise)
             .where(builder.build())
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize());
-        List<Enterprise> result = jpaQuery.fetch();
-        return ResponseEntity.ok(result);
+            .limit(pageable.getPageSize())
+            .fetch();
+        long count = jpaQueryFactory
+            .select(qEnterprise)
+            .from(qEnterprise)
+            .where(builder.build())
+            .fetch()
+            .size();
+        Page<Enterprise> page = new PageImpl<>(jpaQuery, pageable, count);
+        List<Enterprise> result = page.getContent();
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(result);
     }
 
 //    @PostMapping("/enterprise/reset/{code}")

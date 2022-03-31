@@ -12,6 +12,13 @@ public class EnterpriseVM {
     @ApiModelProperty(value = "水厂名称")
     private String name;
 
+
+    /**
+     * 水厂Code
+     */
+    @ApiModelProperty(value = "水厂Code")
+    private String code;
+
     /**
      * 数据类型
      */
@@ -60,6 +67,14 @@ public class EnterpriseVM {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getEnterpriseLongitude() {
