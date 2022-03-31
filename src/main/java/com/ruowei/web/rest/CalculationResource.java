@@ -15,9 +15,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,7 @@ public class CalculationResource {
 
     @GetMapping("/calculation")
     @ApiOperation(value = "手动碳源计算", notes = "作者：孙小楠")
-    public ResponseEntity<List> calculation(Long id, List<Instant> hours, String craftCode, BigDecimal dayCarAdd) {
+    public ResponseEntity<List> calculation(Long id, @RequestParam(value = "hours", required = false) List<Instant> hours, String craftCode) {
         List<String> list = forecastResource.forecastTn(id, hours, craftCode);
         List<Calculation> calculations = new ArrayList<>();
         Craft craft = craftRepository.findFirstByOrderByIdDesc();
@@ -90,11 +92,11 @@ public class CalculationResource {
                     N = ((((A.multiply(new BigDecimal(2)).subtract(A2))
                         .multiply(C.subtract(new BigDecimal(1))))
                         .add(((B.subtract(B2)).multiply(C.add(new BigDecimal(1)))))).multiply(Q))
-                        .divide(new BigDecimal(1000));
+                        .divide(new BigDecimal(1000),2, RoundingMode.HALF_UP);
                     T = (N.multiply(F)
-                        .subtract(D.multiply(E).multiply(Q).multiply(K).divide(new BigDecimal(1000))))
-                        .divide(G);
-                    I = T.divide(H).divide(new BigDecimal(1000)).multiply(J);
+                        .subtract(D.multiply(E).multiply(Q).multiply(K).divide(new BigDecimal(1000),2, RoundingMode.HALF_UP)))
+                        .divide(G,2, RoundingMode.HALF_UP);
+                    I = T.divide(H,2, RoundingMode.HALF_UP).divide(new BigDecimal(1000),2, RoundingMode.HALF_UP).multiply(J);
                     calculation.setNitrateToBeRemoved(N);
                     calculation.setAdditionOfCarbonSource(T);
                     calculation.setDosingPumpFlow(I);
@@ -108,11 +110,11 @@ public class CalculationResource {
                     N = ((((A.multiply(new BigDecimal(2)).subtract(A2))
                         .multiply(C.subtract(new BigDecimal(1))))
                         .add(((B.subtract(B2)).multiply(C.add(new BigDecimal(1)))))).multiply(Q))
-                        .divide(new BigDecimal(1000));
+                        .divide(new BigDecimal(1000),2, RoundingMode.HALF_UP);
                     T = (N.multiply(F)
-                        .subtract(D.multiply(E).multiply(Q).multiply(K).divide(new BigDecimal(1000))))
-                        .divide(G);
-                    I = T.divide(H).divide(new BigDecimal(1000)).multiply(J);
+                        .subtract(D.multiply(E).multiply(Q).multiply(K).divide(new BigDecimal(1000),2, RoundingMode.HALF_UP)))
+                        .divide(G,2, RoundingMode.HALF_UP);
+                    I = T.divide(H,2, RoundingMode.HALF_UP).divide(new BigDecimal(1000),2, RoundingMode.HALF_UP).multiply(J);
                     calculation.setNitrateToBeRemoved(N);
                     calculation.setAdditionOfCarbonSource(T);
                     calculation.setDosingPumpFlow(I);

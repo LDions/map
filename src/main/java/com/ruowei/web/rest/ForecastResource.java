@@ -11,7 +11,6 @@ import com.ruowei.web.rest.vm.AmmoniaNitrogenVM;
 import com.ruowei.web.rest.vm.TotalNitrogenVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -80,7 +79,7 @@ public class ForecastResource {
                         .where(builder1.build());
                     sewMeters = jpaQuery1.fetch();
                     time = hour;
-                    for(SewMeter s:sewMeters){
+                    for (SewMeter s : sewMeters) {
                         if (s.getDayTime().equals(time)) {
                             time = time.plus(2, ChronoUnit.HOURS);
                             AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
@@ -115,7 +114,7 @@ public class ForecastResource {
                 } else {
 //            非试点 用仪表
                     time = hour;
-                    for(SewProcess s : sewProcesses){
+                    for (SewProcess s : sewProcesses) {
                         if (s.getDayTime().equals(time)) {
                             time = time.plus(2, ChronoUnit.HOURS);
                             AmmoniaNitrogen ammoniaNitrogen = new AmmoniaNitrogen();
@@ -183,7 +182,7 @@ public class ForecastResource {
                     sewMeters = jpaQuery1.fetch();
                     time = hour;
                     time = hour;
-                    for (SewMeter s:sewMeters){
+                    for (SewMeter s : sewMeters) {
                         if (s.getDayTime().equals(time)) {
                             time = time.plus(2, ChronoUnit.HOURS);
                             TnData tnData = new TnData();
