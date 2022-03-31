@@ -45,7 +45,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
         return userRepository
-            .findOneByLogin(login)
+            .findOneByLoginAndDeletedIsFalse(login)
             .map(this::createSpringSecurityUser)
             .orElseThrow(() -> new InternalAuthenticationServiceException("用户名或密码错误！"));
     }

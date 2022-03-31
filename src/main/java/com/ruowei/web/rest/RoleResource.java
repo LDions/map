@@ -139,7 +139,7 @@ public class RoleResource {
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         log.debug("REST request to delete SysRole : {}", id);
         List<Long> userIds = userRoleRepository.findAllByRoleId(id).stream().map(UserRole::getUserId).collect(Collectors.toList());
-        List<User> usersInRole = userRepository.findAllByIdIn(userIds);
+        List<User> usersInRole = userRepository.findAllByIdInAndDeletedIsFalse(userIds);
         if (!usersInRole.isEmpty()) {
             throw new BadRequestProblem("删除失败", "存在使用此角色的用户");
         }

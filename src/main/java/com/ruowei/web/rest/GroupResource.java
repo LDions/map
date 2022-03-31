@@ -28,6 +28,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.*;
 
 
@@ -103,7 +104,7 @@ public class GroupResource {
         log.debug("REST request to delete SewGroup : {}", id);
         Optional<Group> group = groupRepository.findById(id);
         if(group.isPresent()){
-            Optional<User> byGroupCode = userRepository.findByGroupCode(group.get().getGroupCode());
+            Optional<User> byGroupCode = userRepository.findByGroupCodeAndDeletedIsFalse(group.get().getGroupCode());
             if (!byGroupCode.isEmpty()){
                 throw new BadRequestProblem("删除失败", "集团用户不为空");
             }
