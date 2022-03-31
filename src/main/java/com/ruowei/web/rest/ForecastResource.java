@@ -170,7 +170,7 @@ public class ForecastResource {
             if (enterprise.isPresent()) {
                 //            试点
                 isTry = enterprise.get().getIsTry();
-                if (isTry.equals(true)) {
+                if (isTry) {
                     OptionalBooleanBuilder builder1 = new OptionalBooleanBuilder()
                         .notEmptyAnd(qSewMeter.dayTime::goe, hour.minus(30, ChronoUnit.HOURS))
                         .notEmptyAnd(qSewMeter.dayTime::loe, hour)
@@ -180,7 +180,6 @@ public class ForecastResource {
                         .from(qSewMeter)
                         .where(builder1.build());
                     sewMeters = jpaQuery1.fetch();
-                    time = hour;
                     time = hour;
                     for (SewMeter s : sewMeters) {
                         if (s.getDayTime().equals(time)) {
@@ -258,20 +257,18 @@ public class ForecastResource {
             .from(qSewProcess)
             .where(builder3.build());
         sewProcesses = jpaQuery3.fetch();
-        List<Inflow> inflowList = new ArrayList<>();
-        sewProcesses.stream().map(sewProcess -> {
-            Inflow inflow = new Inflow();
+        return sewProcesses.stream().map(sewProcess -> {
             //          获取二十分钟前的
+            Inflow inflow = new Inflow();
             Instant before = sewProcess.getDayTime().minus(20, ChronoUnit.MINUTES);
             //            每分钟
             for (int i = 1; i <= 20; i++) {
                 Instant instant = before.plus(1, ChronoUnit.MINUTES);
                 inflow.setTime(instant);
+
                 inflow.setIn_flow(sewProcess.getInFlow());
-                inflowList.add(inflow);
             }
-            return null;
+            return inflow;
         }).collect(Collectors.toList());
-        return inflowList;
     }
 }
