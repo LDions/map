@@ -97,6 +97,9 @@ public class UserResource {
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "用户名已存在");
             });
+        if(vm.getEnterpriseCode() !=null && vm.getGroupCode() !=null){
+            throw new BadRequestProblem("新增失败", "请选择用户类别(水厂or集团)");
+        }
         User user = userVMMapper.toEntity(vm);
         user.setEnterpriseCode(vm.getEnterpriseCode());
         user.setGroupCode(vm.getGroupCode());
@@ -232,11 +235,13 @@ public class UserResource {
             .notEmptyAnd(qUser.login::ne, Constants.ADMIN)
             .notEmptyAnd(qUser.login::contains, qm.getLogin())
             .notEmptyAnd(qUser.enterpriseCode::contains, qm.getEnterpriseCode())
+            .notEmptyAnd(qUser.enterpriseName::contains, qm.getEnterpriseName())
             .notEmptyAnd(qUser.groupCode::contains, qm.getGroupCode())
+            .notEmptyAnd(qUser.groupName::contains, qm.getGroupName())
             .notEmptyAnd(qUser.nickName::contains, qm.getNickname());
 
         List<User> list = jpaQueryFactory
-            .select(Projections.bean(User.class, qUser.id, qUser.login, qUser.nickName, qUser.remark, qUser.status, qUser.enterpriseCode, qUser.groupCode))
+            .select(Projections.bean(User.class, qUser.id, qUser.login, qUser.nickName, qUser.remark, qUser.status, qUser.enterpriseCode,qUser.enterpriseName,qUser.groupCode,qUser.groupName))
             .from(qUser)
             .where(predicate.build().and(qUser.deleted.eq(false)))
             .orderBy(qUser.id.desc())
