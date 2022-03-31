@@ -19,32 +19,36 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
 
-    Optional<User> findOneByLogin(@NotNull String login);
+    Optional<User> findOneByLoginAndDeletedIsFalse(@NotNull String login);
 
-    List<User> findAllByIdIn(Collection<Long> id);
+    List<User> findAllByIdInAndDeletedIsFalse(Collection<Long> id);
 
-    Optional<User> findFirstByLoginAndIdNot(@NotNull String login, Long id);
+    Optional<User> findByIdAndDeletedIsFalse(Long id);
 
-    Optional<User> findByEnterpriseCode(String enterpriseCode);
+    Optional<User> findFirstByLoginAndIdNotAndDeletedIsFalse(@NotNull String login, Long id);
 
-    Optional<User> findByGroupCode(String groupCode);
+    Optional<User> findByEnterpriseCodeAndDeletedIsFalse(String enterpriseCode);
+
+    Optional<User> findByGroupCodeAndDeletedIsFalse(String groupCode);
 
     /**
      * 一条水厂用户数据
+     *
      * @param enterpriseCode
      * @param groupCode
      * @param userCode
      * @return
      */
-    Optional<User> findByEnterpriseCodeAndGroupCodeAndUserCode(String enterpriseCode, String groupCode, String userCode);
+    Optional<User> findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(String enterpriseCode, String groupCode, String userCode);
 
     /**
      * 一条集团用户数据
+     *
      * @param groupCode
      * @param userCode
      * @return
      */
-    Optional<User> findByGroupCodeAndUserCodeAndEnterpriseCodeIsNull(String groupCode, String userCode);
+    Optional<User> findByGroupCodeAndUserCodeAndEnterpriseCodeIsNullAndDeletedIsFalse(String groupCode, String userCode);
 
-    Optional<User> findByEnterpriseCodeAndUserCode(String enterpriseCode, String userCode);
+    Optional<User> findByEnterpriseCodeAndUserCodeAndDeletedIsFalse(String enterpriseCode, String userCode);
 }

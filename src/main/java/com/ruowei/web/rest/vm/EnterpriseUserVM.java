@@ -33,4 +33,7 @@ public class EnterpriseUserVM {
 
     @ApiModelProperty(value = "集团编码")
     private String groupCode;
+
+    @ApiModelProperty(value = "是否删除")
+    private Boolean deleted;
 }

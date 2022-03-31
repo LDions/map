@@ -68,7 +68,7 @@ public class UserJWTController {
     @PostMapping("/authenticate")
     @ApiOperation(value = "登录")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-        User user = userRepository.findOneByLogin(loginVM.getUsername())
+        User user = userRepository.findOneByLoginAndDeletedIsFalse(loginVM.getUsername())
             .orElseThrow(() -> new BadRequestProblem("登录失败", "账号不存在，请重新输入"));
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

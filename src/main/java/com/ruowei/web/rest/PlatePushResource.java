@@ -249,7 +249,7 @@ public class PlatePushResource {
                     userRepository.save(user);
                 } else {
                     //编辑用户信息 水厂编码和集团编码 用户编码都存在说明是一个水厂用户数据
-                    userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
+                    userRepository.findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(vm.getEnterpriseCode(), vm.getGroupCode(), vm.getUserCode())
                         .map(user -> {
                             ObjectUtils.copyPropertiesIgnoreNull(vm, user);
                             userRepository.save(user);
@@ -276,7 +276,7 @@ public class PlatePushResource {
                     userRepository.save(user);
                 } else {
                     //编辑用户信息 水厂编码为空 集团编码 用户编码存在说明是一条集团的用户数据
-                    userRepository.findByGroupCodeAndUserCodeAndEnterpriseCodeIsNull(vm.getGroupCode(), vm.getUserCode())
+                    userRepository.findByGroupCodeAndUserCodeAndEnterpriseCodeIsNullAndDeletedIsFalse(vm.getGroupCode(), vm.getUserCode())
                         .map(user -> {
                             ObjectUtils.copyPropertiesIgnoreNull(vm, user);
                             userRepository.save(user);
@@ -303,9 +303,10 @@ public class PlatePushResource {
                     throw new BadRequestAlertException("水厂不存在", "", "");
                 }
                 //水厂编码和集团编码 用户编码都存在说明是一个水厂用户数据
-                userRepository.findByEnterpriseCodeAndGroupCodeAndUserCode(enterpriseCode, group.getGroupCode(), userCode)
+                userRepository.findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(enterpriseCode, group.getGroupCode(), userCode)
                     .map(user -> {
-                        userRepository.delete(user);
+                        user.setDeleted(true);
+                        userRepository.save(user);
                         return user;
                     }).orElseThrow(() -> new BadRequestAlertException("所删除的用户不存在", "", ""));
                 result.set("推送成功");
@@ -323,9 +324,10 @@ public class PlatePushResource {
         groupRepository.findByGroupCode(groupCode)
             .map(group -> {
                 //水厂编码为空 集团编码 用户编码存在说明是一条集团的用户数据
-                userRepository.findByGroupCodeAndUserCodeAndEnterpriseCodeIsNull(group.getGroupCode(), userCode)
+                userRepository.findByGroupCodeAndUserCodeAndEnterpriseCodeIsNullAndDeletedIsFalse(group.getGroupCode(), userCode)
                     .map(user -> {
-                        userRepository.delete(user);
+                        user.setDeleted(true);
+                        userRepository.save(user);
                         return user;
                     }).orElseThrow(() -> new BadRequestAlertException("用户不存在", "", ""));
                 result.set("推送成功");

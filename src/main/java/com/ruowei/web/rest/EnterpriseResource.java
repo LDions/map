@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.ResponseUtil;
 
-import javax.management.BadAttributeValueExpException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -118,7 +117,7 @@ public class EnterpriseResource {
     public ResponseEntity<Void> deleteEnterprise(@PathVariable String code) {
         log.debug("REST request to delete Enterprise : {}", code);
 
-        if (userRepository.findByEnterpriseCode(code).isPresent()) {
+        if (userRepository.findByEnterpriseCodeAndDeletedIsFalse(code).isPresent()) {
             throw new BadRequestProblem("删除失败", "企业下存在用户");
         }
         enterpriseRepository.deleteByCode(code);
