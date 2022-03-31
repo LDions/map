@@ -101,6 +101,7 @@ public class UserResource {
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         user.setStatus(SendStatusType.FAILED);
         user.setPlateStatus(SendStatusType.FAILED);
+        user.setDeleted(false);
         User result = userRepository.save(user);
         vm.getRoleIds().forEach(roleId ->
             userRoleRepository.save(new UserRole().userId(result.getId()).roleId(Long.valueOf(roleId)))
