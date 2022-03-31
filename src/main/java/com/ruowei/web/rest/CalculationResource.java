@@ -9,6 +9,7 @@ import com.ruowei.repository.CraftRepository;
 import com.ruowei.repository.EnterpriseRepository;
 import com.ruowei.repository.SewMeterRepository;
 import com.ruowei.repository.SewProcessRepository;
+import com.ruowei.service.Calculation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,12 +36,12 @@ public class CalculationResource {
     BigDecimal A = null;
     BigDecimal B = null;
     BigDecimal Q = null;
-//    缺氧去需去除硝酸盐量
+    //    缺氧区需去除硝酸盐量
     BigDecimal N = null;
     BigDecimal D = null;
-//    外投加碳源量
+    //    外投加碳源量
     BigDecimal T = null;
-//    加药泵流量
+    //    加药泵流量
     BigDecimal I = null;
 
     public CalculationResource(EnterpriseRepository enterpriseRepository,
@@ -56,8 +58,9 @@ public class CalculationResource {
 
     @GetMapping("/calculation")
     @ApiOperation(value = "手动碳源计算", notes = "作者：孙小楠")
-    public ResponseEntity<Void> calculation(Long id, List<Instant> hours, String craftCode, BigDecimal dayCarAdd) {
+    public ResponseEntity<List> calculation(Long id, List<Instant> hours, String craftCode, BigDecimal dayCarAdd) {
         List<String> list = forecastResource.forecastTn(id, hours, craftCode);
+        List<Calculation> calculations = new ArrayList<>();
         Craft craft = craftRepository.findFirstByOrderByIdDesc();
         BigDecimal A2 = craft.getAerobioticNitrateConcentration();
         BigDecimal B2 = craft.getAnoxiaNitrateConcentration();
@@ -68,15 +71,16 @@ public class CalculationResource {
         BigDecimal G = craft.getBodEquivalentWeight();
         BigDecimal H = craft.getIntimacy();
         BigDecimal J = craft.getDilutionRatio();
-        for(String s:list){
+        for (String s : list) {
             BigDecimal big = new BigDecimal(s);
+            Calculation calculation = new Calculation();
             //      判断是否试点
             Optional<Enterprise> enterprise = enterpriseRepository.findById(id);
             Boolean isTry;
             if (enterprise.isPresent()) {
-                //            试点
                 isTry = enterprise.get().getIsTry();
                 if (isTry.equals(true)) {
+                    //        试点（校表）
                     SewMeter sewMeter = sewMeterRepository.findFirstByOrderByIdDesc();
                     SewProcess sewProcess = sewProcessRepository.findFirstByOrderByIdDesc();
                     A = big.multiply(new BigDecimal(0.8));
@@ -91,7 +95,11 @@ public class CalculationResource {
                         .subtract(D.multiply(E).multiply(Q).multiply(K).divide(new BigDecimal(1000))))
                         .divide(G);
                     I = T.divide(H).divide(new BigDecimal(1000)).multiply(J);
-                }else {
+                    calculation.setNitrateToBeRemoved(N);
+                    calculation.setAdditionOfCarbonSource(T);
+                    calculation.setDosingPumpFlow(I);
+                } else {
+                    //      非试点（仪表）
                     SewProcess sewProcess = sewProcessRepository.findFirstByOrderByIdDesc();
                     A = big.multiply(new BigDecimal(0.8));
                     B = B2;
@@ -105,11 +113,14 @@ public class CalculationResource {
                         .subtract(D.multiply(E).multiply(Q).multiply(K).divide(new BigDecimal(1000))))
                         .divide(G);
                     I = T.divide(H).divide(new BigDecimal(1000)).multiply(J);
+                    calculation.setNitrateToBeRemoved(N);
+                    calculation.setAdditionOfCarbonSource(T);
+                    calculation.setDosingPumpFlow(I);
                 }
             }
+            calculations.add(calculation);
         }
-
-        return null;
+        return ResponseEntity.ok(calculations);
     }
 
 }
