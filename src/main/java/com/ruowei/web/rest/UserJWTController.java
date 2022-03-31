@@ -93,8 +93,6 @@ public class UserJWTController {
             Group group = groupRepository.findByGroupCode(user.getGroupCode()).orElseThrow(() -> new BadRequestProblem("登录失败", "企业不存在"));
             jwtToken.setGroupName(group.getGroupName());
         }
-        jwtToken.setGroupName(user.getGroupName());
-
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
         List<String> roleCodes = roleRepository.findAllByIdIn(roleIds).stream().map(Role::getCode).collect(Collectors.toList());
         jwtToken.setRoleCodes(roleCodes);
