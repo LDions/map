@@ -45,14 +45,14 @@ public class Group {
      */
     @ApiModelProperty(value = "集团位置经度")
     @Column(name = "group_longitude")
-    private BigDecimal groupLongitude;
+    private String groupLongitude;
 
     /**
      * 集团位置
      */
     @ApiModelProperty(value = "集团位置纬度")
     @Column(name = "group_latitude")
-    private BigDecimal groupLatitude;
+    private String groupLatitude;
 
 
     /**
@@ -107,25 +107,25 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public BigDecimal getGroupLongitude() {
+    public String getGroupLongitude() {
         return groupLongitude;
     }
 
-    public void setGroupLongitude(BigDecimal groupLongitude) {
+    public void setGroupLongitude(String groupLongitude) {
         this.groupLongitude = groupLongitude;
     }
-    public Group groupLongitude(BigDecimal groupLongitude) {
+    public Group groupLongitude(String groupLongitude) {
         this.groupLongitude = groupLongitude;
         return this;
     }
-    public BigDecimal getGroupLatitude() {
+    public String getGroupLatitude() {
         return groupLatitude;
     }
 
-    public void setGroupLatitude(BigDecimal groupLatitude) {
+    public void setGroupLatitude(String groupLatitude) {
         this.groupLatitude = groupLatitude;
     }
-    public Group groupLatitude(BigDecimal groupLatitude) {
+    public Group groupLatitude(String groupLatitude) {
         this.groupLatitude = groupLatitude;
         return this;
     }

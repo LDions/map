@@ -6,8 +6,10 @@ import com.ruowei.domain.QCraft;
 import com.ruowei.domain.SewProcess;
 import com.ruowei.repository.CraftRepository;
 import com.ruowei.security.UserModel;
+import com.ruowei.util.ObjectUtils;
 import com.ruowei.web.rest.dto.DropDownDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.CraftVM;
 import com.ruowei.web.rest.vm.SituationAnalysisVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -66,13 +68,14 @@ public class CraftResource {
 
     @PutMapping("/craft")
     @ApiOperation(value = "编辑工艺接口", notes = "作者：孙小楠")
-    public ResponseEntity<Craft> editCraft(@Valid @RequestBody Craft craft) {
+    public ResponseEntity<Craft> editCraft(@Valid @RequestBody CraftVM craft) {
         log.debug("REST request to update SewCraft : {}", craft);
-        if (craft.getId() == null) {
-            throw new BadRequestProblem("编辑失败", "id不能为空");
+        if (craft.getCraftCode() == null) {
+            throw new BadRequestProblem("编辑失败", "工艺编码不能为空");
         }
-
-        Craft result = craftRepository.save(craft);
+        Craft temp = craftRepository.findByCraftCode(craft.getCraftCode()).get();
+        ObjectUtils.copyPropertiesIgnoreNull(craft, temp);
+        Craft result = craftRepository.save(temp);
         return ResponseEntity.ok().body(result);
     }
 

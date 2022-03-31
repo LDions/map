@@ -84,11 +84,11 @@ public class GroupResource {
         if (StringUtils.isNotEmpty(group.getGroupContactName())) {
             group1.setGroupContactName(group.getGroupContactName());
         }
-        if (group.getGroupLatitude() != null) {
-            group1.setGroupLatitude(group.getGroupLatitude());
-        }
-        if (group.getGroupLongitude() != null) {
+        if (StringUtils.isNotEmpty(group.getGroupLongitude())) {
             group1.setGroupLongitude(group.getGroupLongitude());
+        }
+        if (StringUtils.isNotEmpty(group.getGroupLatitude())) {
+            group1.setGroupLatitude(group.getGroupLatitude());
         }
         if (StringUtils.isNotEmpty(group.getGroupContactPhone())) {
             group1.setGroupContactPhone(group.getGroupContactPhone());
@@ -188,8 +188,13 @@ public class GroupResource {
 
     @PostMapping("/group/enterprise/threshold")
     @ApiOperation(value = "查询阈值报警", notes = "作者：郑昊天")
-    public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore @AuthenticationPrincipal UserModel userModel) {
-        Optional<SewEmiThreshold> threshold = sewEmiThresholdRepository.findByEnterpriseCode(userModel.getcode());
+    public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore @AuthenticationPrincipal UserModel userModel, @ApiParam(value = "水厂编码", required = false) String entCode) {
+        Optional<SewEmiThreshold> threshold;
+        if (userModel.getcode().isEmpty()) {
+            threshold = sewEmiThresholdRepository.findByEnterpriseCode(userModel.getcode());
+        } else {
+            threshold = sewEmiThresholdRepository.findByEnterpriseCode(entCode);
+        }
         if (threshold.isPresent()) {
             ThresholdDTO thresholdDTO = new ThresholdDTO();
             thresholdDTO.setInTn(threshold.get().getOutTotalNLimit());

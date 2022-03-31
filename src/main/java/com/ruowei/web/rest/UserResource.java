@@ -210,7 +210,7 @@ public class UserResource {
             } catch (Exception e) {
                 result.setPlateStatus(SendStatusType.FAILED);
             }
-        } else if (StringUtils.isNotEmpty(result.getGroupCode()) && result.getEnterpriseCode().isEmpty()) {
+        } else if (result.getGroupCode() != null && result.getEnterpriseCode() == null) {
             //集团新增用户给平台推送一下数据
             try {
                 String groupPlateResult = pushService.postForData(applicationProperties.getPlateHost(), PushApi.PLATE_ADDANDALTER_GROUPUSER.getUrl(), userVM);
