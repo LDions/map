@@ -66,9 +66,9 @@ public class RelevanceResource {
     @ApiOperation(value = "关联信息新增", notes = "作者：董玉祥")
     public ResponseEntity<String> relevance(@RequestBody CollectQM qm, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
-        if (userModel.getcode() == null) {
+        /*if (userModel.getcode() == null) {
             throw new BadRequestProblem("新增失败", "您不能进行关联数据的的新增操作");
-        }
+        }*/
 
         beAssociatedRepository.findByBeAssociatedName(qm.getBeAssociated())
             .ifPresent(x -> {
@@ -124,9 +124,9 @@ public class RelevanceResource {
     @ApiOperation(value = "编辑关联信息", notes = "作者：董玉祥")
     public ResponseEntity<String> relevanceModify(@RequestBody CollectQM qm, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
-        if (StringUtils.isBlank(userModel.getcode())) {
+        /*if (StringUtils.isBlank(userModel.getcode())) {
             throw new BadRequestProblem("编辑失败", "您不能进行关联数据的的编辑操作");
-        }
+        }*/
         BeAssociated beAssociated = beAssociatedRepository.findById(qm.getId())
             .orElseThrow(() -> {
                 throw new BadRequestProblem("修改失败", "该数据无关联信息，请先创建再进行修改");
@@ -222,9 +222,9 @@ public class RelevanceResource {
     @ApiOperation(value = "关联信息删除", notes = "作者：董玉祥")
     public ResponseEntity<String> relevanceDelete(Long id, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
 
-        if (StringUtils.isBlank(userModel.getcode())) {
+        /*if (StringUtils.isBlank(userModel.getcode())) {
             throw new BadRequestProblem("删除失败", "您不能进行关联数据的的删除操作");
-        }
+        }*/
         beAssociatedRepository.delete(beAssociatedRepository.findById(id)
             .orElseThrow(() -> {
                 throw new BadRequestProblem("删除失败", "该数据无关联信息，请先创建再进行删除");
