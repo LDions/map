@@ -17,4 +17,6 @@ public interface GroupRepository extends JpaRepository<Group, Long>, QuerydslPre
     Optional<Group> findByGroupCode(String groupCode);
 
     Optional<Group> getFirstByGroupName(String groupName);
+
+    Optional<Group> getFirstByGroupCode(String groupCode);
 }

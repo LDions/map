@@ -91,7 +91,7 @@ public class UserJWTController {
         }
         if(user.getGroupCode() != null) {
             Group group = groupRepository.findByGroupCode(user.getGroupCode()).orElseThrow(() -> new BadRequestProblem("登录失败", "企业不存在"));
-            jwtToken.setEnterpriseName(group.getGroupName());
+            jwtToken.setGroupName(group.getGroupName());
         }
         jwtToken.setGroupName(user.getGroupName());
 
