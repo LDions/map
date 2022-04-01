@@ -152,7 +152,6 @@ public class GroupResource {
         return ResponseEntity.ok().body(dropDownList);
     }
 
-    @ApiIgnore
     @PostMapping("/group/enterprise/result-save")
     @ApiOperation(value = "保存本次对多个工艺计算的结果", notes = "作者：郑昊天")
     public ResponseEntity<String> saveCalculateResult(@Valid @RequestBody List<AccountVM> vms, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
@@ -164,7 +163,7 @@ public class GroupResource {
 //                .dataCode()
                 .enterpriseCode(userModel.getcode())
                 .acctype(vm.getAcctype())
-                .accTime(vm.getAccTime())
+                .accTime(Instant.now())
                 .predictTime(vm.getPredictTime())
                 .totalOutN(vm.getTotalOutN())
                 .outAN(vm.getOutAN())
@@ -195,7 +194,7 @@ public class GroupResource {
     @ApiOperation(value = "查询阈值报警", notes = "作者：郑昊天")
     public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore @AuthenticationPrincipal UserModel userModel, @RequestBody @ApiParam(value = "水厂编码", required = false) String entCode) {
         Optional<SewEmiThreshold> threshold;
-        if (userModel.getcode().isEmpty()) {
+        if (!userModel.getcode().isEmpty()) {
             threshold = sewEmiThresholdRepository.findByEnterpriseCode(userModel.getcode());
         } else {
             threshold = sewEmiThresholdRepository.findByEnterpriseCode(entCode);
@@ -209,7 +208,6 @@ public class GroupResource {
             throw new BadRequestProblem("报警阈值不存在");
         }
     }
-
 
     @ApiIgnore
     @PostMapping("/group/nitrogen-model")
