@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 /**
  * 核算结果保存
@@ -27,10 +28,10 @@ public class AccountVM {
     private String accMonth;
 
     @ApiModelProperty(value = "核算时间", required = true)
-    private String accTime;
+    private Instant accTime;
 
     @ApiModelProperty(value = "预测未来时间", required = true)
-    private String predictTime;
+    private Instant predictTime;
 
     @ApiModelProperty(value = "出水总氮", required = true)
     private BigDecimal totalOutN;
