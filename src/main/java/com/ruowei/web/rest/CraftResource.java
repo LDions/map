@@ -23,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZoneId;
@@ -60,6 +61,74 @@ public class CraftResource {
             .ifPresent(so -> {
                 throw new BadRequestProblem("新增失败", "工艺名称已存在");
             });
+        craftRepository.getFirstByCraftCode(craft.getCraftCode())
+            .ifPresent(so -> {
+                throw new BadRequestProblem("新增失败", "工艺编码已存在");
+            });
+
+        if (craft.getAerobicPoolVolume() == null) {
+            craft.setAerobicPoolVolume(BigDecimal.valueOf(500));
+        }
+        if (craft.getAnaerobicPoolVolume() == null) {
+            craft.setAnaerobicPoolVolume(BigDecimal.valueOf(500));
+        }
+        if (craft.getAnoxicPoolVolume() == null) {
+            craft.setAnoxicPoolVolume(BigDecimal.valueOf(500));
+        }
+        if (craft.getInRefluxFlow() == null) {
+            craft.setOutRefluxFlow(BigDecimal.valueOf(2000));
+        }
+        if (craft.getInRefluxNum() == null) {
+            craft.setInRefluxNum(BigDecimal.valueOf(6));
+        }
+        if (craft.getOutRefluxFlow() == null) {
+            craft.setOutRefluxFlow(BigDecimal.valueOf(1200));
+        }
+        if (craft.getOutRefluxNum() == null) {
+            craft.setOutRefluxNum(BigDecimal.valueOf(5));
+        }
+        if (craft.getAerobioticNitrateConcentration() == null) {
+            craft.setAerobioticNitrateConcentration(BigDecimal.valueOf(10));
+        }
+        if (craft.getAnoxiaNitrateConcentration() == null) {
+            craft.setAnoxiaNitrateConcentration(BigDecimal.valueOf(2));
+        }
+        if (craft.getNitrateRefluxRatio() == null) {
+            craft.setNitrateRefluxRatio(BigDecimal.valueOf(2));
+        }
+        if (craft.getBodCodRatio() == null) {
+            craft.setBodCodRatio(BigDecimal.valueOf(0.5));
+        }
+        if (craft.getCodCalibration() == null) {
+            craft.setCodCalibration(BigDecimal.valueOf(1));
+        }
+        if (craft.getBodNRatio() == null) {
+            craft.setBodNRatio(BigDecimal.valueOf(4));
+        }
+        if (craft.getBodEquivalentWeight() == null) {
+            craft.setBodEquivalentWeight(BigDecimal.valueOf(0.13));
+        }
+        if (craft.getIntimacy() == null) {
+            craft.setIntimacy(BigDecimal.valueOf(1.1));
+        }
+        if (craft.getDilutionRatio() == null) {
+            craft.setDilutionRatio(BigDecimal.valueOf(1.1));
+        }
+        if (craft.getPhosphate() == null) {
+            craft.setPhosphate(BigDecimal.valueOf(0.2));
+        }
+        if (craft.getFeAlRatio() == null) {
+            craft.setFeAlRatio(BigDecimal.valueOf(0.87));
+        }
+        if (craft.getPhosphorusDosing() == null) {
+            craft.setPhosphorusDosing(BigDecimal.valueOf(1.5));
+        }
+        if (craft.getFeAlActiveIngredients() == null) {
+            craft.setFeAlActiveIngredients(BigDecimal.valueOf(0.2));
+        }
+        if (craft.getConcentration() == null) {
+            craft.setConcentration(BigDecimal.valueOf(1.1));
+        }
 
         Craft result = craftRepository.save(craft);
         return ResponseEntity.created(new URI("/api/craft/" + result.getId()))

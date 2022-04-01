@@ -145,7 +145,7 @@ public class GroupPushResource {
             //根据工艺编码查到工艺信息,确保与集团端的工艺信息能对应上
             craftRepository.findByCraftCode(vm.getCraftCode())
                 .ifPresent(craft -> {
-                    sewPot.setCraftId(craft.getId());
+                    sewPot.setCraftCode(craft.getCraftCode());
                 });
             sewPotRepository.save(sewPot);
             result.set("推送成功");

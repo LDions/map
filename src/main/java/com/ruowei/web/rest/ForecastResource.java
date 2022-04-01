@@ -265,7 +265,6 @@ public class ForecastResource {
             for (int i = 1; i <= 20; i++) {
                 Instant instant = before.plus(1, ChronoUnit.MINUTES);
                 inflow.setTime(instant);
-
                 inflow.setIn_flow(sewProcess.getInFlow());
             }
             return inflow;

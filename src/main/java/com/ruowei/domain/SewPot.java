@@ -26,14 +26,6 @@ public class SewPot implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    /**
-     * 所属工艺ID
-     */
-    @ApiModelProperty(value = "工艺ID", required = true)
-    @Column(name = "craft_id", nullable = false)
-    private Long craftId;
-
     /**
      * 日报编码
      */
@@ -838,19 +830,6 @@ public class SewPot implements Serializable {
         this.dayTime = dayTime;
         return this;
     }
-
-    public Long getCraftId() {
-        return craftId;
-    }
-
-    public void setCraftId(Long craftId) {
-        this.craftId = craftId;
-    }
-    public SewPot craftId(Long craftId) {
-        this.craftId = craftId;
-        return this;
-    }
-
     public SendStatusType getPlateStatus() {
         return plateStatus;
     }
@@ -1178,7 +1157,6 @@ public class SewPot implements Serializable {
     public String toString() {
         return "SewPot{" +
             "id=" + id +
-            ", craftId=" + craftId +
             ", potCode='" + potCode + '\'' +
             ", craftCode='" + craftCode + '\'' +
             ", dayInPh=" + dayInPh +
