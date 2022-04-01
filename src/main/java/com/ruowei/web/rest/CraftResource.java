@@ -68,14 +68,76 @@ public class CraftResource {
 
     @PutMapping("/craft")
     @ApiOperation(value = "编辑工艺接口", notes = "作者：孙小楠")
-    public ResponseEntity<Craft> editCraft(@Valid @RequestBody CraftVM craft) {
-        log.debug("REST request to update SewCraft : {}", craft);
-        if (craft.getCraftCode() == null) {
+    public ResponseEntity<Craft> editCraft(@Valid @RequestBody CraftVM vm) {
+        log.debug("REST request to update SewCraft : {}", vm);
+        if (vm.getCraftCode() == null) {
             throw new BadRequestProblem("编辑失败", "工艺编码不能为空");
         }
-        Craft temp = craftRepository.findByCraftCode(craft.getCraftCode()).get();
-        ObjectUtils.copyPropertiesIgnoreNull(craft, temp);
-        Craft result = craftRepository.save(temp);
+        Craft craft = craftRepository.findByCraftCode(vm.getCraftCode()).orElseThrow(() -> new BadRequestProblem("编辑失败", "该工艺编码不存在"));
+        if (vm.getAerobicPoolVolume() != null) {
+            craft.setAerobicPoolVolume(vm.getAerobicPoolVolume());
+        }
+        if (vm.getAnaerobicPoolVolume() != null) {
+            craft.setAnaerobicPoolVolume(vm.getAnaerobicPoolVolume());
+        }
+        if (vm.getAnoxicPoolVolume() != null) {
+            craft.setAnoxicPoolVolume(vm.getAnoxicPoolVolume());
+        }
+        if (vm.getInRefluxFlow() != null) {
+            craft.setOutRefluxFlow(vm.getInRefluxFlow());
+        }
+        if (vm.getInRefluxNum() != null) {
+            craft.setInRefluxNum(vm.getInRefluxNum());
+        }
+        if (vm.getOutRefluxFlow() != null) {
+            craft.setOutRefluxFlow(vm.getOutRefluxFlow());
+        }
+        if (vm.getOutRefluxNum() != null) {
+            craft.setOutRefluxNum(vm.getOutRefluxNum());
+        }
+        if (vm.getAerobioticNitrateConcentration() != null) {
+            craft.setAerobioticNitrateConcentration(vm.getAerobioticNitrateConcentration());
+        }
+        if (vm.getAnoxiaNitrateConcentration() != null) {
+            craft.setAnoxiaNitrateConcentration(vm.getAnoxiaNitrateConcentration());
+        }
+        if (vm.getNitrateRefluxRatio() != null) {
+            craft.setNitrateRefluxRatio(vm.getNitrateRefluxRatio());
+        }
+        if (vm.getBodCodRatio() != null) {
+            craft.setBodCodRatio(vm.getBodCodRatio());
+        }
+        if (vm.getCodCalibration() != null) {
+            craft.setCodCalibration(vm.getCodCalibration());
+        }
+        if (vm.getBodNRatio() != null) {
+            craft.setBodNRatio(vm.getBodNRatio());
+        }
+        if (vm.getBodEquivalentWeight() != null) {
+            craft.setBodEquivalentWeight(vm.getBodEquivalentWeight());
+        }
+        if (vm.getIntimacy() != null) {
+            craft.setIntimacy(vm.getIntimacy());
+        }
+        if (vm.getDilutionRatio() != null) {
+            craft.setDilutionRatio(vm.getDilutionRatio());
+        }
+        if (vm.getPhosphate() != null) {
+            craft.setPhosphate(vm.getPhosphate());
+        }
+        if (vm.getFeAlRatio() != null) {
+            craft.setFeAlRatio(vm.getFeAlRatio());
+        }
+        if (vm.getPhosphorusDosing() != null) {
+            craft.setPhosphorusDosing(vm.getPhosphorusDosing());
+        }
+        if (vm.getFeAlActiveIngredients() != null) {
+            craft.setFeAlActiveIngredients(vm.getFeAlActiveIngredients());
+        }
+        if (vm.getConcentration() != null) {
+            craft.setConcentration(vm.getConcentration());
+        }
+        Craft result = craftRepository.save(craft);
         return ResponseEntity.ok().body(result);
     }
 

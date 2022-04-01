@@ -15,10 +15,10 @@ public class CraftVM {
     private String craftCode;
 
     @ApiModelProperty(value = "厌氧池池容")
-    private String anaerobicPoolVolume;
+    private BigDecimal anaerobicPoolVolume;
 
     @ApiModelProperty(value = "缺氧池池容")
-    private String anoxicPoolVolume;
+    private BigDecimal anoxicPoolVolume;
 
     @ApiModelProperty(value = "好氧池池容（mg/L）")
     private BigDecimal aerobicPoolVolume;
