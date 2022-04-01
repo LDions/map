@@ -1,18 +1,17 @@
 package com.ruowei.domain;
 
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import javax.persistence.*;
-import javax.validation.constraints.*;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * 企业信息
+ * 水厂信息
  */
-@ApiModel(description = "企业信息")
+@ApiModel(description = "水厂信息")
 @Entity
 @Table(name = "sys_enterprise")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -25,80 +24,32 @@ public class Enterprise implements Serializable {
     private Long id;
 
     /**
-     * 单位名称
+     * 水厂名称
      */
-    @NotNull
-    @ApiModelProperty(value = "单位名称", required = true)
-    @Column(name = "name", nullable = false)
+    @ApiModelProperty(value = "水厂名称")
+    @Column(name = "name")
     private String name;
 
     /**
-     * 企业性质
+     * 水厂编码
      */
-    @ApiModelProperty(value = "企业性质")
-    @Column(name = "nature")
-    private String nature;
+    @ApiModelProperty(value = "水厂编码")
+    @Column(name = "code")
+    private String code;
 
     /**
-     * 统一信用代码
+     * 水厂地址经度
      */
-    @NotNull
-    @ApiModelProperty(value = "统一信用代码", required = true)
-    @Column(name = "uni_credit_code", nullable = false)
-    private String uniCreditCode;
+    @ApiModelProperty(value = "水厂地址经度")
+    @Column(name = "enterprise_longitude")
+    private String enterpriseLongitude;
 
     /**
-     * 法定代表人
+     * 水厂地址纬度
      */
-    @ApiModelProperty(value = "法定代表人")
-    @Column(name = "legal_representative")
-    private String legalRepresentative;
-
-    /**
-     * 经营地址所在省
-     */
-    @NotNull
-    @ApiModelProperty(value = "经营地址所在省", required = true)
-    @Column(name = "business_province", nullable = false)
-    private String businessProvince;
-
-    /**
-     * 经营地址所在市
-     */
-    @NotNull
-    @ApiModelProperty(value = "经营地址所在市", required = true)
-    @Column(name = "business_city", nullable = false)
-    private String businessCity;
-
-    /**
-     * 经营地址所在区
-     */
-    @NotNull
-    @ApiModelProperty(value = "经营地址所在区", required = true)
-    @Column(name = "business_area", nullable = false)
-    private String businessArea;
-
-    /**
-     * 经营详细地址
-     */
-    @NotNull
-    @ApiModelProperty(value = "经营详细地址", required = true)
-    @Column(name = "business_address", nullable = false)
-    private String businessAddress;
-
-    /**
-     * 联系人姓名
-     */
-    @ApiModelProperty(value = "联系人姓名")
-    @Column(name = "contact_name")
-    private String contactName;
-
-    /**
-     * 联系人手机
-     */
-    @ApiModelProperty(value = "联系人手机")
-    @Column(name = "contact_phone")
-    private String contactPhone;
+    @ApiModelProperty(value = "水厂地址纬度")
+    @Column(name = "enterprise_latitude")
+    private String enterpriseLatitude;
 
     /**
      * 备注
@@ -108,15 +59,37 @@ public class Enterprise implements Serializable {
     private String remark;
 
     /**
-     * 状态
+     * 是否为试点水厂
      */
-    @NotNull
-    @ApiModelProperty(value = "状态", required = true)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private EnterpriseStatusType status;
+    @ApiModelProperty(value = "是否为试点水厂",required = true)
+    @Column(name = "is_try")
+    private Boolean isTry;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    /**
+     * 水厂所属集团Code
+     */
+    @ApiModelProperty(value = "水厂所属集团Code")
+    @Column(name = "group_code")
+    private String groupCode;
+
+    /**
+     * 联系人
+     */
+    @ApiModelProperty(value = "集团联系人")
+    @Column(name = "contact_name")
+    private String contactName;
+
+    /**
+     * 电话
+     */
+    @ApiModelProperty(value = "联系人电话")
+    @Column(name = "contact_phone")
+    private String contactPhone;
+
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+
     public Long getId() {
         return id;
     }
@@ -124,169 +97,116 @@ public class Enterprise implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
     public Enterprise id(Long id) {
         this.id = id;
         return this;
     }
 
     public String getName() {
-        return this.name;
-    }
-
-    public Enterprise name(String name) {
-        this.name = name;
-        return this;
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getNature() {
-        return this.nature;
-    }
-
-    public Enterprise nature(String nature) {
-        this.nature = nature;
+    public Enterprise name(String name) {
+        this.name = name;
         return this;
     }
 
-    public void setNature(String nature) {
-        this.nature = nature;
+    public String getCode() {
+        return code;
     }
 
-    public String getUniCreditCode() {
-        return this.uniCreditCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public Enterprise uniCreditCode(String uniCreditCode) {
-        this.uniCreditCode = uniCreditCode;
+    public Enterprise code(String code) {
+        this.code = code;
         return this;
     }
 
-    public void setUniCreditCode(String uniCreditCode) {
-        this.uniCreditCode = uniCreditCode;
+    public String getEnterpriseLongitude() {
+        return enterpriseLongitude;
     }
 
-    public String getLegalRepresentative() {
-        return this.legalRepresentative;
+    public void setEnterpriseLongitude(String enterpriseLongitude) {
+        this.enterpriseLongitude = enterpriseLongitude;
     }
-
-    public Enterprise legalRepresentative(String legalRepresentative) {
-        this.legalRepresentative = legalRepresentative;
+    public Enterprise enterpriseLongitude(String enterpriseLongitude) {
+        this.enterpriseLongitude = enterpriseLongitude;
         return this;
     }
 
-    public void setLegalRepresentative(String legalRepresentative) {
-        this.legalRepresentative = legalRepresentative;
+    public String getEnterpriseLatitude() {
+        return enterpriseLatitude;
     }
 
-    public String getBusinessProvince() {
-        return this.businessProvince;
+    public void setEnterpriseLatitude(String enterpriseLatitude) {
+        this.enterpriseLatitude = enterpriseLatitude;
     }
-
-    public Enterprise businessProvince(String businessProvince) {
-        this.businessProvince = businessProvince;
+    public Enterprise enterpriseLatitude(String enterpriseLatitude) {
+        this.enterpriseLatitude = enterpriseLatitude;
         return this;
-    }
-
-    public void setBusinessProvince(String businessProvince) {
-        this.businessProvince = businessProvince;
-    }
-
-    public String getBusinessCity() {
-        return this.businessCity;
-    }
-
-    public Enterprise businessCity(String businessCity) {
-        this.businessCity = businessCity;
-        return this;
-    }
-
-    public void setBusinessCity(String businessCity) {
-        this.businessCity = businessCity;
-    }
-
-    public String getBusinessArea() {
-        return this.businessArea;
-    }
-
-    public Enterprise businessArea(String businessArea) {
-        this.businessArea = businessArea;
-        return this;
-    }
-
-    public void setBusinessArea(String businessArea) {
-        this.businessArea = businessArea;
-    }
-
-    public String getBusinessAddress() {
-        return this.businessAddress;
-    }
-
-    public Enterprise businessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-        return this;
-    }
-
-    public void setBusinessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-    }
-
-    public String getContactName() {
-        return this.contactName;
-    }
-
-    public Enterprise contactName(String contactName) {
-        this.contactName = contactName;
-        return this;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public String getContactPhone() {
-        return this.contactPhone;
-    }
-
-    public Enterprise contactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-        return this;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
     }
 
     public String getRemark() {
-        return this.remark;
-    }
-
-    public Enterprise remark(String remark) {
-        this.remark = remark;
-        return this;
+        return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public EnterpriseStatusType getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(EnterpriseStatusType status) {
-        this.status = status;
-    }
-
-    public Enterprise status(EnterpriseStatusType status) {
-        this.status = status;
+    public Enterprise remark(String remark) {
+        this.remark = remark;
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public Boolean getIsTry() {
+        return isTry;
+    }
+
+    public void setIsTry(Boolean isTry) {
+        this.isTry = isTry;
+    }
+    public Enterprise isTry(Boolean isTry) {
+        this.isTry = isTry;
+        return this;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+    public Enterprise groupCode(String groupCode) {
+        this.groupCode = groupCode;
+        return this;
+    }
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+    public Enterprise contactName(String contactName) {
+        this.contactName = contactName;
+        return this;
+    }
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+    public Enterprise contactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+        return this;
+    }
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -311,17 +231,13 @@ public class Enterprise implements Serializable {
         return "Enterprise{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", nature='" + getNature() + "'" +
-            ", uniCreditCode='" + getUniCreditCode() + "'" +
-            ", legalRepresentative='" + getLegalRepresentative() + "'" +
-            ", businessProvince='" + getBusinessProvince() + "'" +
-            ", businessCity='" + getBusinessCity() + "'" +
-            ", businessArea='" + getBusinessArea() + "'" +
-            ", businessAddress='" + getBusinessAddress() + "'" +
+            ", enterpriseLongitude='" + getEnterpriseLongitude() + "'" +
+            ", enterpriseLatitude='" + getEnterpriseLatitude() + "'" +
+            ", remark='" + getRemark() + "'" +
+            ", isTry='" + getIsTry() + "'" +
+            ", groupCode='" + getGroupCode() + "'" +
             ", contactName='" + getContactName() + "'" +
             ", contactPhone='" + getContactPhone() + "'" +
-            ", remark='" + getRemark() + "'" +
-            ", status='" + getStatus() + "'" +
             "}";
     }
 }

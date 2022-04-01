@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
@@ -29,9 +30,9 @@ public class OtherIndex implements Serializable {
      * 单据号
      */
     @NotNull
-    @ApiModelProperty(value = "单据号", required = true)
-    @Column(name = "document_code", nullable = false)
-    private String documentCode;
+    @ApiModelProperty(value = "工艺ID", required = true)
+    @Column(name = "craft_id", nullable = false)
+    private Long craftId;
 
     /**
      * 污泥处置方法编码
@@ -56,6 +57,20 @@ public class OtherIndex implements Serializable {
     @Column(name = "index_capacity", precision = 21, scale = 2)
     private BigDecimal indexCapacity;
 
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态", required = true)
+    @Column(name = "status", nullable = false)
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态", required = true)
+    @Column(name = "plate_status", nullable = false)
+    private SendStatusType plateStatus;
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -71,17 +86,17 @@ public class OtherIndex implements Serializable {
         return this;
     }
 
-    public String getDocumentCode() {
-        return this.documentCode;
+    public Long getCraftId() {
+        return this.craftId;
     }
 
-    public OtherIndex documentCode(String documentCode) {
-        this.documentCode = documentCode;
+    public OtherIndex craftId(Long craftId) {
+        this.craftId = craftId;
         return this;
     }
 
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
+    public void setCraftId(Long craftId) {
+        this.craftId = craftId;
     }
 
     public String getMethodCode() {
@@ -123,7 +138,21 @@ public class OtherIndex implements Serializable {
         this.indexCapacity = indexCapacity;
     }
 
+    public SendStatusType getStatus() {
+        return status;
+    }
 
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -148,7 +177,7 @@ public class OtherIndex implements Serializable {
     public String toString() {
         return "OtherIndex{" +
             "id=" + getId() +
-            ", documentCode='" + getDocumentCode() + "'" +
+            ", craftId='" + getCraftId() + "'" +
             ", methodCode='" + getMethodCode() + "'" +
             ", methodName='" + getMethodName() + "'" +
             ", indexCapacity=" + getIndexCapacity() +

@@ -42,15 +42,6 @@ public class Role implements Serializable {
     private String name;
 
     /**
-     * 角色类型
-     */
-    @NotNull
-    @ApiModelProperty(value = "角色类型", required = true)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private RoleType type;
-
-    /**
      * 是否内置角色
      */
     @NotNull
@@ -58,14 +49,6 @@ public class Role implements Serializable {
     @Column(name = "is_sys", nullable = false)
     private Boolean isSys;
 
-    /**
-     * 状态
-     */
-    @NotNull
-    @ApiModelProperty(value = "状态", required = true)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private RoleStatusType status;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -107,19 +90,6 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public RoleType getType() {
-        return this.type;
-    }
-
-    public Role type(RoleType type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(RoleType type) {
-        this.type = type;
-    }
-
     public Boolean getIsSys() {
         return this.isSys;
     }
@@ -133,18 +103,6 @@ public class Role implements Serializable {
         this.isSys = isSys;
     }
 
-    public RoleStatusType getStatus() {
-        return this.status;
-    }
-
-    public Role status(RoleStatusType status) {
-        this.status = status;
-        return this;
-    }
-
-    public void setStatus(RoleStatusType status) {
-        this.status = status;
-    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -172,9 +130,7 @@ public class Role implements Serializable {
             "id=" + getId() +
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
-            ", type='" + getType() + "'" +
             ", isSys='" + getIsSys() + "'" +
-            ", status='" + getStatus() + "'" +
             "}";
     }
 }

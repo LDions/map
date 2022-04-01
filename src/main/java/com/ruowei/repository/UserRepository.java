@@ -4,7 +4,6 @@ import com.ruowei.domain.Role;
 import com.ruowei.domain.RoleMenu;
 import com.ruowei.domain.User;
 import com.ruowei.domain.UserRole;
-import com.ruowei.domain.enumeration.UserStatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
@@ -20,17 +19,36 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, QuerydslPredicateExecutor<User> {
 
-    Optional<User> findOneByLogin(@NotNull String login);
+    Optional<User> findOneByLoginAndDeletedIsFalse(@NotNull String login);
 
-    Optional<User> findOneByLoginAndStatusNot(@NotNull String login, @NotNull UserStatusType status);
+    List<User> findAllByIdInAndDeletedIsFalse(Collection<Long> id);
 
-    List<User> findAllByIdInAndStatusNot(Collection<Long> id, @NotNull UserStatusType status);
+    Optional<User> findByIdAndDeletedIsFalse(Long id);
 
-    Optional<User> findFirstByLoginAndIdNotAndStatusNot(@NotNull String login, Long id, @NotNull UserStatusType status);
+    Optional<User> findFirstByLoginAndIdNotAndDeletedIsFalse(@NotNull String login, Long id);
 
-    Optional<User> findByIdAndStatus(Long id, @NotNull UserStatusType status);
+    Optional<User> findByEnterpriseCodeAndDeletedIsFalse(String enterpriseCode);
 
-    Optional<User> findOneByLoginAndStatus(@NotNull String login, @NotNull UserStatusType status);
+    Optional<User> findByGroupCodeAndDeletedIsFalse(String groupCode);
 
-    Optional<User> findByEnterpriseId(Long enterpriseId);
+    /**
+     * 一条水厂用户数据
+     *
+     * @param enterpriseCode
+     * @param groupCode
+     * @param userCode
+     * @return
+     */
+    Optional<User> findByEnterpriseCodeAndGroupCodeAndUserCodeAndDeletedIsFalse(String enterpriseCode, String groupCode, String userCode);
+
+    /**
+     * 一条集团用户数据
+     *
+     * @param groupCode
+     * @param userCode
+     * @return
+     */
+    Optional<User> findByGroupCodeAndUserCodeAndEnterpriseCodeIsNullAndDeletedIsFalse(String groupCode, String userCode);
+
+    Optional<User> findByEnterpriseCodeAndUserCodeAndDeletedIsFalse(String enterpriseCode, String userCode);
 }

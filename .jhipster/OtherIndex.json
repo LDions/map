@@ -2,32 +2,56 @@
   "name": "OtherIndex",
   "fields": [
     {
-      "fieldName": "documentCode",
-      "fieldType": "String",
-      "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
+      "fieldName": "craftId",
+      "fieldType": "Long",
+      "javadoc": "工艺ID",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "methodCode",
       "fieldType": "String",
       "javadoc": "其他指标编码",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "methodName",
       "fieldType": "String",
       "javadoc": "其他指标名称",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "indexCapacity",
       "fieldType": "BigDecimal",
       "javadoc": "指标量（kg/m）"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [],
-  "javadoc": "其他指标数据",
-  "entityTableName": "other_index",
+  "javadoc": "其他指标",
+  "entityTableName": "sew_index",
   "dto": "no",
   "pagination": "no",
   "service": "no",

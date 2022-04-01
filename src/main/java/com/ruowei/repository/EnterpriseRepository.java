@@ -1,12 +1,10 @@
 package com.ruowei.repository;
 
 import com.ruowei.domain.Enterprise;
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +15,26 @@ import java.util.Optional;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long>, QuerydslPredicateExecutor<Enterprise> {
 
-    Optional<Enterprise> getFirstByUniCreditCodeAndStatus(@NotNull String uniCreditCode, @NotNull EnterpriseStatusType status);
+    List<Enterprise> findByGroupCode(String groupCode);
 
-    Optional<Enterprise> getFirstByUniCreditCodeAndIdNotAndStatus(@NotNull String uniCreditCode, Long id, @NotNull EnterpriseStatusType status);
+    Optional<Enterprise> findByCode(String code);
 
-    Optional<Enterprise> findByIdAndStatus(@NotNull Long id, @NotNull EnterpriseStatusType statusType);
+    Optional<Enterprise> findOneByCode(String code);
 
-    List<Enterprise> findAllByStatus(@NotNull EnterpriseStatusType status);
+    Optional<Enterprise> getFirstByCodeAndId(String code, Long id);
+
+    Optional<Enterprise> getFirstByCode(String code);
+
+    Optional<Enterprise> findByCodeAndGroupCode(String code, String groupCode);
+
+    Optional<Enterprise> getFirstByCodeAndGroupCode(String code, String groupCode);
+
+    Optional<Enterprise> findByCodeAndIsTryIsTrue(String code);
+
+    Optional<Enterprise> findByCodeAndGroupCodeAndIsTry(String code, String groupCode, Boolean tryed);
+
+    List<Enterprise> findAllByGroupCode(String code);
+
+    void deleteByCode(String code);
+
 }

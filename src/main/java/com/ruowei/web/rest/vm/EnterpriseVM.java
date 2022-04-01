@@ -1,58 +1,65 @@
 package com.ruowei.web.rest.vm;
 
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
 
 public class EnterpriseVM {
 
-    @NotNull(message = "单位名称不能为空")
-    @ApiModelProperty(value = "单位名称")
+    /**
+     * 水厂名称
+     */
+    @ApiModelProperty(value = "水厂名称")
     private String name;
 
-    @ApiModelProperty(value = "企业性质")
-    private String nature;
 
-    @NotNull(message = "统一信用代码不能为空")
-    @ApiModelProperty(value = "统一信用代码")
-    private String uniCreditCode;
+    /**
+     * 水厂Code
+     */
+    @ApiModelProperty(value = "水厂Code")
+    private String code;
 
-    @ApiModelProperty(value = "法定代表人")
-    private String legalRepresentative;
+    /**
+     * 数据类型
+     */
+    @ApiModelProperty(value = "经营详细地址经度")
+    private String enterpriseLongitude;
 
-    @NotNull(message = "经营地址所在省不能为空")
-    @ApiModelProperty(value = "经营地址所在省")
-    private String businessProvince;
+    /**
+     * 数据类型
+     */
+    @ApiModelProperty(value = "经营详细地址纬度")
+    private String enterpriseLatitude;
 
-    @NotNull(message = "经营地址所在市不能为空")
-    @ApiModelProperty(value = "经营地址所在市")
-    private String businessCity;
-
-    @NotNull(message = "经营地址所在区不能为空")
-    @ApiModelProperty(value = "经营地址所在区")
-    private String businessArea;
-
-    @NotNull(message = "经营详细地址不能为空")
-    @ApiModelProperty(value = "经营详细地址")
-    private String businessAddress;
-
-    @ApiModelProperty(value = "联系人姓名")
-    private String contactName;
-
-    @ApiModelProperty(value = "联系人手机")
-    private String contactPhone;
-
+    /**
+     * 备注
+     */
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    @NotNull(message = "状态不能为空")
-    @ApiModelProperty(value = "状态(NORMAL|DELETE)")
-    private EnterpriseStatusType status;
+    /**
+     * 是否为试点水厂
+     */
+    @ApiModelProperty(value = "是否为试点水厂", required = true)
+    private String isTry;
 
-    @ApiModelProperty(value = "企业用户信息")
-    private UserVM userInfo;
+    /**
+     * 水厂所属集团编码
+     */
+    @ApiModelProperty(value = "水厂所属集团code")
+    private String groupCode;
+
+    /**
+     * 联系人
+     */
+    @ApiModelProperty(value = "水厂联系人")
+    private String contactName;
+
+    /**
+     * 电话
+     */
+    @ApiModelProperty(value = "联系人电话")
+    private String contactPhone;
 
     public String getName() {
         return name;
@@ -62,78 +69,29 @@ public class EnterpriseVM {
         this.name = name;
     }
 
-    public String getNature() {
-        return nature;
+    public String getCode() {
+        return code;
     }
 
-    public void setNature(String nature) {
-        this.nature = nature;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getUniCreditCode() {
-        return uniCreditCode;
+    public String getEnterpriseLongitude() {
+        return enterpriseLongitude;
     }
 
-    public void setUniCreditCode(String uniCreditCode) {
-        this.uniCreditCode = uniCreditCode;
+    public void setEnterpriseLongitude(String enterpriseLongitude) {
+        this.enterpriseLongitude = enterpriseLongitude;
     }
 
-    public String getLegalRepresentative() {
-        return legalRepresentative;
+    public String getEnterpriseLatitude() {
+        return enterpriseLatitude;
     }
 
-    public void setLegalRepresentative(String legalRepresentative) {
-        this.legalRepresentative = legalRepresentative;
+    public void setEnterpriseLatitude(String enterpriseLatitude) {
+        this.enterpriseLatitude = enterpriseLatitude;
     }
-
-    public String getBusinessProvince() {
-        return businessProvince;
-    }
-
-    public void setBusinessProvince(String businessProvince) {
-        this.businessProvince = businessProvince;
-    }
-
-    public String getBusinessCity() {
-        return businessCity;
-    }
-
-    public void setBusinessCity(String businessCity) {
-        this.businessCity = businessCity;
-    }
-
-    public String getBusinessArea() {
-        return businessArea;
-    }
-
-    public void setBusinessArea(String businessArea) {
-        this.businessArea = businessArea;
-    }
-
-    public String getBusinessAddress() {
-        return businessAddress;
-    }
-
-    public void setBusinessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-    }
-
-    public String getContactName() {
-        return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public String getContactPhone() {
-        return contactPhone;
-    }
-
-    public void setContactPhone(String contactPhone) {
-        this.contactPhone = contactPhone;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -142,19 +100,32 @@ public class EnterpriseVM {
         this.remark = remark;
     }
 
-    public EnterpriseStatusType getStatus() {
-        return status;
+    public String getIsTry() {
+        return isTry;
     }
 
-    public void setStatus(EnterpriseStatusType status) {
-        this.status = status;
+    public void setIsTry(String isTry) {
+        this.isTry = isTry;
+    }
+    public String getGroupCode() {
+        return groupCode;
     }
 
-    public UserVM getUserInfo() {
-        return userInfo;
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setUserInfo(UserVM userInfo) {
-        this.userInfo = userInfo;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 }

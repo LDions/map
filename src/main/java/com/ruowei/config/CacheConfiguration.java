@@ -1,6 +1,8 @@
 package com.ruowei.config;
 
 import java.time.Duration;
+
+import com.ruowei.domain.SewEmiThreshold;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.hibernate.cache.jcache.ConfigSettings;
@@ -46,11 +48,9 @@ public class CacheConfiguration {
             createCache(cm, com.ruowei.domain.User.class.getName());
             createCache(cm, com.ruowei.domain.Role.class.getName());
             createCache(cm, com.ruowei.domain.UserRole.class.getName());
-            createCache(cm, com.ruowei.domain.Draft.class.getName());
             createCache(cm, com.ruowei.domain.Dict.class.getName());
             createCache(cm, com.ruowei.domain.EmiFactor.class.getName());
             createCache(cm, com.ruowei.domain.EmiData.class.getName());
-            createCache(cm, com.ruowei.domain.SewEmi.class.getName());
             createCache(cm, com.ruowei.domain.SewPot.class.getName());
             createCache(cm, com.ruowei.domain.SewProcess.class.getName());
             createCache(cm, com.ruowei.domain.SewSlu.class.getName());
@@ -59,6 +59,11 @@ public class CacheConfiguration {
             createCache(cm, com.ruowei.domain.Menu.class.getName());
             createCache(cm, com.ruowei.domain.RoleMenu.class.getName());
             createCache(cm, com.ruowei.domain.OtherIndex.class.getName());
+            createCache(cm, com.ruowei.domain.Group.class.getName());
+            createCache(cm, com.ruowei.domain.SewMeter.class.getName());
+            createCache(cm, com.ruowei.domain.Craft.class.getName());
+            createCache(cm, com.ruowei.domain.SewEmiThreshold.class.getName());
+            createCache(cm, com.ruowei.domain.BeAssociated.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

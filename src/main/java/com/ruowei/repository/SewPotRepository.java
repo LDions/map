@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the SewPot entity.
@@ -14,10 +16,9 @@ import java.util.List;
 @Repository
 public interface SewPotRepository extends JpaRepository<SewPot, Long> {
 
-    /**
-     * 根据单据号查询污水厂药剂投加信息
-     * @param documentCode 单据号
-     * @return
-     */
-    List<SewPot> findByDocumentCode(@NotNull String documentCode);
+    List<SewPot> findByCraftCode(String craftCode);
+
+    List<SewPot> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqualAndCraftCode(Instant time1, Instant time2, String CraftCode);
+
+    Optional<SewPot> findByCraftCodeAndPotCode(String craftCode, String potCode);
 }

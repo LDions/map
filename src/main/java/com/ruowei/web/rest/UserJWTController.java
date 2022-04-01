@@ -3,21 +3,16 @@ package com.ruowei.web.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ruowei.config.ApplicationProperties;
 import com.ruowei.domain.*;
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
-import com.ruowei.domain.enumeration.RoleStatusType;
 import com.ruowei.domain.enumeration.SysType;
-import com.ruowei.domain.enumeration.UserStatusType;
-import com.ruowei.repository.EnterpriseRepository;
-import com.ruowei.repository.RoleRepository;
-import com.ruowei.repository.UserRepository;
-import com.ruowei.repository.UserRoleRepository;
+import com.ruowei.repository.*;
+import com.ruowei.security.UserModel;
 import com.ruowei.security.jwt.JWTFilter;
 import com.ruowei.security.jwt.TokenProvider;
 import com.ruowei.service.MenuService;
 import com.ruowei.service.dto.SimpleMenuTreeDTO;
-import com.ruowei.web.rest.dto.MenuTreeDTO;
 import com.ruowei.web.rest.dto.VerifyTokenDTO;
 import com.ruowei.web.rest.errors.BadRequestProblem;
+import com.ruowei.web.rest.vm.ChangePasswordVM;
 import com.ruowei.web.rest.vm.LoginVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,8 +22,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -50,8 +48,10 @@ public class UserJWTController {
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
     private final MenuService menuService;
+    private final PasswordEncoder passwordEncoder;
+    private final GroupRepository groupRepository;
 
-    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, ApplicationProperties applicationProperties, UserRepository userRepository, EnterpriseRepository enterpriseRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, MenuService menuService) {
+    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, ApplicationProperties applicationProperties, UserRepository userRepository, EnterpriseRepository enterpriseRepository, UserRoleRepository userRoleRepository, RoleRepository roleRepository, MenuService menuService, PasswordEncoder passwordEncoder, GroupRepository groupRepository) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.applicationProperties = applicationProperties;
@@ -60,16 +60,15 @@ public class UserJWTController {
         this.userRoleRepository = userRoleRepository;
         this.roleRepository = roleRepository;
         this.menuService = menuService;
+        this.passwordEncoder = passwordEncoder;
+        this.groupRepository = groupRepository;
     }
 
     @PostMapping("/authenticate")
     @ApiOperation(value = "登录")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-        User user = userRepository.findOneByLoginAndStatusNot(loginVM.getUsername(), UserStatusType.DELETE)
+        User user = userRepository.findOneByLoginAndDeletedIsFalse(loginVM.getUsername())
             .orElseThrow(() -> new BadRequestProblem("登录失败", "账号不存在，请重新输入"));
-        if (UserStatusType.DISABLE.equals(user.getStatus())) {
-            throw new BadRequestProblem("登录失败", "账号已停用，请联系管理员");
-        }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             loginVM.getUsername(),
@@ -81,16 +80,23 @@ public class UserJWTController {
         String jwt = tokenProvider.createToken(authentication, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
         JWTToken jwtToken = new JWTToken(jwt);
-        jwtToken.setEnterpriseId(user.getEnterpriseId());
-        if (user.getEnterpriseId() != null) {
-            Enterprise enterprise = enterpriseRepository.findByIdAndStatus(user.getEnterpriseId(), EnterpriseStatusType.NORMAL)
-                .orElseThrow(() -> new BadRequestProblem("登录失败", "账号所属企业不存在，请重新输入"));
+        jwtToken.setUserId(user.getId());
+        jwtToken.setNickName(user.getNickName());
+        jwtToken.setCode(user.getEnterpriseCode());
+        jwtToken.setGroupCode(user.getGroupCode());
+        if(user.getEnterpriseCode() != null) {
+            Enterprise enterprise = enterpriseRepository.findOneByCode(user.getEnterpriseCode()).orElseThrow(() -> new BadRequestProblem("登录失败", "企业不存在"));
+            user.setEnterpriseName(enterprise.getName());
             jwtToken.setEnterpriseName(enterprise.getName());
         }
+        if(user.getGroupCode() != null) {
+            Group group = groupRepository.findByGroupCode(user.getGroupCode()).orElseThrow(() -> new BadRequestProblem("登录失败", "企业不存在"));
+            user.setGroupName(group.getGroupName());
+            jwtToken.setGroupName(group.getGroupName());
+        }
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
-        List<String> roleCodes = roleRepository.findAllByIdInAndStatus(roleIds, RoleStatusType.NORMAL).stream().map(Role::getCode).collect(Collectors.toList());
+        List<String> roleCodes = roleRepository.findAllByIdIn(roleIds).stream().map(Role::getCode).collect(Collectors.toList());
         jwtToken.setRoleCodes(roleCodes);
         List<String> permissions = menuService.getCurrentUserPermissions(SysType.WEB, user.getId())
             .stream().map(Menu::getMenuHref).collect(Collectors.toList());
@@ -100,6 +106,23 @@ public class UserJWTController {
         return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
     }
 
+    @PostMapping("/change-password")
+    @ApiOperation(value = "修改密码")
+    public ResponseEntity<String> changePassWord(
+        @Valid @RequestBody ChangePasswordVM vm,
+        @ApiIgnore @AuthenticationPrincipal UserModel userModel
+    ) {
+        User user = userRepository
+            .findById(userModel.getUserId())
+            .orElseThrow(() -> new BadRequestProblem("修改失败", "该账号不存在"));
+        boolean result = passwordEncoder.matches(vm.getOldPwd(), user.getPassword());
+        if (!result) {
+            throw new BadRequestProblem("修改失败", "原密码错误");
+        }
+        user.setPassword(passwordEncoder.encode(vm.getNewPwd()));
+        userRepository.save(user);
+        return ResponseEntity.ok().body("修改成功");
+    }
     @GetMapping("/verifyToken")
     @ApiOperation(value = "SSO验证Token")
     public ResponseEntity<VerifyTokenDTO> verifyToken() {
@@ -111,11 +134,19 @@ public class UserJWTController {
      */
     static class JWTToken {
 
+        private Long userId;
+
         private String idToken;
 
-        private Long enterpriseId;
+        private String code;
+
+        private String nickName;
 
         private String enterpriseName;
+
+        private String groupCode;
+
+        private String groupName;
 
         private List<String> roleCodes;
 
@@ -127,6 +158,15 @@ public class UserJWTController {
             this.idToken = idToken;
         }
 
+        @JsonProperty("user_id")
+        Long getUserId() {
+            return userId;
+        }
+
+        void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
         @JsonProperty("id_token")
         String getIdToken() {
             return idToken;
@@ -136,13 +176,31 @@ public class UserJWTController {
             this.idToken = idToken;
         }
 
-        @JsonProperty("enterprise_id")
-        Long getEnterpriseId() {
-            return enterpriseId;
+        @JsonProperty("nick_name")
+        public String getNickName() {
+            return nickName;
         }
 
-        void setEnterpriseId(Long enterpriseId) {
-            this.enterpriseId = enterpriseId;
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
+        }
+
+        @JsonProperty("enterprise_code")
+        String getCode() {
+            return code;
+        }
+
+        void setCode(String code) {
+            this.code = code;
+        }
+
+        @JsonProperty("group_code")
+        String getGroupCode() {
+            return groupCode;
+        }
+
+        void setGroupCode(String groupCode) {
+            this.groupCode = groupCode;
         }
 
         @JsonProperty("enterprise_name")
@@ -152,6 +210,15 @@ public class UserJWTController {
 
         void setEnterpriseName(String enterpriseName) {
             this.enterpriseName = enterpriseName;
+        }
+
+        @JsonProperty("group_name")
+        String getGroupName() {
+            return groupName;
+        }
+
+        void setGroupName(String groupName) {
+            this.groupName = groupName;
         }
 
         @JsonProperty("role_codes")

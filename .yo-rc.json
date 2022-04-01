@@ -57,9 +57,16 @@
       "SewSlu",
       "District",
       "Enterprise",
+      "Group",
+      "Craft",
+      "platform",
       "Menu",
       "RoleMenu",
-      "OtherIndex"
+      "OtherIndex",
+      "SewMeter",
+      "Correlation",
+      "EntCraftData",
+      "BeAssociated"
     ],
     "lastLiquibaseTimestamp": 1631693326000
   }

@@ -1,6 +1,5 @@
 package com.ruowei.web.rest.vm;
 
-import com.ruowei.domain.enumeration.UserStatusType;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
@@ -27,19 +26,12 @@ public class UserVM {
     @ApiModelProperty("用户角色")
     private List<String> roleIds = new ArrayList<>();
 
-    @NotNull
-    @ApiModelProperty(value = "用户状态", required = true)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private UserStatusType status;
+    @ApiModelProperty(value = "水厂Code")
+    private String enterpriseCode;
 
-    public UserStatusType getStatus() {
-        return status;
-    }
+    @ApiModelProperty(value = "集团Code")
+    private String groupCode;
 
-    public void setStatus(UserStatusType status) {
-        this.status = status;
-    }
 
     public Long getId() {
         return id;
@@ -81,6 +73,22 @@ public class UserVM {
         this.roleIds = roleIds;
     }
 
+    public String getEnterpriseCode() {
+        return enterpriseCode;
+    }
+
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -104,7 +112,8 @@ public class UserVM {
             ", login='" + login + '\'' +
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
-            ", status=" + status +
+            ", enterpriseCode=" + enterpriseCode +
+            ", groupCode=" + groupCode +
             '}';
     }
 }

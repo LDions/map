@@ -1,7 +1,7 @@
 package com.ruowei.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ruowei.domain.enumeration.UserStatusType;
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Cache;
@@ -48,15 +48,43 @@ public class User implements Serializable {
     @Column(name = "remark")
     private String remark;
 
-    @ApiModelProperty(value = "企业ID")
-    @Column(name = "enterprise_id")
-    private Long enterpriseId;
+    @ApiModelProperty(value = "水厂编码")
+    @Column(name = "enterprise_code")
+    private String enterpriseCode;
 
-    @NotNull
-    @ApiModelProperty(value = "用户状态", required = true)
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private UserStatusType status;
+    @ApiModelProperty(value = "水厂名称")
+    @Column(name = "enterprise_name")
+    private String enterpriseName;
+
+    @ApiModelProperty(value = "集团编码")
+    @Column(name = "group_code")
+    private String groupCode;
+
+    @ApiModelProperty(value = "集团名称")
+    @Column(name = "group_name")
+    private String groupName;
+
+    @ApiModelProperty(value = "用户编码")
+    @Column(name = "user_code")
+    private String userCode;
+
+    @ApiModelProperty(value = "是否删除")
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted;
+
+    /**
+     * 集团数据推送状态
+     */
+    @ApiModelProperty(value = "集团数据推送状态")
+    @Column(name = "status")
+    private SendStatusType status;
+
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态")
+    @Column(name = "plate_status")
+    private SendStatusType plateStatus;
 
     public Long getId() {
         return id;
@@ -118,31 +146,91 @@ public class User implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public Long getEnterpriseId() {
-        return enterpriseId;
+    public String getEnterpriseCode() {
+        return enterpriseCode;
     }
 
-    public User enterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
+
+    public User enterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
         return this;
     }
 
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public User groupCode(String groupCode) {
+        this.groupCode = groupCode;
+        return this;
     }
 
-    public UserStatusType getStatus() {
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public User userCode(String userCode) {
+        this.userCode = userCode;
+        return this;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
+
+    public SendStatusType getStatus() {
         return status;
     }
 
-    public User status(UserStatusType status) {
+    public void setStatus(SendStatusType status) {
         this.status = status;
-        return this;
     }
 
-    public void setStatus(UserStatusType status) {
-        this.status = status;
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public User enterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+        return this;
+    }
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public User groupName(String groupName) {
+        this.groupName = groupName;
+        return this;
+    }
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override
@@ -162,7 +250,6 @@ public class User implements Serializable {
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "User{" +
@@ -171,8 +258,13 @@ public class User implements Serializable {
             ", password='" + password + '\'' +
             ", nickName='" + nickName + '\'' +
             ", remark='" + remark + '\'' +
-            ", enterpriseId=" + enterpriseId +
+            ", enterpriseCode='" + enterpriseCode + '\'' +
+            ", enterpriseName='" + enterpriseName + '\'' +
+            ", groupCode='" + groupCode + '\'' +
+            ", groupName='" + groupName + '\'' +
+            ", userCode='" + userCode + '\'' +
             ", status=" + status +
+            ", plateStatus=" + plateStatus +
             '}';
     }
 }

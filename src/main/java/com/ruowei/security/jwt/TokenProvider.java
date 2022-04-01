@@ -29,7 +29,9 @@ public class TokenProvider {
     private static final String USERID_KEY = "uid";
     private static final String NICKNAME_KEY = "unm";
     private static final String ENTERPRISEID_KEY = "eid";
+    private static final String GROUPID_KEY = "gid";
     private static final String ENTERPRISENAME_KEY = "enm";
+    private static final String GROUPENAME_KEY = "gnm";
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
     private final Key key;
 
@@ -78,8 +80,10 @@ public class TokenProvider {
             .claim(AUTHORITIES_KEY, authorities)
             .claim(USERID_KEY, userModel.getUserId())
             .claim(NICKNAME_KEY, userModel.getNickName())
-            .claim(ENTERPRISEID_KEY, userModel.getEnterpriseId())
+            .claim(ENTERPRISEID_KEY, userModel.getcode())
+            .claim(GROUPID_KEY, userModel.getgroupCode())
             .claim(ENTERPRISENAME_KEY, userModel.getEnterpriseName())
+            .claim(GROUPENAME_KEY, userModel.getGroupName())
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact();
@@ -95,10 +99,12 @@ public class TokenProvider {
             .collect(Collectors.toList());
         Long userId = ((Number) claims.get(USERID_KEY)).longValue();
         String nickName = (String) claims.get(NICKNAME_KEY);
-        Long enterpriseId = claims.get(ENTERPRISEID_KEY) != null ? ((Number) claims.get(ENTERPRISEID_KEY)).longValue() : null;
+        String code = claims.get(ENTERPRISEID_KEY) != null ? claims.get(ENTERPRISEID_KEY).toString() : null;
+        String groupCode = claims.get(GROUPID_KEY) != null ? claims.get(GROUPID_KEY).toString() : null;
         String enterpriseName = claims.get(ENTERPRISENAME_KEY) != null ? (String) claims.get(ENTERPRISENAME_KEY) : null;
+        String groupName = claims.get(GROUPENAME_KEY) != null ? (String) claims.get(GROUPENAME_KEY) : null;
 
-        User principal = new UserModel(claims.getSubject(), "", authorities, userId, nickName, enterpriseId, enterpriseName);
+        User principal = new UserModel(claims.getSubject(), "", authorities, userId, nickName, code, groupCode, enterpriseName, groupName);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

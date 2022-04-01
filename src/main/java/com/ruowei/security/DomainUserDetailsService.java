@@ -1,13 +1,12 @@
 package com.ruowei.security;
 
 import com.ruowei.domain.Enterprise;
+import com.ruowei.domain.Group;
 import com.ruowei.domain.User;
-import com.ruowei.domain.enumeration.EnterpriseStatusType;
-import com.ruowei.domain.enumeration.UserStatusType;
 import com.ruowei.repository.EnterpriseRepository;
+import com.ruowei.repository.GroupRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
-import com.ruowei.web.rest.errors.BadRequestProblem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -32,11 +31,13 @@ public class DomainUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final EnterpriseRepository enterpriseRepository;
+    private final GroupRepository groupRepository;
 
-    public DomainUserDetailsService(UserRepository userRepository, UserRoleRepository userRoleRepository, EnterpriseRepository enterpriseRepository) {
+    public DomainUserDetailsService(UserRepository userRepository, UserRoleRepository userRoleRepository, EnterpriseRepository enterpriseRepository, GroupRepository groupRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.enterpriseRepository = enterpriseRepository;
+        this.groupRepository = groupRepository;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
         return userRepository
-            .findOneByLogin(login)
+            .findOneByLoginAndDeletedIsFalse(login)
             .map(this::createSpringSecurityUser)
             .orElseThrow(() -> new InternalAuthenticationServiceException("用户名或密码错误！"));
     }
@@ -56,14 +57,20 @@ public class DomainUserDetailsService implements UserDetailsService {
                 .map(SimpleGrantedAuthority::new)
                 .distinct()
                 .collect(Collectors.toList());
-        if (user.getStatus() != UserStatusType.NORMAL) {
-            throw new LockedException("该用户已停用，请联系系统管理员");
+        String code = null;
+        String groupCode = null;
+        if (user.getEnterpriseCode() != null ) {
+            Enterprise enterprise = enterpriseRepository
+                .findByCode(user.getEnterpriseCode())
+                .orElseThrow(() -> new LockedException("未找到水厂信息"));
+            code = enterprise.getCode();
         }
-        if (user.getEnterpriseId() != null) {
-            Enterprise enterprise = enterpriseRepository.findByIdAndStatus(user.getEnterpriseId(), EnterpriseStatusType.NORMAL)
-                .orElseThrow(() -> new LockedException("未找到水务企业信息"));
-            return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), enterprise.getId(), enterprise.getName());
+        if (user.getGroupCode() != null) {
+            Group group = groupRepository
+                .findByGroupCode(user.getGroupCode())
+                .orElseThrow(() -> new LockedException("未找到集团信息"));
+            groupCode = group.getGroupCode();
         }
-        return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), null, null);
+        return new UserModel(user.getLogin(), user.getPassword(), authorities, user.getId(), user.getNickName(), code, groupCode, user.getEnterpriseName(), user.getGroupName());
     }
 }

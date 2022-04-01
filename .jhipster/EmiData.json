@@ -5,95 +5,101 @@
       "fieldName": "documentCode",
       "fieldType": "String",
       "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "enterpriseId",
-      "fieldType": "Long",
-      "javadoc": "企业ID",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "enterpriseName",
+      "fieldName": "enterpriseCode",
       "fieldType": "String",
-      "javadoc": "企业名称",
-      "fieldValidateRules": ["required"]
+      "javadoc": "水厂Code",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "reporterId",
-      "fieldType": "Long",
-      "javadoc": "录入员ID",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "reporterName",
+      "fieldName": "craftCode",
       "fieldType": "String",
-      "javadoc": "录入员姓名",
-      "fieldValidateRules": ["required"]
+      "javadoc": "工艺Code",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "reportTime",
-      "fieldType": "Instant",
-      "javadoc": "填报时间",
-      "fieldValidateRules": ["required"]
+      "fieldName": "acctype",
+      "fieldType": "String",
+      "javadoc": "核算方式（自动、手动）",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "accYear",
       "fieldType": "String",
       "javadoc": "核算年份",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "accMonth",
       "fieldType": "String",
       "javadoc": "核算月份",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "accTime",
-      "fieldType": "String",
+      "fieldType": "Instant",
       "javadoc": "核算时间",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "industryCode",
+      "fieldName": "predictTime",
       "fieldType": "String",
-      "javadoc": "行业类型编码",
-      "fieldValidateRules": ["required"]
+      "javadoc": "预测未来时间",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "industryName",
-      "fieldType": "String",
-      "javadoc": "行业类型名称",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "carbonEmi",
+      "fieldName": "totalOutN",
       "fieldType": "BigDecimal",
-      "javadoc": "本月碳排放（kg/m）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "出水总氮",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "carbonDirEmi",
+      "fieldName": "outAN",
       "fieldType": "BigDecimal",
-      "javadoc": "本月直接碳排放（kg）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "出水氨氮",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "carbonIndirEmi",
+      "fieldName": "carbonAdd",
       "fieldType": "BigDecimal",
-      "javadoc": "本月间接碳排放（kg）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "碳源投加量",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "carbonRed",
+      "fieldName": "phosphorusremover",
       "fieldType": "BigDecimal",
-      "javadoc": "本月负碳排放（kg）",
-      "fieldValidateRules": ["required"]
+      "javadoc": "除磷药剂",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [],
-  "javadoc": "碳排放数据",
+  "javadoc": "计算数据",
   "entityTableName": "emi_data",
   "dto": "no",
   "pagination": "no",

@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data SQL repository for the SewProcess entity.
@@ -14,10 +16,13 @@ import java.util.List;
 @Repository
 public interface SewProcessRepository extends JpaRepository<SewProcess, Long> {
 
-    /**
-     * 根据单据号查询污水厂工艺水质信息
-     * @param documentCode 单据号
-     * @return
-     */
-    List<SewProcess> findByDocumentCode(@NotNull String documentCode);
+    List<SewProcess> findByCraftCode(String craftCode);
+
+    List<SewProcess> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqual(Instant time1,Instant time2);
+
+    List<SewProcess> findByDayTimeIsGreaterThanEqualAndDayTimeIsLessThanEqualAndCraftCode(Instant time1,Instant time2,String craftCode);
+
+    Optional<SewProcess> findByCraftCodeAndProcessCode(String craftCode, String processCode);
+
+    SewProcess findFirstByOrderByIdDesc();
 }

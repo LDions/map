@@ -1,5 +1,6 @@
 package com.ruowei.domain;
 
+import com.ruowei.domain.enumeration.SendStatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -34,118 +35,98 @@ public class EmiData implements Serializable {
     private String documentCode;
 
     /**
-     * 企业ID
+     * 碳排放数据编码
      */
-    @NotNull
-    @ApiModelProperty(value = "企业ID", required = true)
-    @Column(name = "enterprise_id", nullable = false)
-    private Long enterpriseId;
+    @ApiModelProperty(value = "碳排放数据编码")
+    @Column(name = "data_code")
+    private String dataCode;
 
     /**
-     * 企业名称
+     * 水厂Code
      */
     @NotNull
-    @ApiModelProperty(value = "企业名称", required = true)
-    @Column(name = "enterprise_name", nullable = false)
-    private String enterpriseName;
+    @ApiModelProperty(value = "水厂编码", required = true)
+    @Column(name = "enterprise_code", nullable = false)
+    private String enterpriseCode;
 
     /**
-     * 录入员ID
+     * 工艺Code
      */
     @NotNull
-    @ApiModelProperty(value = "录入员ID", required = true)
-    @Column(name = "reporter_id", nullable = false)
-    private Long reporterId;
+    @ApiModelProperty(value = "工艺编码", required = true)
+    @Column(name = "craft_code", nullable = false)
+    private String craftCode;
 
     /**
-     * 录入员姓名
+     * 核算方式（自动、手动）
      */
     @NotNull
-    @ApiModelProperty(value = "录入员姓名", required = true)
-    @Column(name = "reporter_name", nullable = false)
-    private String reporterName;
+    @ApiModelProperty(value = "核算方式（自动、手动）", required = true)
+    @Column(name = "acctype", nullable = false)
+    private Boolean acctype;
 
     /**
-     * 填报时间
-     */
-    @NotNull
-    @ApiModelProperty(value = "填报时间", required = true)
-    @Column(name = "report_time", nullable = false)
-    private Instant reportTime;
-
-    /**
-     * 核算年份
-     */
-    @NotNull
-    @ApiModelProperty(value = "核算年份", required = true)
-    @Column(name = "acc_year", nullable = false)
-    private String accYear;
-
-    /**
-     * 核算月份
-     */
-    @NotNull
-    @ApiModelProperty(value = "核算月份", required = true)
-    @Column(name = "acc_month", nullable = false)
-    private String accMonth;
-
-    /**
-     * 核算时间
+     * 核算时间范围起
      */
     @NotNull
     @ApiModelProperty(value = "核算时间", required = true)
     @Column(name = "acc_time", nullable = false)
-    private String accTime;
+    private Instant accTime;
 
     /**
-     * 行业类型编码
+     * 预测未来时间
      */
     @NotNull
-    @ApiModelProperty(value = "行业类型编码", required = true)
-    @Column(name = "industry_code", nullable = false)
-    private String industryCode;
+    @ApiModelProperty(value = "预测未来时间", required = true)
+    @Column(name = "predict_time", nullable = false)
+    private Instant predictTime;
 
     /**
-     * 行业类型名称
+     * 出水总氮
      */
     @NotNull
-    @ApiModelProperty(value = "行业类型名称", required = true)
-    @Column(name = "industry_name", nullable = false)
-    private String industryName;
+    @ApiModelProperty(value = "出水总氮", required = true)
+    @Column(name = "total_out_n", nullable = false)
+    private BigDecimal totalOutN;
 
     /**
-     * 本月碳排放（kg/m）
+     * 出水氨氮
      */
     @NotNull
-    @ApiModelProperty(value = "本月碳排放（kg/m）", required = true)
-    @Column(name = "carbon_emi", precision = 21, scale = 2, nullable = false)
-    private BigDecimal carbonEmi;
+    @ApiModelProperty(value = "出水氨氮", required = true)
+    @Column(name = "out_an", nullable = false)
+    private BigDecimal outAN;
 
     /**
-     * 本月直接碳排放（kg）
+     * 碳源投加量
      */
     @NotNull
-    @ApiModelProperty(value = "本月直接碳排放（kg）", required = true)
-    @Column(name = "carbon_dir_emi", precision = 21, scale = 2, nullable = false)
-    private BigDecimal carbonDirEmi;
+    @ApiModelProperty(value = "碳源投加量）", required = true)
+    @Column(name = "carbon_add", precision = 21, scale = 2, nullable = false)
+    private BigDecimal carbonAdd;
 
     /**
-     * 本月间接碳排放（kg）
+     * 除磷药剂
      */
     @NotNull
-    @ApiModelProperty(value = "本月间接碳排放（kg）", required = true)
-    @Column(name = "carbon_indir_emi", precision = 21, scale = 2, nullable = false)
-    private BigDecimal carbonIndirEmi;
+    @ApiModelProperty(value = "除磷药剂）", required = true)
+    @Column(name = "phosphorusremover", precision = 21, scale = 2, nullable = false)
+    private BigDecimal phosphorusremover;
 
     /**
-     * 本月负碳排放（kg）
+     * 集团数据推送状态
      */
-    @NotNull
-    @ApiModelProperty(value = "本月负碳排放（kg）", required = true)
-    @Column(name = "carbon_red", precision = 21, scale = 2, nullable = false)
-    private BigDecimal carbonRed;
+    @ApiModelProperty(value = "集团数据推送状态")
+    @Column(name = "status")
+    private SendStatusType status;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    /**
+     * 平台数据推送状态
+     */
+    @ApiModelProperty(value = "平台数据推送状态")
+    @Column(name = "plate_status")
+    private SendStatusType plateStatus;
+
     public Long getId() {
         return id;
     }
@@ -154,204 +135,145 @@ public class EmiData implements Serializable {
         this.id = id;
     }
 
-    public EmiData id(Long id) {
-        this.id = id;
-        return this;
-    }
-
     public String getDocumentCode() {
-        return this.documentCode;
+        return documentCode;
     }
-
     public EmiData documentCode(String documentCode) {
         this.documentCode = documentCode;
         return this;
     }
-
     public void setDocumentCode(String documentCode) {
         this.documentCode = documentCode;
     }
 
-    public Long getEnterpriseId() {
-        return this.enterpriseId;
+    public String getDataCode() {
+        return dataCode;
     }
 
-    public EmiData enterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setDataCode(String dataCode) {
+        this.dataCode = dataCode;
+    }
+
+    public String getEnterpriseCode() {
+        return enterpriseCode;
+    }
+    public EmiData enterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
         return this;
     }
-
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setEnterpriseCode(String enterpriseCode) {
+        this.enterpriseCode = enterpriseCode;
     }
 
-    public String getEnterpriseName() {
-        return this.enterpriseName;
+    public Boolean getAcctype() {
+        return acctype;
     }
-
-    public EmiData enterpriseName(String enterpriseName) {
-        this.enterpriseName = enterpriseName;
+    public EmiData acctype(Boolean acctype) {
+        this.acctype = acctype;
         return this;
     }
-
-    public void setEnterpriseName(String enterpriseName) {
-        this.enterpriseName = enterpriseName;
+    public void setAcctype(Boolean acctype) {
+        this.acctype = acctype;
     }
 
-    public Long getReporterId() {
-        return this.reporterId;
-    }
 
-    public EmiData reporterId(Long reporterId) {
-        this.reporterId = reporterId;
+    public Instant getPredictTime() {
+        return predictTime;
+    }
+    public EmiData predictTime(Instant predictTime) {
+        this.predictTime = predictTime;
         return this;
     }
-
-    public void setReporterId(Long reporterId) {
-        this.reporterId = reporterId;
+    public void setPredictTime(Instant predictTime) {
+        this.predictTime = predictTime;
     }
 
-    public String getReporterName() {
-        return this.reporterName;
+    public String getCraftCode() {
+        return craftCode;
     }
-
-    public EmiData reporterName(String reporterName) {
-        this.reporterName = reporterName;
+    public EmiData craftCode(String craftCode) {
+        this.craftCode = craftCode;
         return this;
     }
-
-    public void setReporterName(String reporterName) {
-        this.reporterName = reporterName;
+    public void setCraftCode(String craftCode) {
+        this.craftCode = craftCode;
     }
 
-    public Instant getReportTime() {
-        return this.reportTime;
+    public BigDecimal getTotalOutN() {
+        return totalOutN;
     }
-
-    public EmiData reportTime(Instant reportTime) {
-        this.reportTime = reportTime;
+    public EmiData totalOutN(BigDecimal totalOutN) {
+        this.totalOutN = totalOutN;
         return this;
     }
-
-    public void setReportTime(Instant reportTime) {
-        this.reportTime = reportTime;
+    public void setTotalOutN(BigDecimal totalOutN) {
+        this.totalOutN = totalOutN;
     }
 
-    public String getAccYear() {
-        return this.accYear;
+    public BigDecimal getOutAN() {
+        return outAN;
     }
-
-    public EmiData accYear(String accYear) {
-        this.accYear = accYear;
+    public EmiData outAN(BigDecimal outAN) {
+        this.outAN = outAN;
         return this;
     }
-
-    public void setAccYear(String accYear) {
-        this.accYear = accYear;
+    public void setOutAN(BigDecimal outAN) {
+        this.outAN = outAN;
     }
 
-    public String getAccMonth() {
-        return this.accMonth;
+    public BigDecimal getCarbonAdd() {
+        return carbonAdd;
     }
-
-    public EmiData accMonth(String accMonth) {
-        this.accMonth = accMonth;
+    public EmiData carbonAdd(BigDecimal carbonAdd) {
+        this.carbonAdd = carbonAdd;
         return this;
     }
-
-    public void setAccMonth(String accMonth) {
-        this.accMonth = accMonth;
+    public void setCarbonAdd(BigDecimal carbonAdd) {
+        this.carbonAdd = carbonAdd;
     }
 
-    public String getAccTime() {
+    public BigDecimal getPhosphorusremover() {
+        return phosphorusremover;
+    }
+    public EmiData phosphorusremover(BigDecimal phosphorusremover) {
+        this.phosphorusremover = phosphorusremover;
+        return this;
+    }
+    public void setPhosphorusremover(BigDecimal phosphorusremover) {
+        this.phosphorusremover = phosphorusremover;
+    }
+
+    public SendStatusType getStatus() {
+        return status;
+    }
+    public EmiData status(SendStatusType status) {
+        this.status = status;
+        return this;
+    }
+    public void setStatus(SendStatusType status) {
+        this.status = status;
+    }
+
+    public SendStatusType getPlateStatus() {
+        return plateStatus;
+    }
+    public EmiData plateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+        return this;
+    }
+    public void setPlateStatus(SendStatusType plateStatus) {
+        this.plateStatus = plateStatus;
+    }
+
+    public Instant getAccTime() {
         return accTime;
     }
-
-    public EmiData accTime(String accTime) {
+    public EmiData accTime(Instant accTime) {
         this.accTime = accTime;
         return this;
     }
-
-    public void setAccTime(String accTime) {
+    public void setAccTime(Instant accTime) {
         this.accTime = accTime;
-    }
-
-    public String getIndustryCode() {
-        return this.industryCode;
-    }
-
-    public EmiData industryCode(String industryCode) {
-        this.industryCode = industryCode;
-        return this;
-    }
-
-    public void setIndustryCode(String industryCode) {
-        this.industryCode = industryCode;
-    }
-
-    public String getIndustryName() {
-        return this.industryName;
-    }
-
-    public EmiData industryName(String industryName) {
-        this.industryName = industryName;
-        return this;
-    }
-
-    public void setIndustryName(String industryName) {
-        this.industryName = industryName;
-    }
-
-    public BigDecimal getCarbonEmi() {
-        return this.carbonEmi;
-    }
-
-    public EmiData carbonEmi(BigDecimal carbonEmi) {
-        this.carbonEmi = carbonEmi;
-        return this;
-    }
-
-    public void setCarbonEmi(BigDecimal carbonEmi) {
-        this.carbonEmi = carbonEmi;
-    }
-
-    public BigDecimal getCarbonDirEmi() {
-        return this.carbonDirEmi;
-    }
-
-    public EmiData carbonDirEmi(BigDecimal carbonDirEmi) {
-        this.carbonDirEmi = carbonDirEmi;
-        return this;
-    }
-
-    public void setCarbonDirEmi(BigDecimal carbonDirEmi) {
-        this.carbonDirEmi = carbonDirEmi;
-    }
-
-    public BigDecimal getCarbonIndirEmi() {
-        return this.carbonIndirEmi;
-    }
-
-    public EmiData carbonIndirEmi(BigDecimal carbonIndirEmi) {
-        this.carbonIndirEmi = carbonIndirEmi;
-        return this;
-    }
-
-    public void setCarbonIndirEmi(BigDecimal carbonIndirEmi) {
-        this.carbonIndirEmi = carbonIndirEmi;
-    }
-
-    public BigDecimal getCarbonRed() {
-        return this.carbonRed;
-    }
-
-    public EmiData carbonRed(BigDecimal carbonRed) {
-        this.carbonRed = carbonRed;
-        return this;
-    }
-
-    public void setCarbonRed(BigDecimal carbonRed) {
-        this.carbonRed = carbonRed;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -373,26 +295,23 @@ public class EmiData implements Serializable {
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "EmiData{" +
-            "id=" + getId() +
-            ", documentCode='" + getDocumentCode() + "'" +
-            ", enterpriseId=" + getEnterpriseId() +
-            ", enterpriseName='" + getEnterpriseName() + "'" +
-            ", reporterId=" + getReporterId() +
-            ", reporterName='" + getReporterName() + "'" +
-            ", reportTime='" + getReportTime() + "'" +
-            ", accYear='" + getAccYear() + "'" +
-            ", accMonth='" + getAccMonth() + "'" +
-            ", accTime='" + getAccTime() + "'" +
-            ", industryCode='" + getIndustryCode() + "'" +
-            ", industryName='" + getIndustryName() + "'" +
-            ", carbonEmi=" + getCarbonEmi() +
-            ", carbonDirEmi=" + getCarbonDirEmi() +
-            ", carbonIndirEmi=" + getCarbonIndirEmi() +
-            ", carbonRed=" + getCarbonRed() +
-            "}";
+            "id=" + id +
+            ", documentCode='" + documentCode +
+            ", dataCode='" + dataCode +
+            ", enterpriseCode='" + enterpriseCode +
+            ", craftCode='" + craftCode +
+            ", acctype=" + acctype +
+            ", accTime=" + accTime +
+            ", predictTime=" + predictTime +
+            ", totalOutN=" + totalOutN +
+            ", outAN=" + outAN +
+            ", carbonAdd=" + carbonAdd +
+            ", phosphorusremover=" + phosphorusremover +
+            ", status=" + status +
+            ", plateStatus=" + plateStatus +
+            '}';
     }
 }

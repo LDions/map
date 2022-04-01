@@ -11,17 +11,23 @@ public class UserModel extends User {
     private Long userId;
     // 用户姓名
     private String nickName;
-    // 企业ID
-    private Long enterpriseId;
+    // 水厂Code
+    private String code;
+    // 集团Code
+    private String groupCode;
     // 企业名称
     private String enterpriseName;
+    // 集团名称
+    private String groupName;
 
-    public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, String nickName, Long enterpriseId, String enterpriseName) {
+    public UserModel(String username, String password, Collection<? extends GrantedAuthority> authorities, Long userId, String nickName, String code, String groupCode, String enterpriseName, String groupName) {
         super(username, password, authorities);
         this.userId = userId;
         this.nickName = nickName;
-        this.enterpriseId = enterpriseId;
+        this.code = code;
+        this.groupCode = groupCode;
         this.enterpriseName = enterpriseName;
+        this.groupName = groupName;
     }
 
     public Long getUserId() {
@@ -40,12 +46,20 @@ public class UserModel extends User {
         this.nickName = nickName;
     }
 
-    public Long getEnterpriseId() {
-        return enterpriseId;
+    public String getcode() {
+        return code;
     }
 
-    public void setEnterpriseId(Long enterpriseId) {
-        this.enterpriseId = enterpriseId;
+    public void setcode(String code) {
+        this.code = code;
+    }
+
+    public String getgroupCode() {
+        return groupCode;
+    }
+
+    public void setgroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
 
     public String getEnterpriseName() {
@@ -54,6 +68,14 @@ public class UserModel extends User {
 
     public void setEnterpriseName(String enterpriseName) {
         this.enterpriseName = enterpriseName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }
 

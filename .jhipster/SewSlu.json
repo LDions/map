@@ -2,36 +2,107 @@
   "name": "SewSlu",
   "fields": [
     {
-      "fieldName": "documentCode",
+      "fieldName": "craftCode",
       "fieldType": "String",
-      "javadoc": "单据号",
-      "fieldValidateRules": ["required"]
+      "javadoc": "工艺Code",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "methodCode",
-      "fieldType": "String",
-      "javadoc": "污泥处置方法编码",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "methodName",
-      "fieldType": "String",
-      "javadoc": "污泥处置方法名称",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "sluCapacity",
+      "fieldName": "assInAmmonia",
       "fieldType": "BigDecimal",
-      "javadoc": "污泥处置量（kg/m）"
+      "javadoc": "进水氨氮（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
-      "fieldName": "sluMoisture",
+      "fieldName": "assInCod",
       "fieldType": "BigDecimal",
-      "javadoc": "污泥处置前含水率（%）"
+      "javadoc": "进水COD（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "assInTn",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水TN（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "assInTp",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水TP（mg/L）"
+    },
+    {
+      "fieldName": "assAnoxicPoolDoOutNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池出口硝酸盐（mg/L）"
+    },
+    {
+      "fieldName": "assAerobicPoolDoOutNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "好氧池出口硝酸盐（mg/L）"
+    },
+    {
+      "fieldName": "assOutAmmonia",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水氨氮（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "assOutCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水COD（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "assOutTn",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水TN（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "assOutTp",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水TP（mg/L）"
+    },
+    {
+      "fieldName": "dayTime",
+      "fieldType": "Instant",
+      "javadoc": "采集时间"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
     }
   ],
   "relationships": [],
-  "javadoc": "污泥处置方法数据",
+  "javadoc": "化验数据",
   "entityTableName": "sew_slu",
   "dto": "no",
   "pagination": "no",

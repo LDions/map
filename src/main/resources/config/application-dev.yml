@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/db?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://192.168.1.216:10000/zhicxtJava?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
-    password: 123456
+    password: bifan
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -56,22 +56,20 @@ spring:
   thymeleaf:
     cache: false
   activemq:
-    broker-url: tcp://localhost:61616
+    broker-url: tcp://112.102.175.57:8002
     user: admin
-    password: admin
+    password: dwysdx2022
     close-timeout: 15s   # 在考虑结束之前等待的时间
     in-memory: true      # 默认代理URL是否应该在内存中。如果指定了显式代理，则忽略此值。
     non-blocking-redelivery: false  # 是否在回滚回滚消息之前停止消息传递。这意味着当启用此命令时，消息顺序不会被保留。
     send-timeout: 0     # 等待消息发送响应的时间。设置为0等待永远。
-    queue-name: active.queue
-    topic-name: active.topic.name.model
     pool:
       enabled: true
       max-connections: 10   #连接池最大连接数
       idle-timeout: 30000   #空闲的连接过期时间，默认为30秒
 
 server:
-  port: 8080
+  port: 10001
 
 # ===================================================================
 # JHipster specific properties
@@ -102,7 +100,7 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:8080
+    base-url: http://192.168.1.216:10001
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -125,6 +123,8 @@ application:
     app-id: SHc9yqBK7EAo
     channel-id: 611098f8e6e8f800842fb9db
     chaincode-id: 6110c5dce869e4007f7fc482
-    base-url: http://192.168.1.216:8081
+    base-url: http://192.168.1.216:10001
 
   reportPath: /data/projects/cnsp/report/
+  host: http://192.168.1.95:8080
+  plateHost: http://192.168.1.95:8080

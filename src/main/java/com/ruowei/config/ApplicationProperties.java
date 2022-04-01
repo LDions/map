@@ -3,7 +3,7 @@ package com.ruowei.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Properties specific to Cnsp Java.
+ * Properties specific to Zhjcxt Java.
  * <p>
  * Properties are configured in the {@code application.yml} file.
  * See {@link tech.jhipster.config.JHipsterProperties} for a good example.
@@ -14,6 +14,28 @@ public class ApplicationProperties {
     private final BlockChain blockChain = new BlockChain();
 
     private String reportPath;
+
+    private String host;
+
+    //集团IP地址
+    private String plateHost;
+
+    //平台IP地址
+    public String getPlateHost() {
+        return plateHost;
+    }
+
+    public void setPlateHost(String plateHost) {
+        this.plateHost = plateHost;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
 
     public BlockChain getBlockChain() {
         return blockChain;
