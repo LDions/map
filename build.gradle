@@ -266,6 +266,9 @@ dependencies {
 // https://mvnrepository.com/artifact/top.jfunc.common/converter
     implementation group: 'top.jfunc.common', name: 'converter', version: '1.8.0'
 
+    // https://mvnrepository.com/artifact/io.rsocket/rsocket-core
+    implementation group: 'io.rsocket', name: 'rsocket-core', version: '1.1.1'
+
 }
 
 if (project.hasProperty("gae")) {
