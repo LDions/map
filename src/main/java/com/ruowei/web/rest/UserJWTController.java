@@ -80,8 +80,8 @@ public class UserJWTController {
         String jwt = tokenProvider.createToken(authentication, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
         JWTToken jwtToken = new JWTToken(jwt);
+        jwtToken.setUserId(user.getId());
         jwtToken.setNickName(user.getNickName());
         jwtToken.setCode(user.getEnterpriseCode());
         jwtToken.setGroupCode(user.getGroupCode());
@@ -95,7 +95,6 @@ public class UserJWTController {
             user.setGroupName(group.getGroupName());
             jwtToken.setGroupName(group.getGroupName());
         }
-        userRepository.save(user);
         List<Long> roleIds = userRoleRepository.findAllByUserId(user.getId()).stream().map(UserRole::getRoleId).collect(Collectors.toList());
         List<String> roleCodes = roleRepository.findAllByIdIn(roleIds).stream().map(Role::getCode).collect(Collectors.toList());
         jwtToken.setRoleCodes(roleCodes);
@@ -135,6 +134,8 @@ public class UserJWTController {
      */
     static class JWTToken {
 
+        private Long userId;
+
         private String idToken;
 
         private String code;
@@ -155,6 +156,15 @@ public class UserJWTController {
 
         JWTToken(String idToken) {
             this.idToken = idToken;
+        }
+
+        @JsonProperty("user_id")
+        Long getUserId() {
+            return userId;
+        }
+
+        void setUserId(Long userId) {
+            this.userId = userId;
         }
 
         @JsonProperty("id_token")

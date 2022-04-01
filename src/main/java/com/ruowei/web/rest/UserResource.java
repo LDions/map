@@ -6,10 +6,9 @@ import com.ruowei.config.ApplicationProperties;
 import com.ruowei.config.Constants;
 import com.ruowei.domain.*;
 
-import com.ruowei.domain.enumeration.RoleStatusType;
-import com.ruowei.domain.enumeration.RoleType;
 import com.ruowei.domain.enumeration.SendStatusType;
 import com.ruowei.repository.EnterpriseRepository;
+import com.ruowei.repository.GroupRepository;
 import com.ruowei.repository.UserRepository;
 import com.ruowei.repository.UserRoleRepository;
 import com.ruowei.security.UserModel;
@@ -26,7 +25,6 @@ import com.ruowei.web.rest.vm.UserQM;
 import com.ruowei.web.rest.vm.UserVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import liquibase.pro.packaged.E;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +46,6 @@ import tech.jhipster.web.util.ResponseUtil;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,11 +66,12 @@ public class UserResource {
     private final UserVMMapper userVMMapper;
     private final PushService pushService;
     private final EnterpriseRepository enterpriseRepository;
+    private final GroupRepository groupRepository;
     private QUser qUser = QUser.user;
     private QRole qRole = QRole.role;
     private QUserRole qUserRole = QUserRole.userRole;
 
-    public UserResource(ApplicationProperties applicationProperties, UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper, PushService pushService, EnterpriseRepository enterpriseRepository) {
+    public UserResource(ApplicationProperties applicationProperties, UserRepository userRepository, PasswordEncoder passwordEncoder, JPAQueryFactory jpaQueryFactory, UserRoleRepository userRoleRepository, UserVMMapper userVMMapper, PushService pushService, EnterpriseRepository enterpriseRepository, GroupRepository groupRepository) {
         this.applicationProperties = applicationProperties;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -82,6 +80,7 @@ public class UserResource {
         this.userVMMapper = userVMMapper;
         this.pushService = pushService;
         this.enterpriseRepository = enterpriseRepository;
+        this.groupRepository = groupRepository;
     }
 
     @PostMapping("/user")
@@ -101,6 +100,14 @@ public class UserResource {
             throw new BadRequestProblem("新增失败", "请选择用户类别(水厂or集团)");
         }
         User user = userVMMapper.toEntity(vm);
+        if(vm.getEnterpriseCode() != null) {
+            Enterprise enterprise = enterpriseRepository.findOneByCode(vm.getEnterpriseCode()).orElseThrow(() -> new BadRequestProblem("新增失败", "企业不存在"));
+            user.setEnterpriseName(enterprise.getName());
+        }
+        if(vm.getGroupCode() != null) {
+            Group group = groupRepository.findByGroupCode(vm.getGroupCode()).orElseThrow(() -> new BadRequestProblem("新增失败", "企业不存在"));
+            user.setGroupName(group.getGroupName());
+        }
         user.setEnterpriseCode(vm.getEnterpriseCode());
         user.setGroupCode(vm.getGroupCode());
         user.setUserCode(IDUtils.codeGenerator());
