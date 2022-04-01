@@ -1,5 +1,8 @@
 package com.ruowei.web.rest;
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ruowei.domain.*;
 import com.ruowei.repository.*;
 import com.ruowei.security.UserModel;
@@ -44,13 +47,20 @@ public class GroupResource {
     private final SewEmiThresholdRepository sewEmiThresholdRepository;
     private final EmiDataRepository emiDataRepository;
 
-    public GroupResource(GroupRepository groupRepository, UserRepository userRepository, EnterpriseRepository enterpriseRepository, CraftRepository craftRepository, SewEmiThresholdRepository sewEmiThresholdRepository, EmiDataRepository emiDataRepository) {
+    private final JPAQueryFactory jpaQueryFactory;
+
+    private QSewEmiThreshold qSewEmiThreshold = QSewEmiThreshold.sewEmiThreshold;
+    private QEnterprise qEnterprise = QEnterprise.enterprise;
+    private QGroup qGroup = QGroup.group;
+
+    public GroupResource(GroupRepository groupRepository, UserRepository userRepository, EnterpriseRepository enterpriseRepository, CraftRepository craftRepository, SewEmiThresholdRepository sewEmiThresholdRepository, EmiDataRepository emiDataRepository, JPAQueryFactory jpaQueryFactory) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.enterpriseRepository = enterpriseRepository;
         this.craftRepository = craftRepository;
         this.sewEmiThresholdRepository = sewEmiThresholdRepository;
         this.emiDataRepository = emiDataRepository;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     @PostMapping("/group")
@@ -142,40 +152,35 @@ public class GroupResource {
         return ResponseEntity.ok().body(dropDownList);
     }
 
-/*    @ApiIgnore
+    @ApiIgnore
     @PostMapping("/group/enterprise/result-save")
     @ApiOperation(value = "保存本次对多个工艺计算的结果", notes = "作者：郑昊天")
-    public ResponseEntity<String> saveAccountResult(@Valid @RequestBody List<AccountVM> vms, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
+    public ResponseEntity<String> saveCalculateResult(@Valid @RequestBody List<AccountVM> vms, @ApiIgnore @AuthenticationPrincipal UserModel userModel) {
         String result = "";
         for (AccountVM vm : vms) {
-            int i = 1;
             EmiData emiData = new EmiData()
 //                .documentCode()
+                // TODO 生成规则
 //                .dataCode()
                 .enterpriseCode(userModel.getcode())
-//                .acctype(vm.getAcctype())
-//                .accYear(vm.getAccYear())
-//                .accMonth(vm.getAccMonth())
-//                .accTimeStart(vm.getAccTime())
-//                .accTimeStop(vm.getAccTime())
-//                .predictTime()
-//                .craftCode(vm.getCraftId())
+                .acctype(vm.getAcctype())
+                .accTime(vm.getAccTime())
+                .predictTime(vm.getPredictTime())
                 .totalOutN(vm.getTotalOutN())
                 .outAN(vm.getOutAN())
                 .carbonAdd(vm.getCarbonAdd())
                 .phosphorusremover(vm.getPhosphorusremover());
             emiDataRepository.save(emiData);
-            i++;
         }
 
         return ResponseEntity.ok().body(result);
-    }*/
+    }
 
     @ApiIgnore
     @PostMapping("/group/excel-export")
     @ApiOperation(value = "结果导出", notes = "作者：郑昊天")
-    public ResponseEntity<Resource> exportResult(@RequestBody @ApiParam(value = "计算历史记录编码列表") List<String> codes) {
-
+    public ResponseEntity<Resource> exportResult(@RequestBody @ApiParam(value = "计算历史记录编码列表") List<String> dataCodes) {
+        // TODO 根据datacodes查询计算结果记录
         // TODO 组装参数
         byte[] buffer = GroupExcelExport.export(new ArrayList<>());
         if (buffer == null) {
@@ -188,7 +193,7 @@ public class GroupResource {
 
     @PostMapping("/group/enterprise/threshold")
     @ApiOperation(value = "查询阈值报警", notes = "作者：郑昊天")
-    public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore @AuthenticationPrincipal UserModel userModel, @ApiParam(value = "水厂编码", required = false) String entCode) {
+    public ResponseEntity<ThresholdDTO> saveAccountResult(@ApiIgnore @AuthenticationPrincipal UserModel userModel, @RequestBody @ApiParam(value = "水厂编码", required = false) String entCode) {
         Optional<SewEmiThreshold> threshold;
         if (userModel.getcode().isEmpty()) {
             threshold = sewEmiThresholdRepository.findByEnterpriseCode(userModel.getcode());
@@ -204,6 +209,7 @@ public class GroupResource {
             throw new BadRequestProblem("报警阈值不存在");
         }
     }
+
 
     @ApiIgnore
     @PostMapping("/group/nitrogen-model")
