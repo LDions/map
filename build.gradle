@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public'  }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         gradlePluginPortal()
     }
     dependencies {
@@ -28,8 +28,8 @@ version = ""
 
 description = ""
 
-sourceCompatibility=11
-targetCompatibility=11
+sourceCompatibility = 11
+targetCompatibility = 11
 assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10" || "11" || "12" || "13" || "14" || "15" || "16"
 
 apply from: "gradle/docker.gradle"
@@ -190,7 +190,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     implementation "org.springframework.boot:spring-boot-starter-security"
-    implementation ("org.springframework.boot:spring-boot-starter-web") {
+    implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
     implementation "org.springframework.boot:spring-boot-starter-undertow"
@@ -208,8 +208,8 @@ dependencies {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
     }
-    implementation ("io.springfox:springfox-oas")
-    implementation ("io.springfox:springfox-swagger2")
+    implementation("io.springfox:springfox-oas")
+    implementation("io.springfox:springfox-swagger2")
     implementation "io.springfox:springfox-bean-validators"
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
