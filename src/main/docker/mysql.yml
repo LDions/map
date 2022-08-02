@@ -1,0 +1,18 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  zhjcxtjava-mysql:
+    image: mysql:8.0.25
+    container_name: zhjcxtjava-mysql
+    volumes:
+      - /data/projects/zhjcxt/mysql/:/var/lib/mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=Mys@2021
+      - MYSQL_DATABASE=cnspJava
+      - MYSQL_USER=cnsp
+      - MYSQL_PASSWORD=Cns@2021
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - "3307:3306"
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp

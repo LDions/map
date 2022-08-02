@@ -1,0 +1,113 @@
+{
+  "name": "EmiData",
+  "fields": [
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "enterpriseCode",
+      "fieldType": "String",
+      "javadoc": "水厂Code",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺Code",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "acctype",
+      "fieldType": "String",
+      "javadoc": "核算方式（自动、手动）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "accYear",
+      "fieldType": "String",
+      "javadoc": "核算年份",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "accMonth",
+      "fieldType": "String",
+      "javadoc": "核算月份",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "accTime",
+      "fieldType": "Instant",
+      "javadoc": "核算时间",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "predictTime",
+      "fieldType": "String",
+      "javadoc": "预测未来时间",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "totalOutN",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水总氮",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outAN",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水氨氮",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "carbonAdd",
+      "fieldType": "BigDecimal",
+      "javadoc": "碳源投加量",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "phosphorusremover",
+      "fieldType": "BigDecimal",
+      "javadoc": "除磷药剂",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "计算数据",
+  "entityTableName": "emi_data",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023657"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "BeAssociated",
+  "fields": [
+    {
+      "fieldName": "beAssociatedName",
+      "fieldType": "String",
+      "javadoc": "被关联数据名称"
+    },
+    {
+      "fieldName": "relationTarget",
+      "fieldType": "String",
+      "javadoc": "关联数据名称"
+    },
+    {
+      "fieldName": "beAssociatedCraftCode",
+      "fieldType": "String",
+      "javadoc": "被关联数据所属工艺Code"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "被指标关联表",
+  "entityTableName": "sew_be_associated",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080844"
+}

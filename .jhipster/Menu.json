@@ -1,0 +1,107 @@
+{
+  "name": "Menu",
+  "fields": [
+    {
+      "fieldName": "menuCode",
+      "fieldType": "String",
+      "javadoc": "菜单编码",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "parentId",
+      "fieldType": "Long",
+      "javadoc": "父级ID"
+    },
+    {
+      "fieldName": "parentIds",
+      "fieldType": "String",
+      "javadoc": "所有父级ID"
+    },
+    {
+      "fieldName": "treeSort",
+      "fieldType": "Integer",
+      "javadoc": "本级排序号（升序）"
+    },
+    {
+      "fieldName": "treeLeaf",
+      "fieldType": "Boolean",
+      "javadoc": "是否最末级",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "treeLevel",
+      "fieldType": "Integer",
+      "javadoc": "层次级别",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "treeNames",
+      "fieldType": "String",
+      "javadoc": "全节点名"
+    },
+    {
+      "fieldName": "menuName",
+      "fieldType": "String",
+      "javadoc": "菜单名称"
+    },
+    {
+      "fieldName": "menuType",
+      "fieldType": "MenuType",
+      "javadoc": "菜单类型",
+      "fieldValues": "MENU,PERMISSION",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "menuHref",
+      "fieldType": "String",
+      "javadoc": "链接"
+    },
+    {
+      "fieldName": "menuIcon",
+      "fieldType": "String",
+      "javadoc": "图标"
+    },
+    {
+      "fieldName": "menuTitle",
+      "fieldType": "String",
+      "javadoc": "菜单标题"
+    },
+    {
+      "fieldName": "menuSort",
+      "fieldType": "Integer",
+      "javadoc": "菜单排序（升序）"
+    },
+    {
+      "fieldName": "isShow",
+      "fieldType": "Boolean",
+      "javadoc": "是否显示",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sysCode",
+      "fieldType": "SysType",
+      "javadoc": "归属系统",
+      "fieldValues": "WEB,MOBILE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "MenuStatusType",
+      "javadoc": "状态",
+      "fieldValues": "NORMAL,DELETE",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "菜单表",
+  "entityTableName": "sys_menu",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080845"
+}

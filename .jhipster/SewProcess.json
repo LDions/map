@@ -1,0 +1,152 @@
+{
+  "name": "SewProcess",
+  "fields": [
+    {
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺Code",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inFlow",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水流量（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inAmmonia",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水氨氮（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水COD（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inTn",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水TN（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inTp",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水TP（mg/L）"
+    },
+    {
+      "fieldName": "inSs",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水SS（mg/L）"
+    },
+    {
+      "fieldName": "outFlow",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水流量（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outAmmonia",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水氨氮（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outCod",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水COD（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outTn",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水TN（mg/L）",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outTp",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水TP（mg/L）"
+    },
+    {
+      "fieldName": "outSs",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水SS（mg/L）"
+    },
+    {
+      "fieldName": "anoxicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池DO（mg/L）"
+    },
+    {
+      "fieldName": "aerobicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "好氧池DO（mg/L）"
+    },
+    {
+      "fieldName": "anoxicPoolDoOutNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "缺氧池出口硝酸盐（mg/L）"
+    },
+    {
+      "fieldName": "aerobicPoolNit",
+      "fieldType": "BigDecimal",
+      "javadoc": "好氧池出口亚硝酸盐（mg/L）"
+    },
+    {
+      "fieldName": "dayTime",
+      "fieldType": "Instant",
+      "javadoc": "采集时间"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "仪表数据",
+  "entityTableName": "sew_process",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023701"
+}

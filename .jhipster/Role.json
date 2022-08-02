@@ -1,0 +1,35 @@
+{
+  "name": "Role",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "javadoc": "角色编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "javadoc": "角色名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isSys",
+      "fieldType": "Boolean",
+      "javadoc": "是否内置角色",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "角色",
+  "entityTableName": "sys_role",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210730055829"
+}

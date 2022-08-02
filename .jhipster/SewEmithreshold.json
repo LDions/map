@@ -1,0 +1,107 @@
+{
+  "name": "SewEmithreshold",
+  "fields": [
+    {
+      "fieldName": "enterpriseId",
+      "fieldType": "Long",
+      "javadoc": "企业id",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inCodLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水COD阈值",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inTotalNLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水总氮上限",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inTotalANLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水氨氮期上限",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "inTotalPLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水总磷期上限",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outCodLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水COD阈值",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outTotalNLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水总氮上限",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outTotalANLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水氨氮期上限",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "outTotalPLimit",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水总磷期上限",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "进出水指标阈值",
+  "entityTableName": "sew_emi_threshold",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023702"
+}

@@ -1,0 +1,29 @@
+{
+  "name": "RoleMenu",
+  "fields": [
+    {
+      "fieldName": "roleId",
+      "fieldType": "Long",
+      "javadoc": "角色ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "menuId",
+      "fieldType": "Long",
+      "javadoc": "菜单ID",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "角色菜单关系",
+  "entityTableName": "sys_role_menu",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080846"
+}

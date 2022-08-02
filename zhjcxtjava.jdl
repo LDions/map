@@ -1,0 +1,322 @@
+/** 用户 */
+entity User(sys_user) {
+    userCode String /** 用户编码 */
+	groupCode String /** 集团编码 */
+    enterpriseCode String /** 水厂编码 */
+    login String required /** 登录账号 */
+	password String required minlength(60) maxlength(60)  /** 密码 */
+	nickName String required /** 用户昵称 */
+	remark String /** 备注 */
+	deleted Boolean /** 是否删除 */
+	status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+}
+/** 角色 */
+entity Role(sys_role) {
+    code String required /** 角色编码 */
+	name String required /** 角色名称 */
+	isSys Boolean required /** 是否内置角色 */
+}
+/** 用户角色 */
+entity UserRole(sys_user_role) {
+	userId Long required /** 用户ID */
+    roleId Long required /** 角色ID */
+}
+/** 菜单表 */
+entity Menu(sys_menu) {
+    menuCode String required unique/** 菜单编码 */
+    parentId Long /** 父级ID */
+    parentIds String /** 所有父级ID */
+    treeSort Integer /** 本级排序号（升序） */
+    treeLeaf Boolean required /** 是否最末级 */
+    treeLevel Integer required /** 层次级别 */
+    treeNames String /** 全节点名 */
+    menuName String /** 菜单名称 */
+    menuType MenuType required /** 菜单类型 */
+    menuHref String /** 链接 */
+    menuIcon String /** 图标 */
+    menuTitle String /** 菜单标题 */
+    menuSort Integer /** 菜单排序（升序） */
+    isShow Boolean required /** 是否显示 */
+    sysCode SysType required /** 归属系统 */
+    status MenuStatusType required /** 状态 */
+}
+/** 菜单类型 */
+enum MenuType {
+    MENU,
+    PERMISSION
+}
+/** 归属系统类型 */
+enum SysType {
+    WEB,
+    MOBILE
+}
+/**
+ * 菜单状态类型
+ * 正常|删除|停用
+ */
+enum MenuStatusType {
+    NORMAL,
+    DELETE
+}
+/** 角色菜单关系 */
+entity RoleMenu(sys_role_menu) {
+    roleId Long required /** 角色ID */
+    menuId Long required /** 菜单ID */
+}
+/** 集团信息 */
+entity Group(sys_group) {
+    groupName String required/** 集团名称 */
+    groupCode String required /** 集团编码 */
+    groupLongitude BigDecimal required /** 经营详细地址经度 */
+    groupLatitude BigDecimal required /** 经营详细地址纬度 */
+    groupContactName String /** 联系人姓名 */
+    groupContactPhone String /** 联系人手机 */
+}
+/** 水厂信息 */
+entity Enterprise(sys_enterprise) {
+	groupCode String /** 水厂所属集团Code */
+	code String required /** 水厂编码 */
+    name String required /** 水厂名称 */
+    enterpriseLongitude BigDecimal required /** 经营详细地址经度 */
+    enterpriseLatitude BigDecimal required /** 经营详细地址纬度 */
+    contactName String /** 联系人姓名 */
+    contactPhone String /** 联系人手机 */
+    isTry Boolean required /** 是否为试点水厂 */
+    remark String /** 备注 */
+}
+/** 工艺信息 */
+entity Craft(craft){
+	enterpriseCode String required/** 所属水厂Code */
+    craftName String /** 工艺名称 */
+    craftCode String /** 工艺编码 */
+    AnaerobicPoolVolume BigDecimal /** 厌氧池池容 */
+    AnoxicPoolVolume BigDecimal /** 缺氧池池容 */
+    AerobicPoolVolume BigDecimal /** 好氧池池容 */
+    inRefluxFlow BigDecimal /** 内回流泵流量 (m3/h) */
+    inRefluxNum BigDecimal /** 内回流泵台数 */
+    outRefluxFlow BigDecimal /** 外回流泵流量 (m3/h) */
+    outRefluxNum BigDecimal /** 外回流泵台数 */
+    aerobioticNitrateConcentration BigDecimal /** 传统公式：好氧区硝酸盐浓度 */
+    anoxiaNitrateConcentration BigDecimal /** 传统公式：缺氧区硝酸盐浓度 */
+    nitrateRefluxRatio BigDecimal /** 传统公式：硝化液回流比 */
+    bodCodRatio BigDecimal /** 传统公式：BOD/COD */
+    codCalibration BigDecimal /** 传统公式：COD校准参数 */
+    bodNRatio BigDecimal /** 传统公式：BOD/N */
+    bodEquivalentWeight BigDecimal /** 传统公式：BOD当量 */
+    intimacy BigDecimal /** 传统公式：外加碳源相对亲密度 */
+    dilutionRatio BigDecimal /** 传统公式：碳源稀释倍数 */
+    phosphate BigDecimal /** 除磷公式：二沉池出水正磷酸盐设定值 */
+    feAlRatio BigDecimal /** 除磷公式：铁盐或铝盐的摩尔质量比 */
+    phosphorusDosing BigDecimal /** 除磷公式：投加系数 */
+    feAlActiveIngredients BigDecimal /** 除磷公式：铁盐或铝盐的有效成分 */
+    concentration BigDecimal /** 除磷公式：除磷药剂配药浓度或者相对密度 */
+}
+/**计算数据 */
+entity EmiData(emi_data) {
+	documentCode String required /** 单据号 */
+	dataCode String required /** 碳排放数据编码 */
+	enterpriseCode String required /** 水厂code */
+	craftCode String required /** 工艺code */
+    acctype Boolean required /** 核算方式（true自动、false手动） */
+    accTime Instant required /** 核算时间 */
+    predictTime Instant required /** 预测未来时间 */
+    totalOutN BigDecimal required /** 出水总氮 */
+    outAN BigDecimal required /** 出水氨氮 */
+    carbonAdd BigDecimal required /** 碳源投加量 */
+    phosphorusremover BigDecimal required /** 除磷药剂  */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+}
+
+/** 仪表数据 */
+entity SewProcess(sew_process) {
+    craftId Long required /** 工艺ID */
+    craftCode String /** 工艺编码 */
+    processCode String required /** 仪表编码（更新仪表推送数据时唯一标识） */
+    // 输入项目-水质信息
+    inFlow BigDecimal required /** 进水流量（mg/L） */
+    inAmmonia BigDecimal required /** 进水氨氮（mg/L） */
+    inCod BigDecimal required /** 进水COD（mg/L） */
+    inTn BigDecimal required /** 进水TN（mg/L） */
+    inTp BigDecimal /** 进水TP（mg/L） */
+    inPh BigDecimal /** 进水PH（mg/L） */
+    inSs BigDecimal /** 进水SS（mg/L） */
+    outFlow BigDecimal required /** 出水流量（mg/L） */
+    outAmmonia BigDecimal required /** 出水氨氮（mg/L） */
+    outCod BigDecimal required /** 出水COD（mg/L） */
+    outTn BigDecimal required /** 出水TN（mg/L） */
+    outTp BigDecimal /** 出水TP（mg/L） */
+    outSs BigDecimal /** 出水SS（mg/L） */
+    aerobicPoolDo BigDecimal /** 好氧池1 DO（mg/L） */
+    aerobicPoolDoSecond BigDecimal /** 好氧池2 DO（mg/L） */
+    anoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
+    aerobicPoolNit BigDecimal /** 好氧池出口亚硝酸盐（mg/L） */
+    dayTime Instant /** 采集时间 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+}
+/** 化验数据 */
+entity SewSlu(sew_slu) {
+    craftId Long required /** 工艺ID */
+    craftCode String /** 工艺编码 */
+    sluCode String required /** 化验编码（更新化验推送数据时唯一标识） */
+    assInAmmonia BigDecimal required /** 进水氨氮（mg/L） */
+    assInCod BigDecimal required /** 进水COD（mg/L） */
+    assInTn BigDecimal required /** 进水TN（mg/L） */
+    assInTp BigDecimal /** 进水TP（mg/L） */
+    assAnoxicPoolDoOutNit BigDecimal /** 缺氧池出口硝酸盐（mg/L） */
+    assAerobicPoolDoOutNit BigDecimal /** 好氧池出口硝酸盐（mg/L） */
+    assOutAmmonia BigDecimal required /** 出水氨氮（mg/L） */
+    assOutCod BigDecimal required /** 出水COD（mg/L） */
+    assOutTn BigDecimal required /** 出水TN（mg/L） */
+    assOutTp BigDecimal /** 出水TP（mg/L） */
+    dayTime Instant /** 采集时间 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+
+}
+/** 日报表数据 */
+entity SewPot(sew_pot) {
+    craftId Long required /** 工艺ID */
+    craftCode String /** 工艺编码 */
+    potCode String required /** 日报编码（更新日报推送数据时唯一标识） */
+	dayInPh BigDecimal /** 进水PH（mg/L） */
+    dayOutPh BigDecimal /** 出水PH（mg/L） */
+	dayFirstMud BigDecimal /** 初沉池排泥量（mg/L） */
+	daySecondMud BigDecimal /** 二沉池排泥量（mg/L） */
+	dayReflux BigDecimal /** 回流比（mg/L） */
+	daySodiumCarAdd BigDecimal /**乙酸钠碳源投加量（mg/L） */
+	dayOtherCarAdd BigDecimal /**其他碳源投加量（mg/L） */
+
+	//生化池-厌氧池
+	dayAnaerobicPoolPh BigDecimal /** 生化池-厌氧池PH指标1 （）*/
+	dayAnaerobicPoolPhSecond BigDecimal /** 生化池-厌氧池PH指标2 （）*/
+	dayAnaerobicPoolOrp BigDecimal /** 生化池-厌氧池ORP指标1 （）*/
+	dayAnaerobicPoolOrpSecond BigDecimal /** 生化池-厌氧池ORP指标2 （）*/
+	dayAnaerobicPoolDo BigDecimal /** 生化池-厌氧池DO指标1 （）*/
+	dayAnaerobicPoolDoSecond BigDecimal /** 生化池-厌氧池DO指标2 （）*/
+	dayAnaerobicPoolSour BigDecimal /** 生化池-厌氧池SOUR指标1 （）*/
+	dayAnaerobicPoolSourSecond BigDecimal /** 生化池-厌氧池SOUR指标2 （）*/
+	dayAnaerobicPoolSv BigDecimal /** 生化池-厌氧池SV指标1 （）*/
+	dayAnaerobicPoolSvSecond BigDecimal /** 生化池-厌氧池SV指标2 （）*/
+	dayAnaerobicPoolMlss BigDecimal /** 生化池-厌氧池MLSS指标1 （）*/
+	dayAnaerobicPoolMlssSecond BigDecimal /** 生化池-厌氧池MLSS指标2 （）*/
+	dayAnaerobicPoolMlvss BigDecimal /** 生化池-厌氧池MLVSS指标1 （）*/
+    dayAnaerobicPoolMlvssSecond BigDecimal /** 生化池-厌氧池MLVSS指标2 （）*/
+	dayAnaerobicPoolTemper BigDecimal /** 生化池-厌氧池温度指标1 （）*/
+	dayAnaerobicPoolTemperSecond BigDecimal /** 生化池-厌氧池温度指标2 （）*/
+	//生化池-缺氧池
+	dayAnoxicPoolPh BigDecimal /** 生化池-缺氧池PH指标1 （）*/
+	dayAnoxicPoolPhSecond BigDecimal /** 生化池-缺氧池PH指标2 （）*/
+	dayAnoxicPoolOrp BigDecimal /** 生化池-缺氧池ORP指标1 （）*/
+	dayAnoxicPoolOrpSecond BigDecimal /** 生化池-缺氧池ORP指标2 （）*/
+	dayAnoxicPoolDo BigDecimal /** 生化池-缺氧池DO指标1 （）*/
+	dayAnoxicPoolDoSecond BigDecimal /** 生化池-缺氧池DO指标2 （）*/
+	dayAnoxicPoolSour BigDecimal /** 生化池-缺氧池SOUR指标1 （）*/
+	dayAnoxicPoolSourSecond BigDecimal /** 生化池-缺氧池SOUR指标2 （）*/
+	dayAnoxicPoolSv BigDecimal /** 生化池-缺氧池SV指标1 （）*/
+	dayAnoxicPoolSvSecond BigDecimal /** 生化池-缺氧池SV指标2 （）*/
+	dayAnoxicPoolMlss BigDecimal /** 生化池-缺氧池MLSS指标1 （）*/
+	dayAnoxicPoolMlssSecond BigDecimal /** 生化池-缺氧池MLSS指标2 （）*/
+	dayAnoxicPoolMlvss BigDecimal /** 生化池-缺氧池MLVSS指标1 （）*/
+    dayAnoxicPoolMlvssSecond BigDecimal /** 生化池-缺氧池MLVSS指标2 （）*/
+	dayAnoxicPoolTemper BigDecimal /** 生化池-缺氧池温度指标1 （）*/
+	dayAnoxicPoolTemperSecond BigDecimal /** 生化池-缺氧池温度指标2 （）*/
+	//生化池-好氧池
+	dayAerobicPoolPh BigDecimal /** 生化池-好氧池PH指标1 （）*/
+	dayAerobicPoolPhSecond BigDecimal /** 生化池-好氧池PH指标2 （）*/
+	dayAerobicPoolOrp BigDecimal /** 生化池-好氧池ORP指标1 （）*/
+	dayAerobicPoolOrpSecond BigDecimal /** 生化池-好氧池ORP指标2 （）*/
+	dayAerobicPoolDo BigDecimal /** 生化池-好氧池DO指标1 （）*/
+	dayAerobicPoolDoSecond BigDecimal /** 生化池-好氧池DO指标2 （）*/
+	dayAerobicPoolSour BigDecimal /** 生化池-好氧池SOUR指标1 （）*/
+	dayAerobicPoolSourSecond BigDecimal /** 生化池-好氧池SOUR指标2 （）*/
+	dayAerobicPoolSv BigDecimal /** 生化池-好氧池SV指标1 （）*/
+	dayAerobicPoolSvSecond BigDecimal /** 生化池-好氧池SV指标2 （）*/
+	dayAerobicPoolMlss BigDecimal /** 生化池-好氧池MLSS指标1 （）*/
+	dayAerobicPoolMlssSecond BigDecimal /** 生化池-好氧池MLSS指标2 （）*/
+	dayAerobicPoolMlvss BigDecimal /** 生化池-好氧池MLVSS指标1 （）*/
+	dayAerobicPoolMlvssSecond BigDecimal /** 生化池-好氧池MLVSS指标2 （）*/
+    dayAerobicPoolSvi BigDecimal /** 生化池-好氧池SVI指标1（）*/
+    dayAerobicPoolSviSecond BigDecimal /** 生化池-好氧池SVI指标2（）*/
+	dayAerobicPoolTemper BigDecimal /** 生化池-好氧池温度指标1 （）*/
+	dayAerobicPoolTemperSecond BigDecimal /** 生化池-好氧池温度指标2 （）*/
+	dayTime Instant /** 采集时间 */
+	status SendStatusType required /** 集团数据推送状态 */
+	plateStatus SendStatusType required /** 平台数据推送状态 */
+
+}
+/** 数据校验表 */
+entity SewMeter(sew_meter){
+    craftId Long required /** 工艺ID */
+    craftCode String /** 工艺编码 */
+    corInAmmonia BigDecimal /** 进水氨氮（mg/L） */
+    corInCod BigDecimal /** 进水COD（mg/L） */
+    corInTn BigDecimal /** 进水TN（mg/L） */
+    corInTp BigDecimal /** 进水TP（mg/L） */
+    corAnoxicPoolDoOutNit BigDecimal required /** 缺氧池出口硝酸盐（mg/L） */
+    corAerobicPoolDoOutNit BigDecimal required /** 好氧池出口硝酸盐（mg/L） */
+    corOutAmmonia BigDecimal /** 出水氨氮（mg/L） */
+    corOutCod BigDecimal /** 出水COD（mg/L） */
+    corOutTn BigDecimal /** 出水TN（mg/L） */
+    corOutTp BigDecimal /** 出水TP（mg/L） */
+    dayTime Instant /** 时间 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+
+}
+
+/** 其他指标 */
+entity OtherIndex(sew_index) {
+    craftId Long required /** 工艺ID */
+    craftCode String /** 工艺编码 */
+    methodCode String required /** 其他指标编码 */
+    methodName String required /** 其他指标名称 */
+    indexCapacity BigDecimal /** 指标量（kg/m）*/
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+}
+
+/**
+ * 数据推送类型
+ * 成功|失败
+ */
+enum SendStatusType {
+    SUCCESS,
+    FAILED
+}
+/** 被关联指标表 */
+entity BeAssociated(sew_be_associated){
+    beAssociatedName String /** 数据名称 */
+    associateCode String /** 关联编码 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+    relationTarget String /** 关联数据名称 */
+    beAssociatedEnterpriseCode String /** 所属水厂Code */
+}
+
+/** 数据字典 */
+entity Dict(sys_dict) {
+    catagoryCode String required /** 分类编码 */
+    catagoryName String required /** 分类名称 */
+    dictCode String required /** 字典编码 */
+    dictName String required /** 字典名称 */
+    disabled Boolean required /** 禁用状态 */
+    sortNo Integer required /** 排序号 */
+}
+
+/** 进出水指标阈值 */
+entity SewEmithreshold(sew_emi_threshold) {
+    enterpriseCode String required /** 企业编码 */
+    inCodLimit BigDecimal required /** 进水COD阈值 */
+    inTotalNLimit BigDecimal required /** 进水总氮上限 */
+    inTotalANLimit BigDecimal required /** 进水氨氮期上限 */
+    inTotalPLimit BigDecimal required /** 进水总磷期上限 */
+    outCodLimit BigDecimal required /** 出水COD阈值 */
+    outTotalNLimit BigDecimal required /** 出水总氮上限 */
+    outTotalANLimit BigDecimal required /** 出水氨氮期上限 */
+    outTotalPLimit BigDecimal required /** 出水总磷期上限 */
+    status SendStatusType required /** 集团数据推送状态 */
+    plateStatus SendStatusType required /** 平台数据推送状态 */
+}

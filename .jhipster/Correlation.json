@@ -1,0 +1,27 @@
+{
+  "name": "Correlation",
+  "fields": [
+    {
+      "fieldName": "relationTarget",
+      "fieldType": "String",
+      "javadoc": "数据名称"
+    },
+    {
+      "fieldName": "relevanceId",
+      "fieldType": "Long",
+      "javadoc": "关联数据Id"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "指标关联表",
+  "entityTableName": "sew_correlation",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080844"
+}

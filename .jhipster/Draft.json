@@ -1,0 +1,54 @@
+{
+  "name": "Draft",
+  "fields": [
+    {
+      "fieldName": "userId",
+      "fieldType": "Long",
+      "javadoc": "用户ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "modifyTime",
+      "fieldType": "Instant",
+      "javadoc": "最后更新时间",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "DraftType",
+      "javadoc": "草稿类型",
+      "fieldValues": "EMI,SIN,OLD",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "industryCode",
+      "fieldType": "String",
+      "javadoc": "行业类型编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "documentCode",
+      "fieldType": "String",
+      "javadoc": "单据号"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "byte[]",
+      "javadoc": "数据内容",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "核算数据草稿",
+  "entityTableName": "app_draft",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210824023459"
+}

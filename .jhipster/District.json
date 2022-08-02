@@ -1,0 +1,52 @@
+{
+  "name": "District",
+  "fields": [
+    {
+      "fieldName": "pid",
+      "fieldType": "Long",
+      "javadoc": "上级id"
+    },
+    {
+      "fieldName": "deep",
+      "fieldType": "Integer",
+      "javadoc": "层级深度[0:省,1:市,2:区,3:镇]"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "javadoc": "城市名称"
+    },
+    {
+      "fieldName": "pinyin",
+      "fieldType": "String",
+      "javadoc": "城市名称的全拼"
+    },
+    {
+      "fieldName": "prefix",
+      "fieldType": "String",
+      "javadoc": "城市名称拼音第一个字母"
+    },
+    {
+      "fieldName": "extId",
+      "fieldType": "Long",
+      "javadoc": "数据源原始编号，如果是添加的数据，此编号为0"
+    },
+    {
+      "fieldName": "extName",
+      "fieldType": "String",
+      "javadoc": "数据源原始名称，为未精简的名称"
+    }
+  ],
+  "relationships": [],
+  "javadoc": "省市区",
+  "entityTableName": "district",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210915080843"
+}

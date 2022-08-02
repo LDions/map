@@ -1,0 +1,72 @@
+{
+  "name": "EmiFactor",
+  "fields": [
+    {
+      "fieldName": "versionNum",
+      "fieldType": "String",
+      "javadoc": "版本号",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "historicalId",
+      "fieldType": "Long",
+      "javadoc": "历史因子ID"
+    },
+    {
+      "fieldName": "projectCode",
+      "fieldType": "String",
+      "javadoc": "项目编码",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "projectName",
+      "fieldType": "String",
+      "javadoc": "项目名称",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "operatorId",
+      "fieldType": "Long",
+      "javadoc": "操作员ID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "operatorName",
+      "fieldType": "String",
+      "javadoc": "操作员姓名",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "modifyDate",
+      "fieldType": "LocalDate",
+      "javadoc": "最后更新日期",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "remark",
+      "fieldType": "byte[]",
+      "javadoc": "备注",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "byte[]",
+      "javadoc": "数据内容",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "碳排放因子",
+  "entityTableName": "emi_factor",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210804083122"
+}

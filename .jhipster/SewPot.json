@@ -1,0 +1,287 @@
+{
+  "name": "SewPot",
+  "fields": [
+    {
+      "fieldName": "craftCode",
+      "fieldType": "String",
+      "javadoc": "工艺Code",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "dayInPh",
+      "fieldType": "BigDecimal",
+      "javadoc": "进水PH（mg/L）"
+    },
+    {
+      "fieldName": "dayOutPh",
+      "fieldType": "BigDecimal",
+      "javadoc": "出水PH（mg/L）"
+    },
+    {
+      "fieldName": "dayFirstMud",
+      "fieldType": "BigDecimal",
+      "javadoc": "初沉池排泥量（mg/L）"
+    },
+    {
+      "fieldName": "daySecondMud",
+      "fieldType": "BigDecimal",
+      "javadoc": "二沉池排泥量（mg/L）"
+    },
+    {
+      "fieldName": "dayReflux",
+      "fieldType": "BigDecimal",
+      "javadoc": "回流比（mg/L）"
+    },
+    {
+      "fieldName": "dayCarAdd",
+      "fieldType": "BigDecimal",
+      "javadoc": "碳源投加量（mg/L）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolPh",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池PH1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolPhSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池PH2 （）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolOrp",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池ORP1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolOrpSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池ORP2 （）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池DO1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolDoSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池DO2 （）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolSour",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池SOUR1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolSourSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池SOUR2 （）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolSv",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池SV1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolSvSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池SV2 （）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolMlss",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池MLSS1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolMlssSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池MLSS2 （）"
+    },
+    {
+      "fieldName": "dayAnaerobicPoolTemper",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池温度1 （）"
+    },{
+      "fieldName": "dayAnaerobicPoolTemperSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-厌氧池温度2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolPh",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池PH1 （）"
+    },{
+      "fieldName": "dayAnoxicPoolPhSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池PH2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolOrp",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池ORP1 （）"
+    },{
+      "fieldName": "dayAnoxicPoolOrpSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池ORP2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池DO1 （）"
+    }, {
+      "fieldName": "dayAnoxicPoolDoSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池DO2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolSour",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池SOUR1 （）"
+    },{
+      "fieldName": "dayAnoxicPoolSourSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池SOUR2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolSv",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池SV1 （）"
+    },{
+      "fieldName": "dayAnoxicPoolSvSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池SV2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolMlss",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池MLSS1 （）"
+    },{
+      "fieldName": "dayAnoxicPoolMlssSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池MLSS2 （）"
+    },
+    {
+      "fieldName": "dayAnoxicPoolTemper",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池温度1 （）"
+    },{
+      "fieldName": "dayAnoxicPoolTemperSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-缺氧池温度2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolPh",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池PH1 （）"
+    },{
+      "fieldName": "dayAerobicPoolPhSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池PH2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolOrp",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池ORP1 （）"
+    },{
+      "fieldName": "dayAerobicPoolOrpSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池ORP2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolDo",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池DO1 （）"
+    },{
+      "fieldName": "dayAerobicPoolDoSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池DO2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolSour",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SOUR1 （）"
+    },{
+      "fieldName": "dayAerobicPoolSourSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SOUR2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolSv",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SV1 （）"
+    },{
+      "fieldName": "dayAerobicPoolSvSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SV2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolMlss",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池MLSS1 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolMlssSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池MLSS2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolMlvss",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池MLVSS1 （）"
+    },{
+      "fieldName": "dayAerobicPoolMlvssSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池MLVSS2 （）"
+    },
+    {
+      "fieldName": "dayAerobicPoolSvi",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SVI1（）"
+    },
+    {
+      "fieldName": "dayAerobicPoolSviSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池SVI2（）"
+    },
+    {
+      "fieldName": "dayAerobicPoolTemper",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池温度1 （）"
+    },{
+      "fieldName": "dayAerobicPoolTemperSecond",
+      "fieldType": "BigDecimal",
+      "javadoc": "生化池-好氧池温度2 （）"
+    },
+    {
+      "fieldName": "dayTime",
+      "fieldType": "Instant",
+      "javadoc": "采集时间"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "SendStatusType",
+      "javadoc": "集团数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "plateStatus",
+      "fieldType": "SendStatusType",
+      "javadoc": "平台数据推送状态",
+      "fieldValues": "SUCCESS,FAILED",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [],
+  "javadoc": "日报表数据",
+  "entityTableName": "sew_pot",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210906023700"
+}
